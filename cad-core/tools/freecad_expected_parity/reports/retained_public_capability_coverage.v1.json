@@ -6,7 +6,7 @@
   "contract": {
     "exists": true,
     "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/retained_public_capabilities.v1.json",
-    "sha256": "7c4165444bc4b44a63a70d69b3f656e864e4ba67aa4687e6858e639bcd8ec76f"
+    "sha256": "a480c258104f02aec525036b37bb4c1164fb071563ca2dd37a523fba778e70c8"
   },
   "errors": [],
   "fixtureCorpusClosure": {
@@ -31,7 +31,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/app-link-box-placement-alias",
+              "fixture": "app-links/app-link-box-placement-alias",
               "level": "target_result",
               "role": "native"
             }
@@ -50,7 +50,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/part-box",
+              "fixture": "part-primitives/part-box",
               "level": "entrypoint_smoke_only",
               "role": "native"
             }
@@ -76,7 +76,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/part-box",
+              "fixture": "part-primitives/part-box",
               "level": "target_result",
               "role": "native"
             }
@@ -95,7 +95,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m6/app-link-copy-on-change-touched-tracking",
+              "fixture": "app-links/app-link-copy-on-change-touched-tracking",
               "level": "target_result",
               "role": "native"
             }
@@ -134,7 +134,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/part-box",
+              "fixture": "part-primitives/part-box",
               "level": "target_result",
               "role": "native"
             }
@@ -171,7 +171,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/part-box",
+              "fixture": "part-primitives/part-box",
               "level": "entrypoint_smoke_only",
               "role": "native"
             }
@@ -208,7 +208,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/material-part-feature-shape-material",
+              "fixture": "material-properties/material-part-feature-shape-material",
               "level": "target_result",
               "role": "native"
             }
@@ -227,7 +227,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/material-part-feature-material-recompute-update",
+              "fixture": "material-properties/material-part-feature-material-recompute-update",
               "level": "target_result",
               "role": "native"
             }
@@ -246,7 +246,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/material-part-feature-minimal-material",
+              "fixture": "material-properties/material-part-feature-minimal-material",
               "level": "target_result",
               "role": "native"
             }
@@ -284,7 +284,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/part-box",
+              "fixture": "part-primitives/part-box",
               "level": "target_result",
               "role": "native"
             }
@@ -302,7 +302,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/part-cut",
+              "fixture": "part-primitives/part-cut",
               "level": "target_result",
               "role": "native"
             }
@@ -320,7 +320,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/part-import-step",
+              "fixture": "part-import/part-import-step",
               "level": "target_result",
               "role": "native"
             }
@@ -338,7 +338,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p5/part-extrusion-taper",
+              "fixture": "part-extrude/part-extrusion-taper",
               "level": "target_result",
               "role": "native"
             }
@@ -356,17 +356,17 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m4/part-offset-face",
+              "fixture": "part-offset/part-offset-face",
               "level": "target_result",
               "role": "native"
             },
             {
-              "fixture": "c3m4/part-loft-solid",
+              "fixture": "part-loft/part-loft-solid",
               "level": "target_result",
               "role": "native"
             },
             {
-              "fixture": "c3m4/part-sweep-solid",
+              "fixture": "part-sweep/part-sweep-solid",
               "level": "target_result",
               "role": "native"
             }
@@ -386,7 +386,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m4/part-geomplate-curve-point-default",
+              "fixture": "part-geomplate/part-geomplate-curve-point-default",
               "level": "target_result",
               "role": "native"
             }
@@ -423,7 +423,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p5/sketch-coincident-profile",
+              "fixture": "sketcher-solve/sketch-coincident-profile",
               "level": "target_result",
               "role": "native"
             }
@@ -442,7 +442,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m3/sketch-circle-radius-solver-geometry-update",
+              "fixture": "sketcher-solve/sketch-circle-radius-solver-geometry-update",
               "level": "target_result",
               "role": "native"
             }
@@ -460,12 +460,12 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p5/sketch-external-face-both",
+              "fixture": "sketcher-external-geometry/sketch-external-face-both",
               "level": "target_result",
               "role": "native"
             },
             {
-              "fixture": "p5/sketch-external-whole-box",
+              "fixture": "sketcher-external-geometry/sketch-external-whole-box",
               "level": "target_result",
               "role": "native"
             }
@@ -483,7 +483,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m3/sketch-underconstrained-no-constraints",
+              "fixture": "sketcher-solve/sketch-underconstrained-no-constraints",
               "level": "native_diagnostic",
               "role": "native"
             }
@@ -501,7 +501,7 @@
           "disposition": "unsupported",
           "fixtureEvidence": [
             {
-              "fixture": "c3m3/sketch-conflicting-constraints",
+              "fixture": "sketcher-solve/sketch-conflicting-constraints",
               "level": "unsupported_contract",
               "role": "unsupported"
             }
@@ -539,12 +539,12 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m5/body-curved-face-pad-profile-normal",
+              "fixture": "partdesign-body/body-curved-face-pad-profile-normal",
               "level": "dependency_result",
               "role": "native"
             },
             {
-              "fixture": "p3b/pocket-custom-vector",
+              "fixture": "partdesign-extrude/pocket-custom-vector",
               "level": "dependency_result",
               "role": "native"
             }
@@ -564,12 +564,12 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c4m2/partdesign-revolution-axis-angle-body",
+              "fixture": "partdesign-revolve/partdesign-revolution-axis-angle-body",
               "level": "dependency_result",
               "role": "native"
             },
             {
-              "fixture": "c4m2/partdesign-groove-axis-angle-body",
+              "fixture": "partdesign-revolve/partdesign-groove-axis-angle-body",
               "level": "dependency_result",
               "role": "native"
             }
@@ -588,17 +588,17 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p7/hole-supported-blind-depth",
+              "fixture": "partdesign-hole/hole-supported-blind-depth",
               "level": "dependency_result",
               "role": "native"
             },
             {
-              "fixture": "p7/hole-supported-through-all",
+              "fixture": "partdesign-hole/hole-supported-through-all",
               "level": "dependency_result",
               "role": "native"
             },
             {
-              "fixture": "p7/hole-supported-counterbore",
+              "fixture": "partdesign-hole/hole-supported-counterbore",
               "level": "dependency_result",
               "role": "native"
             }
@@ -616,17 +616,17 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m5/chamfer-distance-angle-edge",
+              "fixture": "partdesign-dressup/chamfer-distance-angle-edge",
               "level": "dependency_result",
               "role": "native"
             },
             {
-              "fixture": "c3m5/draft-face-auto-neutral-plane",
+              "fixture": "partdesign-dressup/draft-face-auto-neutral-plane",
               "level": "dependency_result",
               "role": "native"
             },
             {
-              "fixture": "c3m5/thickness-face-skin-arc",
+              "fixture": "partdesign-dressup/thickness-face-skin-arc",
               "level": "dependency_result",
               "role": "native"
             }
@@ -646,7 +646,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m5/linear-pattern-multi-original-link-retag",
+              "fixture": "partdesign-pattern/linear-pattern-multi-original-link-retag",
               "level": "dependency_result",
               "role": "native"
             }
@@ -665,17 +665,17 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c4m2/partdesign-loft-additive-body",
+              "fixture": "partdesign-loft/partdesign-loft-additive-body",
               "level": "dependency_result",
               "role": "native"
             },
             {
-              "fixture": "c12m13/partdesign-pipe-additive-lifecycle",
+              "fixture": "partdesign-pipe/partdesign-pipe-additive-lifecycle",
               "level": "dependency_result",
               "role": "native"
             },
             {
-              "fixture": "c4m2/partdesign-boolean-fuse-body-tool",
+              "fixture": "partdesign-boolean/partdesign-boolean-fuse-body-tool",
               "level": "dependency_result",
               "role": "native"
             }
@@ -695,12 +695,12 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c8m1/shape-binder-face-edge-vertex-multi-subshape",
+              "fixture": "partdesign-binder/shape-binder-face-edge-vertex-multi-subshape",
               "level": "dependency_result",
               "role": "native"
             },
             {
-              "fixture": "c8m1/subshape-binder-makeface-offset-fuse-refine",
+              "fixture": "partdesign-binder/subshape-binder-makeface-offset-fuse-refine",
               "level": "dependency_result",
               "role": "native"
             }
@@ -719,7 +719,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c51m5/partdesign-datum-selected-mapmodes",
+              "fixture": "partdesign-datum/partdesign-datum-selected-mapmodes",
               "level": "target_result",
               "role": "native"
             }
@@ -760,7 +760,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/mesh-import-stl",
+              "fixture": "mesh-import/mesh-import-stl",
               "level": "target_result",
               "role": "native"
             }
@@ -778,7 +778,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/mesh-import-closed-tetrahedron",
+              "fixture": "mesh-import/mesh-import-closed-tetrahedron",
               "level": "target_result",
               "role": "native"
             }
@@ -796,7 +796,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/mesh-import-file-recompute-update",
+              "fixture": "mesh-import/mesh-import-file-recompute-update",
               "level": "target_result",
               "role": "native"
             }
@@ -859,7 +859,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/spreadsheet-sheet-expression-dependency",
+              "fixture": "spreadsheet-recompute/spreadsheet-sheet-expression-dependency",
               "level": "target_result",
               "role": "native"
             }
@@ -877,7 +877,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/spreadsheet-sheet-recompute-update",
+              "fixture": "spreadsheet-recompute/spreadsheet-sheet-recompute-update",
               "level": "target_result",
               "role": "native"
             }
@@ -896,7 +896,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "p8/spreadsheet-sheet-empty",
+              "fixture": "spreadsheet-recompute/spreadsheet-sheet-empty",
               "level": "target_result",
               "role": "native"
             }
@@ -947,7 +947,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m6/assembly-angle-zero-and-signed-current-real-solver",
+              "fixture": "assembly-solve/assembly-angle-zero-and-signed-current-real-solver",
               "level": "target_result",
               "role": "native"
             }
@@ -966,7 +966,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m6/assembly-angle-zero-and-signed-current-real-solver",
+              "fixture": "assembly-solve/assembly-angle-zero-and-signed-current-real-solver",
               "level": "target_result",
               "role": "native"
             }
@@ -985,7 +985,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m6/assembly-invalid-grounded-distance-real-solver",
+              "fixture": "assembly-solve/assembly-invalid-grounded-distance-real-solver",
               "level": "native_diagnostic",
               "role": "native"
             }
@@ -1022,7 +1022,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m6/assembly-angle-zero-and-signed-current-real-solver",
+              "fixture": "assembly-solve/assembly-angle-zero-and-signed-current-real-solver",
               "level": "dependency_result",
               "role": "native"
             }
@@ -1040,7 +1040,7 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "c3m6/assembly-invalid-grounded-distance-real-solver",
+              "fixture": "assembly-solve/assembly-invalid-grounded-distance-real-solver",
               "level": "native_diagnostic",
               "role": "native"
             }

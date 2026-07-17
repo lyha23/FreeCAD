@@ -1,0 +1,66 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          5.534123567749435,
+          1.434173939982948,
+          0.0
+        ],
+        "min": [
+          4.0,
+          -1.233475097903745,
+          0.0
+        ]
+      },
+      "length": 3.9512611707400667,
+      "length_delta": 1e-05,
+      "named_shapes": {
+        "HyperbolaEdge": {
+          "owner": "HyperbolaEdge"
+        }
+      },
+      "object": "HyperbolaEdge",
+      "object_fields": {
+        "curve_kind": "hyperbola",
+        "curve_type": "GeomAbs_Hyperbola",
+        "dto": "PartConicCurveDTO",
+        "feature": "part_geometry_curve",
+        "part_geometry_type": "Part.Hyperbola",
+        "shape": "occt_edge",
+        "status": "ok"
+      },
+      "topology_counts": {
+        "edges": 1,
+        "faces": 0,
+        "vertices": 2
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:0851000127466c13ef1af228dfd31b9d53e28493d734434d0649b3742a42d44c",
+    "objects": {
+      "HyperbolaEdge": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:4a54cc60d76e2c70f9ecce1b8d84f83cfe2847f8129f0b311b995f70d1ffc62b",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

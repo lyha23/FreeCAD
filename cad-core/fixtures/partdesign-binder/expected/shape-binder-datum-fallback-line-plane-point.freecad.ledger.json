@@ -1,0 +1,193 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "shape-binder-datum-fallback-line-plane-point",
+    "expectedPayloadHash": "sha256:02f0fba0b38dccbeac024b8b92cc857be83d0fbcb4584c22a986f4c39b71848f",
+    "inputHash": "sha256:89cf5bbf920eaa8bd9d27a8beacf3552b078d6c2b11dbbad4f56de351837ec66",
+    "phase": "partdesign-binder",
+    "topoNamingStateHash": "sha256:32a5a9d1d9c559b0fe0365b3970cfdadf7d8307f888e3fc58619dff2daad9825"
+  },
+  "inputReferences": [],
+  "objects": {
+    "AppLine": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "App::Line"
+    },
+    "AppPlane": {
+      "afterElements": {
+        "Face": [
+          "Face1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "App::Plane"
+    },
+    "AppPoint": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "App::Point"
+    },
+    "ShapeBinderLine": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::ShapeBinder"
+    },
+    "ShapeBinderPlane": {
+      "afterElements": {
+        "Face": [
+          "Face1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::ShapeBinder"
+    },
+    "ShapeBinderPoint": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::ShapeBinder"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "AppLine": {
+        "covers": [
+          "AppLine"
+        ],
+        "ledgerObject": "AppLine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "AppPlane": {
+        "covers": [
+          "AppPlane"
+        ],
+        "ledgerObject": "AppPlane",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "AppPoint": {
+        "covers": [
+          "AppPoint"
+        ],
+        "ledgerObject": "AppPoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ShapeBinderLine": {
+        "covers": [
+          "ShapeBinderLine"
+        ],
+        "ledgerObject": "ShapeBinderLine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ShapeBinderPlane": {
+        "covers": [
+          "ShapeBinderPlane"
+        ],
+        "ledgerObject": "ShapeBinderPlane",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ShapeBinderPoint": {
+        "covers": [
+          "ShapeBinderPoint"
+        ],
+        "ledgerObject": "ShapeBinderPoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:32a5a9d1d9c559b0fe0365b3970cfdadf7d8307f888e3fc58619dff2daad9825",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

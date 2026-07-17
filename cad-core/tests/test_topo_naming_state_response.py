@@ -10,9 +10,9 @@ import unittest
 from pathlib import Path
 
 try:
-    from .fixture_runner import BIN, ROOT
+    from .fixture_runner import BIN, ROOT, semantic_fixture_path
 except ImportError:  # pragma: no cover - supports `unittest discover tests`.
-    from fixture_runner import BIN, ROOT
+    from fixture_runner import BIN, ROOT, semantic_fixture_path
 
 
 TOOLS = ROOT / "tools"
@@ -23,8 +23,8 @@ from freecad_expected_parity import EvaluationRequest, evaluate
 
 
 C13M3_PRODUCER_EVIDENCE_CASES = (
-    ("p2", "rect-pad-pocket", "Body"),
-    ("c4m6", "topo-state-body-tip-stable-recovery", "Body"),
+    ("partdesign-extrude", "rect-pad-pocket", "Body"),
+    ("topology-state", "topo-state-body-tip-stable-recovery", "Body"),
 )
 
 C4M6_TOPO_STATE_PARITY_FIXTURES = (
@@ -142,16 +142,16 @@ def canonical_collision_fingerprint(mapper_history: object) -> tuple[tuple[objec
 
 
 class TopoNamingStateResponseTest(unittest.TestCase):
-    def fixture_payload(self, group: str, fixture: str) -> dict:
-        path = ROOT / "fixtures" / group / f"{fixture}.json"
+    def fixture_payload(self, group: str | None, fixture: str) -> dict:
+        path = semantic_fixture_path(fixture, group)
         return json.loads(path.read_text(encoding="utf-8"))
 
-    def expected_payload(self, group: str, fixture: str) -> dict:
-        path = ROOT / "fixtures" / group / "expected" / f"{fixture}.freecad.json"
+    def expected_payload(self, group: str | None, fixture: str) -> dict:
+        path = semantic_fixture_path(fixture, group).parent / "expected" / f"{fixture}.freecad.json"
         return json.loads(path.read_text(encoding="utf-8"))
 
-    def protocol_expected_payload(self, group: str, fixture: str) -> dict:
-        path = ROOT / "fixtures" / group / "expected" / f"{fixture}.expeted.json"
+    def protocol_expected_payload(self, group: str | None, fixture: str) -> dict:
+        path = semantic_fixture_path(fixture, group).parent / "expected" / f"{fixture}.expeted.json"
         return json.loads(path.read_text(encoding="utf-8"))
 
     def run_official_recompute_payload(self, payload: bytes | dict) -> dict:
@@ -172,7 +172,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
             )
             return json.loads(output_path.read_text(encoding="utf-8"))
 
-    def run_official_recompute_fixture(self, group: str, fixture: str) -> dict:
+    def run_official_recompute_fixture(self, group: str | None, fixture: str) -> dict:
         return self.run_official_recompute_payload(self.fixture_payload(group, fixture))
 
     def run_legacy_recompute_payload(self, payload: bytes | dict) -> dict:
@@ -197,14 +197,14 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         return self.run_legacy_recompute_payload(self.fixture_payload(group, fixture))
 
     def assert_c4m6_native_parity_gate(self, fixture: str) -> None:
-        response = self.run_official_recompute_fixture("c4m6", fixture)
+        response = self.run_official_recompute_fixture("topology-state", fixture)
         report = evaluate(
             EvaluationRequest(
                 root=ROOT,
-                phase="c4m6",
+                phase="topology-state",
                 case=fixture,
                 source_kind="in_memory",
-                in_memory_actuals={("c4m6", fixture): response},
+                in_memory_actuals={("topology-state", fixture): response},
             )
         ).to_dict()
         self.assertTrue(report["preflight"]["valid"], report["preflight"]["errors"])
@@ -214,7 +214,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         self.assertEqual("not_evaluated", report["releaseStatus"])
 
     def assert_p2_consumer_topo_state_smoke(self) -> None:
-        response = self.run_official_recompute_fixture("p2", "rect-pad-pocket")
+        response = self.run_official_recompute_fixture("partdesign-extrude", "rect-pad-pocket")
 
         self.assertEqual(response["diagnostics"], [])
         self.assertEqual([item["object"] for item in response["results"]], ["Body"])
@@ -303,7 +303,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         self.assert_p2_consumer_topo_state_smoke()
 
     def test_c13m1_response_topo_state_round_trips_without_body_tip_recovery_regression(self) -> None:
-        payload = self.fixture_payload("c4m6", "topo-state-body-tip-stable-recovery")
+        payload = self.fixture_payload("topology-state", "topo-state-body-tip-stable-recovery")
 
         first_response = self.run_official_recompute_payload(payload)
         self.assertIn("topoNamingState", first_response)
@@ -339,10 +339,10 @@ class TopoNamingStateResponseTest(unittest.TestCase):
 
     def test_c4m6_reference_shadow_response_keeps_expected_update_contract(self) -> None:
         reference_response = self.run_official_recompute_fixture(
-            "c4m6",
+            "topology-state",
             "topo-state-reference-shadow-brep",
         )
-        expected = self.expected_payload("c4m6", "topo-state-reference-shadow-brep")
+        expected = self.expected_payload("topology-state", "topo-state-reference-shadow-brep")
         self.assertEqual(reference_response["diagnostics"], [])
         self.assertEqual(
             reference_response["elementReferenceUpdates"],
@@ -382,21 +382,21 @@ class TopoNamingStateResponseTest(unittest.TestCase):
     def test_c4m6_expected_request_failures_have_exact_diagnostics_only_envelopes(self) -> None:
         for fixture, code in C4M6_EXPECTED_HARD_FAIL_FIXTURES:
             with self.subTest(fixture=fixture):
-                response = self.run_official_recompute_fixture("c4m6", fixture)
+                response = self.run_official_recompute_fixture(None, fixture)
 
                 self.assert_topo_state_hard_fail(
                     response,
                     code,
-                    self.expected_payload("c4m6", fixture),
+                    self.expected_payload(None, fixture),
                 )
 
     def test_c4m6_compound_link_native_semantic_result_matches_freecad_expected(self) -> None:
         response = self.run_official_recompute_fixture(
-            "c4m6",
+            "topology-state",
             "topo-state-link-compound-child-maps",
         )
         expected = self.expected_payload(
-            "c4m6",
+            "topology-state",
             "topo-state-link-compound-child-maps",
         )
         actual_result = self.result_for_object(response, "CompoundLink")
@@ -412,7 +412,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
     def test_c4m6_compound_child_map_part_ledger_materializes_collisions_without_reference(
         self,
     ) -> None:
-        payload = self.fixture_payload("c4m6", "topo-state-link-compound-child-maps")
+        payload = self.fixture_payload("topology-state", "topo-state-link-compound-child-maps")
         payload["Objects"] = [
             object_payload
             for object_payload in payload["Objects"]
@@ -487,7 +487,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         )
 
         link_response = self.run_official_recompute_fixture(
-            "c4m6",
+            "topology-state",
             "topo-state-link-compound-child-maps",
         )
         link_compound_state = link_response["topoNamingState"]["objects"]["Compound"]
@@ -503,7 +503,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
             child_map["key"] for child_map in link_compound_state["childElementMaps"]
         })
 
-        round_trip_payload = self.fixture_payload("c4m6", "topo-state-link-compound-child-maps")
+        round_trip_payload = self.fixture_payload("topology-state", "topo-state-link-compound-child-maps")
         round_trip_payload["topoNamingState"] = link_response["topoNamingState"]
         round_trip_response = self.run_official_recompute_payload(round_trip_payload)
         self.assertEqual(round_trip_response["diagnostics"], [])
@@ -517,7 +517,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
     def test_c4m6_transport_metadata_references_current_result_subshapes(self) -> None:
         for fixture, object_name in C4M6_TRANSPORT_MESH_CASES:
             with self.subTest(fixture=fixture, object=object_name):
-                response = self.run_official_recompute_fixture("c4m6", fixture)
+                response = self.run_official_recompute_fixture(None, fixture)
                 result = self.result_for_object(response, object_name)
                 self.assertEqual(set(result["mesh"]), C4M6_MESH_KEYS)
                 subshapes = {
@@ -533,7 +533,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
                         self.assertIn(vertex["indexed"], subshapes)
 
         reference = self.run_official_recompute_fixture(
-            "c4m6", "topo-state-reference-shadow-brep"
+            "topology-state", "topo-state-reference-shadow-brep"
         )
         reference_result = self.result_for_object(reference, "ProbeSketch")
         self.assertEqual(
@@ -543,11 +543,11 @@ class TopoNamingStateResponseTest(unittest.TestCase):
 
     def test_c4m6_history_probe_uses_protocol_only_contract_not_native_geometry_oracle(self) -> None:
         response = self.run_official_recompute_fixture(
-            "c4m6",
+            "topology-state",
             "topo-state-mapper-history-events",
         )
         expected = self.protocol_expected_payload(
-            "c4m6",
+            "topology-state",
             "topo-state-mapper-history-events",
         )
 
@@ -562,11 +562,11 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         )
 
     def test_c4m6_element_map_encoding_mismatch_hard_fails_without_topo_state(self) -> None:
-        payload = self.fixture_payload("c4m6", "topo-state-first-recompute-empty")
+        payload = self.fixture_payload("topology-state", "topo-state-first-recompute-empty")
         payload["topoNamingState"]["objects"] = {
             "Box": {
                 "objectHash": self.expected_payload(
-                    "c4m6", "topo-state-first-recompute-empty"
+                    "topology-state", "topo-state-first-recompute-empty"
                 )["topoNamingState"]["objects"]["Box"]["objectHash"],
                 "elementMapVersion": "cad-core.element-map.v1",
                 "subshapes": {},
@@ -590,7 +590,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
     def test_c4m6_malformed_topo_state_objects_hard_fails_before_recompute(self) -> None:
         for label, objects in (("array", []), ("null", None), ("missing", None)):
             with self.subTest(objects=label):
-                payload = self.fixture_payload("c4m6", "topo-state-first-recompute-empty")
+                payload = self.fixture_payload("topology-state", "topo-state-first-recompute-empty")
                 if label == "missing":
                     payload["topoNamingState"].pop("objects")
                 else:
@@ -603,7 +603,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
                 self.assertEqual(response["diagnostics"][0]["expectedObjectsType"], "object")
 
     def test_c4m6_non_object_topo_state_hard_fails_before_recompute(self) -> None:
-        payload = self.fixture_payload("c4m6", "topo-state-first-recompute-empty")
+        payload = self.fixture_payload("topology-state", "topo-state-first-recompute-empty")
         payload["topoNamingState"] = []
 
         response = self.run_official_recompute_payload(payload)
@@ -613,7 +613,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         self.assertEqual(response["diagnostics"][0]["expectedTopoNamingStateType"], "object_or_null")
 
     def test_c4m6_null_topo_state_is_an_explicit_no_state_request(self) -> None:
-        payload = self.fixture_payload("c4m6", "topo-state-first-recompute-empty")
+        payload = self.fixture_payload("topology-state", "topo-state-first-recompute-empty")
         payload["topoNamingState"] = None
 
         response = self.run_official_recompute_payload(payload)
@@ -623,7 +623,7 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         self.assertIn("topoNamingState", response)
 
     def test_c4m6_child_element_map_encoding_mismatch_hard_fails_without_topo_state(self) -> None:
-        payload = self.fixture_payload("c4m6", "topo-state-body-tip-stable-recovery")
+        payload = self.fixture_payload("topology-state", "topo-state-body-tip-stable-recovery")
         first_response = self.run_official_recompute_payload(payload)
         payload["topoNamingState"] = first_response["topoNamingState"]
         body = payload["topoNamingState"]["objects"]["Body"]

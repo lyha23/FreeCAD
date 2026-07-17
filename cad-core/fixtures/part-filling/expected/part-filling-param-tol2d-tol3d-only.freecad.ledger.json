@@ -1,0 +1,94 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-filling-param-tol2d-tol3d-only",
+    "expectedPayloadHash": "sha256:c40e310f8d1d4e922f8381eb0a90aa2bc7ce7e578da9171e2d992b4547bd0e11",
+    "inputHash": "sha256:cfd11c0bef5403987a5d4a05fce931f6350eb679de5d179445071e119921c225",
+    "phase": "part-filling",
+    "topoNamingStateHash": "sha256:3f0e639471d52253006cc01c867f2c68a9ac21eae77ec7607e3a07fbed39693f"
+  },
+  "inputReferences": [],
+  "objects": {
+    "FilledFace": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::FilledFace"
+    },
+    "Profile": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "FilledFace": {
+        "covers": [
+          "FilledFace"
+        ],
+        "ledgerObject": "FilledFace",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Profile": {
+        "covers": [
+          "Profile"
+        ],
+        "ledgerObject": "Profile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:3f0e639471d52253006cc01c867f2c68a9ac21eae77ec7607e3a07fbed39693f",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

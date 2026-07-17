@@ -1,0 +1,59 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-parabola-edge",
+    "expectedPayloadHash": "sha256:fdaa9a5d6fbb2c09ef935b41101471d95c61c271e6b47ff9dc8171ddc975979b",
+    "inputHash": "sha256:3ec2c8753da55cc2bd9288c71560caaf65adb787bd53c741f75afea2298d6fe1",
+    "phase": "part-primitives",
+    "topoNamingStateHash": "sha256:f12208e600898b909e697977faec9aabeb427dbef42a66b28cd358c7d0740ce8"
+  },
+  "inputReferences": [],
+  "objects": {
+    "ParabolaEdge": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeometryCurve"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "ParabolaEdge": {
+        "covers": [
+          "ParabolaEdge"
+        ],
+        "ledgerObject": "ParabolaEdge",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:f12208e600898b909e697977faec9aabeb427dbef42a66b28cd358c7d0740ce8",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

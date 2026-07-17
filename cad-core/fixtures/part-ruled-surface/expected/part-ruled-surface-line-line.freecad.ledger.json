@@ -1,0 +1,119 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-ruled-surface-line-line",
+    "expectedPayloadHash": "sha256:91dd5057ae8f3e2216c281e627168a215c845ec3a141a55a9612eedaf8a6ea46",
+    "inputHash": "sha256:e8dec40a1bcec4d9840fbb4b39c7d980ddec9b5d73d19405694a3093c596fb5d",
+    "phase": "part-ruled-surface",
+    "topoNamingStateHash": "sha256:89b9ad2940ac07e1e7ada10e2fe7dd3e6f49bb834fc881fbc253283344834c1d"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Line1": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "Line2": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "RuledSurface": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RuledSurface"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Line1": {
+        "covers": [
+          "Line1"
+        ],
+        "ledgerObject": "Line1",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Line2": {
+        "covers": [
+          "Line2"
+        ],
+        "ledgerObject": "Line2",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "RuledSurface": {
+        "covers": [
+          "RuledSurface"
+        ],
+        "ledgerObject": "RuledSurface",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:89b9ad2940ac07e1e7ada10e2fe7dd3e6f49bb834fc881fbc253283344834c1d",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

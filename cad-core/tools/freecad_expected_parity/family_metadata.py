@@ -8,7 +8,9 @@ protocol divergence.
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 
@@ -131,11 +133,23 @@ FAMILIES: dict[str, FamilyMetadata] = {
     ),
 }
 
-PART_PRIMITIVE_PHASES = {"c3m4", "c6m4", "c6m5", "c6m6", "c12m12", "c12m13", "p3b"}
-SKETCH_INTERNAL_PHASES = {"c10m1", "c12m16", "p2", "p6"}
-PARTDESIGN_PHASES = {"c3m5", "p3a", "p5", "p7"}
-TOPO_ELEMENTMAP_PHASES = {"c3m1", "c4m1", "c4m2", "c4m3", "c4m4", "c4m5", "c4m6"}
-ASSEMBLY_PHASES = {"c3m6"}
+_PHASE_CATALOG_PATH = Path(__file__).with_name("fixture_capability_phases.v1.json")
+_PHASE_CATALOG = json.loads(_PHASE_CATALOG_PATH.read_text(encoding="utf-8"))["phases"]
+
+
+def _phases_for_module(module: str) -> set[str]:
+    return {
+        str(entry["phase"])
+        for entry in _PHASE_CATALOG
+        if entry.get("module") == module
+    }
+
+
+PART_PHASES = _phases_for_module("Part")
+SKETCH_PHASES = _phases_for_module("Sketcher")
+PARTDESIGN_PHASES = _phases_for_module("PartDesign")
+TOPOLOGY_PHASES = _phases_for_module("Topology")
+ASSEMBLY_PHASES = _phases_for_module("Assembly")
 
 
 def family_for_case(phase: str, case: str) -> FamilyMetadata:
@@ -146,18 +160,18 @@ def family_for_case(phase: str, case: str) -> FamilyMetadata:
         return FAMILIES["assembly_placement_link"]
     if case_lower.startswith("app-link") or "app-link" in case_lower:
         return FAMILIES["assembly_placement_link"]
-    if phase in TOPO_ELEMENTMAP_PHASES or case_lower.startswith("element-map"):
+    if phase in TOPOLOGY_PHASES or case_lower.startswith("element-map"):
         return FAMILIES["toponaming_elementmap"]
-    if phase in SKETCH_INTERNAL_PHASES or any(
+    if phase in SKETCH_PHASES or any(
         token in case_lower
         for token in ("sketch", "internal", "split", "wirejoiner", "face-maker")
     ):
         return FAMILIES["sketch_internal_shape"]
-    if phase in PART_PRIMITIVE_PHASES or case_lower.startswith(
+    if phase in PART_PHASES or case_lower.startswith(
         ("part-", "mesh-import", "partdesign-pipe")
     ):
         return FAMILIES["part_primitive_pipe"]
-    if phase in PARTDESIGN_PHASES or phase.startswith(("c5", "c51")) or any(
+    if phase in PARTDESIGN_PHASES or any(
         token in case_lower
         for token in (
             "body",
@@ -176,8 +190,6 @@ def family_for_case(phase: str, case: str) -> FamilyMetadata:
         )
     ):
         return FAMILIES["partdesign_body_dressup"]
-    if phase == "p8":
-        return FAMILIES["part_primitive_pipe"]
     return FAMILIES["phase_family_registry"]
 
 
@@ -223,7 +235,7 @@ def _next_action_for_decision(family: FamilyMetadata, decision: str) -> str:
     if decision.endswith("_topo_state_publication_gap"):
         return (
             f"{family.label}: publish or intentionally scope topoNamingState fields "
-            "for this family using the same public-state boundary as c4m6."
+            "for this family using the same public-state boundary as topology-state."
         )
     if decision.endswith("_subshape_identity_gap"):
         return (

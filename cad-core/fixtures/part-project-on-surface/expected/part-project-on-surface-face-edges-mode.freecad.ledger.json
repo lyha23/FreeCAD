@@ -1,0 +1,135 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-project-on-surface-face-edges-mode",
+    "expectedPayloadHash": "sha256:1c808eeda4c003104af4dd6b05cf2819bce3f8011835430fcaedad4d361c0617",
+    "inputHash": "sha256:6b775264c229128b08664b66387576e32660b0bca50e0b55b6eabf00d0c483fd",
+    "phase": "part-project-on-surface",
+    "topoNamingStateHash": "sha256:a12b08ef6aab192186c7f38db9467bba2a5c2016020871f1f08e188e58594273"
+  },
+  "inputReferences": [],
+  "objects": {
+    "ProjectedFaceEdges": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::ProjectOnSurface"
+    },
+    "ProjectionFace": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    },
+    "SupportPlane": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "ProjectedFaceEdges": {
+        "covers": [
+          "ProjectedFaceEdges"
+        ],
+        "ledgerObject": "ProjectedFaceEdges",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ProjectionFace": {
+        "covers": [
+          "ProjectionFace"
+        ],
+        "ledgerObject": "ProjectionFace",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SupportPlane": {
+        "covers": [
+          "SupportPlane"
+        ],
+        "ledgerObject": "SupportPlane",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:a12b08ef6aab192186c7f38db9467bba2a5c2016020871f1f08e188e58594273",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

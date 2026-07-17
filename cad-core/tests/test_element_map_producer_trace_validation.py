@@ -21,17 +21,17 @@ class ProducerTraceValidationTests(unittest.TestCase):
         validate_trace(producer_trace())
         validate_trace(
             ROOT
-            / "fixtures/c4m6/expected/"
+            / "fixtures/topology-state/expected/"
             "topo-state-body-tip-stable-recovery.freecad.producer-trace.json"
         )
         validate_trace(
             ROOT
-            / "fixtures/p5/expected/"
+            / "fixtures/sketcher-external-geometry/expected/"
             "sketch-external-circle-edge.freecad.producer-trace.json"
         )
         validate_trace(
             ROOT
-            / "fixtures/c4m6/expected/"
+            / "fixtures/topology-state/expected/"
             "topo-state-document-hash-mismatch.freecad.producer-trace.json"
         )
 

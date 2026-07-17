@@ -1,0 +1,242 @@
+{
+  "diagnostics": [
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Surface",
+      "native_error_code": "unsupported_property",
+      "object": "InvalidSurface",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Supports",
+      "native_error_code": "unsupported_property",
+      "object": "InvalidSupportTarget",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Supports",
+      "native_error_code": "unsupported_property",
+      "object": "InvalidSupportSource",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Orders",
+      "native_error_code": "unsupported_property",
+      "object": "InvalidOrderTarget",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Orders",
+      "native_error_code": "unsupported_property",
+      "object": "InvalidOrderSource",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:0eb8486f7c2d12fd2a59fe3f3920b651b53c43ffd637230095d223508989cdf1",
+    "objects": {
+      "InvalidOrderSource": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d7af559a8903d2d20a6464fd4d0d40935d8d4b51fe4ed77593d46872126d9bf6",
+        "subshapes": {}
+      },
+      "InvalidOrderTarget": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:63bc225ff86925b62ab759fc96630b9898f8d8ce2028e7d78f59ac2c5bee03ff",
+        "subshapes": {}
+      },
+      "InvalidSupportSource": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:5559aee26ffa3b49c384257a068717cb2bc14b300cfeca306f328a152134ebea",
+        "subshapes": {}
+      },
+      "InvalidSupportTarget": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1c76ae9aac3713e0900cf6bf991c00cb778086400b008294590ff9107e3b3220",
+        "subshapes": {}
+      },
+      "InvalidSurface": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1d3c3066686aa075c8994724dcf2981ab313b41a4882ed0268ab962521e1bdb7",
+        "subshapes": {}
+      },
+      "Profile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b33b91886aac013eaa98b01f8cd524f3fa619bbbfcadff4c0c56638c325570f8",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "SupportPlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:00913f248c19123be1984edc8207c379b3e5d3e49b26d12852430bed3eb94037",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

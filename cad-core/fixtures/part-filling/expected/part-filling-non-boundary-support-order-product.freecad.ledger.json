@@ -1,0 +1,242 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "events": [],
+  "fixture": {
+    "case": "part-filling-non-boundary-support-order-product",
+    "expectedPayloadHash": "sha256:967b7662b15e7bc123d2a959bc2fc3f8f456aa42272924a45951408294572810",
+    "inputHash": "sha256:eeaa31ded13d26819189157d890e1843e25f1e16405983d8935f7474c45b8537",
+    "phase": "part-filling",
+    "topoNamingStateHash": "sha256:9c366fb263ce7e4bd905f86a956707181bdf8e989a5e2764033382a932d47f9f"
+  },
+  "inputReferences": [],
+  "objects": {
+    "ConstraintEdge": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "ConstraintWire": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    },
+    "FilledFace": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::FilledFace"
+    },
+    "Profile": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    },
+    "SupportFace": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    },
+    "SupportPlane": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "ConstraintEdge": {
+        "covers": [
+          "ConstraintEdge"
+        ],
+        "ledgerObject": "ConstraintEdge",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ConstraintWire": {
+        "covers": [
+          "ConstraintWire"
+        ],
+        "ledgerObject": "ConstraintWire",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "FilledFace": {
+        "covers": [
+          "FilledFace"
+        ],
+        "ledgerObject": "FilledFace",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Profile": {
+        "covers": [
+          "Profile"
+        ],
+        "ledgerObject": "Profile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SupportFace": {
+        "covers": [
+          "SupportFace"
+        ],
+        "ledgerObject": "SupportFace",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SupportPlane": {
+        "covers": [
+          "SupportPlane"
+        ],
+        "ledgerObject": "SupportPlane",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:9c366fb263ce7e4bd905f86a956707181bdf8e989a5e2764033382a932d47f9f",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

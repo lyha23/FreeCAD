@@ -13,6 +13,7 @@ from pathlib import Path
 CAD_CORE_ROOT = Path(__file__).resolve().parents[1]
 TOOLS = CAD_CORE_ROOT / "tools"
 sys.path.insert(0, str(TOOLS))
+sys.path.insert(0, str(CAD_CORE_ROOT / "tests"))
 SPEC = importlib.util.spec_from_file_location(
     "audit_freecad_fixture_authority",
     TOOLS / "audit_freecad_fixture_authority.py",
@@ -21,6 +22,7 @@ assert SPEC and SPEC.loader
 audit = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(audit)
 from freecad_expected_parity import retained_coverage
+from fixture_runner import semantic_fixture_path
 
 
 class FixtureAuthorityInventoryTests(unittest.TestCase):
@@ -783,6 +785,42 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
         self.assertEqual(
             "non_native_exception",
             mesh_capabilities["feature_mesh_transform"]["coverageStatus"],
+        )
+
+    def test_checked_in_fixture_phases_are_module_capability_classifications(self) -> None:
+        report = audit.build_report(CAD_CORE_ROOT, audit.ROLES_PATH)
+        classification = report["phaseClassification"]
+        self.assertEqual("passed", classification["status"])
+        self.assertEqual(39, classification["phaseCount"])
+        self.assertEqual([], classification["errors"])
+
+        phases = {row["phase"] for row in classification["phases"]}
+        self.assertIn("partdesign-extrude", phases)
+        self.assertIn("topology-resolve", phases)
+        self.assertIn("sketcher-solve", phases)
+        self.assertNotIn("p8", phases)
+        self.assertNotIn("c4m6", phases)
+
+        legacy_map_path = (
+            TOOLS / "freecad_expected_parity" / "fixture_legacy_phase_map.v1.json"
+        )
+        legacy_map = json.loads(legacy_map_path.read_text(encoding="utf-8"))
+        self.assertEqual("cad-core.fixture-legacy-phase-map.v1", legacy_map["schemaVersion"])
+        self.assertEqual(783, len(legacy_map["cases"]))
+        targets = {(row["phase"], row["case"]) for row in legacy_map["cases"]}
+        self.assertEqual(783, len(targets))
+        self.assertEqual(
+            {(row["phase"], row["case"]) for row in report["cases"]},
+            targets,
+        )
+
+    def test_explicit_semantic_phase_is_not_silently_ignored(self) -> None:
+        with self.assertRaisesRegex(AssertionError, "does not exist in semantic phase"):
+            semantic_fixture_path("part-boolean-fragments", "p8")
+
+        self.assertEqual(
+            "part-boolean",
+            semantic_fixture_path("part-boolean-fragments").parent.name,
         )
 
 

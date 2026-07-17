@@ -1,0 +1,192 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "assembly-distance-cone-sphere-default-boundary",
+    "expectedPayloadHash": "sha256:64882d673d6144af54390e6649a88728e1a24a47a454be7637e9198c40a7f63a",
+    "inputHash": "sha256:4187ee5f30296761cd23c02cbba8cd0e2c3e2ee62438c06d6de1eb6c03f4f768",
+    "phase": "assembly-solve",
+    "topoNamingStateHash": "sha256:30e9e56b6e66ce6e5a254e80860aa36709e3671de179b159a8ad9f434050ca64"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Assembly": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Assembly::AssemblyObject"
+    },
+    "ComponentA": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::AssemblyLink"
+    },
+    "ComponentB": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::AssemblyLink"
+    },
+    "ConeA": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Cone"
+    },
+    "DistanceJoint": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "App::FeaturePython"
+    },
+    "GroundedJoint": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "App::FeaturePython"
+    },
+    "Joints": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::JointGroup"
+    },
+    "SphereB": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Sphere"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {
+      "ComponentA": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "ComponentB": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "DistanceJoint": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "GroundedJoint": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "Joints": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      }
+    },
+    "publishedObjects": {
+      "Assembly": {
+        "covers": [
+          "Assembly"
+        ],
+        "ledgerObject": "Assembly",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ConeA": {
+        "covers": [
+          "ConeA"
+        ],
+        "ledgerObject": "ConeA",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SphereB": {
+        "covers": [
+          "SphereB"
+        ],
+        "ledgerObject": "SphereB",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:30e9e56b6e66ce6e5a254e80860aa36709e3671de179b159a8ad9f434050ca64",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

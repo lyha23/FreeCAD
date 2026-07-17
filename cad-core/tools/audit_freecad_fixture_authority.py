@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -26,6 +27,10 @@ from freecad_expected_parity.retained_coverage import (
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLES_PATH = Path(__file__).with_name("freecad_expected_parity") / "fixture_roles.v1.json"
+PHASE_CLASSIFICATION_PATH = (
+    Path(__file__).with_name("freecad_expected_parity")
+    / "fixture_capability_phases.v1.json"
+)
 FREECAD2_ROOT = ROOT.parent.parent / "FreeCAD2"
 DEFAULT_CLOSURE_CONTRACT = FREECAD2_ROOT / "tools" / "probe_release_contract.json"
 DEFAULT_PRUNING_PLAN = (
@@ -36,6 +41,7 @@ DEFAULT_PUBLIC_CAPABILITY_CONTRACT = (
     / "retained_public_capabilities.v1.json"
 )
 SCHEMA = "freecad-fixture-authority-inventory/v1"
+PHASE_CLASSIFICATION_SCHEMA = "cad-core.fixture-capability-phases.v1"
 
 COLLECTOR_STRUCTURED_PROPERTY_TYPES = {
     "App::PropertyBool",
@@ -108,6 +114,72 @@ def relative(path: Path, root: Path) -> str:
 
 def input_paths(fixtures_root: Path) -> list[Path]:
     return sorted(path for path in fixtures_root.glob("*/*.json") if path.is_file())
+
+
+def phase_classification_report(
+    fixtures_root: Path,
+    registry_path: Path,
+) -> dict[str, Any]:
+    """Validate that the unchanged fixtures/<phase>/<case>.json seam is semantic."""
+
+    errors: list[str] = []
+    try:
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return {
+            "status": "failed",
+            "registry": None,
+            "phaseCount": 0,
+            "errors": [f"invalid fixture capability phase registry: {exc}"],
+        }
+    if not isinstance(registry, dict) or registry.get("schemaVersion") != PHASE_CLASSIFICATION_SCHEMA:
+        errors.append(
+            f"fixture capability phase registry schema must be {PHASE_CLASSIFICATION_SCHEMA}"
+        )
+    if registry.get("layout") != "fixtures/<phase>/<case>.json":
+        errors.append("fixture capability phase registry must preserve fixtures/<phase>/<case>.json")
+    entries = registry.get("phases") if isinstance(registry, dict) else None
+    if not isinstance(entries, list) or not entries:
+        errors.append("fixture capability phase registry phases must be a non-empty list")
+        entries = []
+    registered: dict[str, dict[str, Any]] = {}
+    for index, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            errors.append(f"fixture capability phase {index} must be an object")
+            continue
+        phase = entry.get("phase")
+        module = entry.get("module")
+        capability = entry.get("capability")
+        description = entry.get("description")
+        if not all(isinstance(value, str) and value for value in (phase, module, capability, description)):
+            errors.append(f"fixture capability phase {index} has empty semantic fields")
+            continue
+        assert isinstance(phase, str)
+        if phase in registered:
+            errors.append(f"duplicate fixture capability phase {phase}")
+        if re.fullmatch(r"(?:p\d+[a-z]?|c\d+m\d+)", phase):
+            errors.append(f"historical milestone phase is forbidden: {phase}")
+        expected_prefix = re.sub(r"[^a-z0-9]+", "", str(module).lower())
+        if phase != f"{expected_prefix}-{capability}":
+            errors.append(
+                f"fixture capability phase must be <module>-<capability>: {phase}"
+            )
+        registered[phase] = entry
+
+    actual = {path.parent.name for path in input_paths(fixtures_root)}
+    missing = sorted(actual - set(registered))
+    stale = sorted(set(registered) - actual)
+    if missing:
+        errors.append(f"fixture phases missing semantic classification: {missing}")
+    if stale:
+        errors.append(f"semantic phase registry has no fixture inputs: {stale}")
+    return {
+        "status": "passed" if not errors else "failed",
+        "registry": artifact_record(registry_path, fixtures_root.parent),
+        "phaseCount": len(registered),
+        "phases": [registered[key] for key in sorted(registered)],
+        "errors": errors,
+    }
 
 
 def nested_property_types(value: Any) -> set[str]:
@@ -281,8 +353,35 @@ def probe_failure_category(detail: str) -> str:
     return "collector_general_gap"
 
 
+def legacy_fixture_key_map(root: Path) -> dict[tuple[str, str], tuple[str, str]]:
+    """Translate immutable historical receipt identities into the semantic catalog."""
+
+    path = (
+        root
+        / "tools"
+        / "freecad_expected_parity"
+        / "fixture_legacy_phase_map.v1.json"
+    )
+    try:
+        rows = json.loads(path.read_text(encoding="utf-8")).get("cases", [])
+    except (OSError, json.JSONDecodeError, AttributeError):
+        return {}
+    result: dict[tuple[str, str], tuple[str, str]] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        legacy_phase = row.get("legacyPhase")
+        legacy_case = row.get("legacyCase")
+        phase = row.get("phase")
+        case = row.get("case")
+        if all(isinstance(value, str) and value for value in (legacy_phase, legacy_case, phase, case)):
+            result[(legacy_phase, legacy_case)] = (phase, case)
+    return result
+
+
 def probe_receipts(root: Path) -> dict[tuple[str, str], dict[str, Any]]:
     reports_dir = root / "tools" / "freecad_expected_parity" / "reports" / "probes"
+    legacy_keys = legacy_fixture_key_map(root)
     receipts: dict[tuple[str, str], dict[str, Any]] = {}
     for collect_path in sorted(reports_dir.glob("*-collect.json")):
         try:
@@ -314,7 +413,8 @@ def probe_receipts(root: Path) -> dict[tuple[str, str], dict[str, Any]]:
                 repeat_report = json.loads(repeat_path.read_text(encoding="utf-8"))
             except (OSError, json.JSONDecodeError):
                 repeat_report = {}
-        receipts[(phase, case)] = {
+        key = legacy_keys.get((phase, case), (phase, case))
+        receipts[key] = {
             "collectReport": artifact_record(collect_path, root),
             "status": report.get("status"),
             "ledgerOutcome": case_report.get("ledgerOutcome"),
@@ -339,7 +439,7 @@ def probe_receipts(root: Path) -> dict[tuple[str, str], dict[str, Any]]:
         phase = revocation.get("phase")
         case = revocation.get("case")
         failure = revocation.get("failure")
-        key = (phase, case)
+        key = legacy_keys.get((phase, case), (phase, case))
         if (
             not isinstance(phase, str)
             or not isinstance(case, str)
@@ -501,6 +601,21 @@ def build_report(root: Path = ROOT, roles_path: Path = ROLES_PATH) -> dict[str, 
     catalog = load_catalog(root, roles_path=roles_path)
     anomalies = [*manifest_errors, *catalog.errors]
     inputs = input_paths(fixtures_root)
+    classification_path = roles_path.with_name("fixture_capability_phases.v1.json")
+    if classification_path.is_file() or roles_path == ROLES_PATH.resolve():
+        phase_classification = phase_classification_report(
+            fixtures_root,
+            classification_path,
+        )
+    else:
+        phase_classification = {
+            "status": "not_evaluated",
+            "registry": None,
+            "phaseCount": 0,
+            "phases": [],
+            "errors": [],
+        }
+    anomalies.extend(phase_classification["errors"])
     rows: list[dict[str, Any]] = []
     unsupported_rows: list[dict[str, Any]] = []
     protocol_rows: list[dict[str, Any]] = []
@@ -593,6 +708,7 @@ def build_report(root: Path = ROOT, roles_path: Path = ROLES_PATH) -> dict[str, 
             "path": relative(collector_path, root),
             "sha256": file_sha256(collector_path),
         },
+        "phaseClassification": phase_classification,
         "counts": {
             "inputs": len(inputs),
             "roles": dict(sorted(role_counts.items())),

@@ -1,0 +1,240 @@
+{
+  "layout": "fixtures/<phase>/<case>.json",
+  "phases": [
+    {
+      "capability": "links",
+      "description": "DocumentObject link, Link and XLink behavior.",
+      "module": "App",
+      "phase": "app-links"
+    },
+    {
+      "capability": "properties",
+      "description": "Typed property and Placement value transport.",
+      "module": "App",
+      "phase": "app-properties"
+    },
+    {
+      "capability": "links",
+      "description": "Assembly object, joint-reference and display-link envelopes.",
+      "module": "Assembly",
+      "phase": "assembly-links"
+    },
+    {
+      "capability": "solve",
+      "description": "Request-local joint solving and placement writeback.",
+      "module": "Assembly",
+      "phase": "assembly-solve"
+    },
+    {
+      "capability": "properties",
+      "description": "Material property assignment and recompute.",
+      "module": "Material",
+      "phase": "material-properties"
+    },
+    {
+      "capability": "import",
+      "description": "Mesh file import and file-property recompute.",
+      "module": "Mesh",
+      "phase": "mesh-import"
+    },
+    {
+      "capability": "boolean",
+      "description": "Boolean, section and fragment operations.",
+      "module": "Part",
+      "phase": "part-boolean"
+    },
+    {
+      "capability": "extrude",
+      "description": "Part workbench extrusion behavior.",
+      "module": "Part",
+      "phase": "part-extrude"
+    },
+    {
+      "capability": "filling",
+      "description": "Filling surface construction.",
+      "module": "Part",
+      "phase": "part-filling"
+    },
+    {
+      "capability": "geomplate",
+      "description": "GeomPlate surface construction.",
+      "module": "Part",
+      "phase": "part-geomplate"
+    },
+    {
+      "capability": "import",
+      "description": "BREP, STEP and IGES import behavior.",
+      "module": "Part",
+      "phase": "part-import"
+    },
+    {
+      "capability": "loft",
+      "description": "Part workbench loft behavior.",
+      "module": "Part",
+      "phase": "part-loft"
+    },
+    {
+      "capability": "offset",
+      "description": "2D and 3D offset behavior.",
+      "module": "Part",
+      "phase": "part-offset"
+    },
+    {
+      "capability": "primitives",
+      "description": "Part primitive construction.",
+      "module": "Part",
+      "phase": "part-primitives"
+    },
+    {
+      "capability": "project-on-surface",
+      "description": "Project-on-surface behavior.",
+      "module": "Part",
+      "phase": "part-project-on-surface"
+    },
+    {
+      "capability": "ruled-surface",
+      "description": "Ruled-surface construction.",
+      "module": "Part",
+      "phase": "part-ruled-surface"
+    },
+    {
+      "capability": "shapefix",
+      "description": "ShapeFix modification and deletion history.",
+      "module": "Part",
+      "phase": "part-shapefix"
+    },
+    {
+      "capability": "sweep",
+      "description": "Part sweep and PipeShell behavior.",
+      "module": "Part",
+      "phase": "part-sweep"
+    },
+    {
+      "capability": "thickness",
+      "description": "Part workbench thickness behavior.",
+      "module": "Part",
+      "phase": "part-thickness"
+    },
+    {
+      "capability": "binder",
+      "description": "ShapeBinder and SubShapeBinder behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-binder"
+    },
+    {
+      "capability": "body",
+      "description": "Body, Tip and feature-chain behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-body"
+    },
+    {
+      "capability": "boolean",
+      "description": "PartDesign Boolean behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-boolean"
+    },
+    {
+      "capability": "datum",
+      "description": "Datum and Origin attachment behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-datum"
+    },
+    {
+      "capability": "dressup",
+      "description": "Fillet, chamfer, draft and thickness dress-up behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-dressup"
+    },
+    {
+      "capability": "extrude",
+      "description": "Pad and Pocket extrusion behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-extrude"
+    },
+    {
+      "capability": "hole",
+      "description": "Hole geometry, thread and failure behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-hole"
+    },
+    {
+      "capability": "loft",
+      "description": "Additive and subtractive loft behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-loft"
+    },
+    {
+      "capability": "pattern",
+      "description": "Linear, polar, mirrored, scaled and multi-transform behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-pattern"
+    },
+    {
+      "capability": "pipe",
+      "description": "Additive and subtractive pipe behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-pipe"
+    },
+    {
+      "capability": "revolve",
+      "description": "Revolution and Groove behavior.",
+      "module": "PartDesign",
+      "phase": "partdesign-revolve"
+    },
+    {
+      "capability": "limits",
+      "description": "Request execution resource-limit diagnostics.",
+      "module": "Runtime",
+      "phase": "runtime-limits"
+    },
+    {
+      "capability": "external-geometry",
+      "description": "External geometry lifecycle and projection.",
+      "module": "Sketcher",
+      "phase": "sketcher-external-geometry"
+    },
+    {
+      "capability": "geometry",
+      "description": "Sketch geometry and profile construction.",
+      "module": "Sketcher",
+      "phase": "sketcher-geometry"
+    },
+    {
+      "capability": "internal-shape",
+      "description": "InternalShape, split and open-wire behavior.",
+      "module": "Sketcher",
+      "phase": "sketcher-internal-shape"
+    },
+    {
+      "capability": "solve",
+      "description": "Solver-facing constraints, diagnostics and geometry updates.",
+      "module": "Sketcher",
+      "phase": "sketcher-solve"
+    },
+    {
+      "capability": "recompute",
+      "description": "Sheet expressions, mutation and recompute.",
+      "module": "Spreadsheet",
+      "phase": "spreadsheet-recompute"
+    },
+    {
+      "capability": "element-map",
+      "description": "NamedShape, ElementMap and mapper history.",
+      "module": "Topology",
+      "phase": "topology-element-map"
+    },
+    {
+      "capability": "resolve",
+      "description": "Stable reference recovery, rename and pressure behavior.",
+      "module": "Topology",
+      "phase": "topology-resolve"
+    },
+    {
+      "capability": "state",
+      "description": "topoNamingState validation and publication.",
+      "module": "Topology",
+      "phase": "topology-state"
+    }
+  ],
+  "schemaVersion": "cad-core.fixture-capability-phases.v1"
+}

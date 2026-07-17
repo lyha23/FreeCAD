@@ -1,0 +1,59 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "sketch-internal-face-t-cutter",
+    "expectedPayloadHash": "sha256:e60a45da35b95c054934383258cb528b01e6b2c94be3b4681b15bd2d452ab57f",
+    "inputHash": "sha256:aa6898d4eee5a8172ed858aaee488bcf0e0f1fbce97ad1bcefa3423180b6c2bc",
+    "phase": "sketcher-internal-shape",
+    "topoNamingStateHash": "sha256:25b51f468cc8ecbed4d3264d0d0819a914796fd9004b329b9f1b26b1b2140ea9"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Sketch": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Sketch": {
+        "covers": [
+          "Sketch"
+        ],
+        "ledgerObject": "Sketch",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:25b51f468cc8ecbed4d3264d0d0819a914796fd9004b329b9f1b26b1b2140ea9",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

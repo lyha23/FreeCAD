@@ -1,0 +1,311 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "partdesign-datum-3d-plane-diagnostics",
+    "expectedPayloadHash": "sha256:b97106d38d2c2919a6267c8051aa83302d973f1a725b5adfba9258447ad83226",
+    "inputHash": "sha256:f1abbc7e4cea1286b2f6e6c757801b42ca098c10aeb99e2089e5652bfe4ceaee",
+    "phase": "partdesign-datum",
+    "topoNamingStateHash": "sha256:679d67ec20dfba6630cfb4db0a3987976764cd63cb00f82ed1ff5e02248f2e35"
+  },
+  "inputReferences": [],
+  "objects": {
+    "CoincidentPoint": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    },
+    "CollinearPoint": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    },
+    "DatumCSTangentMissingVertex": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSTangentWrongShapes": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSThreePointsCoincident": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSThreePointsCollinear": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSThreePointsMissingThird": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSTranslateWrongShape": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "PlaneXY": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    },
+    "SecondPoint": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    },
+    "SinglePoint": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "CoincidentPoint": {
+        "covers": [
+          "CoincidentPoint"
+        ],
+        "ledgerObject": "CoincidentPoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "CollinearPoint": {
+        "covers": [
+          "CollinearPoint"
+        ],
+        "ledgerObject": "CollinearPoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSTangentMissingVertex": {
+        "covers": [
+          "DatumCSTangentMissingVertex"
+        ],
+        "ledgerObject": "DatumCSTangentMissingVertex",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSTangentWrongShapes": {
+        "covers": [
+          "DatumCSTangentWrongShapes"
+        ],
+        "ledgerObject": "DatumCSTangentWrongShapes",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSThreePointsCoincident": {
+        "covers": [
+          "DatumCSThreePointsCoincident"
+        ],
+        "ledgerObject": "DatumCSThreePointsCoincident",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSThreePointsCollinear": {
+        "covers": [
+          "DatumCSThreePointsCollinear"
+        ],
+        "ledgerObject": "DatumCSThreePointsCollinear",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSThreePointsMissingThird": {
+        "covers": [
+          "DatumCSThreePointsMissingThird"
+        ],
+        "ledgerObject": "DatumCSThreePointsMissingThird",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSTranslateWrongShape": {
+        "covers": [
+          "DatumCSTranslateWrongShape"
+        ],
+        "ledgerObject": "DatumCSTranslateWrongShape",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "PlaneXY": {
+        "covers": [
+          "PlaneXY"
+        ],
+        "ledgerObject": "PlaneXY",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SecondPoint": {
+        "covers": [
+          "SecondPoint"
+        ],
+        "ledgerObject": "SecondPoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SinglePoint": {
+        "covers": [
+          "SinglePoint"
+        ],
+        "ledgerObject": "SinglePoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:679d67ec20dfba6630cfb4db0a3987976764cd63cb00f82ed1ff5e02248f2e35",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

@@ -1,0 +1,59 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "spreadsheet-sheet-empty",
+    "expectedPayloadHash": "sha256:3cb7e09a4b4167769f873eadc3d7bb9b2b585dc265c23ba75a904cbe249818cc",
+    "inputHash": "sha256:b22d126f604427c7556c00bee325ee6d61e203b8c7b9efad16b48b495f755260",
+    "phase": "spreadsheet-recompute",
+    "topoNamingStateHash": "sha256:24fde4271692a0d3f4be2a72b4785b44770ee4241ec2fc08db4b4a8c152c974c"
+  },
+  "inputReferences": [],
+  "objects": {
+    "EmptySheet": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Spreadsheet::Sheet"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "EmptySheet": {
+        "covers": [
+          "EmptySheet"
+        ],
+        "ledgerObject": "EmptySheet",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:24fde4271692a0d3f4be2a72b4785b44770ee4241ec2fc08db4b4a8c152c974c",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

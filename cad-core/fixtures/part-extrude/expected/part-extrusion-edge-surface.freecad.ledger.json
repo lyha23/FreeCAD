@@ -1,0 +1,295 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-extrusion-edge-surface",
+    "expectedPayloadHash": "sha256:1ddd30fc90ee2e8e412c89c1fb3b1af6676793c0563859720a02ede1c493849d",
+    "inputHash": "sha256:056ac6aa2e50921f822a4428cdea29171791e83773d2ca5d25c284069313341d",
+    "phase": "part-extrude",
+    "topoNamingStateHash": "sha256:97f50d41a7387e41822065b4a567bbb8e1a219facec0d4bc26af69979ea3ac04"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Extrude": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "#3:1;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#3:1;:U;XTR;:H*:*,E",
+              "raw": "#3:1;:U;XTR;:Hfaf:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Extrude",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Extrude",
+              "subname": "Edge4"
+            }
+          },
+          "#6:1;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#6:1;:U;XTR;:H*:*,V",
+              "raw": "#6:1;:U;XTR;:Hfaf:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Extrude",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Extrude",
+              "subname": "Vertex2"
+            }
+          },
+          "#6:2;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#6:2;:U;XTR;:H*:*,V",
+              "raw": "#6:2;:U;XTR;:Hfaf:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Extrude",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Extrude",
+              "subname": "Vertex4"
+            }
+          },
+          "Edge1;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:G;XTR;:H*:*,F",
+              "raw": "Edge1;:G;XTR;:Hfaf:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Extrude",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Extrude",
+              "subname": "Face1"
+            }
+          },
+          "Edge1;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:H*,E",
+              "raw": "Edge1;:Hfaf,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Extrude",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Extrude",
+              "subname": "Edge3"
+            }
+          },
+          "Vertex1;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:G;XTR;:H*:*,E",
+              "raw": "Vertex1;:G;XTR;:Hfaf:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Extrude",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Extrude",
+              "subname": "Edge1"
+            }
+          },
+          "Vertex1;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V",
+              "raw": "Vertex1;:Hfaf,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Extrude",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Extrude",
+              "subname": "Vertex1"
+            }
+          },
+          "Vertex2;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:G;XTR;:H*:*,E",
+              "raw": "Vertex2;:G;XTR;:Hfaf:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Extrude",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Extrude",
+              "subname": "Edge2"
+            }
+          },
+          "Vertex2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V",
+              "raw": "Vertex2;:Hfaf,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Extrude",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Extrude",
+              "subname": "Vertex3"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Extrusion"
+    },
+    "Line": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Extrude": {
+        "covers": [
+          "Extrude"
+        ],
+        "ledgerObject": "Extrude",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Line": {
+        "covers": [
+          "Line"
+        ],
+        "ledgerObject": "Line",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:97f50d41a7387e41822065b4a567bbb8e1a219facec0d4bc26af69979ea3ac04",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

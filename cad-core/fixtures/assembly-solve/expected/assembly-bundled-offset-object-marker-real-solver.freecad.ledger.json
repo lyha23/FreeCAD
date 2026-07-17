@@ -1,0 +1,321 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "assembly-bundled-offset-object-marker-real-solver",
+    "expectedPayloadHash": "sha256:31c3c12cf97ee973720a7384e5e208fa4818c7d12c9e847f64d1c3d30063450c",
+    "inputHash": "sha256:80fe1e729f255e043a04026efe997d0e5b4af32aaa1c44f1bad1bf4370daa02d",
+    "phase": "assembly-solve",
+    "topoNamingStateHash": "sha256:f98025babac4607b6020877d057af7561d453e7387cd7c59988aa96cdc9fee7c"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Assembly": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Assembly::AssemblyObject"
+    },
+    "BoxA": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    },
+    "BoxB": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    },
+    "BoxC": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    },
+    "ComponentA": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::AssemblyLink"
+    },
+    "ComponentB": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::AssemblyLink"
+    },
+    "ComponentC": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::AssemblyLink"
+    },
+    "FixedBundleJoint": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "App::FeaturePython"
+    },
+    "GroundedJoint": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "App::FeaturePython"
+    },
+    "Joints": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::JointGroup"
+    },
+    "ObjectMarkerJoint": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "App::FeaturePython"
+    },
+    "RootDistanceJoint": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "App::FeaturePython"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {
+      "ComponentA": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "ComponentB": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "ComponentC": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "FixedBundleJoint": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "GroundedJoint": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "Joints": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "ObjectMarkerJoint": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "RootDistanceJoint": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      }
+    },
+    "publishedObjects": {
+      "Assembly": {
+        "covers": [
+          "Assembly"
+        ],
+        "ledgerObject": "Assembly",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "BoxA": {
+        "covers": [
+          "BoxA"
+        ],
+        "ledgerObject": "BoxA",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "BoxB": {
+        "covers": [
+          "BoxB"
+        ],
+        "ledgerObject": "BoxB",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "BoxC": {
+        "covers": [
+          "BoxC"
+        ],
+        "ledgerObject": "BoxC",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:f98025babac4607b6020877d057af7561d453e7387cd7c59988aa96cdc9fee7c",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

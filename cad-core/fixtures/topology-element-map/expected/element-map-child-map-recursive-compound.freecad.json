@@ -1,0 +1,1500 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          45.0,
+          5.0,
+          0.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "object": "CompoundNested",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g1;SKT;:H*,E;:H*,E",
+          "fullSubname": "CompoundNested.Edge1",
+          "id": "CompoundNested:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "g1;SKT;:H591,E;:H593,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "g1;SKT;:H*,E;:H*,E",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g2;SKT;:H*,E;:H*,E",
+          "fullSubname": "CompoundNested.Edge2",
+          "id": "CompoundNested:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "g2;SKT;:H591,E;:H593,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "g2;SKT;:H*,E;:H*,E",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g1;SKT;:H*,E;:H*,E",
+          "fullSubname": "CompoundNested.Edge3",
+          "id": "CompoundNested:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "g1;SKT;:H592,E;:H593,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "g1;SKT;:H*,E;:H*,E",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g2;SKT;:H*,E;:H*,E",
+          "fullSubname": "CompoundNested.Edge4",
+          "id": "CompoundNested:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "g2;SKT;:H592,E;:H593,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "g2;SKT;:H*,E;:H*,E",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g1;SKT;:H*,E",
+          "fullSubname": "CompoundNested.Edge5",
+          "id": "CompoundNested:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "g1;SKT;:H594,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "g1;SKT;:H*,E",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g1v1;SKT;:H*,V;:H*,V",
+          "fullSubname": "CompoundNested.Vertex1",
+          "id": "CompoundNested:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "g1v1;SKT;:H591,V;:H593,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "g1v1;SKT;:H*,V;:H*,V",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g1v2;SKT;:H*,V;:H*,V",
+          "fullSubname": "CompoundNested.Vertex2",
+          "id": "CompoundNested:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "g1v2;SKT;:H591,V;:H593,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "g1v2;SKT;:H*,V;:H*,V",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g2v2;SKT;:H*,V;:H*,V",
+          "fullSubname": "CompoundNested.Vertex3",
+          "id": "CompoundNested:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "g2v2;SKT;:H591,V;:H593,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "g2v2;SKT;:H*,V;:H*,V",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g1v1;SKT;:H*,V;:H*,V",
+          "fullSubname": "CompoundNested.Vertex4",
+          "id": "CompoundNested:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "g1v1;SKT;:H592,V;:H593,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "g1v1;SKT;:H*,V;:H*,V",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g1v2;SKT;:H*,V;:H*,V",
+          "fullSubname": "CompoundNested.Vertex5",
+          "id": "CompoundNested:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "g1v2;SKT;:H592,V;:H593,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "g1v2;SKT;:H*,V;:H*,V",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g2v2;SKT;:H*,V;:H*,V",
+          "fullSubname": "CompoundNested.Vertex6",
+          "id": "CompoundNested:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "g2v2;SKT;:H592,V;:H593,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "g2v2;SKT;:H*,V;:H*,V",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g1v1;SKT;:H*,V",
+          "fullSubname": "CompoundNested.Vertex7",
+          "id": "CompoundNested:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "g1v1;SKT;:H594,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "g1v1;SKT;:H*,V",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "g1v2;SKT;:H*,V",
+          "fullSubname": "CompoundNested.Vertex8",
+          "id": "CompoundNested:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "g1v2;SKT;:H594,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "g1v2;SKT;:H*,V",
+          "subname": "Vertex8"
+        }
+      ],
+      "topology_counts": {
+        "edges": 5,
+        "faces": 0,
+        "vertices": 8
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:532c153682ad9d546b25d42b710a8e54dbc1b8331733726aa497406779e0b3c2",
+    "objects": {
+      "CompoundAB": {
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "SketchA",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "g1;SKT;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1;SKT;:H*,E",
+                    "raw": "g1;SKT;:H591,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "SketchA",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Edge1"
+                  }
+                },
+                "g1v1;SKT;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v1;SKT;:H*,V",
+                    "raw": "g1v1;SKT;:H591,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchA",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex1"
+                  }
+                },
+                "g1v2;SKT;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v2;SKT;:H*,V",
+                    "raw": "g1v2;SKT;:H591,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchA",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex2"
+                  }
+                },
+                "g2;SKT;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g2;SKT;:H*,E",
+                    "raw": "g2;SKT;:H591,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "SketchA",
+                    "subname": "Edge2"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Edge2"
+                  }
+                },
+                "g2v2;SKT;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g2v2;SKT;:H*,V",
+                    "raw": "g2v2;SKT;:H591,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchA",
+                    "subname": "Vertex3"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex3"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "CompoundAB:SketchA:Child0",
+            "ownerObject": "CompoundAB",
+            "pathPrefix": "Child0"
+          },
+          {
+            "childIndex": 1,
+            "childObject": "SketchB",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "g1;SKT;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1;SKT;:H*,E",
+                    "raw": "g1;SKT;:H592,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "SketchB",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Edge3"
+                  }
+                },
+                "g1v1;SKT;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v1;SKT;:H*,V",
+                    "raw": "g1v1;SKT;:H592,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchB",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex4"
+                  }
+                },
+                "g1v2;SKT;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v2;SKT;:H*,V",
+                    "raw": "g1v2;SKT;:H592,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchB",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex5"
+                  }
+                },
+                "g2;SKT;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g2;SKT;:H*,E",
+                    "raw": "g2;SKT;:H592,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "SketchB",
+                    "subname": "Edge2"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Edge4"
+                  }
+                },
+                "g2v2;SKT;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundAB:SketchB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g2v2;SKT;:H*,V",
+                    "raw": "g2v2;SKT;:H592,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchB",
+                    "subname": "Vertex3"
+                  },
+                  "target": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex6"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "CompoundAB:SketchB:Child1",
+            "ownerObject": "CompoundAB",
+            "pathPrefix": "Child1"
+          }
+        ],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g1;SKT;:H*,E",
+                  "raw": "g1;SKT;:H591,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Edge1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g1;SKT;:H*,E",
+                  "raw": "g1;SKT;:H592,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Edge3"
+                }
+              }
+            ],
+            "id": "canonical-collision-62e029588c0a417b",
+            "mappedName": {
+              "canonical": "g1;SKT;:H*,E",
+              "raw": "g1;SKT;:H591,E"
+            },
+            "message": "Canonical elementMap key g1;SKT;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g2;SKT;:H*,E",
+                  "raw": "g2;SKT;:H591,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Edge2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g2;SKT;:H*,E",
+                  "raw": "g2;SKT;:H592,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Edge4"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Edge4"
+                }
+              }
+            ],
+            "id": "canonical-collision-3fc3f54b19f3ffb2",
+            "mappedName": {
+              "canonical": "g2;SKT;:H*,E",
+              "raw": "g2;SKT;:H591,E"
+            },
+            "message": "Canonical elementMap key g2;SKT;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g1v1;SKT;:H*,V",
+                  "raw": "g1v1;SKT;:H591,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g1v1;SKT;:H*,V",
+                  "raw": "g1v1;SKT;:H592,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex4"
+                }
+              }
+            ],
+            "id": "canonical-collision-64254e89d15a007f",
+            "mappedName": {
+              "canonical": "g1v1;SKT;:H*,V",
+              "raw": "g1v1;SKT;:H591,V"
+            },
+            "message": "Canonical elementMap key g1v1;SKT;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g1v2;SKT;:H*,V",
+                  "raw": "g1v2;SKT;:H591,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g1v2;SKT;:H*,V",
+                  "raw": "g1v2;SKT;:H592,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex5"
+                }
+              }
+            ],
+            "id": "canonical-collision-9cf2a66eb4baa35e",
+            "mappedName": {
+              "canonical": "g1v2;SKT;:H*,V",
+              "raw": "g1v2;SKT;:H591,V"
+            },
+            "message": "Canonical elementMap key g1v2;SKT;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g2v2;SKT;:H*,V",
+                  "raw": "g2v2;SKT;:H591,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex3"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g2v2;SKT;:H*,V",
+                  "raw": "g2v2;SKT;:H592,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex6"
+                }
+              }
+            ],
+            "id": "canonical-collision-0671f0cf2105dd93",
+            "mappedName": {
+              "canonical": "g2v2;SKT;:H*,V",
+              "raw": "g2v2;SKT;:H591,V"
+            },
+            "message": "Canonical elementMap key g2v2;SKT;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          }
+        ],
+        "objectHash": "sha256:b447958b62fa4f316b9028bc61a3d5865236d7ce4c0821e576e940a1ef9415c1",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "g1;SKT;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1;SKT;:H591,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "g2;SKT;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g2;SKT;:H591,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "g1;SKT;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1;SKT;:H592,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "g2;SKT;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g2;SKT;:H592,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "g1v1;SKT;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v1;SKT;:H591,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "g1v2;SKT;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v2;SKT;:H591,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "g2v2;SKT;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g2v2;SKT;:H591,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "g1v1;SKT;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v1;SKT;:H592,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "g1v2;SKT;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v2;SKT;:H592,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "g2v2;SKT;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g2v2;SKT;:H592,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          }
+        }
+      },
+      "CompoundNested": {
+        "childElementMaps": [
+          {
+            "childIndex": 1,
+            "childObject": "SketchC",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "g1;SKT;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:SketchC:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1;SKT;:H*,E",
+                    "raw": "g1;SKT;:H594,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "SketchC",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Edge5"
+                  }
+                },
+                "g1v1;SKT;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:SketchC:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v1;SKT;:H*,V",
+                    "raw": "g1v1;SKT;:H594,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchC",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex7"
+                  }
+                },
+                "g1v2;SKT;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:SketchC:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v2;SKT;:H*,V",
+                    "raw": "g1v2;SKT;:H594,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchC",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex8"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "CompoundNested:SketchC:Child1",
+            "ownerObject": "CompoundNested",
+            "pathPrefix": "Child1"
+          }
+        ],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "g1;SKT;:H*,E": {
+              "evidence": {
+                "childElementMapKey": "CompoundNested:SketchC:Child1",
+                "mapperHistoryIds": [],
+                "source": "freecad_part_compound_links"
+              },
+              "mappedName": {
+                "canonical": "g1;SKT;:H*,E",
+                "raw": "g1;SKT;:H594,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "SketchC",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "CompoundNested",
+                "subname": "Edge5"
+              }
+            },
+            "g1v1;SKT;:H*,V": {
+              "evidence": {
+                "childElementMapKey": "CompoundNested:SketchC:Child1",
+                "mapperHistoryIds": [],
+                "source": "freecad_part_compound_links"
+              },
+              "mappedName": {
+                "canonical": "g1v1;SKT;:H*,V",
+                "raw": "g1v1;SKT;:H594,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "SketchC",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "CompoundNested",
+                "subname": "Vertex7"
+              }
+            },
+            "g1v2;SKT;:H*,V": {
+              "evidence": {
+                "childElementMapKey": "CompoundNested:SketchC:Child1",
+                "mapperHistoryIds": [],
+                "source": "freecad_part_compound_links"
+              },
+              "mappedName": {
+                "canonical": "g1v2;SKT;:H*,V",
+                "raw": "g1v2;SKT;:H594,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "SketchC",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "CompoundNested",
+                "subname": "Vertex8"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g1;SKT;:H*,E;:H*,E",
+                  "raw": "g1;SKT;:H591,E;:H593,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Edge1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g1;SKT;:H*,E;:H*,E",
+                  "raw": "g1;SKT;:H592,E;:H593,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Edge3"
+                }
+              }
+            ],
+            "id": "canonical-collision-dfde9ac2f4fcdd94",
+            "mappedName": {
+              "canonical": "g1;SKT;:H*,E;:H*,E",
+              "raw": "g1;SKT;:H591,E;:H593,E"
+            },
+            "message": "Canonical elementMap key g1;SKT;:H*,E;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g2;SKT;:H*,E;:H*,E",
+                  "raw": "g2;SKT;:H591,E;:H593,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Edge2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g2;SKT;:H*,E;:H*,E",
+                  "raw": "g2;SKT;:H592,E;:H593,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Edge4"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Edge4"
+                }
+              }
+            ],
+            "id": "canonical-collision-0353713dbf6083a6",
+            "mappedName": {
+              "canonical": "g2;SKT;:H*,E;:H*,E",
+              "raw": "g2;SKT;:H591,E;:H593,E"
+            },
+            "message": "Canonical elementMap key g2;SKT;:H*,E;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g1v1;SKT;:H*,V;:H*,V",
+                  "raw": "g1v1;SKT;:H591,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g1v1;SKT;:H*,V;:H*,V",
+                  "raw": "g1v1;SKT;:H592,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex4"
+                }
+              }
+            ],
+            "id": "canonical-collision-0be8e484cbe75096",
+            "mappedName": {
+              "canonical": "g1v1;SKT;:H*,V;:H*,V",
+              "raw": "g1v1;SKT;:H591,V;:H593,V"
+            },
+            "message": "Canonical elementMap key g1v1;SKT;:H*,V;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g1v2;SKT;:H*,V;:H*,V",
+                  "raw": "g1v2;SKT;:H591,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g1v2;SKT;:H*,V;:H*,V",
+                  "raw": "g1v2;SKT;:H592,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex5"
+                }
+              }
+            ],
+            "id": "canonical-collision-a604288776eea296",
+            "mappedName": {
+              "canonical": "g1v2;SKT;:H*,V;:H*,V",
+              "raw": "g1v2;SKT;:H591,V;:H593,V"
+            },
+            "message": "Canonical elementMap key g1v2;SKT;:H*,V;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g2v2;SKT;:H*,V;:H*,V",
+                  "raw": "g2v2;SKT;:H591,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex3"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g2v2;SKT;:H*,V;:H*,V",
+                  "raw": "g2v2;SKT;:H592,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex6"
+                }
+              }
+            ],
+            "id": "canonical-collision-17e134e919eed4f6",
+            "mappedName": {
+              "canonical": "g2v2;SKT;:H*,V;:H*,V",
+              "raw": "g2v2;SKT;:H591,V;:H593,V"
+            },
+            "message": "Canonical elementMap key g2v2;SKT;:H*,V;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g1;SKT;:H*,E;:H*,E",
+                  "raw": "g1;SKT;:H591,E;:H593,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Edge1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g1;SKT;:H*,E;:H*,E",
+                  "raw": "g1;SKT;:H592,E;:H593,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Edge3"
+                }
+              }
+            ],
+            "id": "canonical-collision-b27ed8ab7097357e",
+            "mappedName": {
+              "canonical": "g1;SKT;:H*,E;:H*,E",
+              "raw": "g1;SKT;:H591,E;:H593,E"
+            },
+            "message": "Canonical elementMap key g1;SKT;:H*,E;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g2;SKT;:H*,E;:H*,E",
+                  "raw": "g2;SKT;:H591,E;:H593,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Edge2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g2;SKT;:H*,E;:H*,E",
+                  "raw": "g2;SKT;:H592,E;:H593,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Edge4"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Edge4"
+                }
+              }
+            ],
+            "id": "canonical-collision-772150e4c58ec12a",
+            "mappedName": {
+              "canonical": "g2;SKT;:H*,E;:H*,E",
+              "raw": "g2;SKT;:H591,E;:H593,E"
+            },
+            "message": "Canonical elementMap key g2;SKT;:H*,E;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g1v1;SKT;:H*,V;:H*,V",
+                  "raw": "g1v1;SKT;:H591,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g1v1;SKT;:H*,V;:H*,V",
+                  "raw": "g1v1;SKT;:H592,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex4"
+                }
+              }
+            ],
+            "id": "canonical-collision-3c60bf33e76efa2b",
+            "mappedName": {
+              "canonical": "g1v1;SKT;:H*,V;:H*,V",
+              "raw": "g1v1;SKT;:H591,V;:H593,V"
+            },
+            "message": "Canonical elementMap key g1v1;SKT;:H*,V;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g1v2;SKT;:H*,V;:H*,V",
+                  "raw": "g1v2;SKT;:H591,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g1v2;SKT;:H*,V;:H*,V",
+                  "raw": "g1v2;SKT;:H592,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex5"
+                }
+              }
+            ],
+            "id": "canonical-collision-30336a6a48e66c22",
+            "mappedName": {
+              "canonical": "g1v2;SKT;:H*,V;:H*,V",
+              "raw": "g1v2;SKT;:H591,V;:H593,V"
+            },
+            "message": "Canonical elementMap key g1v2;SKT;:H*,V;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "g2v2;SKT;:H*,V;:H*,V",
+                  "raw": "g2v2;SKT;:H591,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex3"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "g2v2;SKT;:H*,V;:H*,V",
+                  "raw": "g2v2;SKT;:H592,V;:H593,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "CompoundAB",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "CompoundNested",
+                  "subname": "Vertex6"
+                }
+              }
+            ],
+            "id": "canonical-collision-43d4467ec5387170",
+            "mappedName": {
+              "canonical": "g2v2;SKT;:H*,V;:H*,V",
+              "raw": "g2v2;SKT;:H591,V;:H593,V"
+            },
+            "message": "Canonical elementMap key g2v2;SKT;:H*,V;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          }
+        ],
+        "objectHash": "sha256:ce48afcc5f256a504e959db1145ed6cbb71647b36a9af302dd1b363f9310fa3c",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "g1;SKT;:H*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1;SKT;:H591,E;:H593,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "g2;SKT;:H*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g2;SKT;:H591,E;:H593,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "g1;SKT;:H*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1;SKT;:H592,E;:H593,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "g2;SKT;:H*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g2;SKT;:H592,E;:H593,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "g1;SKT;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1;SKT;:H594,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "g1v1;SKT;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v1;SKT;:H591,V;:H593,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "g1v2;SKT;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v2;SKT;:H591,V;:H593,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "g2v2;SKT;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g2v2;SKT;:H591,V;:H593,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "g1v1;SKT;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v1;SKT;:H592,V;:H593,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "g1v2;SKT;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v2;SKT;:H592,V;:H593,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "g2v2;SKT;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g2v2;SKT;:H592,V;:H593,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "g1v1;SKT;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v1;SKT;:H594,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "g1v2;SKT;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1v2;SKT;:H594,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          }
+        }
+      },
+      "SketchA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:71661af484f9a83ca2f13c49bf47774ed9e250535ca2776381c658f3964c9442",
+        "subshapes": {}
+      },
+      "SketchB": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:56601a4369020e7e1b846a1fd7ac74c35d9b492eb8cebe1e62acfc34c8818ef4",
+        "subshapes": {}
+      },
+      "SketchC": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:f5ba0a8d5f4e7be519dec8f3ac86d161a621085d471b88fc39d1c23764457aab",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

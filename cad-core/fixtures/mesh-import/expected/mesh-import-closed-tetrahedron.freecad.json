@@ -1,0 +1,54 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh_summary": {
+        "triangle_count": 4,
+        "vertex_count": 4
+      },
+      "object": "ClosedTetrahedron",
+      "topology_counts": {
+        "edges": 6,
+        "faces": 4,
+        "vertices": 4
+      },
+      "volume": 0.1666666716337204
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:b6af27a118505572d2bb8c78a1016b2fba2101998a7f7ca0ead5be0a8acff351",
+    "objects": {
+      "ClosedTetrahedron": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:e024104c102a03006d9d216c9d9e68c7f617357842baf2cdbe96448cabd40d5a",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

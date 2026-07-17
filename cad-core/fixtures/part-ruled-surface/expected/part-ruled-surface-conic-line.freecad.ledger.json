@@ -1,0 +1,103 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-ruled-surface-conic-line",
+    "expectedPayloadHash": "sha256:55cad826f3649de54b7c6d67b4a8218583312d99e60f927028335f13a71587a4",
+    "inputHash": "sha256:6028b30abf2c500f74b4b4e5a448e89b501989a6c6aaac8c0a5ca5a879872a8a",
+    "phase": "part-ruled-surface",
+    "topoNamingStateHash": "sha256:4421d212ffd966bffe11c036388224bd199b71c7c63ac3e3dadeef46efb8519e"
+  },
+  "inputReferences": [],
+  "objects": {
+    "BridgeLine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "ConicRuledSurface": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RuledSurface"
+    },
+    "HyperbolaEdge": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeometryCurve"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "BridgeLine": {
+        "covers": [
+          "BridgeLine"
+        ],
+        "ledgerObject": "BridgeLine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ConicRuledSurface": {
+        "covers": [
+          "ConicRuledSurface"
+        ],
+        "ledgerObject": "ConicRuledSurface",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "HyperbolaEdge": {
+        "covers": [
+          "HyperbolaEdge"
+        ],
+        "ledgerObject": "HyperbolaEdge",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:4421d212ffd966bffe11c036388224bd199b71c7c63ac3e3dadeef46efb8519e",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

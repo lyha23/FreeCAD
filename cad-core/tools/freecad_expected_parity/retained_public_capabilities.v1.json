@@ -1,6 +1,942 @@
 {
-  "schema": "freecad-retained-public-capabilities/v1",
-  "scope": "Representative retained FreeCAD public capabilities and major headless runtime branches mapped independently from the current fixture corpus.",
+  "modules": [
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "app-links/app-link-box-placement-alias",
+              "level": "target_result"
+            }
+          ],
+          "id": "placement_and_value_transport",
+          "publicSurface": "Base::Placement and core value types",
+          "runtimeBranch": "Python values are converted into document properties and collected back into public expected output.",
+          "sourceEvidence": [
+            "src/Base/Placement.cpp::Base::Placement",
+            "src/Base/Vector3D.cpp::Base::Vector3d"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-primitives/part-box",
+              "level": "entrypoint_smoke_only"
+            }
+          ],
+          "id": "console_and_exception_surfaces",
+          "publicSurface": "Base::Console and Base exception translation",
+          "runtimeBranch": "The native command process initializes these services, but fixtures do not assert their public formatting and handler branches.",
+          "sourceEvidence": [
+            "src/Base/Console.cpp::Base::ConsoleSingleton",
+            "src/Base/Exception.cpp::Base::Exception"
+          ]
+        }
+      ],
+      "name": "FreeCADBase"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-primitives/part-box",
+              "level": "target_result"
+            }
+          ],
+          "id": "document_graph_recompute",
+          "publicSurface": "App::Document object graph and recompute",
+          "runtimeBranch": "Create objects, assign properties, resolve dependencies, and recompute a target result.",
+          "sourceEvidence": [
+            "src/App/Document.cpp::App::Document::recompute",
+            "src/App/DocumentObject.cpp::App::DocumentObject::recompute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "app-links/app-link-copy-on-change-touched-tracking",
+              "level": "target_result"
+            }
+          ],
+          "id": "link_copy_on_change",
+          "publicSurface": "App link properties and copy-on-change",
+          "runtimeBranch": "Touched source state propagates through link ownership and copy-on-change tracking.",
+          "sourceEvidence": [
+            "src/App/PropertyLinks.cpp::App::PropertyLinkBase",
+            "src/App/Link.cpp::App::LinkBaseExtension"
+          ]
+        },
+        {
+          "disposition": "protocol_only",
+          "fixtureEvidence": [],
+          "id": "persisted_restore_transactions",
+          "publicSurface": "App::Document restore, transaction, and undo/redo APIs",
+          "rationale": "The request fixture protocol currently creates a fresh request-local document and has no persisted restore or transaction envelope.",
+          "runtimeBranch": "Restore-time object identity repair and transaction replay require a persisted document lifecycle.",
+          "sourceEvidence": [
+            "src/App/Document.cpp::App::Document::restore",
+            "src/App/Document.cpp::App::Document::undo"
+          ]
+        }
+      ],
+      "name": "FreeCADApp"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-primitives/part-box",
+              "level": "target_result"
+            }
+          ],
+          "id": "headless_command_startup",
+          "publicSurface": "FreeCADCmd headless application entrypoint",
+          "runtimeBranch": "Initialize the application, modules, and Python command execution used by the native collector.",
+          "sourceEvidence": [
+            "src/Main/MainCmd.cpp::main"
+          ]
+        },
+        {
+          "disposition": "uncovered",
+          "fixtureEvidence": [],
+          "id": "command_line_error_and_shutdown_modes",
+          "publicSurface": "FreeCADCmd option parsing, process exit, and shutdown",
+          "rationale": "Geometry fixtures run one successful collector command shape and do not assert the general command-line program contract.",
+          "runtimeBranch": "Invalid options, startup failures, signal handling, and non-collector shutdown modes.",
+          "sourceEvidence": [
+            "src/Main/MainCmd.cpp::main"
+          ]
+        }
+      ],
+      "name": "FreeCADMainCmd"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-primitives/part-box",
+              "level": "entrypoint_smoke_only"
+            }
+          ],
+          "id": "embedded_python_entry",
+          "publicSurface": "FreeCAD Python module initialization",
+          "runtimeBranch": "The collector imports FreeCAD and retained modules in the command process.",
+          "sourceEvidence": [
+            "src/Main/MainPy.cpp::PyInit_FreeCAD"
+          ]
+        },
+        {
+          "disposition": "protocol_only",
+          "fixtureEvidence": [],
+          "id": "embedded_application_lifecycle",
+          "publicSurface": "FreeCAD embedding and external Python lifecycle",
+          "rationale": "The native fixture collector owns a single FreeCADCmd process and does not exercise host embedding or repeated interpreter lifecycles.",
+          "runtimeBranch": "Repeated initialize/finalize and host-embedded interpreter behavior.",
+          "sourceEvidence": [
+            "src/Main/MainPy.cpp::PyInit_FreeCAD"
+          ]
+        }
+      ],
+      "name": "FreeCADMainPy"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "material-properties/material-part-feature-shape-material",
+              "level": "target_result"
+            }
+          ],
+          "id": "part_feature_shape_material_assignment",
+          "publicSurface": "Part::Feature.ShapeMaterial using Materials::PropertyMaterial",
+          "runtimeBranch": "Assign a populated material map and publish its public material fields.",
+          "sourceEvidence": [
+            "src/Mod/Part/App/PartFeature.cpp::Part::Feature::Feature",
+            "src/Mod/Material/App/PropertyMaterial.cpp::Materials::PropertyMaterial::setPyObject"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "material-properties/material-part-feature-material-recompute-update",
+              "level": "target_result"
+            }
+          ],
+          "id": "material_recompute_update",
+          "publicSurface": "Materials::PropertyMaterial mutation",
+          "runtimeBranch": "Mutate the material after one native recompute and collect the second recompute result.",
+          "sourceEvidence": [
+            "src/Mod/Material/App/PropertyMaterial.cpp::Materials::PropertyMaterial::setPyObject",
+            "src/Mod/Material/App/Materials.cpp::Materials::Material::setName"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "material-properties/material-part-feature-minimal-material",
+              "level": "target_result"
+            }
+          ],
+          "id": "minimal_material_boundary",
+          "publicSurface": "Materials::Material optional metadata",
+          "runtimeBranch": "Accept the minimal material name while other public metadata remains empty.",
+          "sourceEvidence": [
+            "src/Mod/Material/App/Materials.cpp::Materials::Material"
+          ]
+        },
+        {
+          "disposition": "uncovered",
+          "fixtureEvidence": [],
+          "id": "material_library_and_card_resolution",
+          "publicSurface": "Material cards, libraries, inheritance, and schema validation",
+          "rationale": "The current request protocol exposes a material property map but no library URI, inheritance, or model-resolution contract.",
+          "runtimeBranch": "Resolve cards from libraries, inheritance chains, and schema-backed physical or appearance models.",
+          "sourceEvidence": [
+            "src/Mod/Material/App/Materials.cpp::Materials::Material",
+            "src/Mod/Material/App/MaterialManager.cpp::Materials::MaterialManager"
+          ]
+        }
+      ],
+      "name": "Material"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-primitives/part-box",
+              "level": "target_result"
+            }
+          ],
+          "id": "primitive_execute",
+          "publicSurface": "Part primitive features",
+          "runtimeBranch": "Execute a primitive and collect its shape, placement, bounds, and topology.",
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeaturePartBox.cpp::Part::Box::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-primitives/part-cut",
+              "level": "target_result"
+            }
+          ],
+          "id": "boolean_execute",
+          "publicSurface": "Part boolean features",
+          "runtimeBranch": "Resolve linked operands and execute a boolean cut.",
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeaturePartBoolean.cpp::Part::Cut::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-import/part-import-step",
+              "level": "target_result"
+            }
+          ],
+          "id": "data_exchange_import",
+          "publicSurface": "Part import features",
+          "runtimeBranch": "Read a STEP shape through the native import execution path.",
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeaturePartImportStep.cpp::Part::ImportStep::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-extrude/part-extrusion-taper",
+              "level": "target_result"
+            }
+          ],
+          "id": "extrusion_options",
+          "publicSurface": "Part::Extrusion",
+          "runtimeBranch": "Build an extrusion using taper and feature option branches.",
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeatureExtrusion.cpp::Part::Extrusion::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-offset/part-offset-face",
+              "level": "target_result"
+            },
+            {
+              "fixture": "part-loft/part-loft-solid",
+              "level": "target_result"
+            },
+            {
+              "fixture": "part-sweep/part-sweep-solid",
+              "level": "target_result"
+            }
+          ],
+          "id": "offset_loft_sweep_builders",
+          "publicSurface": "Part offset, loft, and sweep features",
+          "runtimeBranch": "Execute representative offset, solid loft, and solid sweep builder paths.",
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeatureOffset.cpp::Part::Offset::execute",
+            "src/Mod/Part/App/PartFeatures.cpp::Part::Loft::execute",
+            "src/Mod/Part/App/PartFeatures.cpp::Part::Sweep::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "part-geomplate/part-geomplate-curve-point-default",
+              "level": "target_result"
+            }
+          ],
+          "id": "geomplate_build",
+          "publicSurface": "Part GeomPlate surface construction",
+          "runtimeBranch": "Build a surface from curve and point constraints.",
+          "sourceEvidence": [
+            "src/Mod/Part/App/Tools.cpp::Part::Tools::makeSurface"
+          ]
+        },
+        {
+          "disposition": "protocol_only",
+          "fixtureEvidence": [],
+          "id": "direct_export_side_effects",
+          "publicSurface": "Part shape export APIs",
+          "rationale": "Native geometry fixtures intentionally consume controlled input assets and do not make arbitrary output filesystem side effects part of the request protocol.",
+          "runtimeBranch": "Write BREP, STEP, IGES, or other exchange files as a public side effect.",
+          "sourceEvidence": [
+            "src/Mod/Part/App/TopoShapePyImp.cpp::TopoShapePy::exportStep"
+          ]
+        }
+      ],
+      "name": "Part"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "sketcher-solve/sketch-coincident-profile",
+              "level": "target_result"
+            }
+          ],
+          "id": "geometry_and_internal_shape",
+          "publicSurface": "Sketcher::SketchObject geometry and InternalShape",
+          "runtimeBranch": "Build a constrained profile and its public sketch geometry result.",
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::execute",
+            "src/Mod/Sketcher/App/SketchObjectGeometry.cpp::Sketcher::SketchObject"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "sketcher-solve/sketch-circle-radius-solver-geometry-update",
+              "level": "target_result"
+            }
+          ],
+          "id": "solver_facing_geometry_update",
+          "publicSurface": "Sketch constraints and solver-facing state",
+          "runtimeBranch": "Apply a dimensional constraint and observe the solved geometry update.",
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObjectConstraints.cpp::Sketcher::SketchObject::solve"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "sketcher-external-geometry/sketch-external-face-both",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-external-geometry/sketch-external-whole-box",
+              "level": "target_result"
+            }
+          ],
+          "id": "external_geometry_projection",
+          "publicSurface": "Sketch external geometry links",
+          "runtimeBranch": "Project linked face and whole-object geometry into the sketch.",
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObjectExternal.cpp::Sketcher::SketchObject::addExternal"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "sketcher-solve/sketch-underconstrained-no-constraints",
+              "level": "native_diagnostic"
+            }
+          ],
+          "id": "underconstrained_diagnostics",
+          "publicSurface": "Sketch solver-facing diagnostics",
+          "runtimeBranch": "Publish a valid underconstrained state without treating it as an execution failure.",
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::solve"
+          ]
+        },
+        {
+          "disposition": "unsupported",
+          "fixtureEvidence": [
+            {
+              "fixture": "sketcher-solve/sketch-conflicting-constraints",
+              "level": "unsupported_contract"
+            }
+          ],
+          "id": "conflicting_constraint_native_boundary",
+          "publicSurface": "Sketch conflicting constraint status",
+          "rationale": "The fixture role registry records this case as unsupported rather than native authority; it must not be counted as an executed native diagnostic.",
+          "runtimeBranch": "The requested conflict contract cannot currently be reproduced as stable native public expected output.",
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::solve"
+          ]
+        },
+        {
+          "disposition": "uncovered",
+          "fixtureEvidence": [],
+          "id": "advanced_geometry_and_operation_matrix",
+          "publicSurface": "Remaining Sketch geometry types and editing operations",
+          "rationale": "The corpus contains representative profiles and solver updates, but this maintained inventory has not established branch-complete native evidence for every editing operation and geometry family.",
+          "runtimeBranch": "The full conic, B-spline, trim, extend, fillet, clone, and block operation matrix.",
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObjectGeometry.cpp::Sketcher::SketchObject",
+            "src/Mod/Sketcher/App/SketchObjectOperations.cpp::Sketcher::SketchObject"
+          ]
+        }
+      ],
+      "name": "Sketcher"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "partdesign-body/body-curved-face-pad-profile-normal",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "partdesign-extrude/pocket-custom-vector",
+              "level": "dependency_result"
+            }
+          ],
+          "id": "body_pad_pocket_chain",
+          "publicSurface": "PartDesign Body, Pad, and Pocket",
+          "runtimeBranch": "Execute additive and subtractive features through the Body dependency chain.",
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/Body.cpp::PartDesign::Body::execute",
+            "src/Mod/PartDesign/App/FeaturePad.cpp::PartDesign::Pad::execute",
+            "src/Mod/PartDesign/App/FeaturePocket.cpp::PartDesign::Pocket::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "partdesign-revolve/partdesign-revolution-axis-angle-body",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "partdesign-revolve/partdesign-groove-axis-angle-body",
+              "level": "dependency_result"
+            }
+          ],
+          "id": "revolution_and_groove",
+          "publicSurface": "PartDesign Revolution and Groove",
+          "runtimeBranch": "Resolve profile and axis, then execute additive and subtractive revolved features in a Body.",
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureRevolution.cpp::PartDesign::Revolution::execute",
+            "src/Mod/PartDesign/App/FeatureGroove.cpp::PartDesign::Groove::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "partdesign-hole/hole-supported-blind-depth",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "partdesign-hole/hole-supported-through-all",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "partdesign-hole/hole-supported-counterbore",
+              "level": "dependency_result"
+            }
+          ],
+          "id": "hole_modes",
+          "publicSurface": "PartDesign Hole",
+          "runtimeBranch": "Execute representative blind-depth, through-all, and counterbore cut branches.",
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureHole.cpp::PartDesign::Hole::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "partdesign-dressup/chamfer-distance-angle-edge",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "partdesign-dressup/draft-face-auto-neutral-plane",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "partdesign-dressup/thickness-face-skin-arc",
+              "level": "dependency_result"
+            }
+          ],
+          "id": "dressup_features",
+          "publicSurface": "PartDesign Chamfer, Draft, and Thickness",
+          "runtimeBranch": "Execute representative dress-up features against selected subshapes.",
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureChamfer.cpp::PartDesign::Chamfer::execute",
+            "src/Mod/PartDesign/App/FeatureDraft.cpp::PartDesign::Draft::execute",
+            "src/Mod/PartDesign/App/FeatureThickness.cpp::PartDesign::Thickness::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "partdesign-pattern/linear-pattern-multi-original-link-retag",
+              "level": "dependency_result"
+            }
+          ],
+          "id": "pattern_transform_history",
+          "publicSurface": "PartDesign transformed features and pattern history",
+          "runtimeBranch": "Execute a multi-original linear pattern and preserve linked history evidence.",
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureLinearPattern.cpp::PartDesign::LinearPattern::getTransformations",
+            "src/Mod/PartDesign/App/FeatureTransformed.cpp::PartDesign::Transformed::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "partdesign-loft/partdesign-loft-additive-body",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "partdesign-pipe/partdesign-pipe-additive-lifecycle",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "partdesign-boolean/partdesign-boolean-fuse-body-tool",
+              "level": "dependency_result"
+            }
+          ],
+          "id": "loft_pipe_boolean",
+          "publicSurface": "PartDesign loft, pipe, and boolean features",
+          "runtimeBranch": "Execute profile lifecycle, path sweep, and Body-tool boolean branches.",
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureLoft.cpp::PartDesign::Loft::execute",
+            "src/Mod/PartDesign/App/FeaturePipe.cpp::PartDesign::Pipe::execute",
+            "src/Mod/PartDesign/App/FeatureBoolean.cpp::PartDesign::Boolean::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "partdesign-binder/shape-binder-face-edge-vertex-multi-subshape",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "partdesign-binder/subshape-binder-makeface-offset-fuse-refine",
+              "level": "dependency_result"
+            }
+          ],
+          "id": "binder_support",
+          "publicSurface": "ShapeBinder and SubShapeBinder",
+          "runtimeBranch": "Resolve selected subshapes, placement, make-face, offset, fuse, and refine options.",
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/ShapeBinder.cpp::PartDesign::ShapeBinder::execute",
+            "src/Mod/PartDesign/App/ShapeBinder.cpp::PartDesign::SubShapeBinder::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "partdesign-datum/partdesign-datum-selected-mapmodes",
+              "level": "target_result"
+            }
+          ],
+          "id": "datum_attachment_modes",
+          "publicSurface": "PartDesign datum plane, line, point, and coordinate-system attachment",
+          "runtimeBranch": "Recompute datum objects through selected MapMode and AttachmentSupport branches.",
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/DatumPlane.cpp::PartDesign::Plane",
+            "src/Mod/PartDesign/App/DatumLine.cpp::PartDesign::Line",
+            "src/Mod/PartDesign/App/DatumPoint.cpp::PartDesign::Point",
+            "src/Mod/PartDesign/App/DatumCS.cpp::PartDesign::CoordinateSystem",
+            "src/Mod/Part/App/AttachExtension.cpp::Part::AttachExtension::positionBySupport"
+          ]
+        },
+        {
+          "disposition": "protocol_only",
+          "fixtureEvidence": [],
+          "id": "persisted_body_group_restore",
+          "publicSurface": "Body group restore and version migration",
+          "rationale": "Fresh graph fixtures cover live execution but do not currently express persisted document restore or version migration.",
+          "runtimeBranch": "Restore legacy group membership, Tip, and persisted feature ordering.",
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/Body.cpp::PartDesign::Body::onDocumentRestored"
+          ]
+        }
+      ],
+      "name": "PartDesign"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "mesh-import/mesh-import-stl",
+              "level": "target_result"
+            }
+          ],
+          "id": "open_mesh_import",
+          "publicSurface": "Mesh::Import",
+          "runtimeBranch": "Load an open STL mesh and publish facet, vertex, and bound evidence.",
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "mesh-import/mesh-import-closed-tetrahedron",
+              "level": "target_result"
+            }
+          ],
+          "id": "closed_mesh_boundary",
+          "publicSurface": "Mesh::Import closed solid metadata",
+          "runtimeBranch": "Load a closed tetrahedron and publish closedness, bounds, facet count, and volume.",
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "mesh-import/mesh-import-file-recompute-update",
+              "level": "target_result"
+            }
+          ],
+          "id": "mesh_filename_recompute_update",
+          "publicSurface": "Mesh::Import.FileName touched execution",
+          "runtimeBranch": "Recompute once, change FileName, then reload a different mesh on the second native recompute.",
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::mustExecute",
+            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
+          ]
+        },
+        {
+          "disposition": "unsupported",
+          "fixtureEvidence": [],
+          "id": "feature_mesh_transform",
+          "publicSurface": "Mesh::Transform",
+          "rationale": "The authoritative FreeCAD source contains no active geometry transform branch, so a native geometry fixture would falsely invent behavior from the registered TypeId.",
+          "runtimeBranch": "FreeCAD registers the feature, but its execute implementation currently returns success with the transform body commented out.",
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/FeatureMeshTransform.cpp::Mesh::Transform::execute"
+          ]
+        },
+        {
+          "disposition": "uncovered",
+          "fixtureEvidence": [],
+          "id": "mesh_primitives_setops_and_defects",
+          "publicSurface": "Mesh primitives, set operations, and defect analysis",
+          "rationale": "The current native request corpus only has executable Mesh::Import evidence; registered primitive, set-operation, and defect feature branches need a later source-backed batch.",
+          "runtimeBranch": "Execute the retained Mesh feature families beyond file import.",
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "src/Mod/Mesh/App/FeatureMeshSetOperations.cpp"
+          ]
+        },
+        {
+          "disposition": "protocol_only",
+          "fixtureEvidence": [],
+          "id": "mesh_export_side_effects",
+          "publicSurface": "Mesh export and save APIs",
+          "rationale": "The request fixture protocol treats checked-in assets as inputs and does not expose arbitrary output filesystem writes.",
+          "runtimeBranch": "Write mesh formats to arbitrary filesystem destinations.",
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/MeshPyImp.cpp::MeshPy::write"
+          ]
+        }
+      ],
+      "name": "Mesh"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "spreadsheet-recompute/spreadsheet-sheet-expression-dependency",
+              "level": "target_result"
+            }
+          ],
+          "id": "expression_dependency_recompute",
+          "publicSurface": "Spreadsheet::Sheet cell expressions",
+          "runtimeBranch": "Build the dirty dependency graph, topologically recompute formulas, and publish evaluated cell values.",
+          "sourceEvidence": [
+            "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "spreadsheet-recompute/spreadsheet-sheet-recompute-update",
+              "level": "target_result"
+            }
+          ],
+          "id": "cell_recompute_update",
+          "publicSurface": "Spreadsheet::Sheet set and alias mutation",
+          "runtimeBranch": "Recompute once, mutate source cells, and collect the updated formula value while preserving alias state.",
+          "sourceEvidence": [
+            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::set",
+            "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "spreadsheet-recompute/spreadsheet-sheet-empty",
+              "level": "target_result"
+            }
+          ],
+          "id": "empty_sheet_boundary",
+          "publicSurface": "Spreadsheet::Sheet empty state",
+          "runtimeBranch": "Execute a sheet with no cells and publish an empty cell result without manufacturing content.",
+          "sourceEvidence": [
+            "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
+          ]
+        },
+        {
+          "disposition": "uncovered",
+          "fixtureEvidence": [],
+          "id": "styles_layout_and_merge",
+          "publicSurface": "Spreadsheet cell style, width, height, merge, and alignment APIs",
+          "rationale": "Current public expected output collects semantic cells and expressions, not the Spreadsheet visual layout model.",
+          "runtimeBranch": "Mutate visual cell formatting and merged ranges.",
+          "sourceEvidence": [
+            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setStyle",
+            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::mergeCells"
+          ]
+        },
+        {
+          "disposition": "protocol_only",
+          "fixtureEvidence": [],
+          "id": "spreadsheet_import_export",
+          "publicSurface": "Spreadsheet importFile and exportFile",
+          "rationale": "The current document graph protocol has no spreadsheet file-import or file-export operation envelope, so these side effects are not native fixture claims.",
+          "runtimeBranch": "Read or write external spreadsheet files through user-facing file APIs.",
+          "sourceEvidence": [
+            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::importFile",
+            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::exportFile"
+          ]
+        }
+      ],
+      "name": "Spreadsheet"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "assembly-solve/assembly-angle-zero-and-signed-current-real-solver",
+              "level": "target_result"
+            }
+          ],
+          "id": "assembly_object_graph",
+          "publicSurface": "Assembly::AssemblyObject and joint groups",
+          "runtimeBranch": "Build an assembly graph with components, grounded parts, and joints.",
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject",
+            "src/Mod/Assembly/App/JointGroup.cpp::Assembly::JointGroup"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "assembly-solve/assembly-angle-zero-and-signed-current-real-solver",
+              "level": "target_result"
+            }
+          ],
+          "id": "joint_marker_and_writeback",
+          "publicSurface": "Assembly joint marker extraction and placement writeback",
+          "runtimeBranch": "Resolve joint geometry markers, solve, and publish component placement changes.",
+          "sourceEvidence": [
+            "src/Mod/Assembly/JointObject.py::Joint",
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "assembly-solve/assembly-invalid-grounded-distance-real-solver",
+              "level": "native_diagnostic"
+            }
+          ],
+          "id": "invalid_joint_diagnostics",
+          "publicSurface": "Assembly solve diagnostics",
+          "runtimeBranch": "Reject an invalid grounded distance constraint with structured native diagnostics.",
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+          ]
+        },
+        {
+          "disposition": "protocol_only",
+          "fixtureEvidence": [],
+          "id": "assembly_persistence_and_extension_lifecycle",
+          "publicSurface": "Assembly persisted extension and document restore lifecycle",
+          "rationale": "Current fixtures exercise fresh request-local assembly execution, not persisted restore and extension migration.",
+          "runtimeBranch": "Restore component groups, joint groups, and extension state from saved documents.",
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::onDocumentRestored"
+          ]
+        }
+      ],
+      "name": "Assembly"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "assembly-solve/assembly-angle-zero-and-signed-current-real-solver",
+              "level": "dependency_result"
+            }
+          ],
+          "id": "real_solver_success",
+          "publicSurface": "Ondsel assembly solver adapter",
+          "runtimeBranch": "Create solver markers and constraints, solve, and write placements back to the assembly graph.",
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+          ]
+        },
+        {
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "assembly-solve/assembly-invalid-grounded-distance-real-solver",
+              "level": "native_diagnostic"
+            }
+          ],
+          "id": "real_solver_failure",
+          "publicSurface": "Ondsel solver failure diagnostics",
+          "runtimeBranch": "Return deterministic diagnostics for an invalid grounded distance solve.",
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+          ]
+        },
+        {
+          "disposition": "uncovered",
+          "fixtureEvidence": [],
+          "id": "full_joint_type_and_degenerate_matrix",
+          "publicSurface": "All Ondsel joint types, geometry pairs, and degenerate solves",
+          "rationale": "The corpus has broad real-solver fixtures, but this inventory has not proven an exhaustive cross-product of every joint type and degenerate marker combination.",
+          "runtimeBranch": "Exhaustively combine every joint type with supported and degenerate geometry marker pairs.",
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::makeMbdAssembly"
+          ]
+        }
+      ],
+      "name": "OndselSolver"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "non_cad_smoke",
+          "fixtureEvidence": [],
+          "id": "module_import_and_pure_page_path",
+          "publicSurface": "Help module import and underscore-page normalization",
+          "rationale": "This retained non-CAD entry has a dedicated FreeCADCmd smoke receipt rather than a document graph fixture.",
+          "runtimeBranch": "Import retained Help Python code and evaluate its pure path helper without GUI or network state.",
+          "sourceEvidence": [
+            "src/Mod/Help/Help.py::underscore_page"
+          ]
+        },
+        {
+          "disposition": "unsupported",
+          "fixtureEvidence": [],
+          "id": "gui_and_network_help_display",
+          "publicSurface": "Help.show and WebEngine/browser display",
+          "rationale": "The retained coverage target is deterministic headless import/data behavior; GUI, WebEngine, browser, and network effects are outside native document fixture scope.",
+          "runtimeBranch": "Choose GUI-up branches, access remote documentation, and display pages in GUI or external browsers.",
+          "sourceEvidence": [
+            "src/Mod/Help/Help.py::show"
+          ]
+        }
+      ],
+      "name": "Help"
+    },
+    {
+      "capabilities": [
+        {
+          "disposition": "non_cad_smoke",
+          "fixtureEvidence": [],
+          "id": "metadata_and_spdx_data",
+          "publicSurface": "AddonManager metadata version and SPDX license data",
+          "rationale": "This retained non-CAD entry has a dedicated FreeCADCmd data smoke receipt rather than a document graph fixture.",
+          "runtimeBranch": "Import retained metadata/data modules and validate stable packaged values.",
+          "sourceEvidence": [
+            "src/Mod/AddonManager/addonmanager_metadata.py::Version",
+            "src/Mod/AddonManager/addonmanager_licenses.py"
+          ]
+        },
+        {
+          "disposition": "unsupported",
+          "fixtureEvidence": [],
+          "id": "network_install_update_remove",
+          "publicSurface": "Addon discovery, download, install, update, and removal workflows",
+          "rationale": "Authenticated or network-dependent discovery and destructive user-directory mutations are outside deterministic headless fixture scope and are not implied by metadata smoke.",
+          "runtimeBranch": "Use Qt/network services and mutate user addon directories.",
+          "sourceEvidence": [
+            "src/Mod/AddonManager/addonmanager_installer.py::AddonInstaller",
+            "src/Mod/AddonManager/NetworkManager.py"
+          ]
+        }
+      ],
+      "name": "AddonManager"
+    }
+  ],
   "requiredModules": [
     "FreeCADBase",
     "FreeCADApp",
@@ -17,948 +953,12 @@
     "Help",
     "AddonManager"
   ],
+  "schema": "freecad-retained-public-capabilities/v1",
+  "scope": "Representative retained FreeCAD public capabilities and major headless runtime branches mapped independently from the current fixture corpus.",
   "scopeLimitations": [
     "This is a maintained reverse coverage inventory, not an exhaustive list of every historical FreeCAD API symbol.",
     "A covered row proves native fixture expression for the named branch; it does not prove every option or every sub-branch of that API.",
     "Fixture corpus closure, retained module API coverage, and CAD Core runtime parity are independent verdicts.",
     "GUI, network, installer, destructive filesystem, and persisted restore-only branches are classified explicitly instead of being inferred from headless smoke tests."
-  ],
-  "modules": [
-    {
-      "name": "FreeCADBase",
-      "capabilities": [
-        {
-          "id": "placement_and_value_transport",
-          "publicSurface": "Base::Placement and core value types",
-          "runtimeBranch": "Python values are converted into document properties and collected back into public expected output.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Base/Placement.cpp::Base::Placement",
-            "src/Base/Vector3D.cpp::Base::Vector3d"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/app-link-box-placement-alias",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "console_and_exception_surfaces",
-          "publicSurface": "Base::Console and Base exception translation",
-          "runtimeBranch": "The native command process initializes these services, but fixtures do not assert their public formatting and handler branches.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Base/Console.cpp::Base::ConsoleSingleton",
-            "src/Base/Exception.cpp::Base::Exception"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/part-box",
-              "level": "entrypoint_smoke_only"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "FreeCADApp",
-      "capabilities": [
-        {
-          "id": "document_graph_recompute",
-          "publicSurface": "App::Document object graph and recompute",
-          "runtimeBranch": "Create objects, assign properties, resolve dependencies, and recompute a target result.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/App/Document.cpp::App::Document::recompute",
-            "src/App/DocumentObject.cpp::App::DocumentObject::recompute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/part-box",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "link_copy_on_change",
-          "publicSurface": "App link properties and copy-on-change",
-          "runtimeBranch": "Touched source state propagates through link ownership and copy-on-change tracking.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/App/PropertyLinks.cpp::App::PropertyLinkBase",
-            "src/App/Link.cpp::App::LinkBaseExtension"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m6/app-link-copy-on-change-touched-tracking",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "persisted_restore_transactions",
-          "publicSurface": "App::Document restore, transaction, and undo/redo APIs",
-          "runtimeBranch": "Restore-time object identity repair and transaction replay require a persisted document lifecycle.",
-          "disposition": "protocol_only",
-          "sourceEvidence": [
-            "src/App/Document.cpp::App::Document::restore",
-            "src/App/Document.cpp::App::Document::undo"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The request fixture protocol currently creates a fresh request-local document and has no persisted restore or transaction envelope."
-        }
-      ]
-    },
-    {
-      "name": "FreeCADMainCmd",
-      "capabilities": [
-        {
-          "id": "headless_command_startup",
-          "publicSurface": "FreeCADCmd headless application entrypoint",
-          "runtimeBranch": "Initialize the application, modules, and Python command execution used by the native collector.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Main/MainCmd.cpp::main"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/part-box",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "command_line_error_and_shutdown_modes",
-          "publicSurface": "FreeCADCmd option parsing, process exit, and shutdown",
-          "runtimeBranch": "Invalid options, startup failures, signal handling, and non-collector shutdown modes.",
-          "disposition": "uncovered",
-          "sourceEvidence": [
-            "src/Main/MainCmd.cpp::main"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "Geometry fixtures run one successful collector command shape and do not assert the general command-line program contract."
-        }
-      ]
-    },
-    {
-      "name": "FreeCADMainPy",
-      "capabilities": [
-        {
-          "id": "embedded_python_entry",
-          "publicSurface": "FreeCAD Python module initialization",
-          "runtimeBranch": "The collector imports FreeCAD and retained modules in the command process.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Main/MainPy.cpp::PyInit_FreeCAD"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/part-box",
-              "level": "entrypoint_smoke_only"
-            }
-          ]
-        },
-        {
-          "id": "embedded_application_lifecycle",
-          "publicSurface": "FreeCAD embedding and external Python lifecycle",
-          "runtimeBranch": "Repeated initialize/finalize and host-embedded interpreter behavior.",
-          "disposition": "protocol_only",
-          "sourceEvidence": [
-            "src/Main/MainPy.cpp::PyInit_FreeCAD"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The native fixture collector owns a single FreeCADCmd process and does not exercise host embedding or repeated interpreter lifecycles."
-        }
-      ]
-    },
-    {
-      "name": "Material",
-      "capabilities": [
-        {
-          "id": "part_feature_shape_material_assignment",
-          "publicSurface": "Part::Feature.ShapeMaterial using Materials::PropertyMaterial",
-          "runtimeBranch": "Assign a populated material map and publish its public material fields.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Part/App/PartFeature.cpp::Part::Feature::Feature",
-            "src/Mod/Material/App/PropertyMaterial.cpp::Materials::PropertyMaterial::setPyObject"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/material-part-feature-shape-material",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "material_recompute_update",
-          "publicSurface": "Materials::PropertyMaterial mutation",
-          "runtimeBranch": "Mutate the material after one native recompute and collect the second recompute result.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Material/App/PropertyMaterial.cpp::Materials::PropertyMaterial::setPyObject",
-            "src/Mod/Material/App/Materials.cpp::Materials::Material::setName"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/material-part-feature-material-recompute-update",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "minimal_material_boundary",
-          "publicSurface": "Materials::Material optional metadata",
-          "runtimeBranch": "Accept the minimal material name while other public metadata remains empty.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Material/App/Materials.cpp::Materials::Material"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/material-part-feature-minimal-material",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "material_library_and_card_resolution",
-          "publicSurface": "Material cards, libraries, inheritance, and schema validation",
-          "runtimeBranch": "Resolve cards from libraries, inheritance chains, and schema-backed physical or appearance models.",
-          "disposition": "uncovered",
-          "sourceEvidence": [
-            "src/Mod/Material/App/Materials.cpp::Materials::Material",
-            "src/Mod/Material/App/MaterialManager.cpp::Materials::MaterialManager"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The current request protocol exposes a material property map but no library URI, inheritance, or model-resolution contract."
-        }
-      ]
-    },
-    {
-      "name": "Part",
-      "capabilities": [
-        {
-          "id": "primitive_execute",
-          "publicSurface": "Part primitive features",
-          "runtimeBranch": "Execute a primitive and collect its shape, placement, bounds, and topology.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Part/App/FeaturePartBox.cpp::Part::Box::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/part-box",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "boolean_execute",
-          "publicSurface": "Part boolean features",
-          "runtimeBranch": "Resolve linked operands and execute a boolean cut.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Part/App/FeaturePartBoolean.cpp::Part::Cut::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/part-cut",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "data_exchange_import",
-          "publicSurface": "Part import features",
-          "runtimeBranch": "Read a STEP shape through the native import execution path.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Part/App/FeaturePartImportStep.cpp::Part::ImportStep::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/part-import-step",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "extrusion_options",
-          "publicSurface": "Part::Extrusion",
-          "runtimeBranch": "Build an extrusion using taper and feature option branches.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Part/App/FeatureExtrusion.cpp::Part::Extrusion::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p5/part-extrusion-taper",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "offset_loft_sweep_builders",
-          "publicSurface": "Part offset, loft, and sweep features",
-          "runtimeBranch": "Execute representative offset, solid loft, and solid sweep builder paths.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Part/App/FeatureOffset.cpp::Part::Offset::execute",
-            "src/Mod/Part/App/PartFeatures.cpp::Part::Loft::execute",
-            "src/Mod/Part/App/PartFeatures.cpp::Part::Sweep::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m4/part-offset-face",
-              "level": "target_result"
-            },
-            {
-              "fixture": "c3m4/part-loft-solid",
-              "level": "target_result"
-            },
-            {
-              "fixture": "c3m4/part-sweep-solid",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "geomplate_build",
-          "publicSurface": "Part GeomPlate surface construction",
-          "runtimeBranch": "Build a surface from curve and point constraints.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Part/App/Tools.cpp::Part::Tools::makeSurface"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m4/part-geomplate-curve-point-default",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "direct_export_side_effects",
-          "publicSurface": "Part shape export APIs",
-          "runtimeBranch": "Write BREP, STEP, IGES, or other exchange files as a public side effect.",
-          "disposition": "protocol_only",
-          "sourceEvidence": [
-            "src/Mod/Part/App/TopoShapePyImp.cpp::TopoShapePy::exportStep"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "Native geometry fixtures intentionally consume controlled input assets and do not make arbitrary output filesystem side effects part of the request protocol."
-        }
-      ]
-    },
-    {
-      "name": "Sketcher",
-      "capabilities": [
-        {
-          "id": "geometry_and_internal_shape",
-          "publicSurface": "Sketcher::SketchObject geometry and InternalShape",
-          "runtimeBranch": "Build a constrained profile and its public sketch geometry result.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::execute",
-            "src/Mod/Sketcher/App/SketchObjectGeometry.cpp::Sketcher::SketchObject"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p5/sketch-coincident-profile",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "solver_facing_geometry_update",
-          "publicSurface": "Sketch constraints and solver-facing state",
-          "runtimeBranch": "Apply a dimensional constraint and observe the solved geometry update.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Sketcher/App/SketchObjectConstraints.cpp::Sketcher::SketchObject::solve"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m3/sketch-circle-radius-solver-geometry-update",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "external_geometry_projection",
-          "publicSurface": "Sketch external geometry links",
-          "runtimeBranch": "Project linked face and whole-object geometry into the sketch.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Sketcher/App/SketchObjectExternal.cpp::Sketcher::SketchObject::addExternal"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p5/sketch-external-face-both",
-              "level": "target_result"
-            },
-            {
-              "fixture": "p5/sketch-external-whole-box",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "underconstrained_diagnostics",
-          "publicSurface": "Sketch solver-facing diagnostics",
-          "runtimeBranch": "Publish a valid underconstrained state without treating it as an execution failure.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::solve"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m3/sketch-underconstrained-no-constraints",
-              "level": "native_diagnostic"
-            }
-          ]
-        },
-        {
-          "id": "conflicting_constraint_native_boundary",
-          "publicSurface": "Sketch conflicting constraint status",
-          "runtimeBranch": "The requested conflict contract cannot currently be reproduced as stable native public expected output.",
-          "disposition": "unsupported",
-          "sourceEvidence": [
-            "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::solve"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m3/sketch-conflicting-constraints",
-              "level": "unsupported_contract"
-            }
-          ],
-          "rationale": "The fixture role registry records this case as unsupported rather than native authority; it must not be counted as an executed native diagnostic."
-        },
-        {
-          "id": "advanced_geometry_and_operation_matrix",
-          "publicSurface": "Remaining Sketch geometry types and editing operations",
-          "runtimeBranch": "The full conic, B-spline, trim, extend, fillet, clone, and block operation matrix.",
-          "disposition": "uncovered",
-          "sourceEvidence": [
-            "src/Mod/Sketcher/App/SketchObjectGeometry.cpp::Sketcher::SketchObject",
-            "src/Mod/Sketcher/App/SketchObjectOperations.cpp::Sketcher::SketchObject"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The corpus contains representative profiles and solver updates, but this maintained inventory has not established branch-complete native evidence for every editing operation and geometry family."
-        }
-      ]
-    },
-    {
-      "name": "PartDesign",
-      "capabilities": [
-        {
-          "id": "body_pad_pocket_chain",
-          "publicSurface": "PartDesign Body, Pad, and Pocket",
-          "runtimeBranch": "Execute additive and subtractive features through the Body dependency chain.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/PartDesign/App/Body.cpp::PartDesign::Body::execute",
-            "src/Mod/PartDesign/App/FeaturePad.cpp::PartDesign::Pad::execute",
-            "src/Mod/PartDesign/App/FeaturePocket.cpp::PartDesign::Pocket::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m5/body-curved-face-pad-profile-normal",
-              "level": "dependency_result"
-            },
-            {
-              "fixture": "p3b/pocket-custom-vector",
-              "level": "dependency_result"
-            }
-          ]
-        },
-        {
-          "id": "revolution_and_groove",
-          "publicSurface": "PartDesign Revolution and Groove",
-          "runtimeBranch": "Resolve profile and axis, then execute additive and subtractive revolved features in a Body.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/PartDesign/App/FeatureRevolution.cpp::PartDesign::Revolution::execute",
-            "src/Mod/PartDesign/App/FeatureGroove.cpp::PartDesign::Groove::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c4m2/partdesign-revolution-axis-angle-body",
-              "level": "dependency_result"
-            },
-            {
-              "fixture": "c4m2/partdesign-groove-axis-angle-body",
-              "level": "dependency_result"
-            }
-          ]
-        },
-        {
-          "id": "hole_modes",
-          "publicSurface": "PartDesign Hole",
-          "runtimeBranch": "Execute representative blind-depth, through-all, and counterbore cut branches.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/PartDesign/App/FeatureHole.cpp::PartDesign::Hole::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p7/hole-supported-blind-depth",
-              "level": "dependency_result"
-            },
-            {
-              "fixture": "p7/hole-supported-through-all",
-              "level": "dependency_result"
-            },
-            {
-              "fixture": "p7/hole-supported-counterbore",
-              "level": "dependency_result"
-            }
-          ]
-        },
-        {
-          "id": "dressup_features",
-          "publicSurface": "PartDesign Chamfer, Draft, and Thickness",
-          "runtimeBranch": "Execute representative dress-up features against selected subshapes.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/PartDesign/App/FeatureChamfer.cpp::PartDesign::Chamfer::execute",
-            "src/Mod/PartDesign/App/FeatureDraft.cpp::PartDesign::Draft::execute",
-            "src/Mod/PartDesign/App/FeatureThickness.cpp::PartDesign::Thickness::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m5/chamfer-distance-angle-edge",
-              "level": "dependency_result"
-            },
-            {
-              "fixture": "c3m5/draft-face-auto-neutral-plane",
-              "level": "dependency_result"
-            },
-            {
-              "fixture": "c3m5/thickness-face-skin-arc",
-              "level": "dependency_result"
-            }
-          ]
-        },
-        {
-          "id": "pattern_transform_history",
-          "publicSurface": "PartDesign transformed features and pattern history",
-          "runtimeBranch": "Execute a multi-original linear pattern and preserve linked history evidence.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/PartDesign/App/FeatureLinearPattern.cpp::PartDesign::LinearPattern::getTransformations",
-            "src/Mod/PartDesign/App/FeatureTransformed.cpp::PartDesign::Transformed::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m5/linear-pattern-multi-original-link-retag",
-              "level": "dependency_result"
-            }
-          ]
-        },
-        {
-          "id": "loft_pipe_boolean",
-          "publicSurface": "PartDesign loft, pipe, and boolean features",
-          "runtimeBranch": "Execute profile lifecycle, path sweep, and Body-tool boolean branches.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/PartDesign/App/FeatureLoft.cpp::PartDesign::Loft::execute",
-            "src/Mod/PartDesign/App/FeaturePipe.cpp::PartDesign::Pipe::execute",
-            "src/Mod/PartDesign/App/FeatureBoolean.cpp::PartDesign::Boolean::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c4m2/partdesign-loft-additive-body",
-              "level": "dependency_result"
-            },
-            {
-              "fixture": "c12m13/partdesign-pipe-additive-lifecycle",
-              "level": "dependency_result"
-            },
-            {
-              "fixture": "c4m2/partdesign-boolean-fuse-body-tool",
-              "level": "dependency_result"
-            }
-          ]
-        },
-        {
-          "id": "binder_support",
-          "publicSurface": "ShapeBinder and SubShapeBinder",
-          "runtimeBranch": "Resolve selected subshapes, placement, make-face, offset, fuse, and refine options.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/PartDesign/App/ShapeBinder.cpp::PartDesign::ShapeBinder::execute",
-            "src/Mod/PartDesign/App/ShapeBinder.cpp::PartDesign::SubShapeBinder::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c8m1/shape-binder-face-edge-vertex-multi-subshape",
-              "level": "dependency_result"
-            },
-            {
-              "fixture": "c8m1/subshape-binder-makeface-offset-fuse-refine",
-              "level": "dependency_result"
-            }
-          ]
-        },
-        {
-          "id": "datum_attachment_modes",
-          "publicSurface": "PartDesign datum plane, line, point, and coordinate-system attachment",
-          "runtimeBranch": "Recompute datum objects through selected MapMode and AttachmentSupport branches.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/PartDesign/App/DatumPlane.cpp::PartDesign::Plane",
-            "src/Mod/PartDesign/App/DatumLine.cpp::PartDesign::Line",
-            "src/Mod/PartDesign/App/DatumPoint.cpp::PartDesign::Point",
-            "src/Mod/PartDesign/App/DatumCS.cpp::PartDesign::CoordinateSystem",
-            "src/Mod/Part/App/AttachExtension.cpp::Part::AttachExtension::positionBySupport"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c51m5/partdesign-datum-selected-mapmodes",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "persisted_body_group_restore",
-          "publicSurface": "Body group restore and version migration",
-          "runtimeBranch": "Restore legacy group membership, Tip, and persisted feature ordering.",
-          "disposition": "protocol_only",
-          "sourceEvidence": [
-            "src/Mod/PartDesign/App/Body.cpp::PartDesign::Body::onDocumentRestored"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "Fresh graph fixtures cover live execution but do not currently express persisted document restore or version migration."
-        }
-      ]
-    },
-    {
-      "name": "Mesh",
-      "capabilities": [
-        {
-          "id": "open_mesh_import",
-          "publicSurface": "Mesh::Import",
-          "runtimeBranch": "Load an open STL mesh and publish facet, vertex, and bound evidence.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/mesh-import-stl",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "closed_mesh_boundary",
-          "publicSurface": "Mesh::Import closed solid metadata",
-          "runtimeBranch": "Load a closed tetrahedron and publish closedness, bounds, facet count, and volume.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/mesh-import-closed-tetrahedron",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "mesh_filename_recompute_update",
-          "publicSurface": "Mesh::Import.FileName touched execution",
-          "runtimeBranch": "Recompute once, change FileName, then reload a different mesh on the second native recompute.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::mustExecute",
-            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/mesh-import-file-recompute-update",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "feature_mesh_transform",
-          "publicSurface": "Mesh::Transform",
-          "runtimeBranch": "FreeCAD registers the feature, but its execute implementation currently returns success with the transform body commented out.",
-          "disposition": "unsupported",
-          "sourceEvidence": [
-            "src/Mod/Mesh/App/FeatureMeshTransform.cpp::Mesh::Transform::execute"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The authoritative FreeCAD source contains no active geometry transform branch, so a native geometry fixture would falsely invent behavior from the registered TypeId."
-        },
-        {
-          "id": "mesh_primitives_setops_and_defects",
-          "publicSurface": "Mesh primitives, set operations, and defect analysis",
-          "runtimeBranch": "Execute the retained Mesh feature families beyond file import.",
-          "disposition": "uncovered",
-          "sourceEvidence": [
-            "src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
-            "src/Mod/Mesh/App/FeatureMeshSetOperations.cpp"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The current native request corpus only has executable Mesh::Import evidence; registered primitive, set-operation, and defect feature branches need a later source-backed batch."
-        },
-        {
-          "id": "mesh_export_side_effects",
-          "publicSurface": "Mesh export and save APIs",
-          "runtimeBranch": "Write mesh formats to arbitrary filesystem destinations.",
-          "disposition": "protocol_only",
-          "sourceEvidence": [
-            "src/Mod/Mesh/App/MeshPyImp.cpp::MeshPy::write"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The request fixture protocol treats checked-in assets as inputs and does not expose arbitrary output filesystem writes."
-        }
-      ]
-    },
-    {
-      "name": "Spreadsheet",
-      "capabilities": [
-        {
-          "id": "expression_dependency_recompute",
-          "publicSurface": "Spreadsheet::Sheet cell expressions",
-          "runtimeBranch": "Build the dirty dependency graph, topologically recompute formulas, and publish evaluated cell values.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/spreadsheet-sheet-expression-dependency",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "cell_recompute_update",
-          "publicSurface": "Spreadsheet::Sheet set and alias mutation",
-          "runtimeBranch": "Recompute once, mutate source cells, and collect the updated formula value while preserving alias state.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::set",
-            "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/spreadsheet-sheet-recompute-update",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "empty_sheet_boundary",
-          "publicSurface": "Spreadsheet::Sheet empty state",
-          "runtimeBranch": "Execute a sheet with no cells and publish an empty cell result without manufacturing content.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "p8/spreadsheet-sheet-empty",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "styles_layout_and_merge",
-          "publicSurface": "Spreadsheet cell style, width, height, merge, and alignment APIs",
-          "runtimeBranch": "Mutate visual cell formatting and merged ranges.",
-          "disposition": "uncovered",
-          "sourceEvidence": [
-            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setStyle",
-            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::mergeCells"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "Current public expected output collects semantic cells and expressions, not the Spreadsheet visual layout model."
-        },
-        {
-          "id": "spreadsheet_import_export",
-          "publicSurface": "Spreadsheet importFile and exportFile",
-          "runtimeBranch": "Read or write external spreadsheet files through user-facing file APIs.",
-          "disposition": "protocol_only",
-          "sourceEvidence": [
-            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::importFile",
-            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::exportFile"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The current document graph protocol has no spreadsheet file-import or file-export operation envelope, so these side effects are not native fixture claims."
-        }
-      ]
-    },
-    {
-      "name": "Assembly",
-      "capabilities": [
-        {
-          "id": "assembly_object_graph",
-          "publicSurface": "Assembly::AssemblyObject and joint groups",
-          "runtimeBranch": "Build an assembly graph with components, grounded parts, and joints.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject",
-            "src/Mod/Assembly/App/JointGroup.cpp::Assembly::JointGroup"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m6/assembly-angle-zero-and-signed-current-real-solver",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "joint_marker_and_writeback",
-          "publicSurface": "Assembly joint marker extraction and placement writeback",
-          "runtimeBranch": "Resolve joint geometry markers, solve, and publish component placement changes.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Assembly/JointObject.py::Joint",
-            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m6/assembly-angle-zero-and-signed-current-real-solver",
-              "level": "target_result"
-            }
-          ]
-        },
-        {
-          "id": "invalid_joint_diagnostics",
-          "publicSurface": "Assembly solve diagnostics",
-          "runtimeBranch": "Reject an invalid grounded distance constraint with structured native diagnostics.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m6/assembly-invalid-grounded-distance-real-solver",
-              "level": "native_diagnostic"
-            }
-          ]
-        },
-        {
-          "id": "assembly_persistence_and_extension_lifecycle",
-          "publicSurface": "Assembly persisted extension and document restore lifecycle",
-          "runtimeBranch": "Restore component groups, joint groups, and extension state from saved documents.",
-          "disposition": "protocol_only",
-          "sourceEvidence": [
-            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::onDocumentRestored"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "Current fixtures exercise fresh request-local assembly execution, not persisted restore and extension migration."
-        }
-      ]
-    },
-    {
-      "name": "OndselSolver",
-      "capabilities": [
-        {
-          "id": "real_solver_success",
-          "publicSurface": "Ondsel assembly solver adapter",
-          "runtimeBranch": "Create solver markers and constraints, solve, and write placements back to the assembly graph.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m6/assembly-angle-zero-and-signed-current-real-solver",
-              "level": "dependency_result"
-            }
-          ]
-        },
-        {
-          "id": "real_solver_failure",
-          "publicSurface": "Ondsel solver failure diagnostics",
-          "runtimeBranch": "Return deterministic diagnostics for an invalid grounded distance solve.",
-          "disposition": "native_fixture",
-          "sourceEvidence": [
-            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
-          ],
-          "fixtureEvidence": [
-            {
-              "fixture": "c3m6/assembly-invalid-grounded-distance-real-solver",
-              "level": "native_diagnostic"
-            }
-          ]
-        },
-        {
-          "id": "full_joint_type_and_degenerate_matrix",
-          "publicSurface": "All Ondsel joint types, geometry pairs, and degenerate solves",
-          "runtimeBranch": "Exhaustively combine every joint type with supported and degenerate geometry marker pairs.",
-          "disposition": "uncovered",
-          "sourceEvidence": [
-            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::makeMbdAssembly"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The corpus has broad real-solver fixtures, but this inventory has not proven an exhaustive cross-product of every joint type and degenerate marker combination."
-        }
-      ]
-    },
-    {
-      "name": "Help",
-      "capabilities": [
-        {
-          "id": "module_import_and_pure_page_path",
-          "publicSurface": "Help module import and underscore-page normalization",
-          "runtimeBranch": "Import retained Help Python code and evaluate its pure path helper without GUI or network state.",
-          "disposition": "non_cad_smoke",
-          "sourceEvidence": [
-            "src/Mod/Help/Help.py::underscore_page"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "This retained non-CAD entry has a dedicated FreeCADCmd smoke receipt rather than a document graph fixture."
-        },
-        {
-          "id": "gui_and_network_help_display",
-          "publicSurface": "Help.show and WebEngine/browser display",
-          "runtimeBranch": "Choose GUI-up branches, access remote documentation, and display pages in GUI or external browsers.",
-          "disposition": "unsupported",
-          "sourceEvidence": [
-            "src/Mod/Help/Help.py::show"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "The retained coverage target is deterministic headless import/data behavior; GUI, WebEngine, browser, and network effects are outside native document fixture scope."
-        }
-      ]
-    },
-    {
-      "name": "AddonManager",
-      "capabilities": [
-        {
-          "id": "metadata_and_spdx_data",
-          "publicSurface": "AddonManager metadata version and SPDX license data",
-          "runtimeBranch": "Import retained metadata/data modules and validate stable packaged values.",
-          "disposition": "non_cad_smoke",
-          "sourceEvidence": [
-            "src/Mod/AddonManager/addonmanager_metadata.py::Version",
-            "src/Mod/AddonManager/addonmanager_licenses.py"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "This retained non-CAD entry has a dedicated FreeCADCmd data smoke receipt rather than a document graph fixture."
-        },
-        {
-          "id": "network_install_update_remove",
-          "publicSurface": "Addon discovery, download, install, update, and removal workflows",
-          "runtimeBranch": "Use Qt/network services and mutate user addon directories.",
-          "disposition": "unsupported",
-          "sourceEvidence": [
-            "src/Mod/AddonManager/addonmanager_installer.py::AddonInstaller",
-            "src/Mod/AddonManager/NetworkManager.py"
-          ],
-          "fixtureEvidence": [],
-          "rationale": "Authenticated or network-dependent discovery and destructive user-directory mutations are outside deterministic headless fixture scope and are not implied by metadata smoke."
-        }
-      ]
-    }
   ]
 }

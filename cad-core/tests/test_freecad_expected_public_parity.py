@@ -22,6 +22,7 @@ if str(TOOLS) not in sys.path:
 from freecad_expected_parity import EvaluationRequest, MaterializeRequest, evaluate, materialize_current
 from freecad_expected_parity.catalog import ROLES_SCHEMA, load_catalog
 from freecad_expected_parity.registry import REGISTRY_SCHEMA
+from tests.producer_trace_fixture import bind_trace, producer_trace as scoped_producer_trace
 
 
 class FreecadExpectedPublicParityTest(unittest.TestCase):
@@ -487,7 +488,7 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
         current_path = (
             ROOT
             / "fixtures"
-            / "c4m6"
+            / "topology-state"
             / "cad-core-res"
             / "topo-state-reference-shadow-brep.cad-core.json"
         )
@@ -499,10 +500,10 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
         report = evaluate(
             EvaluationRequest(
                 root=ROOT,
-                phase="c4m6",
+                phase="topology-state",
                 case="topo-state-reference-shadow-brep",
                 source_kind="in_memory",
-                in_memory_actuals={("c4m6", "topo-state-reference-shadow-brep"): actual},
+                in_memory_actuals={("topology-state", "topo-state-reference-shadow-brep"): actual},
             )
         ).to_dict()
 
@@ -621,7 +622,13 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
         )
 
     def test_checked_in_roles_preserve_representative_phase_snapshot_discovery(self) -> None:
-        for phase in ("c3m1", "c10m1", "c12m12", "c3m5", "c3m6"):
+        for phase in (
+            "topology-element-map",
+            "sketcher-internal-shape",
+            "partdesign-pipe",
+            "partdesign-dressup",
+            "assembly-solve",
+        ):
             with self.subTest(phase=phase):
                 catalog = load_catalog(ROOT, phase=phase)
                 self.assertEqual([], catalog.errors)
@@ -629,10 +636,11 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
 
     def test_representative_family_snapshot_reports_keep_metadata_without_acceptance(self) -> None:
         expected_known_gap_ids = {
-            "c10m1": "C13M5-S4-KG-SKETCH-001",
-            "c12m12": "C13M5-S4-KG-PART-001",
-            "c3m5": "C13M5-S4-KG-PD-001",
-            "c3m6": "C13M5-S4-KG-ASM-001",
+            "topology-element-map": "C13M5-S4-KG-TOPO-001",
+            "sketcher-internal-shape": "C13M5-S4-KG-SKETCH-001",
+            "partdesign-pipe": "C13M5-S4-KG-PART-001",
+            "partdesign-dressup": "C13M5-S4-KG-PD-001",
+            "assembly-solve": "C13M5-S4-KG-ASM-001",
         }
         metadata_fields = (
             "owner",
@@ -644,7 +652,7 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
             "close_condition",
             "knownGapId",
         )
-        for phase in ("c3m1", *expected_known_gap_ids):
+        for phase in expected_known_gap_ids:
             with self.subTest(phase=phase):
                 report = evaluate(
                     EvaluationRequest(root=ROOT, phase=phase, source_kind="snapshot")
@@ -656,15 +664,6 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
                 diffs = [diff for item in report["cases"] for diff in item["diffs"]]
                 semantic_diffs = [diff for diff in diffs if diff["comparisonClass"] == "public_semantic"]
                 observations = [diff for diff in diffs if diff["comparisonClass"] != "public_semantic"]
-                if phase == "c3m1":
-                    # The former C13M5 topology known gap is now semantically closed. Keep the
-                    # snapshot in this representative audit, but do not require stale red-gap
-                    # metadata when it has no remaining public-semantic diff to describe.
-                    self.assertEqual("green", report["semanticStatus"])
-                    self.assertEqual([], semantic_diffs)
-                    self.assertTrue(all(diff["accepted"] for diff in observations))
-                    continue
-
                 known_gap_id = expected_known_gap_ids[phase]
                 self.assertEqual("red", report["semanticStatus"])
                 self.assertGreater(len(semantic_diffs), 0)
@@ -816,7 +815,7 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
             response = {"diagnostics": [], "results": []}
             request = {"request": "demo"}
             roles, registry = self.bootstrap(root, expected=response, current=response)
-            expected_trace = self.producer_trace(request, response)
+            expected_trace = bind_trace(scoped_producer_trace(), request, response)
             expected_trace["transactions"][0]["targets"] = []
             self.write_json(
                 root
@@ -826,10 +825,11 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
                 / "case-a.freecad.producer-trace.json",
                 expected_trace,
             )
-            binary = root / "build" / "cad-core"
-            binary.parent.mkdir(parents=True)
+            binary_dir = root / "build"
+            binary_dir.mkdir(parents=True)
 
-            def write_binary(trace: dict) -> None:
+            def write_binary(name: str, trace: dict) -> Path:
+                binary = binary_dir / name
                 binary.write_text(
                     "#!/usr/bin/env python3\n"
                     "import json, pathlib, sys\n"
@@ -840,17 +840,18 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
                     encoding="utf-8",
                 )
                 binary.chmod(binary.stat().st_mode | stat.S_IXUSR)
+                return binary
 
-            write_binary(expected_trace)
+            aligned_binary = write_binary("cad-core-aligned", expected_trace)
             aligned = evaluate(
-                self.request(root, roles, registry, source_kind="live", binary=binary)
+                self.request(root, roles, registry, source_kind="live", binary=aligned_binary)
             ).to_dict()
 
             divergent_trace = json.loads(json.dumps(expected_trace))
-            divergent_trace["events"][1]["decision"] = "changed"
-            write_binary(divergent_trace)
+            divergent_trace["events"][2]["decision"] = "changed"
+            divergent_binary = write_binary("cad-core-divergent", divergent_trace)
             divergent = evaluate(
-                self.request(root, roles, registry, source_kind="live", binary=binary)
+                self.request(root, roles, registry, source_kind="live", binary=divergent_binary)
             ).to_dict()
 
         for report in (aligned, divergent):

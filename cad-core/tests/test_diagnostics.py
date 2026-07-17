@@ -13,32 +13,32 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture, "p2"), codes)
+                self.assertEqual(self.diagnostic_codes(fixture), codes)
 
     def test_reference_lifecycle_matrix(self) -> None:
         diagnostic_cases = {
-            ("p2", "rect-pad-pocket"): [],
-            ("c3m2", "sketch-external-frozen-brep-reuse"): [],
-            ("c3m2", "sketch-external-frozen-missing-snapshot"): ["missing_external_geometry_snapshot"],
-            ("c3m2", "sketch-external-missing-brep-reuse"): [],
-            ("c3m2", "sketch-external-missing-missing-snapshot"): ["missing_external_geometry_snapshot"],
-            ("c3m2", "xlink-missing-external-document"): ["missing_external_document"],
-            ("c3m2", "xlink-pending-external-document"): ["external_document_pending_reload"],
-            ("c3m2", "xlink-unloaded-external-document"): ["external_document_unloaded"],
-            ("c8m1", "subshape-binder-setlinks-normalization-diagnostics"): [
+            ("partdesign-extrude", "rect-pad-pocket"): [],
+            ("sketcher-external-geometry", "sketch-external-frozen-brep-reuse"): [],
+            ("sketcher-external-geometry", "sketch-external-frozen-missing-snapshot"): ["missing_external_geometry_snapshot"],
+            ("sketcher-external-geometry", "sketch-external-missing-brep-reuse"): [],
+            ("sketcher-external-geometry", "sketch-external-missing-missing-snapshot"): ["missing_external_geometry_snapshot"],
+            ("topology-resolve", "xlink-missing-external-document"): ["missing_external_document"],
+            ("topology-resolve", "xlink-pending-external-document"): ["external_document_pending_reload"],
+            ("topology-resolve", "xlink-unloaded-external-document"): ["external_document_unloaded"],
+            ("partdesign-binder", "subshape-binder-setlinks-normalization-diagnostics"): [
                 "cycle_rejected_by_property_link"
             ],
         }
         for (group, fixture), codes in diagnostic_cases.items():
             repeats = 2 if (group, fixture) in {
-                ("c3m2", "sketch-external-frozen-brep-reuse"),
-                ("c3m2", "sketch-external-missing-brep-reuse"),
+                ("sketcher-external-geometry", "sketch-external-frozen-brep-reuse"),
+                ("sketcher-external-geometry", "sketch-external-missing-brep-reuse"),
             } else 1
             for attempt in range(repeats):
                 with self.subTest(fixture=fixture, attempt=attempt):
                     self.assertEqual(self.diagnostic_codes(fixture, group), codes)
 
-        frozen_native = self.run_recompute("sketch-external-frozen-source-changed", "p5")
+        frozen_native = self.run_recompute("sketch-external-frozen-source-changed", "sketcher-external-geometry")
         self.assertEqual(frozen_native["diagnostics"], [])
         self.assertEqual(frozen_native["documentObjectUpdates"], [])
         self.assertEqual(
@@ -46,11 +46,11 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             1,
         )
 
-        detached = self.run_recompute("sketch-external-detached-source-changed", "p5")
+        detached = self.run_recompute("sketch-external-detached-source-changed", "sketcher-external-geometry")
         self.assertEqual(detached["diagnostics"], [])
         self.assertEqual([item["reason"] for item in detached["documentObjectUpdates"]], ["external_geometry_detach"])
 
-        missing_recovered = self.run_recompute("sketch-external-missing-fix", "c3m2")
+        missing_recovered = self.run_recompute("sketch-external-missing-fix", "sketcher-external-geometry")
         self.assertEqual(missing_recovered["diagnostics"], [])
         self.assertEqual(
             [item["reason"] for item in missing_recovered["documentObjectUpdates"]],
@@ -69,7 +69,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture, "p3a"), codes)
+                self.assertEqual(self.diagnostic_codes(fixture), codes)
 
     def test_p3b_fixture_diagnostics(self) -> None:
         expected = {
@@ -105,7 +105,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture, "p3b"), codes)
+                self.assertEqual(self.diagnostic_codes(fixture), codes)
 
     def test_p4_fixture_diagnostics(self) -> None:
         expected = {
@@ -120,7 +120,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture, "p4"), codes)
+                self.assertEqual(self.diagnostic_codes(fixture), codes)
 
     def test_p5_fixture_diagnostics(self) -> None:
         expected = {
@@ -172,7 +172,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture, "p5"), codes)
+                self.assertEqual(self.diagnostic_codes(fixture), codes)
 
     def test_p6_fixture_diagnostics(self) -> None:
         expected = {
@@ -187,7 +187,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture, "p6"), codes)
+                self.assertEqual(self.diagnostic_codes(fixture), codes)
 
     def test_p7_fixture_diagnostics(self) -> None:
         expected = {
@@ -267,7 +267,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture, "p7"), codes)
+                self.assertEqual(self.diagnostic_codes(fixture), codes)
 
     def test_p8_fixture_diagnostics(self) -> None:
         expected = {
@@ -334,4 +334,4 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture, "p8"), codes)
+                self.assertEqual(self.diagnostic_codes(fixture), codes)

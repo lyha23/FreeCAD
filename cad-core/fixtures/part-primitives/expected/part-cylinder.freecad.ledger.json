@@ -1,0 +1,74 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-cylinder",
+    "expectedPayloadHash": "sha256:ec1c1f407e90282ad7390fd1bf74da7f032026045c030dda1e470d86529d1706",
+    "inputHash": "sha256:17644686ac0658db64680573ed3d587182a69b1fcb58df00f6b4b1f5105a07f1",
+    "phase": "part-primitives",
+    "topoNamingStateHash": "sha256:5b8f4080335d1d1ae42d37d86655e6e2aedb6336ac9ca6d91344cfdb0029ee17"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Cylinder": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Cylinder"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Cylinder": {
+        "covers": [
+          "Cylinder"
+        ],
+        "ledgerObject": "Cylinder",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:5b8f4080335d1d1ae42d37d86655e6e2aedb6336ac9ca6d91344cfdb0029ee17",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

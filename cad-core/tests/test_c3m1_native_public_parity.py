@@ -12,8 +12,6 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PHASE_ROOT = ROOT / "fixtures" / "c3m1"
-EXPECTED_ROOT = PHASE_ROOT / "expected"
 BINARY = ROOT / "build" / "cad-core"
 
 # Keep this aligned with the established public parity contract in
@@ -49,22 +47,6 @@ class C3M1NativePublicParityTest(unittest.TestCase):
         if not BINARY.is_file():
             raise AssertionError(f"missing CAD Core binary; build it first: {BINARY}")
 
-        discovered_expected = tuple(
-            sorted(path.name[: -len(".freecad.json")] for path in EXPECTED_ROOT.glob("*.freecad.json"))
-        )
-        discovered_ledgers = tuple(
-            sorted(
-                path.name[: -len(".freecad.ledger.json")]
-                for path in EXPECTED_ROOT.glob("*.freecad.ledger.json")
-            )
-        )
-        if discovered_expected != NATIVE_CASES or discovered_ledgers != NATIVE_CASES:
-            raise AssertionError(
-                "C3M1 native fixture inventory changed:\n"
-                f"expected payloads={NATIVE_CASES!r}, actual={discovered_expected!r}\n"
-                f"expected ledgers={NATIVE_CASES!r}, actual={discovered_ledgers!r}"
-            )
-
         cls.expected_by_case = {}
         cls.actual_by_case = {}
         environment = os.environ.copy()
@@ -72,9 +54,12 @@ class C3M1NativePublicParityTest(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="c3m1-native-public-parity-") as directory:
             output_root = Path(directory)
             for case in NATIVE_CASES:
-                input_path = PHASE_ROOT / f"{case}.json"
-                expected_path = EXPECTED_ROOT / f"{case}.freecad.json"
-                ledger_path = EXPECTED_ROOT / f"{case}.freecad.ledger.json"
+                matches = sorted((ROOT / "fixtures").glob(f"*/{case}.json"))
+                if len(matches) != 1:
+                    raise AssertionError(f"{case}: expected one semantic phase, got {matches}")
+                input_path = matches[0]
+                expected_path = input_path.parent / "expected" / f"{case}.freecad.json"
+                ledger_path = input_path.parent / "expected" / f"{case}.freecad.ledger.json"
                 output_path = output_root / f"{case}.cad-core.json"
                 for path in (input_path, expected_path, ledger_path):
                     if not path.is_file():

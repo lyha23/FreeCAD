@@ -1,0 +1,335 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumCSFolding",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "Folding",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          0.5099019513592786,
+          0.8602325267042626
+        ],
+        "z_axis": [
+          0.0,
+          -0.8602325267042626,
+          0.5099019513592786
+        ]
+      }
+    },
+    {
+      "object": "DatumCSFoldingReversedSupports",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "Folding",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          0.5099019513592786,
+          0.8602325267042626
+        ],
+        "z_axis": [
+          0.0,
+          -0.8602325267042626,
+          0.5099019513592786
+        ]
+      }
+    },
+    {
+      "object": "DatumPlaneFolding",
+      "object_fields": {
+        "attached": true,
+        "datum": "plane",
+        "map_mode": "Folding",
+        "normal": [
+          0.0,
+          -0.8602325267042626,
+          0.5099019513592786
+        ],
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:b7fa26af119abbf0fc4d247a9a50055033983b69565d3ae5463fe866449a6e39",
+    "objects": {
+      "DatumCSFolding": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b6b0475036b975cf1aa69d3c5a472fa1aacf9bdf39de2018b823057e903297df",
+        "subshapes": {}
+      },
+      "DatumCSFoldingReversedSupports": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:a7fed4fbdc273d4fe056de9b6daced3126e89c7770b7278e5e376c9ced0db786",
+        "subshapes": {}
+      },
+      "DatumPlaneFolding": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:65954425c32b4fd4b01303937f681a6c15b0ce55ad7be901c10c9db91a5dc3c8",
+        "subshapes": {}
+      },
+      "FoldAxisA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7f3c7e5b2461ff17ba1c13fc958933db6535d74cc9269c101288293731f4be36",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "FoldAxisAReversed": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3271eea1fc0f92077a6a37972543843ef459e9318ad12a55bf7612858c445c7f",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "FoldAxisB": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:6632870ce9784bae290ac52d2c106bae794d7adcca675e73f4937822f1c80e2c",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "FoldAxisBReversed": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:e0f6555567d47244e1c4ad9b539e6e95757175a6b0a0699855f33fe41640a31c",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "FoldEdgeA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7bddb8b44cc941d91334b5a23ef006aa1e25882d44878c9a52e7e3e6a15f26fb",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "FoldEdgeAReversed": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:9b2c8ac7db95d19377cc4bc1431b41208d2bb26d17491879c370427b1f3270df",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "FoldEdgeB": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:42f4d012238af4e8ece57b0a352f1647403d69b3782572a5fc6a6dcc8463351e",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "FoldEdgeBReversed": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:fa72e399c72b66f12a9c6b54c3a21e9efe1b6bcef53df679898eb8d041dd688d",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

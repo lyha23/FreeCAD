@@ -1,0 +1,54 @@
+{
+  "Objects": [
+    {
+      "Name": "ShellBase",
+      "ID": 1,
+      "TypeId": "Part::ImportBrep",
+      "Properties": {
+        "FileName": "fixtures/_assets/shell-split-base.brep"
+      }
+    },
+    {
+      "Name": "SplitterFace",
+      "ID": 2,
+      "TypeId": "Part::ImportBrep",
+      "Properties": {
+        "FileName": "fixtures/_assets/shell-split-tool.brep"
+      }
+    },
+    {
+      "Name": "BooleanFragments",
+      "ID": 3,
+      "TypeId": "Part::BooleanFragments",
+      "Properties": {
+        "Objects": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "ShellBase",
+            "SplitterFace"
+          ]
+        },
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Split"
+        },
+        "Tolerance": 0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "BooleanFragments"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:1c17625c5be0f3769571d3f2977c389ce5c2f6ca85725cbf2551594f18335382"
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "assembly-distance-line-cylinder-default-boundary",
+    "expectedPayloadHash": "sha256:44863dad4462419463a2f5d6825a626ddc3cfb58c47478e6ee2dc684c8fb7acf",
+    "inputHash": "sha256:b229036f3ae898b4688173427411bc5179d27d040a8796c9c4c23c2abb0f3334",
+    "phase": "assembly-solve",
+    "topoNamingStateHash": "sha256:a10ea295a4821da52adbef7bde2180655858364bd6fe68f823b6f1af47f94831"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Assembly": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Assembly::AssemblyObject"
+    },
+    "ComponentA": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::AssemblyLink"
+    },
+    "ComponentB": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::AssemblyLink"
+    },
+    "CylinderB": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Cylinder"
+    },
+    "DistanceJoint": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "App::FeaturePython"
+    },
+    "GroundedJoint": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "App::FeaturePython"
+    },
+    "Joints": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Assembly::JointGroup"
+    },
+    "LineA": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {
+      "ComponentA": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "ComponentB": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "DistanceJoint": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "GroundedJoint": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "Joints": {
+        "coveredBy": "Assembly",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      }
+    },
+    "publishedObjects": {
+      "Assembly": {
+        "covers": [
+          "Assembly"
+        ],
+        "ledgerObject": "Assembly",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "CylinderB": {
+        "covers": [
+          "CylinderB"
+        ],
+        "ledgerObject": "CylinderB",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "LineA": {
+        "covers": [
+          "LineA"
+        ],
+        "ledgerObject": "LineA",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:a10ea295a4821da52adbef7bde2180655858364bd6fe68f823b6f1af47f94831",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

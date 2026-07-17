@@ -1,0 +1,69 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-spiral",
+    "expectedPayloadHash": "sha256:7e91797089ba7e363f34c752233bc33d323078a81fe52de4e613460c401a7edd",
+    "inputHash": "sha256:2bdeb6c7b08a8c85772970e3b7311d7808c20197407501cf1c6ddaec7ab560ac",
+    "phase": "part-primitives",
+    "topoNamingStateHash": "sha256:b843c2d1a55e42ee3d693ae286eca35d9ca7db9ab06038e5f897397e06b310fb"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Spiral": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Spiral"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Spiral": {
+        "covers": [
+          "Spiral"
+        ],
+        "ledgerObject": "Spiral",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:b843c2d1a55e42ee3d693ae286eca35d9ca7db9ab06038e5f897397e06b310fb",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

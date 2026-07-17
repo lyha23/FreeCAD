@@ -1,0 +1,128 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [
+    {
+      "code": "native_expected_diagnostic",
+      "object": "Sweep",
+      "policy": "S2 must keep or document an explicit FreeCADCmd wrapper collector blocker",
+      "reason": "OCCError: NCollection_Array1::Value",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "events": [],
+  "fixture": {
+    "case": "part-sweep-located-profile-product",
+    "expectedPayloadHash": "sha256:e5f796f5b304274a2b98168bf36e9d01195fdbd6a03a136912c4fbe95bc66d95",
+    "inputHash": "sha256:4d17cc8a94b9222ee06dcc0a364372a15e8cb80333020e92d3c22a3436c489e8",
+    "phase": "part-sweep",
+    "topoNamingStateHash": "sha256:5b203fec7cebad429f43478a9d6f53c5ea8f1052475f322bb6a120c1223de35a"
+  },
+  "inputReferences": [],
+  "objects": {
+    "PipeSpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "ProfileLocation": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    },
+    "SketchPipeProfile": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "Sweep": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {
+      "Sweep": {
+        "coveredBy": "PipeSpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      }
+    },
+    "publishedObjects": {
+      "PipeSpine": {
+        "covers": [
+          "PipeSpine"
+        ],
+        "ledgerObject": "PipeSpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ProfileLocation": {
+        "covers": [
+          "ProfileLocation"
+        ],
+        "ledgerObject": "ProfileLocation",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeProfile": {
+        "covers": [
+          "SketchPipeProfile"
+        ],
+        "ledgerObject": "SketchPipeProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:5b203fec7cebad429f43478a9d6f53c5ea8f1052475f322bb6a120c1223de35a",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

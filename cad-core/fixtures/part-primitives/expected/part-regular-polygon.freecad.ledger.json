@@ -1,0 +1,76 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-regular-polygon",
+    "expectedPayloadHash": "sha256:7a5a4d3364c75d1a4c3066d38deb99f5c7386971e41a48fa71c757c9bc3696a2",
+    "inputHash": "sha256:d5673e1fa60bb036a0cb64e4bf84783a4f3c49ba644347321e30146e4cb56ccd",
+    "phase": "part-primitives",
+    "topoNamingStateHash": "sha256:d3bdbf4309282e0cc1cbaa4065e5bdf636ae07bddedb62be890d4d1903e5a0a2"
+  },
+  "inputReferences": [],
+  "objects": {
+    "RegularPolygon": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "RegularPolygon": {
+        "covers": [
+          "RegularPolygon"
+        ],
+        "ledgerObject": "RegularPolygon",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:d3bdbf4309282e0cc1cbaa4065e5bdf636ae07bddedb62be890d4d1903e5a0a2",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

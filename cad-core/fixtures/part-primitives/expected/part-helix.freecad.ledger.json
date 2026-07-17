@@ -1,0 +1,67 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-helix",
+    "expectedPayloadHash": "sha256:b97da7086ea937ef06d8b75a37f11a0b96bd1278585b49d816159133ad55f66f",
+    "inputHash": "sha256:9c27e1dcd809fa2424f9fcb7e712c6fce87f9784662a92a76722e5b35554dd8b",
+    "phase": "part-primitives",
+    "topoNamingStateHash": "sha256:572769782fb99b6ea412e5058b5354673c3cfc8b8c12576e64abdcccee31d77a"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Helix": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Helix"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Helix": {
+        "covers": [
+          "Helix"
+        ],
+        "ledgerObject": "Helix",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:572769782fb99b6ea412e5058b5354673c3cfc8b8c12576e64abdcccee31d77a",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

@@ -1,0 +1,212 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          4.400000100000002,
+          4.400000100000001,
+          0.9946903764658898
+        ],
+        "min": [
+          -1.0000000066613381e-07,
+          -1.000000000454182e-07,
+          -0.17955900086396573
+        ]
+      },
+      "object": "GeomPlate",
+      "object_fields": {
+        "curve_constraint_count": 4,
+        "dto": "PartGeomPlateSurfaceDTO",
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "is_done": true,
+        "point_constraint_count": 1,
+        "shape": "occt_face",
+        "source_backed_helper": true,
+        "status": "ok",
+        "surface_kind": "GeomPlate_Surface"
+      },
+      "topology_counts": {
+        "edges": 4,
+        "faces": 1,
+        "vertices": 4
+      },
+      "volume": 5.966720600638532
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:47704e3e8f4076586a9b62cd66811622ab4b3c50fae2cfdddcf742a9f58ef3fe",
+    "objects": {
+      "BoundaryA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1300583343d3f7541efadf564853e55c9d90d02e46f4d527b857dbf4201ff274",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "BoundaryB": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:cfeb907b92bc2ac8212a24e62d326362a88946bc99766c1121e6bd10b9e4ad47",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "BoundaryC": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:78655b396ca9c90c7d67e3d89ba79b27ed12c37d68517c6132d57e43bd96fc30",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "BoundaryD": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:5af0086c88c836bbf2cc4276aff502998619033741e4e6afb2585229ce8d4b38",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "GeomPlate": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8a16843614c7cf19717d6a64faa74d38c22e669e86cae5dfc77cc70ee1686261",
+        "subshapes": {}
+      },
+      "SupportPlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:5b62279431971d1f2bae396fa32dd14dea703ede92a1d98dbb4da40e73a57d99",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

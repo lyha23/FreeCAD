@@ -1,0 +1,94 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [
+    {
+      "code": "unsupported_curve_criteria",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "events": [],
+  "fixture": {
+    "case": "part-geomplate-curve-criteria-diagnostic",
+    "expectedPayloadHash": "sha256:079dd91f604e99773045f51d9bad893303e816a1fa44878dd4e5d8f388e51d23",
+    "inputHash": "sha256:1cd3a30b711c346f1eb60c53ab7315cd0acafd16403417aa361a172fd97f444e",
+    "phase": "part-geomplate",
+    "topoNamingStateHash": "sha256:8c7c7ff730d5d4a02d9cebdc8db12c655e8e8c56f8b04b8c0eda2d4e0ccdf6c9"
+  },
+  "inputReferences": [],
+  "objects": {
+    "BoundaryA": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "CurveCriteriaDiagnostic": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeomPlateSurface"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "BoundaryA": {
+        "covers": [
+          "BoundaryA"
+        ],
+        "ledgerObject": "BoundaryA",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "CurveCriteriaDiagnostic": {
+        "covers": [
+          "CurveCriteriaDiagnostic"
+        ],
+        "ledgerObject": "CurveCriteriaDiagnostic",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:8c7c7ff730d5d4a02d9cebdc8db12c655e8e8c56f8b04b8c0eda2d4e0ccdf6c9",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

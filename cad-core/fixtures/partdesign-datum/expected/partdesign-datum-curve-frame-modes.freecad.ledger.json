@@ -1,0 +1,383 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "partdesign-datum-curve-frame-modes",
+    "expectedPayloadHash": "sha256:43282edaaf9799d54c64d030dedcbc4c95d89f96550faee9f56a4bdc6eebbfde",
+    "inputHash": "sha256:f14e3443e2d3bf03a9cffe18bf57f1e5e86e3a4303eeb1cf50b45887a0f35a30",
+    "phase": "partdesign-datum",
+    "topoNamingStateHash": "sha256:1b2a0dc210a7e2790a751537796619c77ecdbd2198da82bd28810530bbc7ca9d"
+  },
+  "inputReferences": [],
+  "objects": {
+    "ArcPath": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Ellipse"
+    },
+    "CirclePath": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Cylinder"
+    },
+    "DatumCSConcentricCircle": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSFrenetNBParameter": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSFrenetTBVertexFirst": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSFrenetTNVertexProjection": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSSectionArc": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumLineAxisOfCurvature": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Line"
+    },
+    "DatumLineBinormal": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Line"
+    },
+    "DatumLineNormal": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Line"
+    },
+    "DatumPointCenterOfCurvature": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Point"
+    },
+    "EllipsePath": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Ellipse"
+    },
+    "ProjectionVertex": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    },
+    "VertexFirstProjection": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "ArcPath": {
+        "covers": [
+          "ArcPath"
+        ],
+        "ledgerObject": "ArcPath",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "CirclePath": {
+        "covers": [
+          "CirclePath"
+        ],
+        "ledgerObject": "CirclePath",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSConcentricCircle": {
+        "covers": [
+          "DatumCSConcentricCircle"
+        ],
+        "ledgerObject": "DatumCSConcentricCircle",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSFrenetNBParameter": {
+        "covers": [
+          "DatumCSFrenetNBParameter"
+        ],
+        "ledgerObject": "DatumCSFrenetNBParameter",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSFrenetTBVertexFirst": {
+        "covers": [
+          "DatumCSFrenetTBVertexFirst"
+        ],
+        "ledgerObject": "DatumCSFrenetTBVertexFirst",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSFrenetTNVertexProjection": {
+        "covers": [
+          "DatumCSFrenetTNVertexProjection"
+        ],
+        "ledgerObject": "DatumCSFrenetTNVertexProjection",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSSectionArc": {
+        "covers": [
+          "DatumCSSectionArc"
+        ],
+        "ledgerObject": "DatumCSSectionArc",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumLineAxisOfCurvature": {
+        "covers": [
+          "DatumLineAxisOfCurvature"
+        ],
+        "ledgerObject": "DatumLineAxisOfCurvature",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumLineBinormal": {
+        "covers": [
+          "DatumLineBinormal"
+        ],
+        "ledgerObject": "DatumLineBinormal",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumLineNormal": {
+        "covers": [
+          "DatumLineNormal"
+        ],
+        "ledgerObject": "DatumLineNormal",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumPointCenterOfCurvature": {
+        "covers": [
+          "DatumPointCenterOfCurvature"
+        ],
+        "ledgerObject": "DatumPointCenterOfCurvature",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "EllipsePath": {
+        "covers": [
+          "EllipsePath"
+        ],
+        "ledgerObject": "EllipsePath",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ProjectionVertex": {
+        "covers": [
+          "ProjectionVertex"
+        ],
+        "ledgerObject": "ProjectionVertex",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "VertexFirstProjection": {
+        "covers": [
+          "VertexFirstProjection"
+        ],
+        "ledgerObject": "VertexFirstProjection",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:1b2a0dc210a7e2790a751537796619c77ecdbd2198da82bd28810530bbc7ca9d",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

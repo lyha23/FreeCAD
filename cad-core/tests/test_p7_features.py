@@ -51,8 +51,8 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if temp_path is not None:
                 temp_path.unlink(missing_ok=True)
 
-    def run_recompute_response(self, fixture: str, group: str = "p2") -> dict:
-        input_path = ROOT / "fixtures" / group / f"{fixture}.json"
+    def run_recompute_response(self, fixture: str, group: str | None = None) -> dict:
+        input_path = self.fixture_path(fixture, group)
         with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / f"{input_path.stem}.result.json"
             env = os.environ.copy()
@@ -100,7 +100,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p7_body_direct_tip_refine_false_response_edges_publish_stable_identity(self) -> None:
         payload = json.loads(
-            (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_text(
+            (ROOT / "fixtures" / "topology-state" / "topo-state-body-tip-stable-recovery.json").read_text(
                 encoding="utf-8"
             )
         )
@@ -388,8 +388,8 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
 
     def test_p7_refine_false_is_feature_refine_noop(self) -> None:
-        result = self.run_recompute("pad-refine-false", "p7")
-        fixture = json.loads((ROOT / "fixtures" / "p7" / "pad-refine-false.json").read_text(encoding="utf-8"))
+        result = self.run_recompute("pad-refine-false", "partdesign-extrude")
+        fixture = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "pad-refine-false.json").read_text(encoding="utf-8"))
         profile = self.object_payload(fixture, "Pad")["Properties"]["Profile"]["SubSet"][0]
         pad = result["objects"]["Pad"]
         pad_named_shape = result["named_shapes"]["Pad"]
@@ -402,10 +402,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["status"], "ok")
         self.assertNotIn("topo_naming", pad)
         self.assert_pad_profile_source_element_map(pad_named_shape)
-        self.assert_object_matches_expected(result, "p7", "pad-refine-false")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-refine-false")
 
     def test_p7_pad_profile_accepts_linked_face(self) -> None:
-        result = self.run_recompute("pad-profile-linked-face", "p7")
+        result = self.run_recompute("pad-profile-linked-face", "partdesign-extrude")
         pad = result["objects"]["PadFromFace"]
 
         self.assert_profile_reference_error(
@@ -418,7 +418,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["status"], "error")
 
     def test_p7_partdesign_loft_profile_accepts_linked_solid_faces(self) -> None:
-        response = self.run_recompute_response("partdesign-loft-linked-face-profile", "p7")
+        response = self.run_recompute_response("partdesign-loft-linked-face-profile", "partdesign-loft")
         body = self.response_result(response, "LoftPreviewBody")
 
         self.assert_profile_reference_error(response, "LoftPreview", "Pad", "Face6")
@@ -426,7 +426,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["subshapes"], [])
 
     def test_p3b_pad_reference_axis_accepts_geometrically_linear_bspline_edge(self) -> None:
-        result = self.run_recompute("pad-reference-axis-linear-bspline-edge", "p3b")
+        result = self.run_recompute("pad-reference-axis-linear-bspline-edge", "partdesign-extrude")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -436,7 +436,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(abs(pad["bbox"]["max"][2] - pad["bbox"]["min"][2]), 4.0, delta=1e-9)
 
     def test_p3b_pad_reference_axis_rejects_nonlinear_bspline_edge(self) -> None:
-        result = self.run_recompute("pad-reference-axis-nonlinear-bspline-rejected", "p3b")
+        result = self.run_recompute("pad-reference-axis-nonlinear-bspline-rejected", "partdesign-extrude")
         diagnostics = result["diagnostics"]
 
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
@@ -444,7 +444,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("not geometrically linear", diagnostics[0]["message"])
 
     def test_p7_refine_true_uses_refinemodel_path(self) -> None:
-        result = self.run_recompute("pad-refine-true", "p7")
+        result = self.run_recompute("pad-refine-true", "partdesign-extrude")
         pad = result["objects"]["Pad"]
         pad_named_shape = result["named_shapes"]["Pad"]
 
@@ -453,10 +453,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["refine"], "applied")
         self.assert_pad_profile_source_element_map(pad_named_shape)
         self.assert_refine_model_history(pad_named_shape, {"Sketch"}, set(), set())
-        self.assert_object_matches_expected(result, "p7", "pad-refine-true")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-refine-true")
 
     def test_p7_pocket_refine_true_uses_refinemodel_path(self) -> None:
-        result = self.run_recompute("pocket-refine-true", "p7")
+        result = self.run_recompute("pocket-refine-true", "partdesign-extrude")
         pocket = result["objects"]["Pocket"]
         body = result["objects"]["Body"]
         body_named_shape = result["named_shapes"]["Body"]
@@ -481,10 +481,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "Pocket", "SketchPad", "SketchPocket"},
             {("Pocket", "Face5"), ("Pocket", "Face6"), ("SketchPocket", "Face1")},
         )
-        self.assert_object_matches_expected(result, "p7", "pocket-refine-true")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pocket-refine-true")
 
     def test_p7_pad_open_wire_profile_auto_surface_extrusion(self) -> None:
-        result = self.run_recompute("partdesign-pad-open-wire-surface-auto", "p7")
+        result = self.run_recompute("partdesign-pad-open-wire-surface-auto", "partdesign-extrude")
         pad = result["objects"]["Pad"]
         pad_named_shape = result["named_shapes"]["Pad"]
         sketch = result["objects"]["Sketch"]
@@ -513,7 +513,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_p7_body_tip_open_wire_pad_returns_display_surface(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-surface-auto.json").read_text())
         payload["Objects"].append(
             {
                 "Name": "Body",
@@ -550,7 +550,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(len(result["subshapes"]["Body"]), 0)
 
     def test_p7_pad_open_wire_stable_sublist_resolves_mixed_internal_raw_edge(self) -> None:
-        result = self.run_recompute("partdesign-pad-open-wire-stable-sublist-mixed-internal", "p7")
+        result = self.run_recompute("partdesign-pad-open-wire-stable-sublist-mixed-internal", "partdesign-extrude")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
         body = result["objects"]["Body"]
@@ -570,7 +570,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p7_pad_open_wire_accepts_sketch_internal_edge_alias(self) -> None:
         payload = json.loads(
-            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
+            (ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
             .read_text(encoding="utf-8")
         )
         profile = self.object_payload(payload, "Pad")["Properties"]["Profile"]["SubSet"][0]
@@ -593,7 +593,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p7_pad_open_wire_rejects_current_edge_stable_sublist(self) -> None:
         payload = json.loads(
-            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
+            (ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
             .read_text(encoding="utf-8")
         )
         profile = self.object_payload(payload, "Pad")["Properties"]["Profile"]["SubSet"][0]
@@ -613,7 +613,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p7_pocket_open_wire_stable_sublist_resolves_mixed_internal_raw_edge(self) -> None:
         payload = json.loads(
-            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
+            (ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
             .read_text(encoding="utf-8")
         )
         pocket_object = self.object_payload(payload, "Pad")
@@ -635,7 +635,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p7_pad_open_wire_deleted_stable_sublist_does_not_hit_stale_edge(self) -> None:
         payload = json.loads(
-            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
+            (ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
             .read_text(encoding="utf-8")
         )
         sketch = self.object_payload(payload, "Sketch")
@@ -657,7 +657,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("Body", result["mesh"])
 
     def test_p7_body_accumulates_display_only_surface_chain(self) -> None:
-        result = self.run_recompute("partdesign-body-display-only-surface-chain", "p7")
+        result = self.run_recompute("partdesign-body-display-only-surface-chain", "partdesign-body")
 
         self.assertEqual(
             [item["code"] for item in result["diagnostics"]],
@@ -672,8 +672,8 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p7_body_displays_display_only_tip_after_solid(self) -> None:
         fixture = "partdesign-body-solid-plus-display-only-tip"
-        result = self.run_recompute(fixture, "p7")
-        response = self.run_recompute_response(fixture, "p7")
+        result = self.run_recompute(fixture)
+        response = self.run_recompute_response(fixture)
         response_body = self.response_result(response, "Pad3Body")
 
         self.assertEqual(
@@ -690,7 +690,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(response_body["subshapes"], [])
 
     def test_p7_face_pad_construction_exception_returns_diagnostic(self) -> None:
-        result = self.run_recompute("partdesign-body-face-pad-missing-direction-exception", "p7")
+        result = self.run_recompute("partdesign-body-face-pad-missing-direction-exception", "partdesign-body")
         diagnostics = result["diagnostics"]
         body = result["objects"]["Pad3Body"]
 
@@ -702,7 +702,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["status"], "skipped")
 
     def test_c3m5_support_transform_cache_ignores_display_only_open_wire_boolean(self) -> None:
-        result = self.run_recompute("body-display-only-support-transform-cache", "c3m5")
+        result = self.run_recompute("body-display-only-support-transform-cache", "partdesign-body")
         pad = result["objects"]["Pad"]
         pad3 = result["objects"]["Pad3"]
         fillet = result["objects"]["FilletPreview"]
@@ -724,7 +724,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("Pad4Body", result["subshapes"])
 
     def test_p7_internal_face_profile_fixtures_use_stable_aliases(self) -> None:
-        for fixture_path in sorted((ROOT / "fixtures" / "p7").glob("*.json")):
+        for fixture_path in sorted((ROOT / "fixtures").glob("*/*.json")):
             with self.subTest(fixture=fixture_path.name):
                 payload = json.loads(fixture_path.read_text(encoding="utf-8"))
                 for object_name, item in self.iter_profile_link_items(payload):
@@ -751,7 +751,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                         )
 
     def test_p7_internal_face_profile_rejects_legacy_sublist(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "pad-refine-false.json").read_text(encoding="utf-8"))
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "pad-refine-false.json").read_text(encoding="utf-8"))
         profile = self.object_payload(payload, "Pad")["Properties"]["Profile"]["SubSet"][0]
         profile["SubList"] = ["InternalFace1"]
 
@@ -767,7 +767,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p7_display_only_surface_face_profile_preserves_feature_owner(self) -> None:
         fixture = "partdesign-display-only-surface-face-profile-owner"
-        result = self.run_recompute(fixture, "p7")
+        result = self.run_recompute(fixture)
         diagnostic_codes = [item["code"] for item in result["diagnostics"]]
 
         self.assertEqual(
@@ -783,7 +783,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "skipped")
 
     def test_p7_face_pad_after_fillet_rejects_revolution_body_display_profile(self) -> None:
-        result = self.run_recompute("partdesign-face-pad-after-fillet-fuse", "p7")
+        result = self.run_recompute("partdesign-face-pad-after-fillet-fuse", "partdesign-extrude")
 
         self.assert_profile_reference_error(result, "Revolution", "Pad", "Face6")
         self.assertEqual(result["objects"]["Revolution"]["status"], "error")
@@ -795,7 +795,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("PadPreviewBody", result["subshapes"])
 
     def test_p7_plain_topological_stable_subname_does_not_override_current_face(self) -> None:
-        result = self.run_recompute("partdesign-face-profile-current-subname-over-plain-stable", "p7")
+        result = self.run_recompute("partdesign-face-profile-current-subname-over-plain-stable", "partdesign-extrude")
         diagnostic_codes = [item["code"] for item in result["diagnostics"]]
         preview = result["objects"]["PadPreview"]
 
@@ -807,7 +807,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "skipped")
 
     def test_p7_pad_open_wire_profile_from_existing_pad_edge(self) -> None:
-        result = self.run_recompute("partdesign-pad-open-wire-from-pad-edge", "p7")
+        result = self.run_recompute("partdesign-pad-open-wire-from-pad-edge", "partdesign-extrude")
         pad = result["objects"]["Pad"]
         preview = result["objects"]["PadPreview"]
         diagnostic_codes = [item["code"] for item in result["diagnostics"]]
@@ -825,7 +825,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(preview["status"], "error")
 
         body_payload = json.loads(
-            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-from-pad-edge.json").read_text()
+            (ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-from-pad-edge.json").read_text()
         )
         body_payload["Objects"].append(
             {
@@ -866,7 +866,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body_preview["status"], "error")
 
     def test_p7_pocket_open_wire_profile_is_body_display_only(self) -> None:
-        result = self.run_recompute("partdesign-pocket-open-wire-body-display-only", "p7")
+        result = self.run_recompute("partdesign-pocket-open-wire-body-display-only", "partdesign-extrude")
         body = result["objects"]["Body"]
         pad = result["objects"]["Pad"]
         pocket = result["objects"]["Pocket"]
@@ -889,7 +889,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(body["volume"], pad["volume"], delta=1e-6)
 
     def test_p7_open_wire_profile_reject_mode_keeps_strict_native_error(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-surface-auto.json").read_text())
         self.object_payload(payload, "Pad")["Properties"]["OpenProfileMode"] = {
             "PropertyType": "App::PropertyEnumeration",
             "value": "Reject",
@@ -901,7 +901,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p7_pocket_open_wire_reject_mode_keeps_strict_native_error(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
         self.object_payload(payload, "Pocket")["Properties"]["OpenProfileMode"] = {
             "PropertyType": "App::PropertyEnumeration",
             "value": "Reject",
@@ -913,7 +913,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pocket"]["status"], "error")
 
     def test_p7_open_wire_thin_solid_requires_thickness(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-surface-auto.json").read_text())
         self.object_payload(payload, "Pad")["Properties"]["OpenProfileMode"] = {
             "PropertyType": "App::PropertyEnumeration",
             "value": "ThinSolid",
@@ -926,7 +926,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p7_open_wire_thin_solid_with_thickness_builds_additive_solid(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-surface-auto.json").read_text())
         pad_properties = self.object_payload(payload, "Pad")["Properties"]
         pad_properties["OpenProfileMode"] = {
             "PropertyType": "App::PropertyEnumeration",
@@ -961,7 +961,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(pad["volume"], 0.0)
 
     def test_p7_pocket_open_wire_thin_cut_requires_thickness(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
         self.object_payload(payload, "Pocket")["Properties"]["OpenProfileMode"] = {
             "PropertyType": "App::PropertyEnumeration",
             "value": "ThinCut",
@@ -974,7 +974,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pocket"]["status"], "error")
 
     def test_p7_pocket_open_wire_thin_cut_with_thickness_modifies_body(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
         self.object_payload(payload, "SketchPocket")["Properties"]["Placement"] = {
             "PropertyType": "App::PropertyPlacement",
             "Base": [0.0, 0.0, 10.0],
@@ -1020,7 +1020,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertLess(body["volume"], pad["volume"])
 
     def test_p7_open_wire_surface_split_cut_remains_explicitly_unsupported(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
         self.object_payload(payload, "Pocket")["Properties"]["OpenProfileMode"] = {
             "PropertyType": "App::PropertyEnumeration",
             "value": "SurfaceSplitCut",
@@ -1032,7 +1032,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pocket"]["status"], "error")
 
     def test_p7_open_wire_thin_solid_rejects_invalid_side(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "partdesign-pad-open-wire-surface-auto.json").read_text())
         pad_properties = self.object_payload(payload, "Pad")["Properties"]
         pad_properties["OpenProfileMode"] = {
             "PropertyType": "App::PropertyEnumeration",
@@ -1054,7 +1054,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p7_pocket_missing_refine_uses_partdesign_default_refinemodel(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "pocket-refine-true.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "pocket-refine-true.json").read_text())
         self.object_payload(payload, "Pocket")["Properties"].pop("Refine")
 
         result = self.run_recompute_payload(payload)
@@ -1072,10 +1072,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "Pocket", "SketchPad", "SketchPocket"},
             {("Pocket", "Face5"), ("Pocket", "Face6"), ("SketchPocket", "Face1")},
         )
-        self.assert_object_matches_expected(result, "p7", "pocket-refine-true")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pocket-refine-true")
 
     def test_p7_body_replay_explicit_refine_false_overrides_partdesign_default(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p7" / "pocket-refine-true.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "partdesign-extrude" / "pocket-refine-true.json").read_text())
         self.object_payload(payload, "Pad")["Properties"]["Refine"] = False
         self.object_payload(payload, "Pocket")["Properties"]["Refine"] = False
 
@@ -1089,7 +1089,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(body["direct_tip_subshape_stable_prefix"])
 
     def test_p7_coordinate_system_exposes_axes_for_reference_axis(self) -> None:
-        result = self.run_recompute("datum-coordinate-system-reference-axis", "p7")
+        result = self.run_recompute("datum-coordinate-system-reference-axis", "partdesign-datum")
         coordinate_system = result["objects"]["CoordinateSystem"]
         pad = result["objects"]["Pad"]
 
@@ -1098,21 +1098,21 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(coordinate_system["z_axis"][0], 0.7071067811865476)
         self.assertAlmostEqual(coordinate_system["z_axis"][2], 0.7071067811865475)
         self.assertEqual(pad["method"], "Length")
-        self.assert_object_matches_expected(result, "p7", "datum-coordinate-system-reference-axis")
+        self.assert_object_matches_expected(result, "partdesign-datum", "datum-coordinate-system-reference-axis")
 
     def test_p7_coordinate_system_can_place_sketch_support(self) -> None:
-        result = self.run_recompute("datum-coordinate-system-sketch-support", "p7")
+        result = self.run_recompute("datum-coordinate-system-sketch-support", "partdesign-datum")
         coordinate_system = result["objects"]["CoordinateSystem"]
         body = result["objects"]["Body"]
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(coordinate_system["origin"], [0.0, 0.0, 2.0])
-        self.assert_object_matches_expected(result, "p7", "datum-coordinate-system-sketch-support")
+        self.assert_object_matches_expected(result, "partdesign-datum", "datum-coordinate-system-sketch-support")
         self.assertEqual(pad["bbox"], body["bbox"])
 
     def test_p7_origin_ignores_local_placement_but_keeps_parent_group_placement(self) -> None:
-        result = self.run_recompute("origin-identity-placement", "p7")
+        result = self.run_recompute("origin-identity-placement", "partdesign-datum")
         origin = result["objects"]["Origin"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1121,7 +1121,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(origin["x_axis"], [1.0, 0.0, 0.0])
 
     def test_c3m5_body_origin_link_places_origin_from_body(self) -> None:
-        result = self.run_recompute("body-origin-link-placement", "c3m5")
+        result = self.run_recompute("body-origin-link-placement", "partdesign-body")
         body = result["objects"]["Body"]
         origin = result["objects"]["Origin"]
 
@@ -1134,7 +1134,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["bbox"]["min"], [5.0, 2.0, 0.0])
 
     def test_c3m5_body_relinks_external_origin_datum_to_body_origin_role(self) -> None:
-        result = self.run_recompute("body-origin-datum-relink", "c3m5")
+        result = self.run_recompute("body-origin-datum-relink", "partdesign-body")
         body = result["objects"]["Body"]
         body_z_axis = result["objects"]["Body_Z_Axis"]
         updates = result["documentObjectUpdates"]
@@ -1158,7 +1158,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             },
         )
 
-        applied = json.loads((ROOT / "fixtures" / "c3m5" / "body-origin-datum-relink.json").read_text(encoding="utf-8"))
+        applied = json.loads((ROOT / "fixtures" / "partdesign-body" / "body-origin-datum-relink.json").read_text(encoding="utf-8"))
         for document_object in applied["Objects"]:
             if document_object["Name"] == "Pad":
                 document_object["Properties"]["ReferenceAxis"]["value"] = "Body_Z_Axis"
@@ -1172,7 +1172,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(applied_result["objects"]["Body"]["status"], "ok")
 
     def test_c4m2_datum_attachment_pressure_uses_selected_attach_engine_modes(self) -> None:
-        result = self.run_recompute("partdesign-datum-attachment-deferred-diagnostics", "c4m2")
+        result = self.run_recompute("partdesign-datum-attachment-deferred-diagnostics", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["objects"]["DatumPointOnVertex"]["status"], "ok")
@@ -1185,7 +1185,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["DatumCSOnFace"]["z_axis"], [0.0, 0.0, 1.0])
 
     def test_c5m4_datum_attachment_mapmode_fields_are_supported_for_selected_batch(self) -> None:
-        result = self.run_recompute("partdesign-datum-attachment-mapmode-diagnostics", "c5m4")
+        result = self.run_recompute("partdesign-datum-attachment-mapmode-diagnostics", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["objects"]["DatumPointSupportOnly"]["status"], "ok")
@@ -1201,15 +1201,15 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["documentObjectUpdates"], [])
 
     def test_c51m5_datum_selected_mapmodes_match_expected(self) -> None:
-        result = self.run_recompute("partdesign-datum-selected-mapmodes", "c51m5")
+        result = self.run_recompute("partdesign-datum-selected-mapmodes", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
-        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-selected-mapmodes")
+        self.assert_object_matches_expected(result, "partdesign-datum", "partdesign-datum-selected-mapmodes")
 
     def test_c51m5_datum_user_offset_plane_publishes_frame_and_drives_sketch(self) -> None:
-        result = self.run_recompute("partdesign-datum-user-offset-plane-sketch", "c51m5")
+        result = self.run_recompute("partdesign-datum-user-offset-plane-sketch", "partdesign-datum")
         base_plane = result["objects"]["BasePlane"]
         offset_plane = result["objects"]["OffsetPlane"]
         body = result["objects"]["Body"]
@@ -1238,7 +1238,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("BasePlane", result["named_shapes"])
         self.assertNotIn("OffsetPlane", result["named_shapes"])
 
-        response = self.run_recompute_response("partdesign-datum-user-offset-plane-sketch", "c51m5")
+        response = self.run_recompute_response("partdesign-datum-user-offset-plane-sketch", "partdesign-datum")
         response_base_plane = self.response_result(response, "BasePlane")
         response_plane = self.response_result(response, "OffsetPlane")
         response_body = self.response_result(response, "Body")
@@ -1258,23 +1258,23 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIsNotNone(response_body["mesh"])
 
     def test_c51x_datum_point_single_input_modes_match_expected(self) -> None:
-        result = self.run_recompute("partdesign-datum-point-single-input-modes", "c51m5")
+        result = self.run_recompute("partdesign-datum-point-single-input-modes", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
-        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-point-single-input-modes")
+        self.assert_object_matches_expected(result, "partdesign-datum", "partdesign-datum-point-single-input-modes")
 
     def test_c51x_datum_line_family_modes_match_expected(self) -> None:
-        result = self.run_recompute("partdesign-datum-line-family-modes", "c51m5")
+        result = self.run_recompute("partdesign-datum-line-family-modes", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
-        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-line-family-modes")
+        self.assert_object_matches_expected(result, "partdesign-datum", "partdesign-datum-line-family-modes")
 
     def test_c51x_datum_line_family_invalid_diagnostics(self) -> None:
-        result = self.run_recompute("partdesign-datum-line-family-diagnostics", "c51m5")
+        result = self.run_recompute("partdesign-datum-line-family-diagnostics", "partdesign-datum")
 
         self.assertEqual(
             [item["code"] for item in result["diagnostics"]],
@@ -1287,15 +1287,15 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_c51x_datum_3d_plane_modes_match_expected(self) -> None:
-        result = self.run_recompute("partdesign-datum-3d-plane-modes", "c51m5")
+        result = self.run_recompute("partdesign-datum-3d-plane-modes", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
-        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-3d-plane-modes")
+        self.assert_object_matches_expected(result, "partdesign-datum", "partdesign-datum-3d-plane-modes")
 
     def test_c51x_datum_3d_plane_invalid_diagnostics(self) -> None:
-        result = self.run_recompute("partdesign-datum-3d-plane-diagnostics", "c51m5")
+        result = self.run_recompute("partdesign-datum-3d-plane-diagnostics", "partdesign-datum")
 
         self.assertEqual(
             [item["code"] for item in result["diagnostics"]],
@@ -1318,16 +1318,16 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_c51x_datum_curve_frame_modes_match_expected(self) -> None:
-        result = self.run_recompute("partdesign-datum-curve-frame-modes", "c51m5")
+        result = self.run_recompute("partdesign-datum-curve-frame-modes", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
-        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-curve-frame-modes")
+        self.assert_object_matches_expected(result, "partdesign-datum", "partdesign-datum-curve-frame-modes")
 
     def test_c51x_datum_curve_frame_invalid_diagnostics(self) -> None:
-        result = self.run_recompute("partdesign-datum-curve-frame-diagnostics", "c51m5")
-        expected = self.expected_freecad("c51m5", "partdesign-datum-curve-frame-diagnostics")
+        result = self.run_recompute("partdesign-datum-curve-frame-diagnostics", "partdesign-datum")
+        expected = self.expected_freecad("partdesign-datum", "partdesign-datum-curve-frame-diagnostics")
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], expected["diagnostic_codes"])
         self.assertEqual(result["objects"]["DatumCSMissingSupport"]["status"], "error")
@@ -1339,16 +1339,16 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_c51x_datum_conic_landmark_modes_match_expected(self) -> None:
-        result = self.run_recompute("partdesign-datum-conic-landmark-modes", "c51m5")
+        result = self.run_recompute("partdesign-datum-conic-landmark-modes", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
-        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-conic-landmark-modes")
+        self.assert_object_matches_expected(result, "partdesign-datum", "partdesign-datum-conic-landmark-modes")
 
     def test_c51x_datum_conic_landmark_invalid_diagnostics(self) -> None:
-        result = self.run_recompute("partdesign-datum-conic-landmark-diagnostics", "c51m5")
-        expected = self.expected_freecad("c51m5", "partdesign-datum-conic-landmark-diagnostics")
+        result = self.run_recompute("partdesign-datum-conic-landmark-diagnostics", "partdesign-datum")
+        expected = self.expected_freecad("partdesign-datum", "partdesign-datum-conic-landmark-diagnostics")
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], expected["diagnostic_codes"])
         self.assertEqual(result["objects"]["DatumLineDirectrixMissingSupport"]["status"], "error")
@@ -1361,18 +1361,18 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_c51x_datum_folding_modes_match_expected(self) -> None:
-        result = self.run_recompute("partdesign-datum-folding-modes", "c51m5")
+        result = self.run_recompute("partdesign-datum-folding-modes", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
         self.assertEqual(result["objects"]["DatumCSFolding"]["map_mode"], "Folding")
         self.assertEqual(result["objects"]["DatumPlaneFolding"]["map_mode"], "Folding")
-        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-folding-modes")
+        self.assert_object_matches_expected(result, "partdesign-datum", "partdesign-datum-folding-modes")
 
     def test_c51x_datum_folding_invalid_diagnostics(self) -> None:
-        result = self.run_recompute("partdesign-datum-folding-diagnostics", "c51m5")
-        expected = self.expected_freecad("c51m5", "partdesign-datum-folding-diagnostics")
+        result = self.run_recompute("partdesign-datum-folding-diagnostics", "partdesign-datum")
+        expected = self.expected_freecad("partdesign-datum", "partdesign-datum-folding-diagnostics")
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], expected["diagnostic_codes"])
         self.assertEqual(result["objects"]["DatumCSFoldingMissingFourth"]["status"], "error")
@@ -1385,10 +1385,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_c51x_datum_point_proximity_modes_match_expected(self) -> None:
-        result = self.run_recompute("partdesign-datum-point-proximity-modes", "c51m5")
+        result = self.run_recompute("partdesign-datum-point-proximity-modes", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-point-proximity-modes")
+        self.assert_object_matches_expected(result, "partdesign-datum", "partdesign-datum-point-proximity-modes")
         self.assertEqual(
             result["documentObjectUpdates"],
             [
@@ -1419,7 +1419,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_c51x_datum_point_proximity_invalid_diagnostics(self) -> None:
-        result = self.run_recompute("partdesign-datum-point-proximity-diagnostics", "c51m5")
+        result = self.run_recompute("partdesign-datum-point-proximity-diagnostics", "partdesign-datum")
 
         self.assertEqual(
             [item["code"] for item in result["diagnostics"]],
@@ -1431,10 +1431,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_c51m5_datum_offset_reverse_and_shadow_sub_writeback(self) -> None:
-        result = self.run_recompute("partdesign-datum-offset-reverse-writeback", "c51m5")
+        result = self.run_recompute("partdesign-datum-offset-reverse-writeback", "partdesign-datum")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-offset-reverse-writeback")
+        self.assert_object_matches_expected(result, "partdesign-datum", "partdesign-datum-offset-reverse-writeback")
         self.assertEqual(
             result["documentObjectUpdates"],
             [
@@ -1457,7 +1457,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_c3m5_body_addsub_replay_stops_at_tip(self) -> None:
-        result = self.run_recompute("body-addsub-replay-stops-at-tip", "c3m5")
+        result = self.run_recompute("body-addsub-replay-stops-at-tip", "partdesign-body")
         body = result["objects"]["Body"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1471,7 +1471,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["bbox"]["max"], [10.0, 5.0, 10.0])
 
     def test_c4m2_revolution_axis_angle_body_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-revolution-axis-angle-body", "c4m2")
+        result = self.run_recompute("partdesign-revolution-axis-angle-body", "partdesign-revolve")
         revolution = result["objects"]["Revolution"]
         body = result["objects"]["Body"]
         revolution_named_shape = result["named_shapes"]["Revolution"]
@@ -1486,10 +1486,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_design_revolve:make_revol_history", revolution_named_shape["element_history_status"])
         self.assertEqual(body["tip"], "Revolution")
         self.assertEqual(body["replayed_additive_features"], ["Revolution"])
-        self.assert_object_matches_expected(result, "c4m2", "partdesign-revolution-axis-angle-body")
+        self.assert_object_matches_expected(result, "partdesign-revolve", "partdesign-revolution-axis-angle-body")
 
     def test_c4m2_groove_axis_angle_body_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-groove-axis-angle-body", "c4m2")
+        result = self.run_recompute("partdesign-groove-axis-angle-body", "partdesign-revolve")
         groove = result["objects"]["Groove"]
         body = result["objects"]["Body"]
         groove_named_shape = result["named_shapes"]["Groove"]
@@ -1505,10 +1505,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "Groove")
         self.assertEqual(body["replayed_additive_features"], ["Pad"])
         self.assertEqual(body["replayed_subtractive_features"], ["Groove"])
-        self.assert_object_matches_expected(result, "c4m2", "partdesign-groove-axis-angle-body")
+        self.assert_object_matches_expected(result, "partdesign-revolve", "partdesign-groove-axis-angle-body")
 
     def test_c4m2_revolution_groove_deferred_boundaries_track_c5_transition(self) -> None:
-        result = self.run_recompute("partdesign-revolution-groove-deferred", "c4m2")
+        result = self.run_recompute("partdesign-revolution-groove-deferred", "partdesign-revolve")
         codes = [diagnostic["code"] for diagnostic in result["diagnostics"]]
 
         self.assertEqual(codes, ["missing_property"])
@@ -1519,7 +1519,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"][0]["property"], "UpToFace")
 
     def test_c5m1_revolution_two_angles_body_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-revolution-two-angles-body", "c5m1")
+        result = self.run_recompute("partdesign-revolution-two-angles-body", "partdesign-revolve")
         revolution = result["objects"]["Revolution"]
         body = result["objects"]["Body"]
         revolution_named_shape = result["named_shapes"]["Revolution"]
@@ -1537,10 +1537,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(revolution["axis_direction"], [0.0, 1.0, 0.0])
         self.assertIn("part_design_revolve:make_revol_history", revolution_named_shape["element_history_status"])
         self.assertEqual(body["replayed_additive_features"], ["Revolution"])
-        self.assert_object_matches_expected(result, "c5m1", "partdesign-revolution-two-angles-body")
+        self.assert_object_matches_expected(result, "partdesign-revolve", "partdesign-revolution-two-angles-body")
 
     def test_c5m1_groove_two_angles_body_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-groove-two-angles-body", "c5m1")
+        result = self.run_recompute("partdesign-groove-two-angles-body", "partdesign-revolve")
         groove = result["objects"]["Groove"]
         body = result["objects"]["Body"]
         groove_named_shape = result["named_shapes"]["Groove"]
@@ -1557,10 +1557,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_design_revolve:make_revol_history", groove_named_shape["element_history_status"])
         self.assertEqual(body["replayed_additive_features"], ["Pad"])
         self.assertEqual(body["replayed_subtractive_features"], ["Groove"])
-        self.assert_object_matches_expected(result, "c5m1", "partdesign-groove-two-angles-body")
+        self.assert_object_matches_expected(result, "partdesign-revolve", "partdesign-groove-two-angles-body")
 
     def test_c5m1_groove_through_all_body_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-groove-through-all-body", "c5m1")
+        result = self.run_recompute("partdesign-groove-through-all-body", "partdesign-revolve")
         groove = result["objects"]["Groove"]
         body = result["objects"]["Body"]
 
@@ -1573,10 +1573,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(groove["reversed"])
         self.assertEqual(groove["source_profile"], "SketchGroove")
         self.assertEqual(body["replayed_subtractive_features"], ["Groove"])
-        self.assert_object_matches_expected(result, "c5m1", "partdesign-groove-through-all-body")
+        self.assert_object_matches_expected(result, "partdesign-revolve", "partdesign-groove-through-all-body")
 
     def test_c5m1_revolution_part_edge_axis_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-revolution-part-edge-axis", "c5m1")
+        result = self.run_recompute("partdesign-revolution-part-edge-axis", "partdesign-revolve")
         revolution = result["objects"]["Revolution"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1584,10 +1584,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(revolution["method"], "Angle")
         self.assertEqual(revolution["axis_direction"], [0.0, 1.0, 0.0])
         self.assertEqual(revolution["source_profile"], "SketchRevolution")
-        self.assert_object_matches_expected(result, "c5m1", "partdesign-revolution-part-edge-axis")
+        self.assert_object_matches_expected(result, "partdesign-revolve", "partdesign-revolution-part-edge-axis")
 
     def test_c5m1_revolution_profile_accepts_linked_face(self) -> None:
-        result = self.run_recompute("partdesign-revolution-profile-linked-face", "c5m1")
+        result = self.run_recompute("partdesign-revolution-profile-linked-face", "partdesign-revolve")
         revolution = result["objects"]["RevolutionFromFace"]
 
         self.assert_profile_reference_error(
@@ -1600,7 +1600,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(revolution["status"], "error")
 
     def test_c5m1_revolve_preview_mesh_has_no_zero_render_normals(self) -> None:
-        fixture_path = ROOT / "fixtures" / "c5m1" / "revolve-preview-body-render-normal.json"
+        fixture_path = ROOT / "fixtures" / "partdesign-revolve" / "revolve-preview-body-render-normal.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         payload["recompute"]["objs"] = ["RevolvePreview"]
         with tempfile.TemporaryDirectory() as tmp:
@@ -1625,7 +1625,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_c5m1_revolve_preview_body_duplicate_vertex_stable_subname(self) -> None:
         response = self.run_recompute_response(
             "revolve-preview-body-duplicate-vertex-stable",
-            "c5m1",
+            "partdesign-revolve",
         )
 
         self.assertNotIn("duplicate_stable_subname", [diagnostic["code"] for diagnostic in response["diagnostics"]])
@@ -1635,7 +1635,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["subshapes"], [])
 
     def test_c5m1_revolve_preview_prefers_stable_axis_over_sketch_internaledge_handle(self) -> None:
-        fixture_path = ROOT / "fixtures" / "c5m1" / "revolve-preview-body-render-normal.json"
+        fixture_path = ROOT / "fixtures" / "partdesign-revolve" / "revolve-preview-body-render-normal.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         reference_axis = self.object_payload(payload, "RevolvePreview")["Properties"]["ReferenceAxis"]
         reference_axis["SubList"] = ["InternalEdge2"]
@@ -1652,7 +1652,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(revolution["volume"], 0.0)
 
     def test_c5m1_revolved_zero_sum_angles_are_diagnostic(self) -> None:
-        result = self.run_recompute("partdesign-revolved-zero-sum-diagnostic", "c5m1")
+        result = self.run_recompute("partdesign-revolved-zero-sum-diagnostic", "partdesign-revolve")
 
         self.assertEqual([diagnostic["code"] for diagnostic in result["diagnostics"]], ["invalid_angle"])
         self.assertEqual(result["diagnostics"][0]["object"], "RevolutionZeroSum")
@@ -1660,7 +1660,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["RevolutionZeroSum"]["status"], "error")
 
     def test_c5m1_revolved_upto_boundaries_are_exact_diagnostics(self) -> None:
-        result = self.run_recompute("partdesign-revolved-upto-diagnostics", "c5m1")
+        result = self.run_recompute("partdesign-revolved-upto-diagnostics", "partdesign-revolve")
         diagnostics = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
 
         self.assertEqual(
@@ -1685,7 +1685,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["GrooveUpToFirst"]["status"], "error")
 
     def test_c5m1_profile_subshape_and_fuse_order_are_supported(self) -> None:
-        result = self.run_recompute("partdesign-revolved-profile-fuse-diagnostics", "c5m1")
+        result = self.run_recompute("partdesign-revolved-profile-fuse-diagnostics", "partdesign-revolve")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["objects"]["RevolutionProfileSubshape"]["status"], "ok")
@@ -1708,18 +1708,18 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         for fixture, (expected_object, expected_method) in cases.items():
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c51m1")
+                result = self.run_recompute(fixture)
                 revolution = result["objects"]["Revolution"]
 
                 self.assertEqual(result["diagnostics"], [])
                 self.assertEqual(revolution["status"], "ok")
                 self.assertEqual(revolution["method"], expected_method)
                 self.assertEqual(revolution["source_profile"], "SketchRevolution")
-                self.assert_object_matches_expected(result, "c51m1", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
                 self.assertIn(expected_object, result["objects"])
 
     def test_c51m1_revolution_accepts_internal_face_stable_alias(self) -> None:
-        fixture_path = ROOT / "fixtures" / "c51m1" / "partdesign-revolution-internalface-profile.json"
+        fixture_path = ROOT / "fixtures" / "partdesign-revolve" / "partdesign-revolution-internalface-profile.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         profile = payload["Objects"][1]["Properties"]["Profile"]
 
@@ -1748,7 +1748,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(facemaker_history["bounded_face_count"], 1)
 
     def test_c51m1_revolution_rejects_request_local_internal_face_stable_sublist(self) -> None:
-        fixture_path = ROOT / "fixtures" / "c51m1" / "partdesign-revolution-internalface-profile.json"
+        fixture_path = ROOT / "fixtures" / "partdesign-revolve" / "partdesign-revolution-internalface-profile.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         profile = payload["Objects"][1]["Properties"]["Profile"]
         profile["StableSubList"] = ["InternalFace1"]
@@ -1772,7 +1772,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         for fixture, expected_direction in expected_directions.items():
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c51m1")
+                result = self.run_recompute(fixture)
                 direction = result["objects"]["Revolution"]["axis_direction"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -1780,7 +1780,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     self.assertAlmostEqual(actual, expected, delta=1e-9)
 
     def test_c51m1_revolution_same_sketch_internaledge_axis_is_resolved(self) -> None:
-        result = self.run_recompute("partdesign-revolution-internaledge-axis", "c51m1")
+        result = self.run_recompute("partdesign-revolution-internaledge-axis", "partdesign-revolve")
         revolution = result["objects"]["Revolution"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1790,7 +1790,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(revolution["volume"], 0.0)
 
     def test_c51m1_revolution_accepts_linear_bspline_pipe_axis(self) -> None:
-        result = self.run_recompute("partdesign-revolution-pipe-linear-bspline-axis", "c51m1")
+        result = self.run_recompute("partdesign-revolution-pipe-linear-bspline-axis", "partdesign-revolve")
         revolution = result["objects"]["Revolution"]
         body = result["objects"]["Body"]
 
@@ -1812,7 +1812,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("partdesign-revolution-uptolast-body", "UpToLast"),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c51m1")
+                result = self.run_recompute(fixture)
                 revolution = result["objects"]["Revolution"]
                 body = result["objects"]["Body"]
 
@@ -1822,7 +1822,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(revolution["topo_naming_history"], "maker_history:brepfeat_revolution")
                 self.assertEqual(body["replayed_additive_features"], ["Pad"])
                 self.assertEqual(body["replayed_replacement_features"], ["Revolution"])
-                self.assert_object_matches_expected(result, "c51m1", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_c51m1_groove_upto_native_brepfeat_failures_are_exact_blockers(self) -> None:
         for fixture in [
@@ -1830,8 +1830,8 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "partdesign-groove-uptoface-body",
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c51m1")
-                expected = self.expected_freecad("c51m1", fixture)
+                result = self.run_recompute(fixture)
+                expected = self.expected_freecad(None, fixture)
                 contract = expected["product_diagnostic_contract"]
 
                 self.assertEqual(
@@ -1857,10 +1857,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(result["diagnostics"][1]["message"], contract["secondary_diagnostic"]["message"])
                 self.assertEqual(result["objects"]["Groove"]["status"], contract["object_status"]["Groove"])
                 self.assertEqual(result["objects"]["Body"]["status"], contract["object_status"]["Body"])
-                self.assert_object_matches_expected(result, "c51m1", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_c4m2_revolution_invalid_angle_is_diagnostic(self) -> None:
-        result = self.run_recompute("partdesign-revolution-invalid-angle", "c4m2")
+        result = self.run_recompute("partdesign-revolution-invalid-angle", "partdesign-revolve")
 
         self.assertEqual([diagnostic["code"] for diagnostic in result["diagnostics"]], ["invalid_angle"])
         self.assertEqual(result["objects"]["Revolution"]["status"], "error")
@@ -1872,7 +1872,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("partdesign-boolean-common-body-tool", "BooleanCommon", "Common", 32.0),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c4m2")
+                result = self.run_recompute(fixture)
                 boolean = result["objects"][feature]
                 body = result["objects"]["MainBody"]
 
@@ -1885,10 +1885,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(body["tip"], feature)
                 self.assertEqual(body["replayed_replacement_features"], [feature])
                 self.assertAlmostEqual(body["volume"], expected_volume, delta=1e-7)
-                self.assert_object_matches_expected(result, "c4m2", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_c4m2_boolean_deferred_boundaries_are_diagnostic(self) -> None:
-        result = self.run_recompute("partdesign-boolean-deferred-diagnostics", "c4m2")
+        result = self.run_recompute("partdesign-boolean-deferred-diagnostics", "partdesign-boolean")
 
         self.assertEqual([diagnostic["code"] for diagnostic in result["diagnostics"]], ["missing_target", "unsupported_property"])
         self.assertEqual(result["objects"]["BooleanCutMissingBase"]["status"], "error")
@@ -1897,7 +1897,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"][1]["property"], "Type")
 
     def test_c5m2_boolean_allow_compound_preserves_multisolid_body_tip(self) -> None:
-        result = self.run_recompute("partdesign-boolean-allow-compound-multisolid", "c5m2")
+        result = self.run_recompute("partdesign-boolean-allow-compound-multisolid", "partdesign-boolean")
         boolean = result["objects"]["BooleanFuse"]
         body = result["objects"]["MainBody"]
 
@@ -1913,10 +1913,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["allow_compound"], True)
         self.assertEqual(body["replayed_replacement_features"], ["BooleanFuse"])
         self.assertIn("BooleanFuse", result["subshapes"])
-        self.assert_object_matches_expected(result, "c5m2", "partdesign-boolean-allow-compound-multisolid")
+        self.assert_object_matches_expected(result, "partdesign-boolean", "partdesign-boolean-allow-compound-multisolid")
 
     def test_c5m2_boolean_disallow_compound_reports_structured_multisolid_failure(self) -> None:
-        result = self.run_recompute("partdesign-boolean-multisolid-rejected", "c5m2")
+        result = self.run_recompute("partdesign-boolean-multisolid-rejected", "partdesign-boolean")
 
         self.assertEqual([diagnostic["code"] for diagnostic in result["diagnostics"]], ["multiple_solids_disallowed"])
         diagnostic = result["diagnostics"][0]
@@ -1929,7 +1929,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("BooleanRejected", result.get("subshapes", {}))
 
     def test_c5m2_boolean_multi_tool_group_order_and_expected_body_replacement(self) -> None:
-        result = self.run_recompute("partdesign-boolean-multi-tool-ownership", "c5m2")
+        result = self.run_recompute("partdesign-boolean-multi-tool-ownership", "partdesign-boolean")
         boolean = result["objects"]["BooleanFuse"]
         body = result["objects"]["MainBody"]
 
@@ -1942,10 +1942,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "BooleanFuse")
         self.assertEqual(body["shape"], "occt_solid")
         self.assertEqual(body["replayed_replacement_features"], ["BooleanFuse"])
-        self.assert_object_matches_expected(result, "c5m2", "partdesign-boolean-multi-tool-ownership")
+        self.assert_object_matches_expected(result, "partdesign-boolean", "partdesign-boolean-multi-tool-ownership")
 
     def test_c5m2_boolean_missing_tool_null_shape_and_unsupported_type_are_diagnostic(self) -> None:
-        result = self.run_recompute("partdesign-boolean-tool-missing-shape-diagnostic", "c5m2")
+        result = self.run_recompute("partdesign-boolean-tool-missing-shape-diagnostic", "partdesign-boolean")
         diagnostics = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
 
         self.assertEqual(
@@ -1964,7 +1964,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["BooleanUnsupportedType"]["status"], "error")
 
     def test_c51m2_boolean_compound_product_contract_and_body_policy(self) -> None:
-        result = self.run_recompute("partdesign-boolean-compound-body-tip", "c51m2")
+        result = self.run_recompute("partdesign-boolean-compound-body-tip", "partdesign-boolean")
         boolean = result["objects"]["BooleanCompound"]
         body = result["objects"]["MainBody"]
         named_shape = result["named_shapes"]["BooleanCompound"]
@@ -1983,9 +1983,9 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_compound:make_element_compound", named_shape["element_history_status"])
         self.assertTrue(any(key.startswith("BaseBox.") for key in named_shape["element_map"]))
         self.assertTrue(any(key.startswith("ToolBox.") for key in named_shape["element_map"]))
-        self.assert_object_matches_expected(result, "c51m2", "partdesign-boolean-compound-body-tip")
+        self.assert_object_matches_expected(result, "partdesign-boolean", "partdesign-boolean-compound-body-tip")
 
-        rejected = self.run_recompute("partdesign-boolean-compound-disallowed", "c51m2")
+        rejected = self.run_recompute("partdesign-boolean-compound-disallowed", "partdesign-boolean")
         self.assertEqual([diagnostic["code"] for diagnostic in rejected["diagnostics"]], ["multiple_solids_disallowed"])
         diagnostic = rejected["diagnostics"][0]
         self.assertEqual(diagnostic["object"], "BooleanCompound")
@@ -1997,7 +1997,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(rejected["objects"]["MainBody"]["reason"], "dependency BooleanCompound failed")
 
     def test_c51m2_boolean_section_product_contract_and_body_diagnostics(self) -> None:
-        result = self.run_recompute("partdesign-boolean-section-standalone", "c51m2")
+        result = self.run_recompute("partdesign-boolean-section-standalone", "partdesign-boolean")
         section = result["objects"]["BooleanSection"]
         named_shape = result["named_shapes"]["BooleanSection"]
 
@@ -2011,9 +2011,9 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
         self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
         self.assertEqual(sum(key.startswith("Edge") for key in result["subshapes"]["BooleanSection"]), 10)
-        self.assert_object_matches_expected(result, "c51m2", "partdesign-boolean-section-standalone")
+        self.assert_object_matches_expected(result, "partdesign-boolean", "partdesign-boolean-section-standalone")
 
-        body_tip = self.run_recompute("partdesign-boolean-section-body-tip-diagnostic", "c51m2")
+        body_tip = self.run_recompute("partdesign-boolean-section-body-tip-diagnostic", "partdesign-boolean")
         self.assertEqual([diagnostic["code"] for diagnostic in body_tip["diagnostics"]], ["partdesign_body_tip_non_solid"])
         diagnostic = body_tip["diagnostics"][0]
         self.assertEqual(diagnostic["object"], "MainBody")
@@ -2023,7 +2023,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body_tip["objects"]["BooleanSection"]["status"], "ok")
         self.assertEqual(body_tip["objects"]["MainBody"]["status"], "error")
 
-        no_intersection = self.run_recompute("partdesign-boolean-section-no-intersection", "c51m2")
+        no_intersection = self.run_recompute("partdesign-boolean-section-no-intersection", "partdesign-boolean")
         self.assertEqual([diagnostic["code"] for diagnostic in no_intersection["diagnostics"]], ["no_intersection"])
         diagnostic = no_intersection["diagnostics"][0]
         self.assertEqual(diagnostic["object"], "BooleanSection")
@@ -2032,7 +2032,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(no_intersection["objects"]["BooleanSection"]["status"], "error")
 
     def test_c4m2_partdesign_loft_additive_body_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-loft-additive-body", "c4m2")
+        result = self.run_recompute("partdesign-loft-additive-body", "partdesign-loft")
         loft = result["objects"]["AdditiveLoft"]
         body = result["objects"]["Body"]
         loft_named_shape = result["named_shapes"]["AdditiveLoft"]
@@ -2048,10 +2048,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_design_loft:solidification", loft_named_shape["element_history_status"])
         self.assertEqual(body["tip"], "AdditiveLoft")
         self.assertEqual(body["replayed_additive_features"], ["AdditiveLoft"])
-        self.assert_object_matches_expected(result, "c4m2", "partdesign-loft-additive-body")
+        self.assert_object_matches_expected(result, "partdesign-loft", "partdesign-loft-additive-body")
 
     def test_c4m2_partdesign_loft_subtractive_body_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-loft-subtractive-body", "c4m2")
+        result = self.run_recompute("partdesign-loft-subtractive-body", "partdesign-loft")
         loft = result["objects"]["SubtractiveLoft"]
         body = result["objects"]["Body"]
         loft_named_shape = result["named_shapes"]["SubtractiveLoft"]
@@ -2068,10 +2068,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "SubtractiveLoft")
         self.assertEqual(body["replayed_additive_features"], ["BasePad"])
         self.assertEqual(body["replayed_subtractive_features"], ["SubtractiveLoft"])
-        self.assert_object_matches_expected(result, "c4m2", "partdesign-loft-subtractive-body")
+        self.assert_object_matches_expected(result, "partdesign-loft", "partdesign-loft-subtractive-body")
 
     def test_c4m2_partdesign_pipe_additive_body_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-pipe-additive-body", "c4m2")
+        result = self.run_recompute("partdesign-pipe-additive-body", "partdesign-pipe")
         pipe = result["objects"]["AdditivePipe"]
         body = result["objects"]["Body"]
         pipe_named_shape = result["named_shapes"]["AdditivePipe"]
@@ -2090,10 +2090,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_design_pipe:pipeshell_history", pipe_named_shape["element_history_status"])
         self.assertEqual(body["tip"], "AdditivePipe")
         self.assertEqual(body["replayed_additive_features"], ["AdditivePipe"])
-        self.assert_object_matches_expected(result, "c4m2", "partdesign-pipe-additive-body")
+        self.assert_object_matches_expected(result, "partdesign-pipe", "partdesign-pipe-additive-body")
 
     def test_c4m2_partdesign_pipe_subtractive_body_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-pipe-subtractive-body", "c4m2")
+        result = self.run_recompute("partdesign-pipe-subtractive-body", "partdesign-pipe")
         pipe = result["objects"]["SubtractivePipe"]
         body = result["objects"]["Body"]
         pipe_named_shape = result["named_shapes"]["SubtractivePipe"]
@@ -2112,10 +2112,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "SubtractivePipe")
         self.assertEqual(body["replayed_additive_features"], ["BasePad"])
         self.assertEqual(body["replayed_subtractive_features"], ["SubtractivePipe"])
-        self.assert_object_matches_expected(result, "c4m2", "partdesign-pipe-subtractive-body")
+        self.assert_object_matches_expected(result, "partdesign-pipe", "partdesign-pipe-subtractive-body")
 
     def test_c4m2_partdesign_pipe_advanced_branches_are_supported(self) -> None:
-        result = self.run_recompute("partdesign-pipe-deferred-diagnostics", "c4m2")
+        result = self.run_recompute("partdesign-pipe-deferred-diagnostics", "partdesign-pipe")
 
         self.assertEqual(result["diagnostics"], [])
         multisection = result["objects"]["AdditivePipeMultisection"]
@@ -2134,7 +2134,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(auxiliary["auxiliary_spine"], "AuxiliarySpine")
 
     def test_c5m3_c51m3_partdesign_loft_advanced_cases_match_native_oracle(self) -> None:
-        for group in ["c5m3", "c51m3"]:
+        for group in ["partdesign-loft"]:
             with self.subTest(group=group, fixture="partdesign-loft-closed-multisection"):
                 closed = self.run_recompute("partdesign-loft-closed-multisection", group)
                 loft = closed["objects"]["AdditiveLoftClosed"]
@@ -2174,7 +2174,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(allow_compound["objects"]["AdditiveLoftRejected"]["status"], "error")
 
     def test_c5m3_partdesign_pipe_multisection_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-pipe-sections-transformation", "c5m3")
+        result = self.run_recompute("partdesign-pipe-sections-transformation", "partdesign-pipe")
         pipe = result["objects"]["AdditivePipeMultisection"]
         pipe_named_shape = result["named_shapes"]["AdditivePipeMultisection"]
 
@@ -2187,10 +2187,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pipe["sections"], ["SketchPipeSection"])
         self.assertIn("part_sweep:pipeshell_history", pipe_named_shape["element_history_status"])
         self.assertIn("part_design_pipe:pipeshell_history", pipe_named_shape["element_history_status"])
-        self.assert_object_matches_expected(result, "c5m3", "partdesign-pipe-sections-transformation")
+        self.assert_object_matches_expected(result, "partdesign-pipe", "partdesign-pipe-sections-transformation")
 
     def test_c12m12_partdesign_pipe_multiwire_sewing_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-pipe-multiwire-sewing", "c12m12")
+        result = self.run_recompute("partdesign-pipe-multiwire-sewing", "partdesign-pipe")
         pipe = result["objects"]["AdditivePipeMultiWire"]
         body = result["objects"]["Body"]
         pipe_named_shape = result["named_shapes"]["AdditivePipeMultiWire"]
@@ -2203,7 +2203,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "AdditivePipeMultiWire")
         self.assertIn("part_design_pipe:multi_wire_sections", pipe_named_shape["element_history_status"])
         self.assertIn("part_design_pipe:sewing", pipe_named_shape["element_history_status"])
-        self.assert_object_matches_expected(result, "c12m12", "partdesign-pipe-multiwire-sewing")
+        self.assert_object_matches_expected(result, "partdesign-pipe", "partdesign-pipe-multiwire-sewing")
 
     def test_c12m13_partdesign_pipe_vertex_success_paths_match_native_oracle(self) -> None:
         cases = [
@@ -2222,7 +2222,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]
         for fixture, object_name, source_profile, sections in cases:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c12m13")
+                result = self.run_recompute(fixture)
                 pipe = result["objects"][object_name]
                 named_shape = result["named_shapes"][object_name]
 
@@ -2233,12 +2233,12 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(pipe["sections"], sections)
                 self.assertEqual(pipe["transformation"], "Multisection")
                 self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
-                self.assert_object_matches_expected(result, "c12m13", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_c12m13_partdesign_pipe_vertex_wire_diagnostics_are_s3_red_evidence(self) -> None:
         fixture = "partdesign-pipe-vertex-wire-diagnostics"
-        result = self.run_recompute(fixture, "c12m13")
-        expected = self.expected_freecad("c12m13", fixture)
+        result = self.run_recompute(fixture)
+        expected = self.expected_freecad(None, fixture)
         diagnostics = {item["object"]: item for item in result["diagnostics"]}
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], expected["diagnostic_codes"])
@@ -2258,8 +2258,8 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(expected["s3_resolution"]["closed_blocker"], "C12M13-BLOCKER-401")
 
     def test_c12m13_partdesign_pipe_lifecycle_matches_native_oracle(self) -> None:
-        additive = self.run_recompute("partdesign-pipe-additive-lifecycle", "c12m13")
-        additive_expected = self.expected_freecad("c12m13", "partdesign-pipe-additive-lifecycle")
+        additive = self.run_recompute("partdesign-pipe-additive-lifecycle", "partdesign-pipe")
+        additive_expected = self.expected_freecad("partdesign-pipe", "partdesign-pipe-additive-lifecycle")
 
         self.assertNotIn("known_gap", additive_expected)
         self.assertEqual(additive["diagnostics"], [])
@@ -2274,10 +2274,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ["BasePadFuse", "AdditivePipeFuse"],
         )
         self.assertEqual(additive_expected["s4_resolution"]["closed_blocker"], "C12M13-BLOCKER-501")
-        self.assert_object_matches_expected(additive, "c12m13", "partdesign-pipe-additive-lifecycle")
+        self.assert_object_matches_expected(additive, "partdesign-pipe", "partdesign-pipe-additive-lifecycle")
 
-        subtractive = self.run_recompute("partdesign-pipe-subtractive-lifecycle", "c12m13")
-        subtractive_expected = self.expected_freecad("c12m13", "partdesign-pipe-subtractive-lifecycle")
+        subtractive = self.run_recompute("partdesign-pipe-subtractive-lifecycle", "partdesign-pipe")
+        subtractive_expected = self.expected_freecad("partdesign-pipe", "partdesign-pipe-subtractive-lifecycle")
 
         self.assertNotIn("known_gap", subtractive_expected)
         self.assertEqual(subtractive["diagnostics"], [])
@@ -2286,10 +2286,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(subtractive["objects"]["SubtractivePipe"]["volume"], 75.0)
         self.assertEqual(subtractive["objects"]["Body"]["replayed_subtractive_features"], ["SubtractivePipe"])
         self.assertEqual(subtractive_expected["s4_resolution"]["closed_blocker"], "C12M13-BLOCKER-501")
-        self.assert_object_matches_expected(subtractive, "c12m13", "partdesign-pipe-subtractive-lifecycle")
+        self.assert_object_matches_expected(subtractive, "partdesign-pipe", "partdesign-pipe-subtractive-lifecycle")
 
     def test_c5m3_partdesign_pipe_transition_and_frenet_match_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-pipe-transition-variants", "c5m3")
+        result = self.run_recompute("partdesign-pipe-transition-variants", "partdesign-pipe")
         pipe = result["objects"]["AdditivePipeRightFrenet"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -2297,10 +2297,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pipe["mode"], "Frenet")
         self.assertEqual(pipe["transformation"], "Constant")
         self.assertEqual(pipe["transition"], "Right corner")
-        self.assert_object_matches_expected(result, "c5m3", "partdesign-pipe-transition-variants")
+        self.assert_object_matches_expected(result, "partdesign-pipe", "partdesign-pipe-transition-variants")
 
     def test_c5m3_partdesign_pipe_deferred_orientation_scaling_are_diagnostic(self) -> None:
-        result = self.run_recompute("partdesign-pipe-auxiliary-binormal-diagnostics", "c5m3")
+        result = self.run_recompute("partdesign-pipe-auxiliary-binormal-diagnostics", "partdesign-pipe")
 
         self.assertEqual(
             [diagnostic["code"] for diagnostic in result["diagnostics"]],
@@ -2320,7 +2320,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["AdditivePipeTangent"]["status"], "ok")
 
     def test_c51m4_partdesign_pipe_fixed_round_selected_spine_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-pipe-fixed-round-body", "c51m4")
+        result = self.run_recompute("partdesign-pipe-fixed-round-body", "partdesign-pipe")
         pipe = result["objects"]["AdditivePipeFixedRound"]
         body = result["objects"]["Body"]
         named_shape = result["named_shapes"]["AdditivePipeFixedRound"]
@@ -2334,10 +2334,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
         self.assertIn("part_sweep:pipeshell_history", named_shape["element_history_status"])
         self.assertEqual(body["tip"], "AdditivePipeFixedRound")
-        self.assert_object_matches_expected(result, "c51m4", "partdesign-pipe-fixed-round-body")
+        self.assert_object_matches_expected(result, "partdesign-pipe", "partdesign-pipe-fixed-round-body")
 
     def test_c51m4_partdesign_pipe_auxiliary_binormal_modes_match_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-pipe-auxiliary-binormal-modes", "c51m4")
+        result = self.run_recompute("partdesign-pipe-auxiliary-binormal-modes", "partdesign-pipe")
 
         self.assertEqual(result["diagnostics"], [])
         auxiliary = result["objects"]["AdditivePipeAuxiliary"]
@@ -2353,10 +2353,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             named_shape = result["named_shapes"][object_name]
             self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
             self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
-        self.assert_object_matches_expected(result, "c51m4", "partdesign-pipe-auxiliary-binormal-modes")
+        self.assert_object_matches_expected(result, "partdesign-pipe", "partdesign-pipe-auxiliary-binormal-modes")
 
     def test_c51m4_partdesign_pipe_selected_spine_multisection_matches_native_oracle(self) -> None:
-        result = self.run_recompute("partdesign-pipe-selected-spine-multisection", "c51m4")
+        result = self.run_recompute("partdesign-pipe-selected-spine-multisection", "partdesign-pipe")
         pipe = result["objects"]["AdditivePipeSelectedSpine"]
         named_shape = result["named_shapes"]["AdditivePipeSelectedSpine"]
 
@@ -2366,10 +2366,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pipe["transformation"], "Multisection")
         self.assertEqual(pipe["sections"], ["SketchPipeSectionEnd"])
         self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
-        self.assert_object_matches_expected(result, "c51m4", "partdesign-pipe-selected-spine-multisection")
+        self.assert_object_matches_expected(result, "partdesign-pipe", "partdesign-pipe-selected-spine-multisection")
 
     def test_c51m4_partdesign_pipe_source_backed_blockers_preserve_law_diagnostics(self) -> None:
-        result = self.run_recompute("partdesign-pipe-source-backed-blockers", "c51m4")
+        result = self.run_recompute("partdesign-pipe-source-backed-blockers", "partdesign-pipe")
 
         self.assertEqual(
             [diagnostic["code"] for diagnostic in result["diagnostics"]],
@@ -2403,7 +2403,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c6m1")
+                result = self.run_recompute(fixture)
                 pipe = result["objects"][object_name]
                 named_shape = result["named_shapes"][object_name]
 
@@ -2443,7 +2443,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]
         for fixture, object_name, add_sub, samples in cases:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c6m3")
+                result = self.run_recompute(fixture)
                 pipe = result["objects"][object_name]
                 named_shape = result["named_shapes"][object_name]
 
@@ -2465,7 +2465,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     body = result["objects"]["Body"]
                     self.assertEqual(body["tip"], object_name)
                     self.assertEqual(body["replayed_subtractive_features"], [object_name])
-                self.assert_object_matches_expected(result, "c6m3", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
                 if add_sub == "sub":
                     body = result["objects"]["Body"]
                     self.assertEqual(pipe["shape"], body["shape"])
@@ -2563,7 +2563,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         }
 
-        result = self.run_recompute("partdesign-pipe-invalid_pipe_law_samples-diagnostics", "c6m3")
+        result = self.run_recompute("partdesign-pipe-invalid_pipe_law_samples-diagnostics", "partdesign-pipe")
         self.assertEqual([item["object"] for item in result["diagnostics"]], list(cases))
         self.assertEqual([item["code"] for item in result["diagnostics"]], [case[0] for case in cases.values()])
 
@@ -2585,7 +2585,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(pipe["pipe_law"]["reason"], reason)
                 self.assertNotIn("shape", pipe)
 
-        self.assert_object_matches_expected(result, "c6m3", "partdesign-pipe-invalid_pipe_law_samples-diagnostics")
+        self.assert_object_matches_expected(result, "partdesign-pipe", "partdesign-pipe-invalid_pipe_law_samples-diagnostics")
 
     def test_c6m1_partdesign_pipe_tangent_ledgers_are_request_local(self) -> None:
         cases = [
@@ -2604,7 +2604,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]
         for fixture, object_name, ledger_field, source_object in cases:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c6m1")
+                result = self.run_recompute(fixture)
                 pipe = result["objects"][object_name]
                 ledger = pipe[ledger_field]
                 named_shape = result["named_shapes"][object_name]
@@ -2621,7 +2621,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertIn("part_sweep:pipeshell_history", named_shape["element_history_status"])
 
     def test_c6m1_partdesign_pipe_law_and_tangent_diagnostics_are_locatable(self) -> None:
-        result = self.run_recompute("partdesign-pipe-law-tangent-diagnostics", "c6m1")
+        result = self.run_recompute("partdesign-pipe-law-tangent-diagnostics", "partdesign-pipe")
 
         self.assertEqual(
             [diagnostic["code"] for diagnostic in result["diagnostics"]],
@@ -2648,7 +2648,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertIn("subname", diagnostics[object_name])
 
     def test_p7_hole_blind_depth_cuts_body(self) -> None:
-        result = self.run_recompute("hole-blind-depth", "p7")
+        result = self.run_recompute("hole-blind-depth", "partdesign-hole")
         hole = result["objects"]["Hole"]
         body = result["objects"]["Body"]
 
@@ -2656,16 +2656,16 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(hole["status"], "ok")
         self.assertEqual(hole["method"], "Dimension")
         self.assertEqual(hole["add_sub"], "sub")
-        self.assert_object_matches_expected(result, "p7", "hole-blind-depth")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-blind-depth")
 
     def test_p7_hole_supported_profile_matches_native_oracle(self) -> None:
-        result = self.run_recompute("hole-supported-blind-depth", "p7")
+        result = self.run_recompute("hole-supported-blind-depth", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(hole["status"], "ok")
         self.assertEqual(hole["source_profile"], "SketchHole")
-        self.assert_object_matches_expected(result, "p7", "hole-supported-blind-depth")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-supported-blind-depth")
 
     def test_p7_hole_supported_common_variants_match_native_oracle(self) -> None:
         for fixture, expected_fields in [
@@ -2679,7 +2679,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("hole-supported-point-counterbore", {"hole_cut_type": "Counterbore", "hole_cut_diameter": 4.0}),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 hole = result["objects"]["Hole"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -2687,10 +2687,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(hole["source_profile"], "SketchHole")
                 for field, value in expected_fields.items():
                     self.assertEqual(hole[field], value)
-                self.assert_object_matches_expected(result, "p7", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_c3m5_hole_point_profile_counterbore_extends_history_matrix(self) -> None:
-        result = self.run_recompute("hole-supported-point-counterbore", "p7")
+        result = self.run_recompute("hole-supported-point-counterbore", "partdesign-hole")
         hole = result["objects"]["Hole"]
         named_shape = result["named_shapes"]["Hole"]
         body_history = result["named_shapes"]["Body"]["element_history_status"]
@@ -2719,7 +2719,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn("history_consumed:generated_modified", body_history)
         self.assertIn("terminal_history:split_deleted", body_history)
-        self.assert_object_matches_expected(result, "p7", "hole-supported-point-counterbore")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-supported-point-counterbore")
 
     def test_p7_hole_supported_threaded_heads_match_native_oracle(self) -> None:
         for fixture, expected_fields in [
@@ -2750,7 +2750,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 hole = result["objects"]["Hole"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -2763,7 +2763,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                         self.assertAlmostEqual(hole[field], value, delta=1e-9)
                     else:
                         self.assertEqual(hole[field], value)
-                self.assert_object_matches_expected(result, "p7", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p7_hole_supported_thread_options_match_native_oracle(self) -> None:
         for fixture, expected_fields in [
@@ -2805,7 +2805,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 hole = result["objects"]["Hole"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -2819,10 +2819,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                         self.assertAlmostEqual(hole[field], value, delta=1e-9)
                     else:
                         self.assertEqual(hole[field], value)
-                self.assert_object_matches_expected(result, "p7", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p7_hole_refine_true_uses_body_final_result_refine(self) -> None:
-        result = self.run_recompute("hole-refine-true", "p7")
+        result = self.run_recompute("hole-refine-true", "partdesign-hole")
         hole = result["objects"]["Hole"]
         body = result["objects"]["Body"]
         body_named_shape = result["named_shapes"]["Body"]
@@ -2838,45 +2838,45 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "Hole"},
             {("Hole", "Face3")},
         )
-        self.assert_object_matches_expected(result, "p7", "hole-refine-true")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-refine-true")
 
     def test_p7_hole_through_all_cuts_body(self) -> None:
-        result = self.run_recompute("hole-through-all", "p7")
+        result = self.run_recompute("hole-through-all", "partdesign-hole")
         hole = result["objects"]["Hole"]
         body = result["objects"]["Body"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(hole["method"], "ThroughAll")
         self.assertGreater(hole["depth"], 10.0)
-        self.assert_object_matches_expected(result, "p7", "hole-through-all")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-through-all")
 
     def test_p7_hole_counterbore_cuts_head_cylinder_and_shaft(self) -> None:
-        result = self.run_recompute("hole-counterbore", "p7")
+        result = self.run_recompute("hole-counterbore", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(hole["hole_cut_type"], "Counterbore")
         self.assertEqual(hole["hole_cut_diameter"], 4.0)
         self.assertEqual(hole["hole_cut_depth"], 2.0)
-        self.assert_object_matches_expected(result, "p7", "hole-counterbore")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-counterbore")
 
     def test_p7_hole_countersink_cuts_conical_head_and_shaft(self) -> None:
-        result = self.run_recompute("hole-countersink", "p7")
+        result = self.run_recompute("hole-countersink", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(hole["hole_cut_type"], "Countersink")
         self.assertEqual(hole["hole_cut_countersink_angle"], 90.0)
-        self.assert_object_matches_expected(result, "p7", "hole-countersink")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-countersink")
 
     def test_p7_hole_counterdrill_cuts_head_cone_between_two_cylinders(self) -> None:
-        result = self.run_recompute("hole-counterdrill", "p7")
+        result = self.run_recompute("hole-counterdrill", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(hole["hole_cut_type"], "Counterdrill")
         self.assertEqual(hole["hole_cut_depth"], 1.0)
-        self.assert_object_matches_expected(result, "p7", "hole-counterdrill")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-counterdrill")
 
     def test_p7_hole_threaded_metric_head_cut_uses_freecad_standard_tables(self) -> None:
         for fixture, cut_type, standard, source, cut_diameter, cut_depth, angle in [
@@ -2886,7 +2886,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("hole-threaded-dynamic-iso2009", "Countersink", "ISO 2009", "iso2009.json", 9.5, 0.0, 90.0),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 hole = result["objects"]["Hole"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -2924,7 +2924,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 encoding="utf-8",
             )
 
-            fixture = json.loads((ROOT / "fixtures" / "p7" / "hole-threaded-dynamic-din7984.json").read_text())
+            fixture = json.loads((ROOT / "fixtures" / "partdesign-hole" / "hole-threaded-dynamic-din7984.json").read_text())
             for obj in fixture["Objects"]:
                 if obj["Name"] == "Hole":
                     obj["Properties"]["HoleCutType"] = "CAD Core Custom Head"
@@ -2961,7 +2961,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("hole-thread-depth-dimension-clamped", "Dimension", 6.0, 3.8),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 hole = result["objects"]["Hole"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -2977,7 +2977,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("hole-thread-custom-clearance", "6H", "Right", True, 0.08, 0.08, 0.04),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 hole = result["objects"]["Hole"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -2993,8 +2993,8 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertAlmostEqual(hole["thread_radius_clearance"], radius, delta=1e-9)
 
     def test_p7_hole_model_thread_builds_freecad_pipe_shell_tool(self) -> None:
-        plain = self.run_recompute("hole-supported-thread-class-clearance", "p7")
-        result = self.run_recompute("hole-supported-model-thread-metric", "p7")
+        plain = self.run_recompute("hole-supported-thread-class-clearance", "partdesign-hole")
+        result = self.run_recompute("hole-supported-model-thread-metric", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3009,10 +3009,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(hole["thread_radius_clearance"], 0.011, delta=1e-9)
         self.assertGreater(hole["volume"], plain["objects"]["Hole"]["volume"])
         self.assertLess(result["objects"]["Body"]["volume"], plain["objects"]["Body"]["volume"])
-        self.assert_object_matches_expected(result, "p7", "hole-supported-model-thread-metric")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-supported-model-thread-metric")
 
     def test_c3m5_hole_thread_table_model_thread_contract_uses_native_oracles(self) -> None:
-        table_result = self.run_recompute("hole-supported-threaded-dynamic-iso2009", "p7")
+        table_result = self.run_recompute("hole-supported-threaded-dynamic-iso2009", "partdesign-hole")
         table_hole = table_result["objects"]["Hole"]
         table_hole_named_shape = table_result["named_shapes"]["Hole"]
         table_body_history = table_result["named_shapes"]["Body"]["element_history_status"]
@@ -3055,7 +3055,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("history_consumed:generated_modified", table_body_history)
         self.assertIn("terminal_history:split_deleted", table_body_history)
 
-        model_result = self.run_recompute("hole-supported-model-thread-metric", "p7")
+        model_result = self.run_recompute("hole-supported-model-thread-metric", "partdesign-hole")
         model_hole = model_result["objects"]["Hole"]
         model_hole_named_shape = model_result["named_shapes"]["Hole"]
         model_body_history = model_result["named_shapes"]["Body"]["element_history_status"]
@@ -3076,12 +3076,12 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn("history_consumed:generated_modified", model_body_history)
         self.assertIn("terminal_history:split_deleted", model_body_history)
-        self.assert_object_matches_expected(table_result, "p7", "hole-supported-threaded-dynamic-iso2009")
-        self.assert_object_matches_expected(model_result, "p7", "hole-supported-model-thread-metric")
+        self.assert_object_matches_expected(table_result, "partdesign-hole", "hole-supported-threaded-dynamic-iso2009")
+        self.assert_object_matches_expected(model_result, "partdesign-hole", "hole-supported-model-thread-metric")
 
     def test_c3m5_hole_threaded_model_thread_head_cut_oracle_matrix_matches_native(self) -> None:
-        result = self.run_recompute("hole-supported-model-thread-counterbore", "p7")
-        expected = self.expected_freecad("p7", "hole-supported-model-thread-counterbore")
+        result = self.run_recompute("hole-supported-model-thread-counterbore", "partdesign-hole")
+        expected = self.expected_freecad("partdesign-hole", "hole-supported-model-thread-counterbore")
         hole = result["objects"]["Hole"]
         named_shape = result["named_shapes"]["Hole"]
         events = [
@@ -3095,7 +3095,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(expected["topology_counts"], {"edges": 106, "faces": 50, "vertices": 60})
         # RS9-M39 S2 oracle: re-collected with
         # `python3 tools/collect_freecad_expected.py
-        # fixtures/p7/hole-supported-model-thread-counterbore.json --out
+        # fixtures/partdesign-hole/hole-supported-model-thread-counterbore.json --out
         # target/rs9_m39/hole-supported-model-thread-counterbore.current.freecad.json --pretty
         # --freecadcmd /Users/li/.cargo/bin/FreeCADCmd`.
         # FreeCAD 1.2.0 revision 20260519 / OCCT 7.8.1 reports Body volume
@@ -3103,7 +3103,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         # cut modeled thread before the profiled/head tool and keep the compound wrapper; the
         # AddSubShape tool remains the pattern-consumer boundary, with no capabilities gate change.
         self.assertAlmostEqual(expected["volume"], 434.05359569539525, delta=1e-9)
-        self.assert_object_matches_expected(result, "p7", "hole-supported-model-thread-counterbore")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-supported-model-thread-counterbore")
         self.assertEqual(hole["threaded"], True)
         self.assertEqual(hole["model_thread"], True)
         self.assertEqual(hole["model_thread_geometry"], "pipe_shell")
@@ -3133,17 +3133,17 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_p7_hole_angled_drill_point_extends_blind_hole_tip(self) -> None:
-        result = self.run_recompute("hole-angled-drill-point", "p7")
+        result = self.run_recompute("hole-angled-drill-point", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(hole["hole_cut_type"], "None")
         self.assertEqual(hole["drill_point"], "Angled")
         self.assertEqual(hole["drill_for_depth"], False)
-        self.assert_object_matches_expected(result, "p7", "hole-angled-drill-point")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-angled-drill-point")
 
     def test_p7_hole_uses_sketch_points_as_hole_centers(self) -> None:
-        result = self.run_recompute("hole-point-profile", "p7")
+        result = self.run_recompute("hole-point-profile", "partdesign-hole")
         sketch = result["objects"]["SketchHole"]
         hole = result["objects"]["Hole"]
         body = result["objects"]["Body"]
@@ -3167,19 +3167,19 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 for event in point_events
             )
         )
-        self.assert_object_matches_expected(result, "p7", "hole-point-profile")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-point-profile")
 
     def test_p7_hole_tapered_profile_uses_tapered_angle_bottom_radius(self) -> None:
-        result = self.run_recompute("hole-tapered", "p7")
+        result = self.run_recompute("hole-tapered", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(hole["tapered"], True)
         self.assertEqual(hole["tapered_angle"], 80.0)
-        self.assert_object_matches_expected(result, "p7", "hole-tapered")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-tapered")
 
     def test_p7_hole_threaded_without_model_thread_uses_tap_drill_plain_tool(self) -> None:
-        result = self.run_recompute("hole-threaded-cosmetic", "p7")
+        result = self.run_recompute("hole-threaded-cosmetic", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3192,10 +3192,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(hole["thread_pitch"], 0.25)
         self.assertEqual(hole["diameter"], 0.75)
         self.assertEqual(hole["drill_point"], "Flat")
-        self.assert_object_matches_expected(result, "p7", "hole-threaded-cosmetic")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-threaded-cosmetic")
 
     def test_p7_hole_threaded_fine_profile_uses_fine_tap_drill_table(self) -> None:
-        result = self.run_recompute("hole-threaded-fine-cosmetic", "p7")
+        result = self.run_recompute("hole-threaded-fine-cosmetic", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3207,10 +3207,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(hole["thread_diameter"], 4.0)
         self.assertEqual(hole["thread_pitch"], 0.5)
         self.assertEqual(hole["diameter"], 3.5)
-        self.assert_object_matches_expected(result, "p7", "hole-threaded-fine-cosmetic")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-threaded-fine-cosmetic")
 
     def test_p7_hole_threaded_unc_profile_uses_unc_tap_drill_table(self) -> None:
-        result = self.run_recompute("hole-threaded-unc-cosmetic", "p7")
+        result = self.run_recompute("hole-threaded-unc-cosmetic", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3222,7 +3222,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(hole["thread_diameter"], 2.845)
         self.assertEqual(hole["thread_pitch"], 0.635)
         self.assertEqual(hole["diameter"], 2.35)
-        self.assert_object_matches_expected(result, "p7", "hole-threaded-unc-cosmetic")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-threaded-unc-cosmetic")
 
     def test_p7_hole_threaded_unf_and_unef_profiles_use_tap_drill_tables(self) -> None:
         for fixture, thread_type, thread_size, thread_diameter, thread_pitch, diameter in [
@@ -3230,7 +3230,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("hole-threaded-unef-cosmetic", "UNEF", "#12", 5.486, 0.794, 4.80),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 hole = result["objects"]["Hole"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -3242,7 +3242,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(hole["thread_diameter"], thread_diameter)
                 self.assertEqual(hole["thread_pitch"], thread_pitch)
                 self.assertEqual(hole["diameter"], diameter)
-                self.assert_object_matches_expected(result, "p7", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p7_hole_threaded_pipe_and_british_profiles_use_freecad_tables(self) -> None:
         for fixture, thread_type, thread_size, thread_diameter, thread_pitch, diameter, source in [
@@ -3284,7 +3284,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 hole = result["objects"]["Hole"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -3296,10 +3296,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(hole["thread_diameter"], thread_diameter)
                 self.assertEqual(hole["thread_pitch"], thread_pitch)
                 self.assertAlmostEqual(hole["diameter"], diameter, delta=1e-9)
-                self.assert_object_matches_expected(result, "p7", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p7_hole_threaded_isotyre_profile_uses_pitch_fallback(self) -> None:
-        result = self.run_recompute("hole-threaded-isotyre-cosmetic", "p7")
+        result = self.run_recompute("hole-threaded-isotyre-cosmetic", "partdesign-hole")
         hole = result["objects"]["Hole"]
         diameter = 5.334 - 0.705
 
@@ -3312,10 +3312,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(hole["thread_diameter"], 5.334)
         self.assertEqual(hole["thread_pitch"], 0.705)
         self.assertAlmostEqual(hole["diameter"], diameter, delta=1e-9)
-        self.assert_object_matches_expected(result, "p7", "hole-threaded-isotyre-cosmetic")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-threaded-isotyre-cosmetic")
 
     def test_p7_hole_thread_clearance_uses_iso_metric_fit_table(self) -> None:
-        result = self.run_recompute("hole-thread-clearance", "p7")
+        result = self.run_recompute("hole-thread-clearance", "partdesign-hole")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3327,7 +3327,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(hole["thread_diameter"], 4.0)
         self.assertEqual(hole["thread_pitch"], 0.7)
         self.assertEqual(hole["diameter"], 4.8)
-        self.assert_object_matches_expected(result, "p7", "hole-thread-clearance")
+        self.assert_object_matches_expected(result, "partdesign-hole", "hole-thread-clearance")
 
     def test_p7_hole_thread_clearance_uses_uts_table_and_generic_fallback(self) -> None:
         for fixture, thread_type, thread_size, diameter, source in [
@@ -3341,7 +3341,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 hole = result["objects"]["Hole"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -3351,12 +3351,12 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(hole["thread_fit"], "Normal")
                 self.assertEqual(hole["diameter_source"], source)
                 self.assertAlmostEqual(hole["diameter"], diameter, delta=1e-9)
-                self.assert_object_matches_expected(result, "p7", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p7_hole_without_base_diagnostics_are_explicit(self) -> None:
         for fixture in ["hole-without-base", "hole-threaded-known-gap"]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 diagnostic = result["diagnostics"][0]
 
                 self.assertEqual(diagnostic["code"], "execution_failed")
@@ -3364,7 +3364,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["property"], "Profile")
 
     def test_p7_fillet_replaces_body_tip_shape(self) -> None:
-        result = self.run_recompute("fillet-pad-edge", "p7")
+        result = self.run_recompute("fillet-pad-edge", "partdesign-dressup")
         fillet = result["objects"]["Fillet"]
         body = result["objects"]["Body"]
 
@@ -3373,10 +3373,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(fillet["dress_up"], "fillet")
         self.assertEqual(fillet["body_mode"], "replace")
         self.assertEqual(body["tip"], "Fillet")
-        self.assert_object_matches_expected(result, "p7", "fillet-pad-edge")
+        self.assert_object_matches_expected(result, "partdesign-dressup", "fillet-pad-edge")
 
     def test_p7_chamfer_replaces_body_tip_shape(self) -> None:
-        result = self.run_recompute("chamfer-pad-edge", "p7")
+        result = self.run_recompute("chamfer-pad-edge", "partdesign-dressup")
         chamfer = result["objects"]["Chamfer"]
         body = result["objects"]["Body"]
 
@@ -3385,7 +3385,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(chamfer["dress_up"], "chamfer")
         self.assertEqual(chamfer["body_mode"], "replace")
         self.assertEqual(body["tip"], "Chamfer")
-        self.assert_object_matches_expected(result, "p7", "chamfer-pad-edge")
+        self.assert_object_matches_expected(result, "partdesign-dressup", "chamfer-pad-edge")
 
     def test_c7m3_fillet_oracle_rows_match_expected(self) -> None:
         for fixture, selection in [
@@ -3409,7 +3409,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 fillet = result["objects"]["Fillet"]
                 body = result["objects"]["Body"]
 
@@ -3420,22 +3420,22 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(body["tip"], "Fillet")
                 for key, value in selection.items():
                     self.assertEqual(fillet["base_selection"][key], value)
-                self.assert_object_matches_expected(result, "p7", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_c7m3_chamfer_flip_direction_oracle_rows_match_expected(self) -> None:
         for group, fixture, parameters in [
             (
-                "p7",
+                "partdesign-dressup",
                 "chamfer-pad-edge-flip-true",
                 {"chamfer_type": "Equal distance", "size": 0.5, "flip_direction": True},
             ),
             (
-                "c3m5",
+                "partdesign-dressup",
                 "chamfer-two-distances-edge-flip-true",
                 {"chamfer_type": "Two distances", "size": 0.3, "size2": 0.8, "flip_direction": True},
             ),
             (
-                "c3m5",
+                "partdesign-dressup",
                 "chamfer-distance-angle-edge-flip-true",
                 {"chamfer_type": "Distance and Angle", "size": 0.5, "angle": 45.0, "flip_direction": True},
             ),
@@ -3454,7 +3454,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assert_object_matches_expected(result, group, fixture)
 
     def test_c3m5_dressup_base_uses_body_cumulative_shape(self) -> None:
-        result = self.run_recompute("body-dressup-cumulative-base", "c3m5")
+        result = self.run_recompute("body-dressup-cumulative-base", "partdesign-body")
         body = result["objects"]["Pad5Body"]
         fillet2 = result["objects"]["Fillet2"]
 
@@ -3472,7 +3472,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(body["volume"], fillet2["volume"])
 
     def test_c3m5_curved_face_profile_pad_uses_surface_normal(self) -> None:
-        result = self.run_recompute("body-curved-face-pad-profile-normal", "c3m5")
+        result = self.run_recompute("body-curved-face-pad-profile-normal", "partdesign-body")
         body = result["objects"]["PadPreviewBody"]
         preview = result["objects"]["PadPreview"]
 
@@ -3483,7 +3483,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("PadPreviewBody", result["mesh"])
 
     def test_c3m5_body_dressup_rejects_invalid_target_stable_subname(self) -> None:
-        fixture_path = ROOT / "fixtures" / "c3m5" / "body-dressup-invalid-stable-subname.json"
+        fixture_path = ROOT / "fixtures" / "partdesign-body" / "body-dressup-invalid-stable-subname.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         for item in payload["Objects"]:
             if item["Name"] == "Fillet3":
@@ -3512,7 +3512,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c3m5")
+                result = self.run_recompute(fixture)
                 chamfer = result["objects"]["Chamfer"]
                 body = result["objects"]["Body"]
 
@@ -3526,7 +3526,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertGreater(chamfer["volume"], 0)
 
     def test_c3m5_draft_face_uses_datum_plane_and_line(self) -> None:
-        copy_result = self.run_recompute("draft-no-face-copy", "c3m5")
+        copy_result = self.run_recompute("draft-no-face-copy", "partdesign-dressup")
         copy_draft = copy_result["objects"]["Draft"]
         self.assertEqual(copy_result["diagnostics"], [])
         self.assertEqual(copy_draft["status"], "ok")
@@ -3536,7 +3536,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(copy_result["objects"]["Body"]["tip"], "Draft")
         self.assertAlmostEqual(copy_draft["volume"], copy_result["objects"]["Pad"]["volume"])
 
-        result = self.run_recompute("draft-face-datum-plane-line", "c3m5")
+        result = self.run_recompute("draft-face-datum-plane-line", "partdesign-dressup")
         draft = result["objects"]["Draft"]
         body = result["objects"]["Body"]
         draft_named_shape = result["named_shapes"]["Draft"]
@@ -3560,7 +3560,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("history_consumed:generated_modified", draft_named_shape["element_history_status"])
         self.assertTrue(any(key.startswith("Pad.") for key in draft_named_shape["element_map"]))
 
-        auto_result = self.run_recompute("draft-face-auto-neutral-plane", "c3m5")
+        auto_result = self.run_recompute("draft-face-auto-neutral-plane", "partdesign-dressup")
         auto_draft = auto_result["objects"]["Draft"]
         auto_named_shape = auto_result["named_shapes"]["Draft"]
         self.assertEqual(auto_result["diagnostics"], [])
@@ -3579,7 +3579,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("history_consumed:generated_modified", auto_named_shape["element_history_status"])
 
     def test_c3m5_thickness_face_uses_make_thick_solid_variants(self) -> None:
-        copy_result = self.run_recompute("thickness-no-face-copy", "c3m5")
+        copy_result = self.run_recompute("thickness-no-face-copy", "partdesign-dressup")
         copy_thickness = copy_result["objects"]["Thickness"]
         self.assertEqual(copy_result["diagnostics"], [])
         self.assertEqual(copy_thickness["status"], "ok")
@@ -3626,7 +3626,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c3m5")
+                result = self.run_recompute(fixture)
                 thickness = result["objects"]["Thickness"]
                 body = result["objects"]["Body"]
                 named_shape = result["named_shapes"]["Thickness"]
@@ -3646,7 +3646,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
                 self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
 
-        multi_result = self.run_recompute("thickness-multi-solid-fuse", "c3m5")
+        multi_result = self.run_recompute("thickness-multi-solid-fuse", "partdesign-dressup")
         multi_thickness = multi_result["objects"]["Thickness"]
         multi_named_shape = multi_result["named_shapes"]["Thickness"]
         multi_parameters = multi_thickness["parameters"]
@@ -3687,7 +3687,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("chamfer-refine-true", "Chamfer"),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 dress_up = result["objects"][object_name]
                 body = result["objects"]["Body"]
                 dress_up_named_shape = result["named_shapes"][object_name]
@@ -3702,10 +3702,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     {"Pad", "SketchPad"},
                     {("Pad", "Vertex1"), ("Pad", "Vertex2"), ("SketchPad", "Vertex1")},
                 )
-                self.assert_object_matches_expected(result, "p7", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p7_dressup_base_diagnostics_are_structured(self) -> None:
-        result = self.run_recompute("fillet-missing-edge", "p7")
+        result = self.run_recompute("fillet-missing-edge", "partdesign-dressup")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual(diagnostic["code"], "invalid_subshape")
@@ -3714,7 +3714,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["target"], "Pad")
         self.assertEqual(diagnostic["subname"], "Edge99")
 
-        result = self.run_recompute("chamfer-invalid-size", "p7")
+        result = self.run_recompute("chamfer-invalid-size", "partdesign-dressup")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual(diagnostic["code"], "invalid_length")
@@ -3722,7 +3722,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["property"], "Size")
 
     def test_c3m5_dressup_failure_diagnostics_cover_selection_and_parameter_errors(self) -> None:
-        result = self.run_recompute("dressup-failure-diagnostics", "c3m5")
+        result = self.run_recompute("dressup-failure-diagnostics", "partdesign-dressup")
         diagnostics = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
 
         self.assertEqual(
@@ -3747,10 +3747,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "ChamferInvalidSize",
         ]:
             self.assertEqual(result["objects"][object_name]["status"], "error")
-        self.assert_object_matches_expected(result, "c3m5", "dressup-failure-diagnostics")
+        self.assert_object_matches_expected(result, "partdesign-dressup", "dressup-failure-diagnostics")
 
     def test_c3m5_dressup_face_selection_records_expanded_edge_history(self) -> None:
-        result = self.run_recompute("fillet-face-selection-history", "c3m5")
+        result = self.run_recompute("fillet-face-selection-history", "partdesign-dressup")
         fillet = result["objects"]["Fillet"]
         selection = fillet["base_selection"]
 
@@ -3766,10 +3766,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(set(selection["selected_edge_sources"]), {"Face1"})
         self.assertEqual(len(selection["selected_edge_subnames"]), 4)
         self.assertTrue(all(subname.startswith("Edge") for subname in selection["selected_edge_subnames"]))
-        self.assert_object_matches_expected(result, "c3m5", "fillet-face-selection-history")
+        self.assert_object_matches_expected(result, "partdesign-dressup", "fillet-face-selection-history")
 
     def test_p7_mirrored_features_mode_fuses_transformed_additive_original(self) -> None:
-        result = self.run_recompute("mirrored-pad-datum-plane", "p7")
+        result = self.run_recompute("mirrored-pad-datum-plane", "partdesign-pattern")
         mirrored = result["objects"]["Mirrored"]
         body = result["objects"]["Body"]
         mirrored_named_shape = result["named_shapes"]["Mirrored"]
@@ -3798,10 +3798,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
             "transformed copy should record non-indexed history for copied source aliases",
         )
-        self.assert_object_matches_expected(result, "p7", "mirrored-pad-datum-plane")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "mirrored-pad-datum-plane")
 
     def test_p7_transformed_refine_true_uses_refinemodel_path(self) -> None:
-        result = self.run_recompute("mirrored-refine-true", "p7")
+        result = self.run_recompute("mirrored-refine-true", "partdesign-pattern")
         mirrored = result["objects"]["Mirrored"]
         body = result["objects"]["Body"]
         mirrored_named_shape = result["named_shapes"]["Mirrored"]
@@ -3821,10 +3821,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 ("SketchPad", "Edge2"),
             },
         )
-        self.assert_object_matches_expected(result, "p7", "mirrored-refine-true")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "mirrored-refine-true")
 
     def test_p7_mirrored_features_mode_consumes_dressup_support_transform_cache(self) -> None:
-        result = self.run_recompute("mirrored-fillet-support-transform", "p7")
+        result = self.run_recompute("mirrored-fillet-support-transform", "partdesign-pattern")
         fillet = result["objects"]["Fillet"]
         mirrored = result["objects"]["Mirrored"]
         body = result["objects"]["Body"]
@@ -3840,10 +3840,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(mirrored["originals"], ["Fillet"])
         self.assertEqual(body["tip"], "Mirrored")
         self.assert_dressup_slot_history(mirrored_named_shape, {"Fillet", "Pad"}, "Mirrored.Transform1")
-        self.assert_object_matches_expected(result, "p7", "mirrored-fillet-support-transform")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "mirrored-fillet-support-transform")
 
     def test_p7_mirrored_features_mode_consumes_chained_dressup_support_transform_cache(self) -> None:
-        result = self.run_recompute("mirrored-dressup-chain-support-transform", "p7")
+        result = self.run_recompute("mirrored-dressup-chain-support-transform", "partdesign-pattern")
         fillet = result["objects"]["Fillet"]
         chamfer = result["objects"]["Chamfer"]
         mirrored = result["objects"]["Mirrored"]
@@ -3868,10 +3868,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Chamfer", "Fillet", "Pad"},
             "Mirrored.Transform1",
         )
-        self.assert_object_matches_expected(result, "p7", "mirrored-dressup-chain-support-transform")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "mirrored-dressup-chain-support-transform")
 
     def test_c3m5_transformed_features_rejects_dressup_empty_addsub_cache(self) -> None:
-        result = self.run_recompute("transformed-dressup-empty-cache-original", "c3m5")
+        result = self.run_recompute("transformed-dressup-empty-cache-original", "partdesign-pattern")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual(diagnostic["code"], "missing_addsub_cache")
@@ -3883,7 +3883,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Mirrored"]["status"], "error")
 
     def test_p7_mirrored_whole_shape_fuses_transformed_support(self) -> None:
-        result = self.run_recompute("mirrored-whole-shape", "p7")
+        result = self.run_recompute("mirrored-whole-shape", "partdesign-pattern")
         mirrored = result["objects"]["Mirrored"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3891,10 +3891,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(mirrored["transformed"], "mirrored")
         self.assertEqual(mirrored["transform_mode"], "Whole shape")
         self.assertEqual(mirrored["originals"], ["Pad"])
-        self.assert_object_matches_expected(result, "p7", "mirrored-whole-shape")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "mirrored-whole-shape")
 
     def test_p7_linear_pattern_features_mode_fuses_additive_originals_by_extent(self) -> None:
-        result = self.run_recompute("linear-pattern-pad-datum-line", "p7")
+        result = self.run_recompute("linear-pattern-pad-datum-line", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
         pattern_named_shape = result["named_shapes"]["LinearPattern"]
@@ -3912,10 +3912,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "SketchPad"},
             terminal=True,
         )
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-pad-datum-line")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-pad-datum-line")
 
     def test_p7_linear_pattern_uses_sketch_construction_axis(self) -> None:
-        result = self.run_recompute("linear-pattern-pad-sketch-axis", "p7")
+        result = self.run_recompute("linear-pattern-pad-sketch-axis", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
 
@@ -3924,10 +3924,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["transformed"], "linear_pattern")
         self.assertEqual(pattern["transform_mode"], "Features")
         self.assertEqual(body["tip"], "LinearPattern")
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-pad-sketch-axis")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-pad-sketch-axis")
 
     def test_p7_linear_pattern_combines_two_directions(self) -> None:
-        result = self.run_recompute("linear-pattern-pad-two-directions", "p7")
+        result = self.run_recompute("linear-pattern-pad-two-directions", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
 
@@ -3936,10 +3936,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["transformed"], "linear_pattern")
         self.assertEqual(pattern["transform_mode"], "Features")
         self.assertEqual(body["tip"], "LinearPattern")
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-pad-two-directions")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-pad-two-directions")
 
     def test_p7_linear_pattern_replays_multi_original_add_and_sub_slots(self) -> None:
-        result = self.run_recompute("linear-pattern-pad-pocket-multi-original", "p7")
+        result = self.run_recompute("linear-pattern-pad-pocket-multi-original", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
         pattern_named_shape = result["named_shapes"]["LinearPattern"]
@@ -3957,10 +3957,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "Pocket", "SketchPad", "SketchPocket"},
             terminal=True,
         )
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-pad-pocket-multi-original")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-pad-pocket-multi-original")
 
     def test_c3m5_linear_pattern_multi_original_history_survives_link_retag(self) -> None:
-        result = self.run_recompute("linear-pattern-multi-original-link-retag", "c3m5")
+        result = self.run_recompute("linear-pattern-multi-original-link-retag", "partdesign-pattern")
         link = result["objects"]["BodyLink"]
         named_shape = result["named_shapes"]["BodyLink"]
 
@@ -3974,10 +3974,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Body.Pocket", "Pad", "Pocket", "SketchPad", "SketchPocket"},
             terminal=True,
         )
-        self.assert_object_matches_expected(result, "c3m5", "linear-pattern-multi-original-link-retag")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-multi-original-link-retag")
 
     def test_c3m5_chained_dressup_pattern_history_keeps_support_transform_slot(self) -> None:
-        result = self.run_recompute("chained-dressup-pattern-history", "c3m5")
+        result = self.run_recompute("chained-dressup-pattern-history", "partdesign-dressup")
         fillet = result["objects"]["Fillet"]
         chamfer = result["objects"]["Chamfer"]
         pattern = result["objects"]["LinearPattern"]
@@ -4008,10 +4008,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Chamfer", "Fillet", "Pad", "SketchPad"},
             terminal=True,
         )
-        self.assert_object_matches_expected(result, "c3m5", "chained-dressup-pattern-history")
+        self.assert_object_matches_expected(result, "partdesign-dressup", "chained-dressup-pattern-history")
 
     def test_c3m5_body_basefeature_writeback_materializes_featurebase_chain(self) -> None:
-        result = self.run_recompute("body-tip-reroute-basefeature", "c3m5")
+        result = self.run_recompute("body-tip-reroute-basefeature", "partdesign-body")
         body = result["objects"]["Body"]
         updates = result["documentObjectUpdates"]
 
@@ -4039,7 +4039,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(updates[2]["properties"]["BaseFeature"]["value"], "BaseFeature")
 
-        applied = json.loads((ROOT / "fixtures" / "c3m5" / "body-tip-reroute-basefeature.json").read_text(encoding="utf-8"))
+        applied = json.loads((ROOT / "fixtures" / "partdesign-body" / "body-tip-reroute-basefeature.json").read_text(encoding="utf-8"))
         applied["Objects"].insert(
             3,
             {
@@ -4074,10 +4074,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(applied_result["documentObjectUpdates"], [])
         self.assertEqual(applied_result["objects"]["Body"]["status"], "ok")
         self.assertEqual(applied_result["objects"]["Body"]["tip"], "Pad")
-        self.assert_object_matches_expected(result, "c3m5", "body-tip-reroute-basefeature")
+        self.assert_object_matches_expected(result, "partdesign-body", "body-tip-reroute-basefeature")
 
     def test_c3m5_body_deleted_tip_reroutes_tip_and_next_basefeature(self) -> None:
-        result = self.run_recompute("body-delete-tip-reroute-basefeature", "c3m5")
+        result = self.run_recompute("body-delete-tip-reroute-basefeature", "partdesign-body")
         body = result["objects"]["Body"]
         updates = result["documentObjectUpdates"]
 
@@ -4095,7 +4095,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates[0]["properties"]["Tip"]["value"], "Pad")
         self.assertEqual(updates[1]["properties"]["BaseFeature"]["value"], "Pad")
 
-        applied = json.loads((ROOT / "fixtures" / "c3m5" / "body-delete-tip-reroute-basefeature.json").read_text(encoding="utf-8"))
+        applied = json.loads((ROOT / "fixtures" / "partdesign-body" / "body-delete-tip-reroute-basefeature.json").read_text(encoding="utf-8"))
         applied["Objects"] = [
             document_object
             for document_object in applied["Objects"]
@@ -4121,10 +4121,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(applied_result["documentObjectUpdates"], [])
         self.assertEqual(applied_result["objects"]["Body"]["status"], "ok")
         self.assertEqual(applied_result["objects"]["Body"]["tip"], "Pad")
-        self.assert_object_matches_expected(result, "c3m5", "body-delete-tip-reroute-basefeature")
+        self.assert_object_matches_expected(result, "partdesign-body", "body-delete-tip-reroute-basefeature")
 
     def test_p7_linear_pattern_can_transform_subtractive_original_only(self) -> None:
-        result = self.run_recompute("linear-pattern-pocket-subtractive-original", "p7")
+        result = self.run_recompute("linear-pattern-pocket-subtractive-original", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
         pattern_named_shape = result["named_shapes"]["LinearPattern"]
@@ -4142,30 +4142,30 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "Pocket", "SketchPad", "SketchPocket"},
             terminal=True,
         )
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-pocket-subtractive-original")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-pocket-subtractive-original")
 
     def test_p7_linear_pattern_custom_spacing_list_controls_steps(self) -> None:
-        result = self.run_recompute("linear-pattern-custom-spacings", "p7")
+        result = self.run_recompute("linear-pattern-custom-spacings", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pattern["status"], "ok")
         self.assertEqual(body["tip"], "LinearPattern")
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-custom-spacings")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-custom-spacings")
 
     def test_p7_linear_pattern_spacing_pattern_controls_steps(self) -> None:
-        result = self.run_recompute("linear-pattern-spacing-pattern", "p7")
+        result = self.run_recompute("linear-pattern-spacing-pattern", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pattern["status"], "ok")
         self.assertEqual(body["tip"], "LinearPattern")
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-spacing-pattern")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-spacing-pattern")
 
     def test_p7_linear_pattern_whole_shape_fuses_transformed_support(self) -> None:
-        result = self.run_recompute("linear-pattern-whole-shape", "p7")
+        result = self.run_recompute("linear-pattern-whole-shape", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -4173,10 +4173,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["transformed"], "linear_pattern")
         self.assertEqual(pattern["transform_mode"], "Whole shape")
         self.assertEqual(pattern["originals"], ["Pad"])
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-whole-shape")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-whole-shape")
 
     def test_p7_linear_pattern_whole_shape_uses_body_prefix_support(self) -> None:
-        result = self.run_recompute("linear-pattern-whole-shape-body-prefix-support", "p7")
+        result = self.run_recompute("linear-pattern-whole-shape-body-prefix-support", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
 
@@ -4187,10 +4187,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["originals"], ["Pad"])
         self.assertEqual(pattern["body_mode"], "replace")
         self.assertEqual(body["tip"], "LinearPattern")
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-whole-shape-body-prefix-support")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-whole-shape-body-prefix-support")
 
     def test_p7_linear_pattern_whole_shape_consumes_refined_prefix_support(self) -> None:
-        result = self.run_recompute("linear-pattern-whole-shape-refined-prefix-support", "p7")
+        result = self.run_recompute("linear-pattern-whole-shape-refined-prefix-support", "partdesign-pattern")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
         pattern_named_shape = result["named_shapes"]["LinearPattern"]
@@ -4209,10 +4209,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "Pocket", "SketchPad", "SketchPocket"},
             terminal=True,
         )
-        self.assert_object_matches_expected(result, "p7", "linear-pattern-whole-shape-refined-prefix-support")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "linear-pattern-whole-shape-refined-prefix-support")
 
     def test_p7_polar_pattern_features_mode_rotates_additive_originals_by_extent(self) -> None:
-        result = self.run_recompute("polar-pattern-pad-datum-line", "p7")
+        result = self.run_recompute("polar-pattern-pad-datum-line", "partdesign-pattern")
         pattern = result["objects"]["PolarPattern"]
         body = result["objects"]["Body"]
         pattern_named_shape = result["named_shapes"]["PolarPattern"]
@@ -4230,10 +4230,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "SketchPad"},
             terminal=True,
         )
-        self.assert_object_matches_expected(result, "p7", "polar-pattern-pad-datum-line")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "polar-pattern-pad-datum-line")
 
     def test_p7_polar_pattern_uses_sketch_normal_axis(self) -> None:
-        result = self.run_recompute("polar-pattern-pad-sketch-axis", "p7")
+        result = self.run_recompute("polar-pattern-pad-sketch-axis", "partdesign-pattern")
         pattern = result["objects"]["PolarPattern"]
         body = result["objects"]["Body"]
 
@@ -4242,10 +4242,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["transformed"], "polar_pattern")
         self.assertEqual(pattern["transform_mode"], "Features")
         self.assertEqual(body["tip"], "PolarPattern")
-        self.assert_object_matches_expected(result, "p7", "polar-pattern-pad-sketch-axis")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "polar-pattern-pad-sketch-axis")
 
     def test_p7_polar_pattern_spacing_pattern_controls_angles(self) -> None:
-        result = self.run_recompute("polar-pattern-spacing-pattern", "p7")
+        result = self.run_recompute("polar-pattern-spacing-pattern", "partdesign-pattern")
         pattern = result["objects"]["PolarPattern"]
         body = result["objects"]["Body"]
 
@@ -4253,10 +4253,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["status"], "ok")
         self.assertEqual(pattern["transformed"], "polar_pattern")
         self.assertEqual(body["tip"], "PolarPattern")
-        self.assert_object_matches_expected(result, "p7", "polar-pattern-spacing-pattern")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "polar-pattern-spacing-pattern")
 
     def test_p7_polar_pattern_whole_shape_fuses_transformed_support(self) -> None:
-        result = self.run_recompute("polar-pattern-whole-shape", "p7")
+        result = self.run_recompute("polar-pattern-whole-shape", "partdesign-pattern")
         pattern = result["objects"]["PolarPattern"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -4264,10 +4264,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["transformed"], "polar_pattern")
         self.assertEqual(pattern["transform_mode"], "Whole shape")
         self.assertEqual(pattern["originals"], ["Pad"])
-        self.assert_object_matches_expected(result, "p7", "polar-pattern-whole-shape")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "polar-pattern-whole-shape")
 
     def test_p7_polar_pattern_whole_shape_uses_body_prefix_support(self) -> None:
-        result = self.run_recompute("polar-pattern-whole-shape-body-prefix-support", "p7")
+        result = self.run_recompute("polar-pattern-whole-shape-body-prefix-support", "partdesign-pattern")
         pattern = result["objects"]["PolarPattern"]
         body = result["objects"]["Body"]
 
@@ -4278,10 +4278,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["originals"], ["Pad"])
         self.assertEqual(pattern["body_mode"], "replace")
         self.assertEqual(body["tip"], "PolarPattern")
-        self.assert_object_matches_expected(result, "p7", "polar-pattern-whole-shape-body-prefix-support")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "polar-pattern-whole-shape-body-prefix-support")
 
     def test_p7_scaled_features_mode_scales_around_first_original_center_of_mass(self) -> None:
-        result = self.run_recompute("scaled-pad-factor-two", "p7")
+        result = self.run_recompute("scaled-pad-factor-two", "partdesign-pattern")
         scaled = result["objects"]["Scaled"]
         body = result["objects"]["Body"]
         scaled_named_shape = result["named_shapes"]["Scaled"]
@@ -4299,10 +4299,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "SketchPad"},
             terminal=False,
         )
-        self.assert_object_matches_expected(result, "p7", "scaled-pad-factor-two")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "scaled-pad-factor-two")
 
     def test_p7_scaled_diagnostics_are_structured(self) -> None:
-        result = self.run_recompute("scaled-invalid-factor", "p7")
+        result = self.run_recompute("scaled-invalid-factor", "partdesign-pattern")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual(diagnostic["code"], "invalid_length")
@@ -4310,7 +4310,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["property"], "Factor")
 
     def test_p7_scaled_whole_shape_scales_support_around_origin(self) -> None:
-        result = self.run_recompute("scaled-whole-shape", "p7")
+        result = self.run_recompute("scaled-whole-shape", "partdesign-pattern")
         scaled = result["objects"]["Scaled"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -4318,7 +4318,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(scaled["transformed"], "scaled")
         self.assertEqual(scaled["transform_mode"], "Whole shape")
         self.assertEqual(scaled["originals"], ["Pad"])
-        self.assert_object_matches_expected(result, "p7", "scaled-whole-shape")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "scaled-whole-shape")
 
     def test_p7_transformed_copy_preserves_terminal_stable_history(self) -> None:
         for fixture, code, stable_subname in [
@@ -4326,7 +4326,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("mirrored-stable-history-deleted", "deleted_stable_subname", "Pocket.Face5"),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p7")
+                result = self.run_recompute(fixture)
                 diagnostic = result["diagnostics"][0]
                 history_kinds = {
                     item["kind"]
@@ -4362,7 +4362,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     )
 
     def test_p7_multi_transform_combines_linear_pattern_and_mirror(self) -> None:
-        result = self.run_recompute("multi-transform-linear-mirror", "p7")
+        result = self.run_recompute("multi-transform-linear-mirror", "partdesign-pattern")
         multi = result["objects"]["MultiTransform"]
         body = result["objects"]["Body"]
         multi_named_shape = result["named_shapes"]["MultiTransform"]
@@ -4388,10 +4388,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "SketchPad"},
             terminal=True,
         )
-        self.assert_object_matches_expected(result, "p7", "multi-transform-linear-mirror")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "multi-transform-linear-mirror")
 
     def test_p7_multi_transform_scaled_child_uses_diagonal_composition(self) -> None:
-        result = self.run_recompute("multi-transform-scaled-diagonal", "p7")
+        result = self.run_recompute("multi-transform-scaled-diagonal", "partdesign-pattern")
         multi = result["objects"]["MultiTransform"]
         body = result["objects"]["Body"]
 
@@ -4401,10 +4401,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(multi["status"], "ok")
         self.assertEqual(multi["transformed"], "multi_transform")
         self.assertEqual(body["tip"], "MultiTransform")
-        self.assert_object_matches_expected(result, "p7", "multi-transform-scaled-diagonal")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "multi-transform-scaled-diagonal")
 
     def test_p7_multi_transform_scaled_divisor_gap_is_explicit(self) -> None:
-        result = self.run_recompute("multi-transform-scaled-divisor-known-gap", "p7")
+        result = self.run_recompute("multi-transform-scaled-divisor-known-gap", "partdesign-pattern")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual(diagnostic["code"], "invalid_length")
@@ -4413,7 +4413,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("divisor", diagnostic["message"])
 
     def test_p7_multi_transform_whole_shape_uses_support_and_child_transforms(self) -> None:
-        result = self.run_recompute("multi-transform-whole-shape", "p7")
+        result = self.run_recompute("multi-transform-whole-shape", "partdesign-pattern")
         multi = result["objects"]["MultiTransform"]
         child = result["objects"]["LinearPattern"]
         multi_named_shape = result["named_shapes"]["MultiTransform"]
@@ -4430,4 +4430,4 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"Pad", "SketchPad"},
             terminal=True,
         )
-        self.assert_object_matches_expected(result, "p7", "multi-transform-whole-shape")
+        self.assert_object_matches_expected(result, "partdesign-pattern", "multi-transform-whole-shape")

@@ -370,16 +370,16 @@ def _visible_diff(diff: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in diff.items() if not key.startswith("_")}
 
 
-def _annotate_non_c4m6_unaccepted_family_metadata(cases: list[CaseReport]) -> None:
+def _annotate_non_topology_state_unaccepted_family_metadata(cases: list[CaseReport]) -> None:
     """Restore S4 ownership metadata without widening protocol acceptance.
 
     ``apply_registry`` is intentionally the only code that can set
     ``accepted=True``.  Family metadata is attached after that decision and
-    only makes unresolved non-c4m6 work actionable in snapshot reports.
+    only makes unresolved non-topology-state work actionable in snapshot reports.
     """
 
     for item in cases:
-        if item.phase == "c4m6":
+        if item.phase == "topology-state":
             continue
         for diff in item.diffs:
             if diff.get("accepted") is True:
@@ -577,7 +577,7 @@ def evaluate(request: EvaluationRequest) -> ParityReport:
 
     all_diffs = [diff for item in cases for diff in item.diffs]
     registry_audit = apply_registry(registry, all_diffs, phase=request.phase, case=request.case)
-    _annotate_non_c4m6_unaccepted_family_metadata(cases)
+    _annotate_non_topology_state_unaccepted_family_metadata(cases)
     if not registry_audit["valid"]:
         global_errors.extend(str(error) for error in registry_audit["validationErrors"])
     if request.source_kind == "live" and any(

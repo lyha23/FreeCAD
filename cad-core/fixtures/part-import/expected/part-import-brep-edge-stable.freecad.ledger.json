@@ -1,0 +1,74 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-import-brep-edge-stable",
+    "expectedPayloadHash": "sha256:c9bad7be7e2a833b792369c7430af558605c6541b34f48ba14ebce4f9a4c9a86",
+    "inputHash": "sha256:74e426a1040128f43da123df349f772dd29d30bc332ad0833f597b856f9df715",
+    "phase": "part-import",
+    "topoNamingStateHash": "sha256:236d8eff474464f43ae8e0e69ff60e43c3e493a58617d54d94b3aa83bf065b54"
+  },
+  "inputReferences": [],
+  "objects": {
+    "ImportedCylinder": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::ImportBrep"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "ImportedCylinder": {
+        "covers": [
+          "ImportedCylinder"
+        ],
+        "ledgerObject": "ImportedCylinder",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:236d8eff474464f43ae8e0e69ff60e43c3e493a58617d54d94b3aa83bf065b54",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

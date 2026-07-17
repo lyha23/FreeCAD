@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOLS = ROOT / "tools"
+RELEASE_GATE_CASE = "topo-state-schema-incompatible"
 
 
 class FreecadExpectedReleaseGateEndToEndTest(unittest.TestCase):
@@ -26,7 +27,9 @@ class FreecadExpectedReleaseGateEndToEndTest(unittest.TestCase):
                 sys.executable,
                 str(temp_root / "tools" / "compare_freecad_expected.py"),
                 "--phase",
-                "c4m6",
+                "topology-state",
+                "--case",
+                RELEASE_GATE_CASE,
                 "--bin",
                 str(binary),
                 *arguments,
@@ -44,10 +47,10 @@ class FreecadExpectedReleaseGateEndToEndTest(unittest.TestCase):
         )
         return json.loads(completed.stdout)
 
-    def test_real_binary_materializes_c4m6_phase_and_enforces_live_release_gate(self) -> None:
-        """Exercise the documented c4m6 CLI gate without touching checked-in currents."""
+    def test_real_binary_materializes_topology_state_phase_and_enforces_live_release_gate(self) -> None:
+        """Exercise one closed topology-state case without claiming the whole phase is green."""
 
-        phase = "c4m6"
+        phase = "topology-state"
         binary = ROOT / "build" / "cad-core"
 
         self.assertTrue(binary.is_file(), f"missing CAD Core binary; build it first: {binary}")
@@ -64,6 +67,11 @@ class FreecadExpectedReleaseGateEndToEndTest(unittest.TestCase):
             )
             temp_tools.mkdir()
             shutil.copy2(TOOLS / "compare_freecad_expected.py", temp_tools)
+            shutil.copytree(
+                TOOLS / "element_map_producer_trace",
+                temp_tools / "element_map_producer_trace",
+                ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+            )
             shutil.copy2(TOOLS / "validate_freecad_expected_ledger.py", temp_tools)
             shutil.copytree(
                 TOOLS / "freecad_expected_parity",
@@ -92,7 +100,7 @@ class FreecadExpectedReleaseGateEndToEndTest(unittest.TestCase):
                 self.assertIsInstance(json.loads(current_path.read_text(encoding="utf-8")), dict)
 
             release_summary = self.run_compare_cli(temp_root, binary, "--release-gate")
-            release_path = temp_root / "out" / "freecad-expected-parity" / f"{phase}.json"
+            release_path = temp_root / release_summary["report"]
             release = json.loads(release_path.read_text(encoding="utf-8"))
 
             self.assertTrue(release["preflight"]["valid"], release["preflight"]["errors"])

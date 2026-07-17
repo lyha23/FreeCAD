@@ -1,0 +1,2418 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          5.0,
+          13.0,
+          4.0
+        ],
+        "min": [
+          5.0,
+          10.0,
+          0.0
+        ]
+      },
+      "object": "FaceLink",
+      "object_fields": {
+        "link": "app_link",
+        "linked_object": "ArrayLink",
+        "shape": "occt_face"
+      },
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FaceLink.Face1",
+          "id": "FaceLink:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FaceLink.Edge1",
+          "id": "FaceLink:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FaceLink.Edge2",
+          "id": "FaceLink:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FaceLink.Edge3",
+          "id": "FaceLink:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FaceLink.Edge4",
+          "id": "FaceLink:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FaceLink.Vertex1",
+          "id": "FaceLink:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FaceLink.Vertex2",
+          "id": "FaceLink:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FaceLink.Vertex3",
+          "id": "FaceLink:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FaceLink.Vertex4",
+          "id": "FaceLink:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        }
+      ],
+      "topology_counts": {
+        "edges": 4,
+        "faces": 1,
+        "vertices": 4
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:8b9f288bd2fc06aa71d22d88e57048f9224ade8814b86a21bff38aa5192e9cda",
+    "objects": {
+      "ArrayLink": {
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "Box",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "Edge10;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge10;:H*,E;:H*:*,E",
+                    "raw": "Edge10;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge10"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge10"
+                  }
+                },
+                "Edge11;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge11;:H*,E;:H*:*,E",
+                    "raw": "Edge11;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge11"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge11"
+                  }
+                },
+                "Edge12;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge12;:H*,E;:H*:*,E",
+                    "raw": "Edge12;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge12"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge12"
+                  }
+                },
+                "Edge1;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge1;:H*,E;:H*:*,E",
+                    "raw": "Edge1;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge1"
+                  }
+                },
+                "Edge2;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge2;:H*,E;:H*:*,E",
+                    "raw": "Edge2;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge2"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge2"
+                  }
+                },
+                "Edge3;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge3;:H*,E;:H*:*,E",
+                    "raw": "Edge3;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge3"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge3"
+                  }
+                },
+                "Edge4;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge4;:H*,E;:H*:*,E",
+                    "raw": "Edge4;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge4"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge4"
+                  }
+                },
+                "Edge5;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge5;:H*,E;:H*:*,E",
+                    "raw": "Edge5;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge5"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge5"
+                  }
+                },
+                "Edge6;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge6;:H*,E;:H*:*,E",
+                    "raw": "Edge6;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge6"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge6"
+                  }
+                },
+                "Edge7;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge7;:H*,E;:H*:*,E",
+                    "raw": "Edge7;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge7"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge7"
+                  }
+                },
+                "Edge8;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge8;:H*,E;:H*:*,E",
+                    "raw": "Edge8;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge8"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge8"
+                  }
+                },
+                "Edge9;:H*,E;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge9;:H*,E;:H*:*,E",
+                    "raw": "Edge9;:H7c0,E;:H7c2:8,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Edge9"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Edge9"
+                  }
+                },
+                "Face1;:H*,F;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Face1;:H*,F;:H*:*,F",
+                    "raw": "Face1;:H7c0,F;:H7c2:8,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Face1"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Face1"
+                  }
+                },
+                "Face2;:H*,F;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Face2;:H*,F;:H*:*,F",
+                    "raw": "Face2;:H7c0,F;:H7c2:8,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Face2"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Face2"
+                  }
+                },
+                "Face3;:H*,F;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Face3;:H*,F;:H*:*,F",
+                    "raw": "Face3;:H7c0,F;:H7c2:8,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Face3"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Face3"
+                  }
+                },
+                "Face4;:H*,F;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Face4;:H*,F;:H*:*,F",
+                    "raw": "Face4;:H7c0,F;:H7c2:8,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Face4"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Face4"
+                  }
+                },
+                "Face5;:H*,F;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Face5;:H*,F;:H*:*,F",
+                    "raw": "Face5;:H7c0,F;:H7c2:8,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Face5"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Face5"
+                  }
+                },
+                "Face6;:H*,F;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Face6;:H*,F;:H*:*,F",
+                    "raw": "Face6;:H7c0,F;:H7c2:8,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Face6"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Face6"
+                  }
+                },
+                "Vertex1;:H*,V;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex1;:H*,V;:H*:*,V",
+                    "raw": "Vertex1;:H7c0,V;:H7c2:8,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Vertex1"
+                  }
+                },
+                "Vertex2;:H*,V;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex2;:H*,V;:H*:*,V",
+                    "raw": "Vertex2;:H7c0,V;:H7c2:8,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Vertex2"
+                  }
+                },
+                "Vertex3;:H*,V;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex3;:H*,V;:H*:*,V",
+                    "raw": "Vertex3;:H7c0,V;:H7c2:8,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Vertex3"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Vertex3"
+                  }
+                },
+                "Vertex4;:H*,V;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex4;:H*,V;:H*:*,V",
+                    "raw": "Vertex4;:H7c0,V;:H7c2:8,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Vertex4"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Vertex4"
+                  }
+                },
+                "Vertex5;:H*,V;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex5;:H*,V;:H*:*,V",
+                    "raw": "Vertex5;:H7c0,V;:H7c2:8,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Vertex5"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Vertex5"
+                  }
+                },
+                "Vertex6;:H*,V;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex6;:H*,V;:H*:*,V",
+                    "raw": "Vertex6;:H7c0,V;:H7c2:8,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Vertex6"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Vertex6"
+                  }
+                },
+                "Vertex7;:H*,V;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex7;:H*,V;:H*:*,V",
+                    "raw": "Vertex7;:H7c0,V;:H7c2:8,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Vertex7"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Vertex7"
+                  }
+                },
+                "Vertex8;:H*,V;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "ArrayLink:Box:Box",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_app_link_linked_object"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex8;:H*,V;:H*:*,V",
+                    "raw": "Vertex8;:H7c0,V;:H7c2:8,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Box",
+                    "subname": "Vertex8"
+                  },
+                  "target": {
+                    "object": "ArrayLink",
+                    "subname": "Vertex8"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "ArrayLink:Box:Box",
+            "ownerObject": "ArrayLink",
+            "pathPrefix": "Box"
+          }
+        ],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Face1;:H*,F;:H*:*,F",
+                  "raw": "Face1;:H7c0,F;:H7c2:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face1"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Face1;:H*,F;:H*:*,F",
+                  "raw": "Face1;:H7c0,F;:H7c3:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face7"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face7"
+                }
+              }
+            ],
+            "id": "canonical-collision-9aabb417cc22bd4e",
+            "mappedName": {
+              "canonical": "Face1;:H*,F;:H*:*,F",
+              "raw": "Face1;:H7c0,F;:H7c2:8,F"
+            },
+            "message": "Canonical elementMap key Face1;:H*,F;:H*:*,F maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Face2;:H*,F;:H*:*,F",
+                  "raw": "Face2;:H7c0,F;:H7c2:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face2"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Face2;:H*,F;:H*:*,F",
+                  "raw": "Face2;:H7c0,F;:H7c3:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face8"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face8"
+                }
+              }
+            ],
+            "id": "canonical-collision-1b271251d5808e6d",
+            "mappedName": {
+              "canonical": "Face2;:H*,F;:H*:*,F",
+              "raw": "Face2;:H7c0,F;:H7c2:8,F"
+            },
+            "message": "Canonical elementMap key Face2;:H*,F;:H*:*,F maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Face3;:H*,F;:H*:*,F",
+                  "raw": "Face3;:H7c0,F;:H7c2:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face3"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face3"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Face3;:H*,F;:H*:*,F",
+                  "raw": "Face3;:H7c0,F;:H7c3:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face9"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face9"
+                }
+              }
+            ],
+            "id": "canonical-collision-d9d9bed27b3615b0",
+            "mappedName": {
+              "canonical": "Face3;:H*,F;:H*:*,F",
+              "raw": "Face3;:H7c0,F;:H7c2:8,F"
+            },
+            "message": "Canonical elementMap key Face3;:H*,F;:H*:*,F maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Face4;:H*,F;:H*:*,F",
+                  "raw": "Face4;:H7c0,F;:H7c2:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face4"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face4"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Face4;:H*,F;:H*:*,F",
+                  "raw": "Face4;:H7c0,F;:H7c3:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face10"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face10"
+                }
+              }
+            ],
+            "id": "canonical-collision-47fff4a13f47b8c1",
+            "mappedName": {
+              "canonical": "Face4;:H*,F;:H*:*,F",
+              "raw": "Face4;:H7c0,F;:H7c2:8,F"
+            },
+            "message": "Canonical elementMap key Face4;:H*,F;:H*:*,F maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Face5;:H*,F;:H*:*,F",
+                  "raw": "Face5;:H7c0,F;:H7c2:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face5"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face5"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Face5;:H*,F;:H*:*,F",
+                  "raw": "Face5;:H7c0,F;:H7c3:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face11"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face11"
+                }
+              }
+            ],
+            "id": "canonical-collision-fbf3534115e020fb",
+            "mappedName": {
+              "canonical": "Face5;:H*,F;:H*:*,F",
+              "raw": "Face5;:H7c0,F;:H7c2:8,F"
+            },
+            "message": "Canonical elementMap key Face5;:H*,F;:H*:*,F maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Face6;:H*,F;:H*:*,F",
+                  "raw": "Face6;:H7c0,F;:H7c2:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face6"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face6"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Face6;:H*,F;:H*:*,F",
+                  "raw": "Face6;:H7c0,F;:H7c3:8,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Face12"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face12"
+                }
+              }
+            ],
+            "id": "canonical-collision-6c76a7531ea79f1f",
+            "mappedName": {
+              "canonical": "Face6;:H*,F;:H*:*,F",
+              "raw": "Face6;:H7c0,F;:H7c2:8,F"
+            },
+            "message": "Canonical elementMap key Face6;:H*,F;:H*:*,F maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E;:H*:*,E",
+                  "raw": "Edge1;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E;:H*:*,E",
+                  "raw": "Edge1;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge13"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge13"
+                }
+              }
+            ],
+            "id": "canonical-collision-c98ae920bafc89ef",
+            "mappedName": {
+              "canonical": "Edge1;:H*,E;:H*:*,E",
+              "raw": "Edge1;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge1;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge2;:H*,E;:H*:*,E",
+                  "raw": "Edge2;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge2;:H*,E;:H*:*,E",
+                  "raw": "Edge2;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge14"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge14"
+                }
+              }
+            ],
+            "id": "canonical-collision-ac8b61c90d7467ad",
+            "mappedName": {
+              "canonical": "Edge2;:H*,E;:H*:*,E",
+              "raw": "Edge2;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge2;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge3;:H*,E;:H*:*,E",
+                  "raw": "Edge3;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge3"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge3;:H*,E;:H*:*,E",
+                  "raw": "Edge3;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge15"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge15"
+                }
+              }
+            ],
+            "id": "canonical-collision-7fde16856a0980c2",
+            "mappedName": {
+              "canonical": "Edge3;:H*,E;:H*:*,E",
+              "raw": "Edge3;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge3;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge4;:H*,E;:H*:*,E",
+                  "raw": "Edge4;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge4"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge4"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge4;:H*,E;:H*:*,E",
+                  "raw": "Edge4;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge16"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge16"
+                }
+              }
+            ],
+            "id": "canonical-collision-8bf5eaa9f3dce926",
+            "mappedName": {
+              "canonical": "Edge4;:H*,E;:H*:*,E",
+              "raw": "Edge4;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge4;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge5;:H*,E;:H*:*,E",
+                  "raw": "Edge5;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge5"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge5"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge5;:H*,E;:H*:*,E",
+                  "raw": "Edge5;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge17"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge17"
+                }
+              }
+            ],
+            "id": "canonical-collision-d6ef3dbea590b7b2",
+            "mappedName": {
+              "canonical": "Edge5;:H*,E;:H*:*,E",
+              "raw": "Edge5;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge5;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge6;:H*,E;:H*:*,E",
+                  "raw": "Edge6;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge6"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge6"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge6;:H*,E;:H*:*,E",
+                  "raw": "Edge6;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge18"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge18"
+                }
+              }
+            ],
+            "id": "canonical-collision-ec955f8f831d7238",
+            "mappedName": {
+              "canonical": "Edge6;:H*,E;:H*:*,E",
+              "raw": "Edge6;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge6;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge7;:H*,E;:H*:*,E",
+                  "raw": "Edge7;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge7"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge7"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge7;:H*,E;:H*:*,E",
+                  "raw": "Edge7;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge19"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge19"
+                }
+              }
+            ],
+            "id": "canonical-collision-9e81cc0eb549bf2c",
+            "mappedName": {
+              "canonical": "Edge7;:H*,E;:H*:*,E",
+              "raw": "Edge7;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge7;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge8;:H*,E;:H*:*,E",
+                  "raw": "Edge8;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge8"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge8"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge8;:H*,E;:H*:*,E",
+                  "raw": "Edge8;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge20"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge20"
+                }
+              }
+            ],
+            "id": "canonical-collision-adb5898c4ff5eee3",
+            "mappedName": {
+              "canonical": "Edge8;:H*,E;:H*:*,E",
+              "raw": "Edge8;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge8;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge9;:H*,E;:H*:*,E",
+                  "raw": "Edge9;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge9"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge9"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge9;:H*,E;:H*:*,E",
+                  "raw": "Edge9;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge21"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge21"
+                }
+              }
+            ],
+            "id": "canonical-collision-5dbee387f9a75f55",
+            "mappedName": {
+              "canonical": "Edge9;:H*,E;:H*:*,E",
+              "raw": "Edge9;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge9;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge10;:H*,E;:H*:*,E",
+                  "raw": "Edge10;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge10"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge10"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge10;:H*,E;:H*:*,E",
+                  "raw": "Edge10;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge22"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge22"
+                }
+              }
+            ],
+            "id": "canonical-collision-0b66597c6a20977e",
+            "mappedName": {
+              "canonical": "Edge10;:H*,E;:H*:*,E",
+              "raw": "Edge10;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge10;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge11;:H*,E;:H*:*,E",
+                  "raw": "Edge11;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge11"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge11"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge11;:H*,E;:H*:*,E",
+                  "raw": "Edge11;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge23"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge23"
+                }
+              }
+            ],
+            "id": "canonical-collision-6dc7b148bdd4d3e5",
+            "mappedName": {
+              "canonical": "Edge11;:H*,E;:H*:*,E",
+              "raw": "Edge11;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge11;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge12;:H*,E;:H*:*,E",
+                  "raw": "Edge12;:H7c0,E;:H7c2:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge12"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge12"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge12;:H*,E;:H*:*,E",
+                  "raw": "Edge12;:H7c0,E;:H7c3:8,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Edge24"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge24"
+                }
+              }
+            ],
+            "id": "canonical-collision-a57849f51371bf4a",
+            "mappedName": {
+              "canonical": "Edge12;:H*,E;:H*:*,E",
+              "raw": "Edge12;:H7c0,E;:H7c2:8,E"
+            },
+            "message": "Canonical elementMap key Edge12;:H*,E;:H*:*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V;:H*:*,V",
+                  "raw": "Vertex1;:H7c0,V;:H7c2:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V;:H*:*,V",
+                  "raw": "Vertex1;:H7c0,V;:H7c3:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex9"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex9"
+                }
+              }
+            ],
+            "id": "canonical-collision-f49b5f617ea8e0df",
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V;:H*:*,V",
+              "raw": "Vertex1;:H7c0,V;:H7c2:8,V"
+            },
+            "message": "Canonical elementMap key Vertex1;:H*,V;:H*:*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V;:H*:*,V",
+                  "raw": "Vertex2;:H7c0,V;:H7c2:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V;:H*:*,V",
+                  "raw": "Vertex2;:H7c0,V;:H7c3:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex10"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex10"
+                }
+              }
+            ],
+            "id": "canonical-collision-6f6e5c878c4ceb0e",
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V;:H*:*,V",
+              "raw": "Vertex2;:H7c0,V;:H7c2:8,V"
+            },
+            "message": "Canonical elementMap key Vertex2;:H*,V;:H*:*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex3;:H*,V;:H*:*,V",
+                  "raw": "Vertex3;:H7c0,V;:H7c2:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex3"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex3;:H*,V;:H*:*,V",
+                  "raw": "Vertex3;:H7c0,V;:H7c3:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex11"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex11"
+                }
+              }
+            ],
+            "id": "canonical-collision-a88d21dbd4574a85",
+            "mappedName": {
+              "canonical": "Vertex3;:H*,V;:H*:*,V",
+              "raw": "Vertex3;:H7c0,V;:H7c2:8,V"
+            },
+            "message": "Canonical elementMap key Vertex3;:H*,V;:H*:*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex4;:H*,V;:H*:*,V",
+                  "raw": "Vertex4;:H7c0,V;:H7c2:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex4"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex4;:H*,V;:H*:*,V",
+                  "raw": "Vertex4;:H7c0,V;:H7c3:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex12"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex12"
+                }
+              }
+            ],
+            "id": "canonical-collision-1d62b35b36f5955c",
+            "mappedName": {
+              "canonical": "Vertex4;:H*,V;:H*:*,V",
+              "raw": "Vertex4;:H7c0,V;:H7c2:8,V"
+            },
+            "message": "Canonical elementMap key Vertex4;:H*,V;:H*:*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex5;:H*,V;:H*:*,V",
+                  "raw": "Vertex5;:H7c0,V;:H7c2:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex5"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex5;:H*,V;:H*:*,V",
+                  "raw": "Vertex5;:H7c0,V;:H7c3:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex13"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex13"
+                }
+              }
+            ],
+            "id": "canonical-collision-0c5c6b8d1ec7b66f",
+            "mappedName": {
+              "canonical": "Vertex5;:H*,V;:H*:*,V",
+              "raw": "Vertex5;:H7c0,V;:H7c2:8,V"
+            },
+            "message": "Canonical elementMap key Vertex5;:H*,V;:H*:*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex6;:H*,V;:H*:*,V",
+                  "raw": "Vertex6;:H7c0,V;:H7c2:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex6"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex6;:H*,V;:H*:*,V",
+                  "raw": "Vertex6;:H7c0,V;:H7c3:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex14"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex14"
+                }
+              }
+            ],
+            "id": "canonical-collision-524aee5b50aa5b65",
+            "mappedName": {
+              "canonical": "Vertex6;:H*,V;:H*:*,V",
+              "raw": "Vertex6;:H7c0,V;:H7c2:8,V"
+            },
+            "message": "Canonical elementMap key Vertex6;:H*,V;:H*:*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex7;:H*,V;:H*:*,V",
+                  "raw": "Vertex7;:H7c0,V;:H7c2:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex7"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex7"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex7;:H*,V;:H*:*,V",
+                  "raw": "Vertex7;:H7c0,V;:H7c3:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex15"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex15"
+                }
+              }
+            ],
+            "id": "canonical-collision-ea06af91b9795b98",
+            "mappedName": {
+              "canonical": "Vertex7;:H*,V;:H*:*,V",
+              "raw": "Vertex7;:H7c0,V;:H7c2:8,V"
+            },
+            "message": "Canonical elementMap key Vertex7;:H*,V;:H*:*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex8;:H*,V;:H*:*,V",
+                  "raw": "Vertex8;:H7c0,V;:H7c2:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex8"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex8"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex8;:H*,V;:H*:*,V",
+                  "raw": "Vertex8;:H7c0,V;:H7c3:8,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex16"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex16"
+                }
+              }
+            ],
+            "id": "canonical-collision-52f185e89b0abcd8",
+            "mappedName": {
+              "canonical": "Vertex8;:H*,V;:H*:*,V",
+              "raw": "Vertex8;:H7c0,V;:H7c2:8,V"
+            },
+            "message": "Canonical elementMap key Vertex8;:H*,V;:H*:*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          }
+        ],
+        "objectHash": "sha256:fefa57b1059ee02a54829102ee6815c84e338dfeb9ceec925ca9d7723f1f0c79",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "Edge1;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge1;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "Edge10;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge10;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "Edge11;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge11;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "Edge12;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge12;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "Edge12"
+          },
+          "Edge13": {
+            "canonicalFreecadMappedName": "Edge1;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge1;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge13",
+            "subname": "Edge13"
+          },
+          "Edge14": {
+            "canonicalFreecadMappedName": "Edge2;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge2;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge14",
+            "subname": "Edge14"
+          },
+          "Edge15": {
+            "canonicalFreecadMappedName": "Edge3;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge3;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge15",
+            "subname": "Edge15"
+          },
+          "Edge16": {
+            "canonicalFreecadMappedName": "Edge4;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge4;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge16",
+            "subname": "Edge16"
+          },
+          "Edge17": {
+            "canonicalFreecadMappedName": "Edge5;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge5;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge17",
+            "subname": "Edge17"
+          },
+          "Edge18": {
+            "canonicalFreecadMappedName": "Edge6;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge6;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge18",
+            "subname": "Edge18"
+          },
+          "Edge19": {
+            "canonicalFreecadMappedName": "Edge7;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge7;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge19",
+            "subname": "Edge19"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "Edge2;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge2;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge20": {
+            "canonicalFreecadMappedName": "Edge8;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge8;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge20",
+            "subname": "Edge20"
+          },
+          "Edge21": {
+            "canonicalFreecadMappedName": "Edge9;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge9;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge21",
+            "subname": "Edge21"
+          },
+          "Edge22": {
+            "canonicalFreecadMappedName": "Edge10;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge10;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge22",
+            "subname": "Edge22"
+          },
+          "Edge23": {
+            "canonicalFreecadMappedName": "Edge11;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge11;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge23",
+            "subname": "Edge23"
+          },
+          "Edge24": {
+            "canonicalFreecadMappedName": "Edge12;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge12;:H7c0,E;:H7c3:8,E",
+            "resolvedIndexed": "Edge24",
+            "subname": "Edge24"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "Edge3;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge3;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "Edge4;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge4;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "Edge5;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge5;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "Edge6;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge6;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "Edge7;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge7;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "Edge8;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge8;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "Edge9;:H*,E;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge9;:H7c0,E;:H7c2:8,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "Face1;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face1;:H7c0,F;:H7c2:8,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          },
+          "Face10": {
+            "canonicalFreecadMappedName": "Face4;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face4;:H7c0,F;:H7c3:8,F",
+            "resolvedIndexed": "Face10",
+            "subname": "Face10"
+          },
+          "Face11": {
+            "canonicalFreecadMappedName": "Face5;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face5;:H7c0,F;:H7c3:8,F",
+            "resolvedIndexed": "Face11",
+            "subname": "Face11"
+          },
+          "Face12": {
+            "canonicalFreecadMappedName": "Face6;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face6;:H7c0,F;:H7c3:8,F",
+            "resolvedIndexed": "Face12",
+            "subname": "Face12"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "Face2;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face2;:H7c0,F;:H7c2:8,F",
+            "resolvedIndexed": "Face2",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "Face3;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face3;:H7c0,F;:H7c2:8,F",
+            "resolvedIndexed": "Face3",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "Face4;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face4;:H7c0,F;:H7c2:8,F",
+            "resolvedIndexed": "Face4",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "Face5;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face5;:H7c0,F;:H7c2:8,F",
+            "resolvedIndexed": "Face5",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "Face6;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face6;:H7c0,F;:H7c2:8,F",
+            "resolvedIndexed": "Face6",
+            "subname": "Face6"
+          },
+          "Face7": {
+            "canonicalFreecadMappedName": "Face1;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face1;:H7c0,F;:H7c3:8,F",
+            "resolvedIndexed": "Face7",
+            "subname": "Face7"
+          },
+          "Face8": {
+            "canonicalFreecadMappedName": "Face2;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face2;:H7c0,F;:H7c3:8,F",
+            "resolvedIndexed": "Face8",
+            "subname": "Face8"
+          },
+          "Face9": {
+            "canonicalFreecadMappedName": "Face3;:H*,F;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face3;:H7c0,F;:H7c3:8,F",
+            "resolvedIndexed": "Face9",
+            "subname": "Face9"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "Vertex1;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex1;:H7c0,V;:H7c2:8,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex10": {
+            "canonicalFreecadMappedName": "Vertex2;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex2;:H7c0,V;:H7c3:8,V",
+            "resolvedIndexed": "Vertex10",
+            "subname": "Vertex10"
+          },
+          "Vertex11": {
+            "canonicalFreecadMappedName": "Vertex3;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex3;:H7c0,V;:H7c3:8,V",
+            "resolvedIndexed": "Vertex11",
+            "subname": "Vertex11"
+          },
+          "Vertex12": {
+            "canonicalFreecadMappedName": "Vertex4;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex4;:H7c0,V;:H7c3:8,V",
+            "resolvedIndexed": "Vertex12",
+            "subname": "Vertex12"
+          },
+          "Vertex13": {
+            "canonicalFreecadMappedName": "Vertex5;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex5;:H7c0,V;:H7c3:8,V",
+            "resolvedIndexed": "Vertex13",
+            "subname": "Vertex13"
+          },
+          "Vertex14": {
+            "canonicalFreecadMappedName": "Vertex6;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex6;:H7c0,V;:H7c3:8,V",
+            "resolvedIndexed": "Vertex14",
+            "subname": "Vertex14"
+          },
+          "Vertex15": {
+            "canonicalFreecadMappedName": "Vertex7;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex7;:H7c0,V;:H7c3:8,V",
+            "resolvedIndexed": "Vertex15",
+            "subname": "Vertex15"
+          },
+          "Vertex16": {
+            "canonicalFreecadMappedName": "Vertex8;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex8;:H7c0,V;:H7c3:8,V",
+            "resolvedIndexed": "Vertex16",
+            "subname": "Vertex16"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "Vertex2;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex2;:H7c0,V;:H7c2:8,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "Vertex3;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex3;:H7c0,V;:H7c2:8,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "Vertex4;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex4;:H7c0,V;:H7c2:8,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "Vertex5;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex5;:H7c0,V;:H7c2:8,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "Vertex6;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex6;:H7c0,V;:H7c2:8,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "Vertex7;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex7;:H7c0,V;:H7c2:8,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "Vertex8;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex8;:H7c0,V;:H7c2:8,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          },
+          "Vertex9": {
+            "canonicalFreecadMappedName": "Vertex1;:H*,V;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex1;:H7c0,V;:H7c3:8,V",
+            "resolvedIndexed": "Vertex9",
+            "subname": "Vertex9"
+          }
+        }
+      },
+      "Box": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "current_only",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "current_only",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "current_only",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "current_only",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "current_only",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "current_only",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "current_only",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "current_only",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "current_only",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "current_only",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "current_only",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "current_only",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "current_only",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "current_only",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "current_only",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "current_only",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "current_only",
+            "subname": "Vertex8"
+          }
+        }
+      },
+      "FaceLink": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:ad45f84f801a4dbf74e38ab3ddfa5c86fb136eb034e19c253fa5de38fb843c36",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

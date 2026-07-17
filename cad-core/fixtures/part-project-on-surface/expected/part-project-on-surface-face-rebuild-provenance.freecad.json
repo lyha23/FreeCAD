@@ -1,0 +1,788 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          5.0,
+          3.5,
+          0.0
+        ],
+        "min": [
+          1.0,
+          0.5,
+          0.0
+        ]
+      },
+      "bbox_delta": 0.11,
+      "object": "ProjectedFaceRebuildProvenance",
+      "object_fields": {
+        "feature": "part_project_on_surface",
+        "height": 0.0,
+        "mode": "Faces",
+        "offset": 0.0,
+        "projected_face_count": 1,
+        "projected_inner_wire_count": 1,
+        "projected_solid_count": 0,
+        "projected_wire_count": 2,
+        "projection_item_ledger": [
+          {
+            "projection_item_index": 0,
+            "source_object": "ProjectionFaceWithHole",
+            "source_shape_kind": "face",
+            "source_subname": "Face1",
+            "stable_subname": "Face1"
+          }
+        ],
+        "projection_items": [
+          {
+            "object": "ProjectionFaceWithHole",
+            "subshape": "Face1"
+          }
+        ],
+        "projection_subshape": "Face1",
+        "shape": "occt_compound",
+        "source_projection": "ProjectionFaceWithHole",
+        "source_support": "SupportPlane",
+        "status": "ok",
+        "support_face": "Face1",
+        "topo_naming_history": "indexed_projected_edges_no_mapper_history"
+      },
+      "topology_counts": {
+        "edges": 8,
+        "faces": 1,
+        "vertices": 8
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:3296c89d81193001d9659671f28b91b4d3db1e537bda78f9bd7b98a4d5aa1b35",
+    "objects": {
+      "HoleTool": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:575bcdc7e5e00008ab480f03d5f04911ed2d3ead5683ca8c5068d47c16b19da0",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "current_only",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "current_only",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "current_only",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "current_only",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "current_only",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "current_only",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "current_only",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "current_only",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "current_only",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "current_only",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "current_only",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "current_only",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "current_only",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "current_only",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "current_only",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "current_only",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "current_only",
+            "subname": "Vertex8"
+          }
+        }
+      },
+      "OuterProjectionFace": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:20a8dd56e49393fbf2c4b2c994ba9bf47858e5cead9a9b16bb3b3ff89860e522",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "ProjectedFaceRebuildProvenance": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:9a355f6e3fd3df3f4faf1e973ee2b4023a10e82677034ef7bd2f87b8d8d46724",
+        "subshapes": {}
+      },
+      "ProjectionFaceWithHole": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "Edge1;:G(Face1;K-1;:H*:*,F);CUT;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge1;:G(Face1;K-1;:H*:*,F);CUT;:H*:*,V",
+                "raw": "Edge1;:G(Face1;K-1;:H1130:4,F);CUT;:H1131:1d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex6"
+              }
+            },
+            "Edge1;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge1;:H*,E",
+                "raw": "Edge1;:H1130,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge1"
+              }
+            },
+            "Edge2;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge2;:H*,E",
+                "raw": "Edge2;:H1130,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge2"
+              }
+            },
+            "Edge3;:G(Face1;K-2;:H*:*,F);CUT;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge3;:G(Face1;K-2;:H*:*,F);CUT;:H*:*,V",
+                "raw": "Edge3;:G(Face1;K-2;:H1130:4,F);CUT;:H1131:1d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex8"
+              }
+            },
+            "Edge3;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge3;:H*,E",
+                "raw": "Edge3;:H1130,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge4"
+              }
+            },
+            "Edge4;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge4;:H*,E",
+                "raw": "Edge4;:H1130,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge3"
+              }
+            },
+            "Edge5;:G(Face1;K-3;:H*:*,F);CUT;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge5;:G(Face1;K-3;:H*:*,F);CUT;:H*:*,V",
+                "raw": "Edge5;:G(Face1;K-3;:H1130:4,F);CUT;:H1131:1d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex5"
+              }
+            },
+            "Edge7;:G(Face1;K-4;:H*:*,F);CUT;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge7;:G(Face1;K-4;:H*:*,F);CUT;:H*:*,V",
+                "raw": "Edge7;:G(Face1;K-4;:H1130:4,F);CUT;:H1131:1d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex7"
+              }
+            },
+            "Face1;:G5(Face1;K-1;:H*:*,F);CUT;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Face1;:G5(Face1;K-1;:H*:*,F);CUT;:H*:*,E",
+                "raw": "Face1;:G5(Face1;K-1;:H1131:4,F);CUT;:H1130:1e,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge8"
+              }
+            },
+            "Face1;:G6(Face2;K-1;:H*:*,F);CUT;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Face1;:G6(Face2;K-1;:H*:*,F);CUT;:H*:*,E",
+                "raw": "Face1;:G6(Face2;K-1;:H1131:4,F);CUT;:H1130:1e,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge6"
+              }
+            },
+            "Face1;:G7(Face3;K-1;:H*:*,F);CUT;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Face1;:G7(Face3;K-1;:H*:*,F);CUT;:H*:*,E",
+                "raw": "Face1;:G7(Face3;K-1;:H1131:4,F);CUT;:H1130:1e,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge5"
+              }
+            },
+            "Face1;:G8(Face4;K-1;:H*:*,F);CUT;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Face1;:G8(Face4;K-1;:H*:*,F);CUT;:H*:*,E",
+                "raw": "Face1;:G8(Face4;K-1;:H1131:4,F);CUT;:H1130:1e,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Edge7"
+              }
+            },
+            "Face1;:M;CUT;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Face1;:M;CUT;:H*:*,F",
+                "raw": "Face1;:M;CUT;:H1130:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Face1"
+              }
+            },
+            "Vertex1;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Vertex1;:H*,V",
+                "raw": "Vertex1;:H1130,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex1"
+              }
+            },
+            "Vertex2;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Vertex2;:H*,V",
+                "raw": "Vertex2;:H1130,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex2"
+              }
+            },
+            "Vertex3;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Vertex3;:H*,V",
+                "raw": "Vertex3;:H1130,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex3"
+              }
+            },
+            "Vertex4;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Vertex4;:H*,V",
+                "raw": "Vertex4;:H1130,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "ProjectionFaceWithHole",
+                "subname": "Vertex4"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3069d9ec2d68f30a8dad645308f2a7871a7192924868af5323ec65708760357d",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "Edge1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge1;:H1130,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "Edge2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge2;:H1130,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "Edge4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge4;:H1130,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "Edge3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge3;:H1130,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "Face1;:G7(Face3;K-1;:H*:*,F);CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face1;:G7(Face3;K-1;:H1131:4,F);CUT;:H1130:1e,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "Face1;:G6(Face2;K-1;:H*:*,F);CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face1;:G6(Face2;K-1;:H1131:4,F);CUT;:H1130:1e,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "Face1;:G8(Face4;K-1;:H*:*,F);CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face1;:G8(Face4;K-1;:H1131:4,F);CUT;:H1130:1e,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "Face1;:G5(Face1;K-1;:H*:*,F);CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face1;:G5(Face1;K-1;:H1131:4,F);CUT;:H1130:1e,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Edge8"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "Face1;:M;CUT;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Face1;:M;CUT;:H1130:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "Vertex1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex1;:H1130,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "Vertex2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex2;:H1130,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "Vertex3;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex3;:H1130,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "Vertex4;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex4;:H1130,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "Edge5;:G(Face1;K-3;:H*:*,F);CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge5;:G(Face1;K-3;:H1130:4,F);CUT;:H1131:1d,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "Edge1;:G(Face1;K-1;:H*:*,F);CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge1;:G(Face1;K-1;:H1130:4,F);CUT;:H1131:1d,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "Edge7;:G(Face1;K-4;:H*:*,F);CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge7;:G(Face1;K-4;:H1130:4,F);CUT;:H1131:1d,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "Edge3;:G(Face1;K-2;:H*:*,F);CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge3;:G(Face1;K-2;:H1130:4,F);CUT;:H1131:1d,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          }
+        }
+      },
+      "SupportPlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c8b3184b4dfc52825d50a1ee58e7b1e87ae727854026c440254d88d87ac8996d",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-import-file-recompute-update",
+    "expectedPayloadHash": "sha256:c980d8552489b738804d1e3c2a702663b567c0bcc7f4e17c49c09b83ebfbc253",
+    "inputHash": "sha256:98c81da18c57833bc686b60f17bb98ac087f946f72a5abd313e4180a8584b0dd",
+    "phase": "mesh-import",
+    "topoNamingStateHash": "sha256:c0c5bf284453f29750d61c631b6ea7acb4e964f9ef5c43ed728405dc214443fd"
+  },
+  "inputReferences": [],
+  "objects": {
+    "UpdatedImport": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::Import"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "UpdatedImport": {
+        "covers": [
+          "UpdatedImport"
+        ],
+        "ledgerObject": "UpdatedImport",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:c0c5bf284453f29750d61c631b6ea7acb4e964f9ef5c43ed728405dc214443fd",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

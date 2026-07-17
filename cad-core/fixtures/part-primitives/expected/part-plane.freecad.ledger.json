@@ -1,0 +1,75 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-plane",
+    "expectedPayloadHash": "sha256:31015ecfc2a116eff027dea8f95d259cfa2918731b69bacdc406157d348c5e93",
+    "inputHash": "sha256:261d515f37eac438f349e721d76be0fe288ff9179c7c21811d512c52a29f600b",
+    "phase": "part-primitives",
+    "topoNamingStateHash": "sha256:6c66f677326b2439866e7cecf57d3f16dcd1fc29237d4c4429d5830667339bb6"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Plane": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Plane": {
+        "covers": [
+          "Plane"
+        ],
+        "ledgerObject": "Plane",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:6c66f677326b2439866e7cecf57d3f16dcd1fc29237d4c4429d5830667339bb6",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

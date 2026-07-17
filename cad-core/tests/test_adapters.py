@@ -113,7 +113,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(len(point["point"]), 3)
 
     def test_c_api_returns_sketch_internal_profile_mesh(self) -> None:
-        result = self.run_recompute_ffi("sketch-internal-face", "p5")
+        result = self.run_recompute_ffi("sketch-internal-face", "sketcher-internal-shape")
         sketch = result["results"][0]
 
         self.assertEqual(result["diagnostics"], [])
@@ -135,7 +135,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(any(item["id"] == "Sketch:InternalVertex1" for item in sketch["subshapes"]))
 
     def test_c_api_returns_open_sketch_raw_edge_segments(self) -> None:
-        result = self.run_recompute_ffi("sketch-open-wire-internal-empty", "p5")
+        result = self.run_recompute_ffi("sketch-open-wire-internal-empty", "sketcher-geometry")
         sketch = result["results"][0]
 
         self.assertEqual(result["diagnostics"], [])
@@ -230,7 +230,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(update_shadow["sourceGeometryKind"], "LineSegment")
 
     def test_c_api_returns_raw_edge_segments_with_internal_profile_mesh(self) -> None:
-        result = self.run_recompute_ffi("sketch-internal-face-dangling-line", "p5")
+        result = self.run_recompute_ffi("sketch-internal-face-dangling-line", "sketcher-internal-shape")
         sketch = result["results"][0]
 
         self.assertEqual(result["diagnostics"], [])
@@ -245,14 +245,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_c_api_rejects_invalid_sketch_plane_frame(self) -> None:
-        result = self.run_recompute_ffi("sketch-plane-frame-invalid", "p5")
+        result = self.run_recompute_ffi("sketch-plane-frame-invalid", "sketcher-geometry")
         sketch = result["results"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_property_type"])
         self.assertIsNone(sketch["mesh"])
 
     def test_c_api_returns_split_internal_face_mesh_ids(self) -> None:
-        result = self.run_recompute_ffi("sketch-internal-face-split-line", "p5")
+        result = self.run_recompute_ffi("sketch-internal-face-split-line", "sketcher-internal-shape")
         sketch = result["results"][0]
 
         self.assertEqual(result["diagnostics"], [])
@@ -279,7 +279,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(raw_edge["identityStatus"], "stable")
 
     def test_c_api_returns_c12m16_split_fragment_ledger_fields(self) -> None:
-        result = self.run_recompute_ffi("sketch-split-fragment-line-reference", "c12m16")
+        result = self.run_recompute_ffi("sketch-split-fragment-line-reference", "sketcher-internal-shape")
         sketch = next(item for item in result["results"] if item["object"] == "BaseSketch")
 
         self.assertEqual(result["diagnostics"], [])
@@ -328,7 +328,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(shadow["sourceGeometryKind"], "LineSegment")
 
     def test_c_api_matches_cli_for_p3b_recompute(self) -> None:
-        ffi_result = self.run_recompute_ffi("pocket-custom-vector", "p3b")
+        ffi_result = self.run_recompute_ffi("pocket-custom-vector", "partdesign-extrude")
 
         self.assertEqual(ffi_result["diagnostics"], [])
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
@@ -341,7 +341,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_c_api_mesh_edge_segments_reference_result_subshapes(self) -> None:
-        result = self.run_recompute_ffi("topo-state-body-tip-stable-recovery", "c4m6")
+        result = self.run_recompute_ffi("topo-state-body-tip-stable-recovery", "topology-state")
         body = result["results"][0]
 
         self.assertEqual(result["diagnostics"], [])
@@ -350,7 +350,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assert_mesh_vertex_points_reference_subshapes(body)
 
     def test_c_api_body_direct_tip_subshapes_publish_tip_qualified_stable_names(self) -> None:
-        result = self.run_recompute_ffi("topo-state-body-tip-stable-recovery", "c4m6")
+        result = self.run_recompute_ffi("topo-state-body-tip-stable-recovery", "topology-state")
         body = result["results"][0]
         subshapes = {item["indexed"]: item for item in body["subshapes"]}
 
@@ -367,7 +367,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
 
     def test_c_api_body_replacement_tip_subshapes_publish_tip_qualified_stable_names(self) -> None:
-        result = self.run_recompute_ffi("fillet-face-selection-history", "c3m5")
+        result = self.run_recompute_ffi("fillet-face-selection-history", "partdesign-dressup")
         body = next(item for item in result["results"] if item["object"] == "Body")
         face_subshapes = [item for item in body["subshapes"] if item["kind"] == "Face"]
 
@@ -384,7 +384,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertNotRegex(item["stableSubname"], r"\.(Edge|Vertex)\d+$")
 
     def test_c_api_body_replacement_tip_after_earlier_refine_publishes_tip_owner(self) -> None:
-        result = self.run_recompute_ffi("body-replacement-tip-after-earlier-refine", "c3m5")
+        result = self.run_recompute_ffi("body-replacement-tip-after-earlier-refine", "partdesign-body")
         body = next(item for item in result["results"] if item["object"] == "PadBody")
         subshapes = {item["indexed"]: item for item in body["subshapes"]}
 
@@ -394,7 +394,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(subshapes["Face2"]["stableSubname"], "Fillet2.Fillet.Face3")
 
     def test_c_api_body_additive_chain_tip_subshapes_publish_tip_qualified_stable_names(self) -> None:
-        result = self.run_recompute_ffi("partdesign-revolution-featurefirst-body", "c51m1")
+        result = self.run_recompute_ffi("partdesign-revolution-featurefirst-body", "partdesign-revolve")
         body = next(item for item in result["results"] if item["object"] == "Body")
         face_subshapes = [item for item in body["subshapes"] if item["kind"] == "Face"]
 
@@ -411,7 +411,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertNotRegex(item["stableSubname"], r"\.(Edge|Vertex)\d+$")
 
     def test_c4s11_cli_c_api_worker_wasm_share_core_result_contract(self) -> None:
-        payload = (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_bytes()
+        payload = (ROOT / "fixtures" / "topology-state" / "topo-state-body-tip-stable-recovery.json").read_bytes()
 
         cli_result = self.run_cli_core_recompute_payload(payload)
         c_api_result = self.run_recompute_ffi_payload(payload)
@@ -430,7 +430,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(normalized, cli_result)
 
     def test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel(self) -> None:
-        payload = (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_bytes()
+        payload = (ROOT / "fixtures" / "topology-state" / "topo-state-body-tip-stable-recovery.json").read_bytes()
 
         cli_result = self.run_cli_core_recompute_payload(payload)
         c_api_result = self.run_recompute_ffi_payload(payload)
@@ -455,7 +455,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(state, topo_states[0])
 
     def test_c4s11_adapter_resource_limit_diagnostic_preserves_result_schema(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "c3m7" / "rect-pad-worker-mesh-limit.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "runtime-limits" / "rect-pad-worker-mesh-limit.json").read_text())
         payload["mesh_limits"]["max_vertices"] = "four"
 
         for adapter, runner in [
@@ -478,7 +478,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["target"], "mesh_limits")
 
     def test_c_api_recompute_rejects_reference_shadow_legacy_internal_face_sublist(self) -> None:
-        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow", "p5")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow", "topology-resolve")
         updates = ffi_result["elementReferenceUpdates"]
 
         self.assertEqual([item["code"] for item in ffi_result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
@@ -486,7 +486,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates, [])
 
     def test_c_api_recompute_rejects_recovered_reference_shadow_update(self) -> None:
-        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "topology-resolve")
         updates = ffi_result["elementReferenceUpdates"]
 
         self.assertEqual([item["code"] for item in ffi_result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
@@ -494,13 +494,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates, [])
 
     def test_c_api_recompute_omits_reference_shadow_recovery_metadata_for_internal_face_profile(self) -> None:
-        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "topology-resolve")
 
         self.assertEqual([item["code"] for item in ffi_result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_c_api_recompute_rejects_full_sublist_reference_shadow_update_for_internal_face_profile(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "topology-resolve" / "pad-internal-face-reference-shadow.json").read_text())
         profile = payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]
         profile["FullSubList"] = ["ExternalDoc#Sketch.InternalFace1"]
 
@@ -512,7 +512,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates, [])
 
     def test_c_api_recompute_returns_reference_shadow_update_for_link_sub_list(self) -> None:
-        ffi_result = self.run_recompute_ffi("sketch-external-face-reference-shadow", "p5")
+        ffi_result = self.run_recompute_ffi("sketch-external-face-reference-shadow", "sketcher-external-geometry")
         updates = ffi_result["elementReferenceUpdates"]
 
         self.assertEqual(ffi_result["diagnostics"], [])
@@ -535,7 +535,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(shadow["fingerprint"]["vertexCount"], 4)
 
     def test_c_api_recompute_link_sub_list_update_preserves_unupdated_items(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p5" / "sketch-external-face-reference-shadow.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "sketcher-external-geometry" / "sketch-external-face-reference-shadow.json").read_text())
         payload["Objects"][1]["Properties"]["ExternalGeometry"]["SubSet"].append(
             {"value": "Box", "SubList": ["Face1"]}
         )
@@ -551,7 +551,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sub_set[1], {"value": "Box", "SubList": ["Face1"]})
 
     def test_c_api_recompute_preserves_full_sublist_on_link_sub_list_update(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "p5" / "sketch-external-face-reference-shadow.json").read_text())
+        payload = json.loads((ROOT / "fixtures" / "sketcher-external-geometry" / "sketch-external-face-reference-shadow.json").read_text())
         external = payload["Objects"][1]["Properties"]["ExternalGeometry"]["SubSet"][0]
         external["FullSubList"] = ["ExternalDoc#Box.Face5"]
 
@@ -1141,11 +1141,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(up_to_shape_multi_face["fixtures"], [])
         self.assertEqual(
             up_to_shape_multi_face["failure_fixtures"]["offset"],
-            "p3a/pocket-up-to-shape-multiple-faces-offset",
+            "partdesign-extrude/pocket-up-to-shape-multiple-faces-offset",
         )
         self.assertEqual(
             up_to_shape_multi_face["failure_fixtures"]["invalid_subshape"],
-            "p3a/pocket-up-to-shape-edge-subshape",
+            "partdesign-extrude/pocket-up-to-shape-edge-subshape",
         )
         self.assertEqual(
             up_to_shape_multi_face["diagnostics"],
@@ -1172,22 +1172,22 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("Body additive fuse replay", revolution_groove["supported"])
         self.assertIn("Body additive FeatureFirst fuse replay", revolution_groove["supported"])
         self.assertIn("Body subtractive cut replay", revolution_groove["supported"])
-        self.assertIn("c4m2/partdesign-revolution-axis-angle-body", revolution_groove["fixtures"])
-        self.assertIn("c4m2/partdesign-groove-axis-angle-body", revolution_groove["fixtures"])
-        self.assertIn("c5m1/partdesign-revolution-two-angles-body", revolution_groove["fixtures"])
-        self.assertIn("c5m1/partdesign-groove-two-angles-body", revolution_groove["fixtures"])
-        self.assertIn("c5m1/partdesign-groove-through-all-body", revolution_groove["fixtures"])
-        self.assertIn("c5m1/partdesign-revolution-part-edge-axis", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-revolution-internalface-profile", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-revolution-featurefirst-body", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-revolution-datumline-axis", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-revolution-appline-axis", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-revolution-sketch-axisn", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-revolution-uptoface-body", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-revolution-uptofirst-body", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-revolution-uptolast-body", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-groove-uptofirst-body", revolution_groove["fixtures"])
-        self.assertIn("c51m1/partdesign-groove-uptoface-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-axis-angle-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-groove-axis-angle-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-two-angles-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-groove-two-angles-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-groove-through-all-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-part-edge-axis", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-internalface-profile", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-featurefirst-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-datumline-axis", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-appline-axis", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-sketch-axisn", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-uptoface-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-uptofirst-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-revolution-uptolast-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-groove-uptofirst-body", revolution_groove["fixtures"])
+        self.assertIn("partdesign-revolve/partdesign-groove-uptoface-body", revolution_groove["fixtures"])
         self.assertEqual(
             revolution_groove["diagnostics"],
             [
@@ -1253,8 +1253,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             groove_upto_gap["fixtures"],
             [
-                "c51m1/partdesign-groove-uptofirst-body",
-                "c51m1/partdesign-groove-uptoface-body",
+                "partdesign-revolve/partdesign-groove-uptofirst-body",
+                "partdesign-revolve/partdesign-groove-uptoface-body",
             ],
         )
         self.assertIn(
@@ -1278,18 +1278,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("Body replacement Tip replay", boolean["supported"])
         self.assertIn("Section standalone edge/wire result", boolean["supported"])
         self.assertIn("Section Body Tip non-solid diagnostic", boolean["supported"])
-        self.assertIn("c4m2/partdesign-boolean-cut-body-tool", boolean["fixtures"])
-        self.assertIn("c4m2/partdesign-boolean-fuse-body-tool", boolean["fixtures"])
-        self.assertIn("c4m2/partdesign-boolean-common-body-tool", boolean["fixtures"])
-        self.assertIn("c5m2/partdesign-boolean-allow-compound-multisolid", boolean["fixtures"])
-        self.assertIn("c5m2/partdesign-boolean-multi-tool-ownership", boolean["fixtures"])
-        self.assertIn("c5m2/partdesign-boolean-multisolid-rejected", boolean["fixtures"])
-        self.assertIn("c5m2/partdesign-boolean-tool-missing-shape-diagnostic", boolean["fixtures"])
-        self.assertIn("c51m2/partdesign-boolean-compound-body-tip", boolean["fixtures"])
-        self.assertIn("c51m2/partdesign-boolean-compound-disallowed", boolean["fixtures"])
-        self.assertIn("c51m2/partdesign-boolean-section-standalone", boolean["fixtures"])
-        self.assertIn("c51m2/partdesign-boolean-section-body-tip-diagnostic", boolean["fixtures"])
-        self.assertIn("c51m2/partdesign-boolean-section-no-intersection", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-cut-body-tool", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-fuse-body-tool", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-common-body-tool", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-allow-compound-multisolid", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-multi-tool-ownership", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-multisolid-rejected", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-tool-missing-shape-diagnostic", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-compound-body-tip", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-compound-disallowed", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-section-standalone", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-section-body-tip-diagnostic", boolean["fixtures"])
+        self.assertIn("partdesign-boolean/partdesign-boolean-section-no-intersection", boolean["fixtures"])
         self.assertEqual(
             boolean["diagnostics"],
             [
@@ -1324,14 +1324,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             loft["fixtures"],
             [
-                "c4m2/partdesign-loft-additive-body",
-                "c4m2/partdesign-loft-subtractive-body",
-                "c5m3/partdesign-loft-closed-multisection",
-                "c5m3/partdesign-loft-multiwire-ordering",
-                "c5m3/partdesign-loft-allow-compound-diagnostic",
-                "c51m3/partdesign-loft-closed-multisection",
-                "c51m3/partdesign-loft-multiwire-ordering",
-                "c51m3/partdesign-loft-allow-compound-diagnostic",
+                "partdesign-loft/partdesign-loft-additive-body",
+                "partdesign-loft/partdesign-loft-subtractive-body",
+                "partdesign-loft/partdesign-loft-closed-multisection",
+                "partdesign-loft/partdesign-loft-multiwire-ordering",
+                "partdesign-loft/partdesign-loft-allow-compound-diagnostic",
+                "partdesign-loft/partdesign-loft-closed-multisection",
+                "partdesign-loft/partdesign-loft-multiwire-ordering",
+                "partdesign-loft/partdesign-loft-allow-compound-diagnostic",
             ],
         )
         self.assertIn("invalid_sections", loft["diagnostics"])
@@ -1376,24 +1376,24 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             pipe["fixtures"],
             [
-                "c4m2/partdesign-pipe-additive-body",
-                "c4m2/partdesign-pipe-subtractive-body",
-                "c4m2/partdesign-pipe-deferred-diagnostics",
-                "c5m3/partdesign-pipe-sections-transformation",
-                "c5m3/partdesign-pipe-transition-variants",
-                "c5m3/partdesign-pipe-auxiliary-binormal-diagnostics",
-                "c51m4/partdesign-pipe-fixed-round-body",
-                "c51m4/partdesign-pipe-auxiliary-binormal-modes",
-                "c51m4/partdesign-pipe-selected-spine-multisection",
-                "c51m4/partdesign-pipe-source-backed-blockers",
-                "c6m1/partdesign-pipe-linear-law-product",
-                "c6m1/partdesign-pipe-s-shape-law-product",
-                "c6m3/partdesign-pipe-interpolation-law-product",
-                "c6m3/partdesign-pipe-interpolation-law-subtractive-product",
-                "c6m3/partdesign-pipe-invalid_pipe_law_samples-diagnostics",
-                "c6m1/partdesign-pipe-spine-tangent-ledger-product",
-                "c6m1/partdesign-pipe-auxiliary-tangent-ledger-product",
-                "c6m1/partdesign-pipe-law-tangent-diagnostics",
+                "partdesign-pipe/partdesign-pipe-additive-body",
+                "partdesign-pipe/partdesign-pipe-subtractive-body",
+                "partdesign-pipe/partdesign-pipe-deferred-diagnostics",
+                "partdesign-pipe/partdesign-pipe-sections-transformation",
+                "partdesign-pipe/partdesign-pipe-transition-variants",
+                "partdesign-pipe/partdesign-pipe-auxiliary-binormal-diagnostics",
+                "partdesign-pipe/partdesign-pipe-fixed-round-body",
+                "partdesign-pipe/partdesign-pipe-auxiliary-binormal-modes",
+                "partdesign-pipe/partdesign-pipe-selected-spine-multisection",
+                "partdesign-pipe/partdesign-pipe-source-backed-blockers",
+                "partdesign-pipe/partdesign-pipe-linear-law-product",
+                "partdesign-pipe/partdesign-pipe-s-shape-law-product",
+                "partdesign-pipe/partdesign-pipe-interpolation-law-product",
+                "partdesign-pipe/partdesign-pipe-interpolation-law-subtractive-product",
+                "partdesign-pipe/partdesign-pipe-invalid_pipe_law_samples-diagnostics",
+                "partdesign-pipe/partdesign-pipe-spine-tangent-ledger-product",
+                "partdesign-pipe/partdesign-pipe-auxiliary-tangent-ledger-product",
+                "partdesign-pipe/partdesign-pipe-law-tangent-diagnostics",
             ],
         )
         self.assertIn("unsupported_property", pipe["diagnostics"])
@@ -1450,25 +1450,25 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("DatumPoint Focus1 selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumPoint Focus2 selected MapMode", datum_attachment["supported"])
         self.assertIn("AttachmentSupport StableSubList/ShadowSub request-local writeback", datum_attachment["supported"])
-        self.assertIn("p7/datum-coordinate-system-reference-axis", datum_attachment["fixtures"])
-        self.assertIn("c4m2/partdesign-datum-attachment-deferred-diagnostics", datum_attachment["fixtures"])
-        self.assertIn("c5m4/partdesign-datum-attachment-mapmode-diagnostics", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-selected-mapmodes", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-user-offset-plane-sketch", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-offset-reverse-writeback", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-point-single-input-modes", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-point-proximity-modes", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-point-proximity-diagnostics", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-line-family-modes", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-line-family-diagnostics", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-3d-plane-modes", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-3d-plane-diagnostics", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-curve-frame-modes", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-curve-frame-diagnostics", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-conic-landmark-modes", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-conic-landmark-diagnostics", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-folding-modes", datum_attachment["fixtures"])
-        self.assertIn("c51m5/partdesign-datum-folding-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/datum-coordinate-system-reference-axis", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-attachment-deferred-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-attachment-mapmode-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-selected-mapmodes", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-user-offset-plane-sketch", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-offset-reverse-writeback", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-point-single-input-modes", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-point-proximity-modes", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-point-proximity-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-line-family-modes", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-line-family-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-3d-plane-modes", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-3d-plane-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-curve-frame-modes", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-curve-frame-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-conic-landmark-modes", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-conic-landmark-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-folding-modes", datum_attachment["fixtures"])
+        self.assertIn("partdesign-datum/partdesign-datum-folding-diagnostics", datum_attachment["fixtures"])
         self.assertIn("unsupported_property", datum_attachment["diagnostics"])
         self.assertIn("attachment_support_invalid_shape", datum_attachment["diagnostics"])
         self.assertIn("projection_failed", datum_attachment["diagnostics"])
@@ -1555,15 +1555,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             [],
         )
         self.assertIn(
-            "p7/hole-supported-model-thread-counterbore",
+            "partdesign-hole/hole-supported-model-thread-counterbore",
             capabilities["part_design"]["hole"]["native_oracle_fixtures"],
         )
         self.assertIn(
-            "p7/hole-supported-model-thread-metric",
+            "partdesign-hole/hole-supported-model-thread-metric",
             capabilities["part_design"]["hole"]["native_oracle_fixtures"],
         )
         self.assertIn(
-            "p7/hole-supported-point-counterbore",
+            "partdesign-hole/hole-supported-point-counterbore",
             capabilities["part_design"]["hole"]["native_oracle_fixtures"],
         )
         self.assertEqual(capabilities["part_design"]["hole"]["native_oracle_known_gap_fixtures"], [])
@@ -2784,9 +2784,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "object_result.topo_naming_history=maker_history:taper_thru_sections",
             taper_history["metadata"],
         )
-        self.assertIn("p3b/pad-length-taper", taper_history["fixtures"])
-        self.assertIn("p3b/pocket-length-taper", taper_history["fixtures"])
-        self.assertIn("p5/part-extrusion-taper", taper_history["fixtures"])
+        self.assertIn("partdesign-extrude/pad-length-taper", taper_history["fixtures"])
+        self.assertIn("partdesign-extrude/pocket-length-taper", taper_history["fixtures"])
+        self.assertIn("part-extrude/part-extrusion-taper", taper_history["fixtures"])
         self.assertEqual(capabilities["object_metadata"]["remaining_gaps"], [])
 
         self.assertEqual(
@@ -3116,15 +3116,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("sketcher_arc_of_hyperbola_profile", conic_curves["covered"])
         self.assertIn("sketcher_arc_of_parabola_profile", conic_curves["covered"])
         self.assertIn("sketcher_conic_external_reference", conic_curves["covered"])
-        self.assertIn("p8/part-hyperbola-edge", conic_curves["fixtures"])
-        self.assertIn("p8/part-parabola-edge", conic_curves["fixtures"])
-        self.assertIn("p8/part-conic-edge-invalid-params", conic_curves["fixtures"])
-        self.assertIn("p8/part-conic-edge-extrusion", conic_curves["fixtures"])
-        self.assertIn("p8/part-ruled-surface-conic-line", conic_curves["fixtures"])
-        self.assertIn("p5/sketch-hyperbola-arc-profile", conic_curves["fixtures"])
-        self.assertIn("p5/sketch-parabola-arc-profile", conic_curves["fixtures"])
-        self.assertIn("p5/sketch-conic-arcs-external-geometry-projected", conic_curves["fixtures"])
-        self.assertIn("p5/sketch-conic-arcs-external-geometry-native", conic_curves["fixtures"])
+        self.assertIn("part-primitives/part-hyperbola-edge", conic_curves["fixtures"])
+        self.assertIn("part-primitives/part-parabola-edge", conic_curves["fixtures"])
+        self.assertIn("part-primitives/part-conic-edge-invalid-params", conic_curves["fixtures"])
+        self.assertIn("part-primitives/part-conic-edge-extrusion", conic_curves["fixtures"])
+        self.assertIn("part-ruled-surface/part-ruled-surface-conic-line", conic_curves["fixtures"])
+        self.assertIn("sketcher-geometry/sketch-hyperbola-arc-profile", conic_curves["fixtures"])
+        self.assertIn("sketcher-geometry/sketch-parabola-arc-profile", conic_curves["fixtures"])
+        self.assertIn("sketcher-geometry/sketch-conic-arcs-external-geometry-projected", conic_curves["fixtures"])
+        self.assertIn("sketcher-geometry/sketch-conic-arcs-external-geometry-native", conic_curves["fixtures"])
         self.assertIn("invalid_part_conic_curve_kind", conic_curves["diagnostics"])
         self.assertIn("Part::Extrusion", conic_curves["consumer_type_ids"])
         self.assertIn("Part::RuledSurface", conic_curves["consumer_type_ids"])
@@ -3232,23 +3232,23 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             project_on_surface["fixtures"],
             [
-                "c4m1/part-project-on-surface-edge-plane",
-                "c4m1/part-project-on-surface-face-plane",
-                "c4m1/part-project-on-surface-face-hole-plane",
-                "c4m1/part-project-on-surface-face-edges-mode",
-                "c4m1/part-project-on-surface-face-all-plane",
-                "c4m1/part-project-on-surface-height-boundaries",
-                "c4m1/part-project-on-surface-edge-offset",
-                "c4m1/part-project-on-surface-face-offset",
-                "c4m1/part-project-on-surface-height-offset-boundary",
-                "c4m1/part-project-on-surface-multi-edge-order",
-                "c4m1/part-project-on-surface-mixed-face-edge-order",
-                "c4m1/part-project-on-surface-deferred-boundaries",
-                "c5m9/part-project-on-surface-edge-provenance",
-                "c5m9/part-project-on-surface-wire-split-provenance",
-                "c5m9/part-project-on-surface-invalid-provenance-diagnostics",
-                "c5m9/part-project-on-surface-face-rebuild-provenance",
-                "c5m9/part-project-on-surface-all-compound-provenance",
+                "part-project-on-surface/part-project-on-surface-edge-plane",
+                "part-project-on-surface/part-project-on-surface-face-plane",
+                "part-project-on-surface/part-project-on-surface-face-hole-plane",
+                "part-project-on-surface/part-project-on-surface-face-edges-mode",
+                "part-project-on-surface/part-project-on-surface-face-all-plane",
+                "part-project-on-surface/part-project-on-surface-height-boundaries",
+                "part-project-on-surface/part-project-on-surface-edge-offset",
+                "part-project-on-surface/part-project-on-surface-face-offset",
+                "part-project-on-surface/part-project-on-surface-height-offset-boundary",
+                "part-project-on-surface/part-project-on-surface-multi-edge-order",
+                "part-project-on-surface/part-project-on-surface-mixed-face-edge-order",
+                "part-project-on-surface/part-project-on-surface-deferred-boundaries",
+                "part-project-on-surface/part-project-on-surface-edge-provenance",
+                "part-project-on-surface/part-project-on-surface-wire-split-provenance",
+                "part-project-on-surface/part-project-on-surface-invalid-provenance-diagnostics",
+                "part-project-on-surface/part-project-on-surface-face-rebuild-provenance",
+                "part-project-on-surface/part-project-on-surface-all-compound-provenance",
             ],
         )
         for diagnostic in (
@@ -3291,7 +3291,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             native_mapper_gap["product_contract"]["freecad_expected_status"],
             "native_oracle_unavailable",
         )
-        self.assertIn("c5m9/part-project-on-surface-edge-provenance", native_mapper_gap["fixtures"])
+        self.assertIn("part-project-on-surface/part-project-on-surface-edge-provenance", native_mapper_gap["fixtures"])
         self.assertIn("ProjectOnSurface mapper/history ownership", native_mapper_gap["delete_condition"])
         self.assertIn("Mode", project_on_surface["field_boundaries"]["expected_backed"])
         self.assertIn(
@@ -3336,21 +3336,21 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("conic_edge_consumer", ruled_surface["covered"])
         self.assertIn("expected_backed_fixtures", ruled_surface["covered"])
         for fixture in (
-            "p8/part-ruled-surface-line-line",
-            "p8/part-ruled-surface-conic-line",
-            "p8/part-ruled-surface-orientation-reversed",
-            "p8/part-ruled-surface-invalid-input",
-            "c4m1/part-ruled-surface-wire-wire",
+            "part-ruled-surface/part-ruled-surface-line-line",
+            "part-ruled-surface/part-ruled-surface-conic-line",
+            "part-ruled-surface/part-ruled-surface-orientation-reversed",
+            "part-ruled-surface/part-ruled-surface-invalid-input",
+            "part-ruled-surface/part-ruled-surface-wire-wire",
         ):
             self.assertIn(fixture, ruled_surface["fixtures"])
         self.assertEqual(
             ruled_surface["fixtures"],
             [
-                "p8/part-ruled-surface-line-line",
-                "p8/part-ruled-surface-conic-line",
-                "p8/part-ruled-surface-orientation-reversed",
-                "p8/part-ruled-surface-invalid-input",
-                "c4m1/part-ruled-surface-wire-wire",
+                "part-ruled-surface/part-ruled-surface-line-line",
+                "part-ruled-surface/part-ruled-surface-conic-line",
+                "part-ruled-surface/part-ruled-surface-orientation-reversed",
+                "part-ruled-surface/part-ruled-surface-invalid-input",
+                "part-ruled-surface/part-ruled-surface-wire-wire",
             ],
         )
         for diagnostic in (
@@ -3419,35 +3419,35 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("c5m12_native_hidden_diagnostic_historical_evidence", loft["covered"])
         self.assertIn("linearize_planar_faces_post_processing", loft["covered"])
         for fixture in (
-            "c3m4/part-loft-two-section-surface",
-            "c3m4/part-loft-solid",
-            "c3m4/part-loft-ruled",
-            "c3m4/part-loft-closed",
-            "c3m4/part-loft-invalid-sections",
-            "c4m1/part-loft-linearize-profile-face",
-            "c4m1/part-loft-linearize-profile-vertex",
-            "c5m12/part-loft-complex-wire-face",
-            "c5m12/part-loft-complex-vertex-sketch-object",
-            "c5m12/part-loft-subelement-assignment-diagnostic",
-            "c6m7/part-loft-subelement-product",
-            "c6m7/part-loft-subelement-product-invalid",
+            "part-loft/part-loft-two-section-surface",
+            "part-loft/part-loft-solid",
+            "part-loft/part-loft-ruled",
+            "part-loft/part-loft-closed",
+            "part-loft/part-loft-invalid-sections",
+            "part-loft/part-loft-linearize-profile-face",
+            "part-loft/part-loft-linearize-profile-vertex",
+            "part-loft/part-loft-complex-wire-face",
+            "part-loft/part-loft-complex-vertex-sketch-object",
+            "part-loft/part-loft-subelement-assignment-diagnostic",
+            "part-loft/part-loft-subelement-product",
+            "part-loft/part-loft-subelement-product-invalid",
         ):
             self.assertIn(fixture, loft["fixtures"])
         self.assertEqual(
             loft["fixtures"],
             [
-                "c3m4/part-loft-two-section-surface",
-                "c3m4/part-loft-solid",
-                "c3m4/part-loft-ruled",
-                "c3m4/part-loft-closed",
-                "c3m4/part-loft-invalid-sections",
-                "c4m1/part-loft-linearize-profile-face",
-                "c4m1/part-loft-linearize-profile-vertex",
-                "c5m12/part-loft-complex-wire-face",
-                "c5m12/part-loft-complex-vertex-sketch-object",
-                "c5m12/part-loft-subelement-assignment-diagnostic",
-                "c6m7/part-loft-subelement-product",
-                "c6m7/part-loft-subelement-product-invalid",
+                "part-loft/part-loft-two-section-surface",
+                "part-loft/part-loft-solid",
+                "part-loft/part-loft-ruled",
+                "part-loft/part-loft-closed",
+                "part-loft/part-loft-invalid-sections",
+                "part-loft/part-loft-linearize-profile-face",
+                "part-loft/part-loft-linearize-profile-vertex",
+                "part-loft/part-loft-complex-wire-face",
+                "part-loft/part-loft-complex-vertex-sketch-object",
+                "part-loft/part-loft-subelement-assignment-diagnostic",
+                "part-loft/part-loft-subelement-product",
+                "part-loft/part-loft-subelement-product-invalid",
             ],
         )
         for diagnostic in (
@@ -3502,7 +3502,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "cad_core_product_contract_non_parity",
         )
         self.assertIn(
-            "c6m7/part-loft-subelement-product",
+            "part-loft/part-loft-subelement-product",
             narrowed_gaps["part_loft_subelement_assignment_native_hidden"]["fixtures"],
         )
         self.assertEqual(
@@ -3628,55 +3628,55 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ):
             self.assertIn(covered, sweep["covered"])
         for fixture in (
-            "c3m4/part-sweep-right-corner-surface",
-            "c3m4/part-sweep-solid",
-            "c3m4/part-sweep-frenet-off",
-            "c3m4/part-sweep-transition-transformed",
-            "c3m4/part-sweep-transition-round-corner",
-            "c3m4/part-sweep-spine-subedges",
-            "c3m4/part-sweep-open-profile-surface",
-            "c3m4/part-sweep-invalid-inputs",
-            "c4m1/part-sweep-multi-profile-linearize",
-            "c4m1/part-sweep-advanced-deferred",
-            "c5m10/part-sweep-auxiliary-spine-contract",
-            "c5m10/part-sweep-binormal-contract",
-            "c5m10/part-sweep-support-mode-diagnostics",
-            "c5m10/part-sweep-located-profile-contract",
-            "c5m10/part-sweep-tolerance-contract",
-            "c5m10/part-sweep-advanced-combined-contract",
-            "c5m12/part-sweep-spine-support-surface-normal",
-            "c6m4/part-sweep-located-profile-product",
-            "c6m4/part-sweep-located-profile-diagnostics",
-            "c6m4/part-sweep-located-profile-bool-diagnostics",
-            "c6m4/part-sweep-advanced-combined-product",
-            "c12m14/part-sweep-helper-mutable-lifecycle",
+            "part-sweep/part-sweep-right-corner-surface",
+            "part-sweep/part-sweep-solid",
+            "part-sweep/part-sweep-frenet-off",
+            "part-sweep/part-sweep-transition-transformed",
+            "part-sweep/part-sweep-transition-round-corner",
+            "part-sweep/part-sweep-spine-subedges",
+            "part-sweep/part-sweep-open-profile-surface",
+            "part-sweep/part-sweep-invalid-inputs",
+            "part-sweep/part-sweep-multi-profile-linearize",
+            "part-sweep/part-sweep-advanced-deferred",
+            "part-sweep/part-sweep-auxiliary-spine-contract",
+            "part-sweep/part-sweep-binormal-contract",
+            "part-sweep/part-sweep-support-mode-diagnostics",
+            "part-sweep/part-sweep-located-profile-contract",
+            "part-sweep/part-sweep-tolerance-contract",
+            "part-sweep/part-sweep-advanced-combined-contract",
+            "part-sweep/part-sweep-spine-support-surface-normal",
+            "part-sweep/part-sweep-located-profile-product",
+            "part-sweep/part-sweep-located-profile-diagnostics",
+            "part-sweep/part-sweep-located-profile-bool-diagnostics",
+            "part-sweep/part-sweep-advanced-combined-product",
+            "part-sweep/part-sweep-helper-mutable-lifecycle",
         ):
             self.assertIn(fixture, sweep["fixtures"])
         self.assertEqual(
             sweep["fixtures"],
             [
-                "c3m4/part-sweep-right-corner-surface",
-                "c3m4/part-sweep-solid",
-                "c3m4/part-sweep-frenet-off",
-                "c3m4/part-sweep-transition-transformed",
-                "c3m4/part-sweep-transition-round-corner",
-                "c3m4/part-sweep-spine-subedges",
-                "c3m4/part-sweep-open-profile-surface",
-                "c3m4/part-sweep-invalid-inputs",
-                "c4m1/part-sweep-multi-profile-linearize",
-                "c4m1/part-sweep-advanced-deferred",
-                "c5m10/part-sweep-auxiliary-spine-contract",
-                "c5m10/part-sweep-binormal-contract",
-                "c5m10/part-sweep-support-mode-diagnostics",
-                "c5m10/part-sweep-located-profile-contract",
-                "c5m10/part-sweep-tolerance-contract",
-                "c5m10/part-sweep-advanced-combined-contract",
-                "c5m12/part-sweep-spine-support-surface-normal",
-                "c6m4/part-sweep-located-profile-product",
-                "c6m4/part-sweep-located-profile-diagnostics",
-                "c6m4/part-sweep-located-profile-bool-diagnostics",
-                "c6m4/part-sweep-advanced-combined-product",
-                "c12m14/part-sweep-helper-mutable-lifecycle",
+                "part-sweep/part-sweep-right-corner-surface",
+                "part-sweep/part-sweep-solid",
+                "part-sweep/part-sweep-frenet-off",
+                "part-sweep/part-sweep-transition-transformed",
+                "part-sweep/part-sweep-transition-round-corner",
+                "part-sweep/part-sweep-spine-subedges",
+                "part-sweep/part-sweep-open-profile-surface",
+                "part-sweep/part-sweep-invalid-inputs",
+                "part-sweep/part-sweep-multi-profile-linearize",
+                "part-sweep/part-sweep-advanced-deferred",
+                "part-sweep/part-sweep-auxiliary-spine-contract",
+                "part-sweep/part-sweep-binormal-contract",
+                "part-sweep/part-sweep-support-mode-diagnostics",
+                "part-sweep/part-sweep-located-profile-contract",
+                "part-sweep/part-sweep-tolerance-contract",
+                "part-sweep/part-sweep-advanced-combined-contract",
+                "part-sweep/part-sweep-spine-support-surface-normal",
+                "part-sweep/part-sweep-located-profile-product",
+                "part-sweep/part-sweep-located-profile-diagnostics",
+                "part-sweep/part-sweep-located-profile-bool-diagnostics",
+                "part-sweep/part-sweep-advanced-combined-product",
+                "part-sweep/part-sweep-helper-mutable-lifecycle",
             ],
         )
         for diagnostic in (
@@ -3804,10 +3804,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(located_gap["freecadcmd_evidence"]["control"], "wire profile without Location builds")
         self.assertIn("SectionOptions[].Location", located_gap["fields"])
         self.assertIn("SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart", located_gap["fields"])
-        self.assertIn("c5m10/part-sweep-located-profile-contract", located_gap["fixtures"])
-        self.assertIn("c6m4/part-sweep-located-profile-product", located_gap["fixtures"])
-        self.assertIn("c6m4/part-sweep-located-profile-diagnostics", located_gap["fixtures"])
-        self.assertIn("c6m4/part-sweep-located-profile-bool-diagnostics", located_gap["fixtures"])
+        self.assertIn("part-sweep/part-sweep-located-profile-contract", located_gap["fixtures"])
+        self.assertIn("part-sweep/part-sweep-located-profile-product", located_gap["fixtures"])
+        self.assertIn("part-sweep/part-sweep-located-profile-diagnostics", located_gap["fixtures"])
+        self.assertIn("part-sweep/part-sweep-located-profile-bool-diagnostics", located_gap["fixtures"])
         self.assertEqual(
             located_gap["product_contract"]["provenance"],
             "cad_core_product_contract_non_parity",
@@ -3817,7 +3817,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             located_gap["product_contract"]["profile_placement"],
             "SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart",
         )
-        self.assertEqual(located_gap["product_contract"]["product_path"], "c6m4/part-sweep-located-profile-product")
+        self.assertEqual(located_gap["product_contract"]["product_path"], "part-sweep/part-sweep-located-profile-product")
         combined_gap = narrowed_gaps["part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker"]
         self.assertEqual(combined_gap["status"], "released_c6m4_product_contract_non_parity")
         self.assertEqual(combined_gap["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
@@ -3837,8 +3837,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart",
             ],
         )
-        self.assertIn("c5m10/part-sweep-advanced-combined-contract", combined_gap["fixtures"])
-        self.assertIn("c6m4/part-sweep-advanced-combined-product", combined_gap["fixtures"])
+        self.assertIn("part-sweep/part-sweep-advanced-combined-contract", combined_gap["fixtures"])
+        self.assertIn("part-sweep/part-sweep-advanced-combined-product", combined_gap["fixtures"])
         self.assertEqual(
             combined_gap["product_contract"]["provenance"],
             "cad_core_product_contract_non_parity",
@@ -3846,7 +3846,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(combined_gap["product_contract"]["freecadcmd_location_overload_status"], "notCollected")
         self.assertEqual(
             combined_gap["product_contract"]["product_path"],
-            "c6m4/part-sweep-advanced-combined-product",
+            "part-sweep/part-sweep-advanced-combined-product",
         )
         for non_goal in (
             "upstream_native_part_sweep_advanced_direct_properties",
@@ -3972,67 +3972,67 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ):
             self.assertIn(covered, filling["covered"])
         for fixture in (
-            "c3m4/part-filling-closed-wire-default",
-            "c3m4/part-filling-boundary-edges-default",
-            "c3m4/part-filling-invalid-inputs",
-            "c4m1/part-filling-advanced-deferred",
-            "c5m8/part-filling-initial-surface-boundary",
-            "c5m8/part-filling-support-order-edge-face",
-            "c5m8/part-filling-invalid-support-order",
-            "c5m8/part-filling-non-default-params",
-            "c5m8/part-filling-param-diagnostics",
-            "c5m8/part-filling-non-boundary-edge-support",
-            "c5m8/part-filling-non-boundary-face-point",
-            "c5m8/part-filling-non-boundary-wire",
-            "c5m8/part-filling-non-boundary-diagnostics",
-            "c5m8/part-filling-compound-optional-boundary",
-            "c5m8/part-filling-wrapper-boundary",
-            "c5m8/part-filling-wrapper-uv-point-boundary",
-            "c5m12/part-filling-non-boundary-edge-no-support-order",
-            "c5m13/part-filling-param-degree-only",
-            "c5m13/part-filling-param-num-iter-only",
-            "c5m13/part-filling-param-tol2d-tol3d-only",
-            "c5m13/part-filling-param-max-degree-only",
-            "c6m5/part-filling-surface-initial-face-product",
-            "c6m5/part-filling-support-order-c0-g1-g2-product",
-            "c6m5/part-filling-surface-support-order-invalid-product",
-            "c6m5/part-filling-explicit-params-product",
-            "c6m5/part-filling-explicit-params-invalid-product",
-            "c6m5/part-filling-non-boundary-support-order-product",
-            "c6m5/part-filling-non-boundary-support-order-invalid-product",
+            "part-filling/part-filling-closed-wire-default",
+            "part-filling/part-filling-boundary-edges-default",
+            "part-filling/part-filling-invalid-inputs",
+            "part-filling/part-filling-advanced-deferred",
+            "part-filling/part-filling-initial-surface-boundary",
+            "part-filling/part-filling-support-order-edge-face",
+            "part-filling/part-filling-invalid-support-order",
+            "part-filling/part-filling-non-default-params",
+            "part-filling/part-filling-param-diagnostics",
+            "part-filling/part-filling-non-boundary-edge-support",
+            "part-filling/part-filling-non-boundary-face-point",
+            "part-filling/part-filling-non-boundary-wire",
+            "part-filling/part-filling-non-boundary-diagnostics",
+            "part-filling/part-filling-compound-optional-boundary",
+            "part-filling/part-filling-wrapper-boundary",
+            "part-filling/part-filling-wrapper-uv-point-boundary",
+            "part-filling/part-filling-non-boundary-edge-no-support-order",
+            "part-filling/part-filling-param-degree-only",
+            "part-filling/part-filling-param-num-iter-only",
+            "part-filling/part-filling-param-tol2d-tol3d-only",
+            "part-filling/part-filling-param-max-degree-only",
+            "part-filling/part-filling-surface-initial-face-product",
+            "part-filling/part-filling-support-order-c0-g1-g2-product",
+            "part-filling/part-filling-surface-support-order-invalid-product",
+            "part-filling/part-filling-explicit-params-product",
+            "part-filling/part-filling-explicit-params-invalid-product",
+            "part-filling/part-filling-non-boundary-support-order-product",
+            "part-filling/part-filling-non-boundary-support-order-invalid-product",
         ):
             self.assertIn(fixture, filling["fixtures"])
         self.assertEqual(
             filling["fixtures"],
             [
-                "c3m4/part-filling-closed-wire-default",
-                "c3m4/part-filling-boundary-edges-default",
-                "c3m4/part-filling-invalid-inputs",
-                "c4m1/part-filling-advanced-deferred",
-                "c5m8/part-filling-initial-surface-boundary",
-                "c5m8/part-filling-support-order-edge-face",
-                "c5m8/part-filling-invalid-support-order",
-                "c5m8/part-filling-non-default-params",
-                "c5m8/part-filling-param-diagnostics",
-                "c5m8/part-filling-non-boundary-edge-support",
-                "c5m8/part-filling-non-boundary-face-point",
-                "c5m8/part-filling-non-boundary-wire",
-                "c5m8/part-filling-non-boundary-diagnostics",
-                "c5m8/part-filling-compound-optional-boundary",
-                "c5m8/part-filling-wrapper-boundary",
-                "c5m8/part-filling-wrapper-uv-point-boundary",
-                "c5m12/part-filling-non-boundary-edge-no-support-order",
-                "c5m13/part-filling-param-degree-only",
-                "c5m13/part-filling-param-num-iter-only",
-                "c5m13/part-filling-param-tol2d-tol3d-only",
-                "c5m13/part-filling-param-max-degree-only",
-                "c6m5/part-filling-surface-initial-face-product",
-                "c6m5/part-filling-support-order-c0-g1-g2-product",
-                "c6m5/part-filling-surface-support-order-invalid-product",
-                "c6m5/part-filling-explicit-params-product",
-                "c6m5/part-filling-explicit-params-invalid-product",
-                "c6m5/part-filling-non-boundary-support-order-product",
-                "c6m5/part-filling-non-boundary-support-order-invalid-product",
+                "part-filling/part-filling-closed-wire-default",
+                "part-filling/part-filling-boundary-edges-default",
+                "part-filling/part-filling-invalid-inputs",
+                "part-filling/part-filling-advanced-deferred",
+                "part-filling/part-filling-initial-surface-boundary",
+                "part-filling/part-filling-support-order-edge-face",
+                "part-filling/part-filling-invalid-support-order",
+                "part-filling/part-filling-non-default-params",
+                "part-filling/part-filling-param-diagnostics",
+                "part-filling/part-filling-non-boundary-edge-support",
+                "part-filling/part-filling-non-boundary-face-point",
+                "part-filling/part-filling-non-boundary-wire",
+                "part-filling/part-filling-non-boundary-diagnostics",
+                "part-filling/part-filling-compound-optional-boundary",
+                "part-filling/part-filling-wrapper-boundary",
+                "part-filling/part-filling-wrapper-uv-point-boundary",
+                "part-filling/part-filling-non-boundary-edge-no-support-order",
+                "part-filling/part-filling-param-degree-only",
+                "part-filling/part-filling-param-num-iter-only",
+                "part-filling/part-filling-param-tol2d-tol3d-only",
+                "part-filling/part-filling-param-max-degree-only",
+                "part-filling/part-filling-surface-initial-face-product",
+                "part-filling/part-filling-support-order-c0-g1-g2-product",
+                "part-filling/part-filling-surface-support-order-invalid-product",
+                "part-filling/part-filling-explicit-params-product",
+                "part-filling/part-filling-explicit-params-invalid-product",
+                "part-filling/part-filling-non-boundary-support-order-product",
+                "part-filling/part-filling-non-boundary-support-order-invalid-product",
             ],
         )
         for diagnostic in (
@@ -4150,10 +4150,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             narrowed_gaps["filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker"]["expected_backed_subsets"],
             [
-                "c5m13/part-filling-param-degree-only",
-                "c5m13/part-filling-param-num-iter-only",
-                "c5m13/part-filling-param-tol2d-tol3d-only",
-                "c5m13/part-filling-param-max-degree-only",
+                "part-filling/part-filling-param-degree-only",
+                "part-filling/part-filling-param-num-iter-only",
+                "part-filling/part-filling-param-tol2d-tol3d-only",
+                "part-filling/part-filling-param-max-degree-only",
             ],
         )
         self.assertEqual(
@@ -4297,45 +4297,45 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ):
             self.assertIn(covered, geomplate["covered"])
         for fixture in (
-            "c3m4/part-geomplate-curve-point-default",
-            "c3m4/part-geomplate-invalid-inputs",
-            "c4m1/part-geomplate-advanced-constraints",
-            "c4m1/part-geomplate-advanced-deferred",
-            "c5m7/part-geomplate-initial-surface-g0",
-            "c5m7/part-geomplate-g1-curve-on-surface",
-            "c5m7/part-geomplate-curve2d-on-surface",
-            "c5m7/part-geomplate-projected-curve2d",
-            "c5m7/part-geomplate-point2d-on-surface",
-            "c5m7/part-geomplate-mixed-surface-constraints",
-            "c5m7/part-geomplate-point-custom-criteria",
-            "c8m4/part-geomplate-curve-custom-criteria",
-            "c5m7/part-geomplate-curve-criteria-diagnostic",
-            "c5m7/part-geomplate-wrapper-boundary",
-            "c5m13/part-geomplate-projected-curve2d-initial-surface",
-            "c6m6/part-geomplate-g1-curve-on-surface-contract",
-            "c6m6/part-geomplate-projected-curve2d-no-initial-surface",
+            "part-geomplate/part-geomplate-curve-point-default",
+            "part-geomplate/part-geomplate-invalid-inputs",
+            "part-geomplate/part-geomplate-advanced-constraints",
+            "part-geomplate/part-geomplate-advanced-deferred",
+            "part-geomplate/part-geomplate-initial-surface-g0",
+            "part-geomplate/part-geomplate-g1-curve-on-surface",
+            "part-geomplate/part-geomplate-curve2d-on-surface",
+            "part-geomplate/part-geomplate-projected-curve2d",
+            "part-geomplate/part-geomplate-point2d-on-surface",
+            "part-geomplate/part-geomplate-mixed-surface-constraints",
+            "part-geomplate/part-geomplate-point-custom-criteria",
+            "part-geomplate/part-geomplate-curve-custom-criteria",
+            "part-geomplate/part-geomplate-curve-criteria-diagnostic",
+            "part-geomplate/part-geomplate-wrapper-boundary",
+            "part-geomplate/part-geomplate-projected-curve2d-initial-surface",
+            "part-geomplate/part-geomplate-g1-curve-on-surface-contract",
+            "part-geomplate/part-geomplate-projected-curve2d-no-initial-surface",
         ):
             self.assertIn(fixture, geomplate["fixtures"])
         self.assertEqual(
             geomplate["fixtures"],
             [
-                "c3m4/part-geomplate-curve-point-default",
-                "c3m4/part-geomplate-invalid-inputs",
-                "c4m1/part-geomplate-advanced-constraints",
-                "c4m1/part-geomplate-advanced-deferred",
-                "c5m7/part-geomplate-initial-surface-g0",
-                "c5m7/part-geomplate-g1-curve-on-surface",
-                "c5m7/part-geomplate-curve2d-on-surface",
-                "c5m7/part-geomplate-projected-curve2d",
-                "c5m7/part-geomplate-point2d-on-surface",
-                "c5m7/part-geomplate-mixed-surface-constraints",
-                "c5m7/part-geomplate-point-custom-criteria",
-                "c8m4/part-geomplate-curve-custom-criteria",
-                "c5m7/part-geomplate-curve-criteria-diagnostic",
-                "c5m7/part-geomplate-wrapper-boundary",
-                "c5m13/part-geomplate-projected-curve2d-initial-surface",
-                "c6m6/part-geomplate-g1-curve-on-surface-contract",
-                "c6m6/part-geomplate-projected-curve2d-no-initial-surface",
+                "part-geomplate/part-geomplate-curve-point-default",
+                "part-geomplate/part-geomplate-invalid-inputs",
+                "part-geomplate/part-geomplate-advanced-constraints",
+                "part-geomplate/part-geomplate-advanced-deferred",
+                "part-geomplate/part-geomplate-initial-surface-g0",
+                "part-geomplate/part-geomplate-g1-curve-on-surface",
+                "part-geomplate/part-geomplate-curve2d-on-surface",
+                "part-geomplate/part-geomplate-projected-curve2d",
+                "part-geomplate/part-geomplate-point2d-on-surface",
+                "part-geomplate/part-geomplate-mixed-surface-constraints",
+                "part-geomplate/part-geomplate-point-custom-criteria",
+                "part-geomplate/part-geomplate-curve-custom-criteria",
+                "part-geomplate/part-geomplate-curve-criteria-diagnostic",
+                "part-geomplate/part-geomplate-wrapper-boundary",
+                "part-geomplate/part-geomplate-projected-curve2d-initial-surface",
+                "part-geomplate/part-geomplate-g1-curve-on-surface-contract",
+                "part-geomplate/part-geomplate-projected-curve2d-no-initial-surface",
             ],
         )
         for diagnostic in (
@@ -4458,7 +4458,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             geomplate["narrowed_gaps"]["projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker"][
                 "expected_backed_subsets"
             ],
-            ["c5m13/part-geomplate-projected-curve2d-initial-surface"],
+            ["part-geomplate/part-geomplate-projected-curve2d-initial-surface"],
         )
         self.assertEqual(
             geomplate["narrowed_gaps"]["projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker"][
@@ -4662,7 +4662,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("full_surface_family", serialized_capabilities)
 
     def test_c_api_recompute_reports_show_element_lifecycle_updates(self) -> None:
-        ffi_result = self.run_recompute_ffi("app-link-show-element-synthetic", "p8")
+        ffi_result = self.run_recompute_ffi("app-link-show-element-synthetic", "app-links")
         updates = ffi_result["documentObjectUpdates"]
 
         self.assertEqual(ffi_result["diagnostics"], [])
@@ -4671,7 +4671,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates[0]["properties"]["LinkedObject"]["value"], "Box")
 
     def test_c3m7_worker_and_wasm_adapters_apply_streaming_mesh_limits(self) -> None:
-        payload = (ROOT / "fixtures" / "c3m7" / "rect-pad-worker-mesh-limit.json").read_bytes()
+        payload = (ROOT / "fixtures" / "runtime-limits" / "rect-pad-worker-mesh-limit.json").read_bytes()
 
         for adapter, runner in [
             ("worker", self.run_worker_recompute_ffi_payload),
@@ -4696,7 +4696,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_c3m7_c_api_exports_binary_mesh_payload(self) -> None:
         document = json.loads(
-            (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_text(
+            (ROOT / "fixtures" / "topology-state" / "topo-state-body-tip-stable-recovery.json").read_text(
                 encoding="utf-8"
             )
         )
@@ -4719,7 +4719,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_c4s11_binary_mesh_payload_limit_reports_metadata_diagnostic(self) -> None:
         document = json.loads(
-            (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_text(
+            (ROOT / "fixtures" / "topology-state" / "topo-state-body-tip-stable-recovery.json").read_text(
                 encoding="utf-8"
             )
         )
@@ -4748,7 +4748,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["details"]["protocol"], "cad-core-binary-mesh-v1")
 
     def test_c_api_export_reports_business_diagnostics_without_server_paths(self) -> None:
-        document = json.loads((ROOT / "fixtures" / "p8" / "part-box.json").read_text(encoding="utf-8"))
+        document = json.loads((ROOT / "fixtures" / "part-primitives" / "part-box.json").read_text(encoding="utf-8"))
 
         status, metadata, data, error = self.call_export_ffi(
             {"document": document, "object": "Missing", "format": "step"}
@@ -4775,7 +4775,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_c_api_export_reports_no_computed_shape_for_datum_plane_provider(self) -> None:
         document = json.loads(
-            (ROOT / "fixtures" / "c51m5" / "partdesign-datum-user-offset-plane-sketch.json").read_text(
+            (ROOT / "fixtures" / "partdesign-datum" / "partdesign-datum-user-offset-plane-sketch.json").read_text(
                 encoding="utf-8"
             )
         )

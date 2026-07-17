@@ -1,0 +1,125 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-sweep-auxiliary-spine-contract",
+    "expectedPayloadHash": "sha256:5436b883aeab48d7ee3a6b0e452f57a6bf4686839bf9eb57e23bc8fc1fe82ef4",
+    "inputHash": "sha256:62158c8a1c8cdafea724d1c2b3fd2c320abbf38be729662cc2d17bf48d2abb58",
+    "phase": "part-sweep",
+    "topoNamingStateHash": "sha256:9eaa4deec56d6d44a347546b50b2c8bce4f68a5dd4c45ad558617de4fac977da"
+  },
+  "inputReferences": [],
+  "objects": {
+    "AuxiliarySpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "PipeSpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SketchPipeProfile": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "Sweep": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Sweep"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "AuxiliarySpine": {
+        "covers": [
+          "AuxiliarySpine"
+        ],
+        "ledgerObject": "AuxiliarySpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "PipeSpine": {
+        "covers": [
+          "PipeSpine"
+        ],
+        "ledgerObject": "PipeSpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeProfile": {
+        "covers": [
+          "SketchPipeProfile"
+        ],
+        "ledgerObject": "SketchPipeProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Sweep": {
+        "covers": [
+          "Sweep"
+        ],
+        "ledgerObject": "Sweep",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:9eaa4deec56d6d44a347546b50b2c8bce4f68a5dd4c45ad558617de4fac977da",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

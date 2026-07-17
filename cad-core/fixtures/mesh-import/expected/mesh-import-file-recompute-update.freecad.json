@@ -1,0 +1,54 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh_summary": {
+        "triangle_count": 4,
+        "vertex_count": 4
+      },
+      "object": "UpdatedImport",
+      "topology_counts": {
+        "edges": 6,
+        "faces": 4,
+        "vertices": 4
+      },
+      "volume": 0.1666666716337204
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:20f5f40c774bd716aa9a7dc55de124a39eb51bde7e0bb602099d6fa0204e3002",
+    "objects": {
+      "UpdatedImport": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:0e4d9e0d3af35860c338a715c2eaa875d233c84328ebcb26b88a355e519eb640",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

@@ -4,9 +4,9 @@ import json
 from pathlib import Path
 
 try:
-    from .fixture_runner import ROOT
+    from .fixture_runner import ROOT, semantic_fixture_path
 except ImportError:  # pragma: no cover - supports `unittest discover tests`.
-    from fixture_runner import ROOT
+    from fixture_runner import ROOT, semantic_fixture_path
 
 
 def discover_expected_cases(root: Path = ROOT) -> list[tuple[str, str, Path]]:
@@ -70,8 +70,11 @@ class ExpectedFixtureAssertions:
             return
         self.assertEqual(actual, expected, path)
 
-    def expected_freecad(self, group: str, fixture: str) -> dict:
-        return json.loads((ROOT / "fixtures" / group / "expected" / f"{fixture}.freecad.json").read_text())
+    def expected_freecad(self, group: str | None, fixture: str) -> dict:
+        fixture_path = semantic_fixture_path(fixture, group)
+        return json.loads(
+            (fixture_path.parent / "expected" / f"{fixture}.freecad.json").read_text()
+        )
 
     def expected_result_objects(self, expected: dict) -> dict[str, dict]:
         if isinstance(expected.get("results"), list):
@@ -293,7 +296,9 @@ class ExpectedFixtureAssertions:
                 )
             )
 
-    def assert_result_matches_expected(self, result: dict, group: str, fixture: str) -> None:
+    def assert_result_matches_expected(
+        self, result: dict, group: str | None, fixture: str
+    ) -> None:
         expected = self.expected_freecad(group, fixture)
         if "known_gap" in expected:
             self.skipTest(f"{group}/{fixture}: {expected['known_gap']}")
@@ -304,5 +309,7 @@ class ExpectedFixtureAssertions:
         for object_name, named_shape_expected in expected.get("named_shapes", {}).items():
             self.assert_named_shape_matches_expected(result, object_name, named_shape_expected)
 
-    def assert_object_matches_expected(self, result: dict, group: str, fixture: str) -> None:
+    def assert_object_matches_expected(
+        self, result: dict, group: str | None, fixture: str
+    ) -> None:
         self.assert_result_matches_expected(result, group, fixture)

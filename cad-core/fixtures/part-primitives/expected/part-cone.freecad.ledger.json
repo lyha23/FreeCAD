@@ -1,0 +1,74 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-cone",
+    "expectedPayloadHash": "sha256:59f5ab72d0e8a05d8fdb0292d88d12d4413f7587d454ecbb2c8d15db839ac392",
+    "inputHash": "sha256:068cd6993faffc93f8e070053aa28c16c0503daade26e86bc670e1a6a64e33b4",
+    "phase": "part-primitives",
+    "topoNamingStateHash": "sha256:766ba8fde3b574e83f30d00d9fa7edcd9d99d9fe1a5c20e0f213b746cef93124"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Cone": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Cone"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Cone": {
+        "covers": [
+          "Cone"
+        ],
+        "ledgerObject": "Cone",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:766ba8fde3b574e83f30d00d9fa7edcd9d99d9fe1a5c20e0f213b746cef93124",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

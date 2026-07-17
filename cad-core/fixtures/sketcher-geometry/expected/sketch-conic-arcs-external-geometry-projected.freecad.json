@@ -1,0 +1,103 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "SourceSketch",
+      "object_fields": {
+        "external_curve_count": 0,
+        "external_geometry_count": 0,
+        "external_point_count": 0,
+        "raw_edge_count": 2,
+        "shape": "occt_sketch_shape",
+        "status": "ok"
+      },
+      "sketch_external": {
+        "construction_count": 0,
+        "flag_counts": {
+          "Defining": 0,
+          "Detached": 0,
+          "Frozen": 0,
+          "Missing": 0,
+          "Sync": 0
+        },
+        "flags": []
+      },
+      "sketch_internal": {
+        "profile_ready": false,
+        "raw_edge_count": 2,
+        "shape": "empty"
+      }
+    },
+    {
+      "object": "Sketch",
+      "object_fields": {
+        "external_curve_count": 2,
+        "external_geometry_count": 2,
+        "external_point_count": 0,
+        "raw_edge_count": 4,
+        "shape": "occt_sketch_shape",
+        "status": "ok"
+      },
+      "sketch_external": {
+        "construction_count": 2,
+        "flag_counts": {
+          "Defining": 0,
+          "Detached": 0,
+          "Frozen": 0,
+          "Missing": 0,
+          "Sync": 0
+        },
+        "flags": [
+          [],
+          []
+        ]
+      },
+      "sketch_internal": {
+        "internal_counts": {
+          "edges": 4,
+          "faces": 1,
+          "vertices": 4
+        },
+        "profile_ready": true,
+        "raw_edge_count": 4,
+        "shape": "occt_internal_shape"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:23ee662598d7105154276b5cda072425313a76281c12c7304a49677d63df22ee",
+    "objects": {
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:eb7a6f4d3b16d1a19ffa55efcb7ff93bde11bf41f38ef2b2c53d2c65342c5f0e",
+        "subshapes": {}
+      },
+      "SourceSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:68594347ab6471a398e6b3348e751880d8c241f516b0621a71c594aa0cf0863e",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

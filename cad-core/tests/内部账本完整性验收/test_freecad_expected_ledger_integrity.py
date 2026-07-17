@@ -30,7 +30,7 @@ COLLECTOR_SPEC.loader.exec_module(collector)
 REAL_EXPECTED_PATH = (
     CAD_CORE_ROOT
     / "fixtures"
-    / "c4m6"
+    / "topology-state"
     / "expected"
     / "topo-state-body-tip-stable-recovery.freecad.json"
 )
@@ -41,7 +41,7 @@ REAL_FIXTURE_PATH = REAL_EXPECTED_PATH.parent.parent / "topo-state-body-tip-stab
 LINK_EXPECTED_PATH = (
     CAD_CORE_ROOT
     / "fixtures"
-    / "c4m6"
+    / "topology-state"
     / "expected"
     / "topo-state-link-compound-child-maps.freecad.json"
 )
@@ -52,7 +52,7 @@ LINK_FIXTURE_PATH = LINK_EXPECTED_PATH.parent.parent / "topo-state-link-compound
 RECOVERABLE_EXPECTED_PATH = (
     CAD_CORE_ROOT
     / "fixtures"
-    / "p5"
+    / "sketcher-external-geometry"
     / "expected"
     / "sketch-external-internal-edge-stable-recover.freecad.json"
 )
@@ -62,7 +62,7 @@ RECOVERABLE_LEDGER_PATH = RECOVERABLE_EXPECTED_PATH.with_name(
 SHADOW_EXPECTED_PATH = (
     CAD_CORE_ROOT
     / "fixtures"
-    / "c4m6"
+    / "topology-state"
     / "expected"
     / "topo-state-reference-shadow-brep.freecad.json"
 )

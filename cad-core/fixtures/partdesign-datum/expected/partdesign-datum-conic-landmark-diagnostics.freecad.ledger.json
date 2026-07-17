@@ -1,0 +1,276 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "partdesign-datum-conic-landmark-diagnostics",
+    "expectedPayloadHash": "sha256:4cba9c3f9f6bb327c63e769e62930eef29153b77c82652e4160ebea7ca7a07af",
+    "inputHash": "sha256:a31d3f1283a3fdba96900558e183d7393b6e9163c87f0bbf0470cd27af40a711",
+    "phase": "partdesign-datum",
+    "topoNamingStateHash": "sha256:1d7456732744dcd24f5dd5056316a576b75c3370de0093490cde0b60b308a15a"
+  },
+  "inputReferences": [],
+  "objects": {
+    "DatumLineDirectrixMissingSupport": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Line"
+    },
+    "DatumLineDirectrixNonConic": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Line"
+    },
+    "DatumLineDirectrixWrongShape": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Line"
+    },
+    "DatumLineEllipseAsymptote1": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Line"
+    },
+    "DatumLineParabolaDirectrix2": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Line"
+    },
+    "DatumPointParabolaFocus2": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Point"
+    },
+    "EllipseEdge": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Ellipse"
+    },
+    "ParabolaSketch": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "StraightPath": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "WrongPoint": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "DatumLineDirectrixMissingSupport": {
+        "covers": [
+          "DatumLineDirectrixMissingSupport"
+        ],
+        "ledgerObject": "DatumLineDirectrixMissingSupport",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumLineDirectrixNonConic": {
+        "covers": [
+          "DatumLineDirectrixNonConic"
+        ],
+        "ledgerObject": "DatumLineDirectrixNonConic",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumLineDirectrixWrongShape": {
+        "covers": [
+          "DatumLineDirectrixWrongShape"
+        ],
+        "ledgerObject": "DatumLineDirectrixWrongShape",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumLineEllipseAsymptote1": {
+        "covers": [
+          "DatumLineEllipseAsymptote1"
+        ],
+        "ledgerObject": "DatumLineEllipseAsymptote1",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumLineParabolaDirectrix2": {
+        "covers": [
+          "DatumLineParabolaDirectrix2"
+        ],
+        "ledgerObject": "DatumLineParabolaDirectrix2",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumPointParabolaFocus2": {
+        "covers": [
+          "DatumPointParabolaFocus2"
+        ],
+        "ledgerObject": "DatumPointParabolaFocus2",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "EllipseEdge": {
+        "covers": [
+          "EllipseEdge"
+        ],
+        "ledgerObject": "EllipseEdge",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ParabolaSketch": {
+        "covers": [
+          "ParabolaSketch"
+        ],
+        "ledgerObject": "ParabolaSketch",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "StraightPath": {
+        "covers": [
+          "StraightPath"
+        ],
+        "ledgerObject": "StraightPath",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "WrongPoint": {
+        "covers": [
+          "WrongPoint"
+        ],
+        "ledgerObject": "WrongPoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:1d7456732744dcd24f5dd5056316a576b75c3370de0093490cde0b60b308a15a",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

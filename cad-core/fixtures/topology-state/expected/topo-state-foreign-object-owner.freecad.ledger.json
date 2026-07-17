@@ -1,0 +1,33 @@
+{
+  "diagnostics": [
+    {
+      "code": "topo_state_object_owner_incompatible",
+      "message": "topoNamingState contains an object that is not present in the current DocumentObject graph; request-level recompute is refused",
+      "object": "ForeignBox",
+      "offendingObject": "ForeignBox",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
+  "fixture": {
+    "case": "topo-state-foreign-object-owner",
+    "expectedPayloadHash": "sha256:128f0e30df1ef0cea2eaf45f9bba8415fc70c6b1f3650210b8569dd58f8f39d3",
+    "inputHash": "sha256:8d8048c6d1ea6dc956309fcbfec077b9a89ad5b62e9b39746aa6c46efc67874a",
+    "phase": "topology-state"
+  },
+  "inputReferences": [],
+  "outcome": "rejected",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "rejection": {
+    "diagnosticCodes": [
+      "topo_state_object_owner_incompatible"
+    ],
+    "reason": "FreeCADCmd rejected the request before publishing topoNamingState"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

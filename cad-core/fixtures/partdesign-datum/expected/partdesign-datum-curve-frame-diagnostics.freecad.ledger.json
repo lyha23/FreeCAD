@@ -1,0 +1,247 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "partdesign-datum-curve-frame-diagnostics",
+    "expectedPayloadHash": "sha256:47dab7d66ae000ce06c628db0d06d87298da81e672eb455b9273f63d1051b77d",
+    "inputHash": "sha256:36bf6480e99f509544a937514766dfe71e9f3832f0317547909b9c89390c2722",
+    "phase": "partdesign-datum",
+    "topoNamingStateHash": "sha256:cc249aeccdd6b74bc017c330b3e7bc482423927bd1b12eece5ff8b461923e9cb"
+  },
+  "inputReferences": [],
+  "objects": {
+    "DatumCSInfiniteCurvature": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSMissingSupport": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSUndefinedNormal": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSWrongProjectionSupport": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSWrongShape": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "DatumCSZeroDerivative": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::CoordinateSystem"
+    },
+    "StraightPath": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "WrongPoint": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    },
+    "ZeroDerivativeSketch": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "DatumCSInfiniteCurvature": {
+        "covers": [
+          "DatumCSInfiniteCurvature"
+        ],
+        "ledgerObject": "DatumCSInfiniteCurvature",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSMissingSupport": {
+        "covers": [
+          "DatumCSMissingSupport"
+        ],
+        "ledgerObject": "DatumCSMissingSupport",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSUndefinedNormal": {
+        "covers": [
+          "DatumCSUndefinedNormal"
+        ],
+        "ledgerObject": "DatumCSUndefinedNormal",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSWrongProjectionSupport": {
+        "covers": [
+          "DatumCSWrongProjectionSupport"
+        ],
+        "ledgerObject": "DatumCSWrongProjectionSupport",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSWrongShape": {
+        "covers": [
+          "DatumCSWrongShape"
+        ],
+        "ledgerObject": "DatumCSWrongShape",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumCSZeroDerivative": {
+        "covers": [
+          "DatumCSZeroDerivative"
+        ],
+        "ledgerObject": "DatumCSZeroDerivative",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "StraightPath": {
+        "covers": [
+          "StraightPath"
+        ],
+        "ledgerObject": "StraightPath",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "WrongPoint": {
+        "covers": [
+          "WrongPoint"
+        ],
+        "ledgerObject": "WrongPoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ZeroDerivativeSketch": {
+        "covers": [
+          "ZeroDerivativeSketch"
+        ],
+        "ledgerObject": "ZeroDerivativeSketch",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:cc249aeccdd6b74bc017c330b3e7bc482423927bd1b12eece5ff8b461923e9cb",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

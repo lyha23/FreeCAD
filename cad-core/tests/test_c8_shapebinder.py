@@ -27,7 +27,7 @@ class CadCoreC8ShapeBinderTest(CadCoreFixtureTestCase):
         )
 
     def test_binder_element_map_namedshape_and_body_replay_stay_request_local(self) -> None:
-        result = self.run_recompute("shape-binder-subshape-binder-element-map-namedshape-body-replay", "c8m1")
+        result = self.run_recompute("shape-binder-subshape-binder-element-map-namedshape-body-replay", "partdesign-binder")
         self.assert_no_error_diagnostics(result)
         self.assertNotIn("BodyBaseFeature", result["objects"])
         self.assertEqual(result["documentObjectUpdates"], [])
@@ -41,7 +41,7 @@ class CadCoreC8ShapeBinderTest(CadCoreFixtureTestCase):
             self.assertTrue(any(source.startswith("Box001.") for source in element_map))
 
     def test_bindmode_and_copy_on_change_lifecycle_boundaries_are_explicit(self) -> None:
-        bindmode = self.run_recompute("subshape-binder-bindmode-synchronized-frozen-detached", "c8m1")
+        bindmode = self.run_recompute("subshape-binder-bindmode-synchronized-frozen-detached", "partdesign-binder")
         self.assert_no_error_diagnostics(bindmode)
         self.assertEqual(bindmode["objects"]["BindModeSynchronized"]["bind_mode"], "Synchronized")
         self.assertEqual(
@@ -61,7 +61,7 @@ class CadCoreC8ShapeBinderTest(CadCoreFixtureTestCase):
             ],
         )
 
-        copy = self.run_recompute("subshape-binder-copy-on-change-disabled-enabled-mutated-partialload", "c8m1")
+        copy = self.run_recompute("subshape-binder-copy-on-change-disabled-enabled-mutated-partialload", "partdesign-binder")
         self.assertEqual(copy["diagnostics"], [])
         self.assertEqual(
             copy["objects"]["CopyOnChangeEnabled"]["copy_on_change_boundary"],
@@ -81,7 +81,7 @@ class CadCoreC8ShapeBinderTest(CadCoreFixtureTestCase):
         )
 
     def test_setlinks_normalization_keeps_cycle_diagnostic_without_unsupported_type(self) -> None:
-        result = self.run_recompute("subshape-binder-setlinks-normalization-diagnostics", "c8m1")
+        result = self.run_recompute("subshape-binder-setlinks-normalization-diagnostics", "partdesign-binder")
         codes = [item["code"] for item in result["diagnostics"]]
         self.assertEqual(codes, ["cycle_rejected_by_property_link"])
         self.assertNotIn("unsupported_type", codes)

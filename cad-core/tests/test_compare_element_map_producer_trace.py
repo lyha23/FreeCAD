@@ -1212,13 +1212,16 @@ class CompareProducerTraceTests(unittest.TestCase):
         args = argparse.Namespace(
             expected=None,
             actual=None,
-            phase="c4m6",
+            phase="topology-state",
             case="demo",
             actual_kind="cad-core",
         )
         expected, actual = paths_from_args(args)
         self.assertEqual("demo.freecad.producer-trace.json", expected.name)
-        self.assertEqual(ROOT / "fixtures/c4m6/cad-core-res/demo.cad-core.producer-trace.json", actual)
+        self.assertEqual(
+            ROOT / "fixtures/topology-state/cad-core-res/demo.cad-core.producer-trace.json",
+            actual,
+        )
 
     def test_cli_exit_codes_binding_and_report_contract(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -12,8 +12,6 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PHASE_ROOT = ROOT / "fixtures" / "c3m4"
-EXPECTED_ROOT = PHASE_ROOT / "expected"
 BINARY = ROOT / "build" / "cad-core"
 
 NATIVE_CASES = (
@@ -54,19 +52,6 @@ class C3M4NativePublicParityTest(unittest.TestCase):
         if not BINARY.is_file():
             raise AssertionError(f"missing CAD Core binary; build it first: {BINARY}")
 
-        discovered = tuple(
-            sorted(
-                path.name[: -len(".freecad.json")]
-                for path in EXPECTED_ROOT.glob("*.freecad.json")
-            )
-        )
-        if discovered != NATIVE_CASES:
-            raise AssertionError(
-                "c3m4 native fixture inventory changed:\n"
-                f"expected={NATIVE_CASES!r}\n"
-                f"actual={discovered!r}"
-            )
-
         cls.expected_by_case = {}
         cls.actual_by_case = {}
         env = os.environ.copy()
@@ -74,9 +59,12 @@ class C3M4NativePublicParityTest(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="c3m4-native-public-parity-") as directory:
             output_root = Path(directory)
             for case in NATIVE_CASES:
-                input_path = PHASE_ROOT / f"{case}.json"
-                expected_path = EXPECTED_ROOT / f"{case}.freecad.json"
-                ledger_path = EXPECTED_ROOT / f"{case}.freecad.ledger.json"
+                matches = sorted((ROOT / "fixtures").glob(f"*/{case}.json"))
+                if len(matches) != 1:
+                    raise AssertionError(f"{case}: expected one semantic phase, got {matches}")
+                input_path = matches[0]
+                expected_path = input_path.parent / "expected" / f"{case}.freecad.json"
+                ledger_path = input_path.parent / "expected" / f"{case}.freecad.ledger.json"
                 output_path = output_root / f"{case}.cad-core.json"
                 for path in (input_path, expected_path, ledger_path):
                     if not path.is_file():

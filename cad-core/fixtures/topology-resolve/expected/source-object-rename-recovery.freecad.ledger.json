@@ -1,0 +1,98 @@
+{
+  "diagnostics": [
+    {
+      "actualDocumentHash": "sha256:2bc59b8fc0a14fa209769a6b03bcf51d32034329862b3cb17ab6afa99c375cf2",
+      "code": "topo_state_document_hash_mismatch",
+      "expectedDocumentHash": "sha256:fa87e9bb6d95d6babf26595a00eec2e407f7808a1ce63c7a61646c3c797d57ac",
+      "message": "topoNamingState documentHash does not match the current DocumentObject graph; request-level recompute is refused",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
+  "fixture": {
+    "case": "source-object-rename-recovery",
+    "expectedPayloadHash": "sha256:3a7f49e262961b337421d1c0235881a42418ecb89452cf67a9d40e6fbdb663f7",
+    "inputHash": "sha256:514038ae94a9a3a8ffdce5695a96b86c910c8b11929dc9fd18c08b9278432f2c",
+    "phase": "topology-resolve"
+  },
+  "inputReferences": [
+    {
+      "displaySubname": "",
+      "element": "g1;SKT;FAC",
+      "hasReferenceShadow": false,
+      "id": "ref:1",
+      "owner": "Pad",
+      "path": [
+        "Pad",
+        "SketchPad"
+      ],
+      "propertyPath": "Profile.SubSet.0",
+      "required": true,
+      "source": "topoNamingState",
+      "stableSubname": "g1;SKT;FAC",
+      "target": "SketchPad"
+    },
+    {
+      "displaySubname": "",
+      "element": "g1;SKT;FAC",
+      "hasReferenceShadow": false,
+      "id": "ref:2",
+      "owner": "Pocket",
+      "path": [
+        "Pocket",
+        "SketchPocket"
+      ],
+      "propertyPath": "Profile.SubSet.0",
+      "required": true,
+      "source": "topoNamingState",
+      "stableSubname": "g1;SKT;FAC",
+      "target": "SketchPocket"
+    },
+    {
+      "displaySubname": "",
+      "element": "g1;SKT;FAC",
+      "hasReferenceShadow": false,
+      "id": "ref:3",
+      "owner": "ProbePad",
+      "path": [
+        "ProbePad",
+        "ProbeSketch"
+      ],
+      "propertyPath": "Profile.SubSet.0",
+      "required": true,
+      "source": "topoNamingState",
+      "stableSubname": "g1;SKT;FAC",
+      "target": "ProbeSketch"
+    },
+    {
+      "displaySubname": "OldBodyFace",
+      "element": "Pad.Face6",
+      "hasReferenceShadow": true,
+      "id": "ref:4",
+      "owner": "ProbePad",
+      "path": [
+        "ProbePad",
+        "Body"
+      ],
+      "propertyPath": "UpToFace",
+      "required": true,
+      "source": "topoNamingState",
+      "stableSubname": "Pad.Face6",
+      "target": "Body"
+    }
+  ],
+  "outcome": "rejected",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "rejection": {
+    "diagnosticCodes": [
+      "topo_state_document_hash_mismatch"
+    ],
+    "reason": "FreeCADCmd rejected the request before publishing topoNamingState"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

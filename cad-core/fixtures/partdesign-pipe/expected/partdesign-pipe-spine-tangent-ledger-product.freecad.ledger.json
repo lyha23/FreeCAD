@@ -1,0 +1,103 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "partdesign-pipe-spine-tangent-ledger-product",
+    "expectedPayloadHash": "sha256:026d2b024e8658284a4d86e8c092b56f1f8f043c82baa0c4f646a3acbcc95fdf",
+    "inputHash": "sha256:474abf9c331141bf79daf74461afc7be4b03665f5e4886a24c2cccf55a7080eb",
+    "phase": "partdesign-pipe",
+    "topoNamingStateHash": "sha256:009af0663e28874d05db1401a2d4704f91067af1b6b920f2eaa2a1c69d890844"
+  },
+  "inputReferences": [],
+  "objects": {
+    "AdditivePipeSpineTangentProduct": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::AdditivePipe"
+    },
+    "SketchPipeProfile": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SketchPipeSpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "AdditivePipeSpineTangentProduct": {
+        "covers": [
+          "AdditivePipeSpineTangentProduct"
+        ],
+        "ledgerObject": "AdditivePipeSpineTangentProduct",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeProfile": {
+        "covers": [
+          "SketchPipeProfile"
+        ],
+        "ledgerObject": "SketchPipeProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeSpine": {
+        "covers": [
+          "SketchPipeSpine"
+        ],
+        "ledgerObject": "SketchPipeSpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:009af0663e28874d05db1401a2d4704f91067af1b6b920f2eaa2a1c69d890844",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

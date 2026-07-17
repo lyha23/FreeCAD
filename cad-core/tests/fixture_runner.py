@@ -20,6 +20,23 @@ FFI_LIB_CANDIDATES = [
 ]
 
 
+def semantic_fixture_path(fixture: str, phase: str | None = None) -> Path:
+    if phase:
+        candidate = ROOT / "fixtures" / phase / f"{fixture}.json"
+        if candidate.is_file():
+            return candidate
+        raise AssertionError(
+            f"fixture {fixture!r} does not exist in semantic phase {phase!r}"
+        )
+    matches = sorted((ROOT / "fixtures").glob(f"*/{fixture}.json"))
+    if len(matches) != 1:
+        raise AssertionError(
+            f"fixture {fixture!r} resolved to {len(matches)} semantic phases: "
+            f"{[path.parent.name for path in matches]}"
+        )
+    return matches[0]
+
+
 class CadCoreBuffer(ctypes.Structure):
     _fields_ = [("ptr", ctypes.c_void_p), ("len", ctypes.c_size_t)]
 
@@ -38,6 +55,19 @@ class CadCoreExportResult(ctypes.Structure):
 
 
 class CadCoreFixtureTestCase(unittest.TestCase):
+    def fixture_path(self, fixture: str, phase: str | None = None) -> Path:
+        """Resolve a case in the semantic phase catalog.
+
+        ``phase`` remains an optional assertion for tests that care about the
+        capability boundary. Tests that do not care about classification omit
+        it; case names are required to be unique across semantic phases.
+        """
+
+        try:
+            return semantic_fixture_path(fixture, phase)
+        except AssertionError as exc:
+            self.fail(str(exc))
+
     def run_recompute_file(self, input_path: Path, extra_args: list[str] | None = None) -> dict:
         with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / f"{input_path.stem}.result.json"
@@ -55,8 +85,8 @@ class CadCoreFixtureTestCase(unittest.TestCase):
             subprocess.run(command, cwd=ROOT, check=True, env=env)
             return json.loads(output.read_text(encoding="utf-8"))
 
-    def run_recompute(self, fixture: str, group: str = "p2") -> dict:
-        return self.run_recompute_file(ROOT / "fixtures" / group / f"{fixture}.json")
+    def run_recompute(self, fixture: str, group: str | None = None) -> dict:
+        return self.run_recompute_file(self.fixture_path(fixture, group))
 
     def ffi_library_path(self) -> Path:
         for path in FFI_LIB_CANDIDATES:
@@ -84,8 +114,8 @@ class CadCoreFixtureTestCase(unittest.TestCase):
         library.cad_core_free_export_result.restype = None
         return library
 
-    def run_recompute_ffi(self, fixture: str, group: str = "p2") -> dict:
-        payload = (ROOT / "fixtures" / group / f"{fixture}.json").read_bytes()
+    def run_recompute_ffi(self, fixture: str, group: str | None = None) -> dict:
+        payload = self.fixture_path(fixture, group).read_bytes()
         return self.run_recompute_ffi_payload(payload)
 
     def run_recompute_ffi_payload(self, payload: bytes | dict) -> dict:
@@ -173,5 +203,5 @@ class CadCoreFixtureTestCase(unittest.TestCase):
         finally:
             library.cad_core_free_export_result(ctypes.byref(result))
 
-    def diagnostic_codes(self, fixture: str, group: str = "p2") -> list[str]:
+    def diagnostic_codes(self, fixture: str, group: str | None = None) -> list[str]:
         return [item["code"] for item in self.run_recompute(fixture, group)["diagnostics"]]

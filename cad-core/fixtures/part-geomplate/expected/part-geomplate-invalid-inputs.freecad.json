@@ -1,0 +1,200 @@
+{
+  "diagnostics": [
+    {
+      "code": "missing_constraints",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_curve_source",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_point_constraint",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_wrapper_lifecycle",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "native_error": "Part.GeomPlate.BuildPlateSurface requires curve or point constraints",
+      "native_error_code": "missing_constraints",
+      "object": "EmptyConstraints",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Curve constraint source PointSource is not a supported Part::Line",
+      "native_error_code": "invalid_curve_source",
+      "object": "InvalidCurveSource",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "PointConstraints[0] must be a three-number vector",
+      "native_error_code": "invalid_point_constraint",
+      "object": "InvalidPoint",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Part.GeomPlate.BuildPlateSurface Degree must be a positive integer",
+      "native_error_code": "invalid_parameter",
+      "object": "InvalidParameter",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; PlateSurfacePyImp.cpp leaves Curves as TODO and GeomPlateSurface Save/Restore throw NotImplementedError",
+      "native_error_code": "unsupported_wrapper_lifecycle",
+      "object": "UnsupportedPlateSurfaceCurves",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:299d4fd1b35176f8a10b880fb50e9c0bf29bec94997fc91c8a8e90cc9b7bbfcf",
+    "objects": {
+      "EmptyConstraints": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:0bcf9674cb0497d1f69595346f496adb729f1b7cfd50d176c1b5525d071b6199",
+        "subshapes": {}
+      },
+      "InvalidCurveSource": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b9a23e8e22cd1078c15b9d88973535bd223b3874b6c1bd04a60ee395ebd5c831",
+        "subshapes": {}
+      },
+      "InvalidParameter": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:cb2f1c164c6764b9d45a305b22614ef1b02ceb2f05eaee0e2978e1fc786e6c8a",
+        "subshapes": {}
+      },
+      "InvalidPoint": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8c8d4482283df630068d41dc9f01e0e52ec8ef920df52a83e687136dff2b40b9",
+        "subshapes": {}
+      },
+      "LineSource": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:27d24834470a97fc83f466f078574fdb5d2e37988355ffeeee293df2ebb7c627",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "PointSource": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3df85e27673f452dacbc00386ada64395d0efb92614cc8801df9382443238a00",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "UnsupportedPlateSurfaceCurves": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:2f9c1221834fb8d5d9f5441f5f658a03cf8a0ba394dfb2a141e78fedea38db51",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

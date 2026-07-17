@@ -10,7 +10,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PHASE_ROOT = ROOT / "fixtures" / "c3m3"
+PHASE_ROOT = ROOT / "fixtures" / "sketcher-solve"
 CASE = "sketch-underconstrained-no-constraints"
 BINARY = ROOT / "build" / "cad-core"
 

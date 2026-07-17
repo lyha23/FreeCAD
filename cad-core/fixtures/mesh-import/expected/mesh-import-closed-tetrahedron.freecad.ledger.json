@@ -1,0 +1,59 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-import-closed-tetrahedron",
+    "expectedPayloadHash": "sha256:7ed262470acfd5d901e5a1a4cbd646b25ecac029ee49d2d80eb0031a123be6af",
+    "inputHash": "sha256:22aef3a9132d2e0a09c272941f0c93c8622b4b0a2977d7d06be1caba20f96268",
+    "phase": "mesh-import",
+    "topoNamingStateHash": "sha256:5fb074c687bc377c2f137eb2e7358af8cf1deb6e23231b7366bf8a4f407fab95"
+  },
+  "inputReferences": [],
+  "objects": {
+    "ClosedTetrahedron": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::Import"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "ClosedTetrahedron": {
+        "covers": [
+          "ClosedTetrahedron"
+        ],
+        "ledgerObject": "ClosedTetrahedron",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:5fb074c687bc377c2f137eb2e7358af8cf1deb6e23231b7366bf8a4f407fab95",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

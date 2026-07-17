@@ -1,0 +1,132 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-loft-linearize-profile-face",
+    "expectedPayloadHash": "sha256:d64474e5b69baa09015f1474760e18795f0273774061e8f41aa035bd6d21479f",
+    "inputHash": "sha256:a24433d1b31f7dff4f727235ec77300e5a06718dced4fdbae6b337500057a76d",
+    "phase": "part-loft",
+    "topoNamingStateHash": "sha256:ff7f1ae90e3239a2d3c4d38d3291898636018ef964f669ae8ab87e2debe56f1b"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Loft": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Loft"
+    },
+    "LowerFace": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    },
+    "UpperProfile": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Loft": {
+        "covers": [
+          "Loft"
+        ],
+        "ledgerObject": "Loft",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "LowerFace": {
+        "covers": [
+          "LowerFace"
+        ],
+        "ledgerObject": "LowerFace",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "UpperProfile": {
+        "covers": [
+          "UpperProfile"
+        ],
+        "ledgerObject": "UpperProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:ff7f1ae90e3239a2d3c4d38d3291898636018ef964f669ae8ab87e2debe56f1b",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

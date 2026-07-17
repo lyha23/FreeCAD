@@ -1,181 +1,109 @@
-# cad-core fixtures 用例顺序说明
+# cad-core fixture 模块能力分类
 
-基线刷新：2026-07-12（按工作树根输入、`fixture_roles.v1.json` 和现有 sidecar 实测）。
+基线刷新：2026-07-17。本文只说明 fixture corpus 的目录语义和权威边界；覆盖状态以 live manifest 与报告为准。
 
-本文说明 `cad-core/fixtures/` 的 phase 阅读顺序、根输入边界，以及 native public/ledger oracle 契约。producer trace 只是按需参考的诊断 sidecar，不构成第三个一致性权威。本文不是发布状态快照：请以当前文件系统和角色 manifest 为准。
+## 目录合同
 
-当前共有 51 个 phase、775 个根输入 fixture。角色 manifest 覆盖全部根输入，其中 480 个 `native`、14 个 `protocol_only`、281 个 `unsupported`。现有 `expected/` 中有 480 个 public expected、480 个 ledger；另有 480 个通过闭包校验的 producer trace 诊断 sidecar。native 一致性合同由前两者构成，不以 trace 是否存在或 equal 为条件。
-
-## 核心结论
-
-`fixtures` 不是单一线性队列：先按顶层 phase 分组，再在该 phase 内处理根输入 JSON。
-
-- 语义阅读 / 排查顺序：先看 `p2`、`p3a`、`p3b`、`p4` 至 `p8`，再看后续 `cXmY` / `c51mY` 里程碑目录。
-- 历史 `mvp` 已删除，`c7m1` 也不在当前目录集合；不要将它们当作空 phase 槽位。
-- 根输入只能是 `fixtures/<phase>/*.json`。`expected/`、`cad-core-res/` 和 `cad-rs-res/` 都不是输入遍历的一部分。
-- `cad-core/tools/freecad_expected_parity/fixture_roles.v1.json` 是输入角色的唯一目录：禁止按是否已有 expected 文件猜测 `native`、`protocol_only` 或 `unsupported`。
-- `topoNamingState` 是请求随附的客户端状态，不是 FreeCAD/CAD Core 的跨请求缓存，也不是几何建模输入。
-
-## native public/ledger oracle 与可选 trace 证据
-
-对角色为 `native` 的用例，`collect_freecad_expected.py` 以原生 FreeCADCmd 采集同一份 fixture 的三个同名 sidecar：
-
-| 文件 | 定位 | CAD Core 是否可直接作为协议 oracle 使用 |
-| --- | --- | --- |
-| `expected/<case>.freecad.json` | 对外 public result / topo-state 合同 | 是 |
-| `expected/<case>.freecad.ledger.json` | provenance、对象/元素解析及 public 闭包证据 | 是；与 public expected 共同构成一致性权威 |
-| `expected/<case>.freecad.producer-trace.json` | FreeCAD ElementMap 生产过程、切片、checkpoint、scope 和 snapshot 闭包证据 | 否；仅在 public/ledger 无法对齐时按需参考 |
-
-trace 不得被写入 `topoNamingState`、普通 CAD Core response 或 fixture 输入。默认一致性评价不读取 trace；只有 public/ledger 差异需要定位时，它才回答“哪个原生生产切片造成了这一元素映射/稳定名”。
-
-收集器默认使用本轮 producer-enabled 原生二进制：
+fixture 输入保持一层结构：
 
 ```text
-/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd
+fixtures/<phase>/<case>.json
 ```
 
-可以用 `--freecadcmd <path>` 显式替换；不要再依赖 `FREECADCMD` 环境变量。public/ledger 收集失败会 hard fail 一致性采集。无法 drain trace、trace schema/sequence/snapshot/scope 闭包不合法，只在显式 trace 诊断采集时 hard fail；不得把这种失败写成 public/ledger 不一致。
+`<phase>` 现在统一表示“FreeCAD 模块 + 公开能力”，例如 `part-extrude`、`topology-resolve`、`spreadsheet-recompute`。不再用 `p5`、`c3m4`、`c51m3` 等实施里程碑作为目录分类。
 
-当前 request-level preflight rejection 在创建 FreeCAD Document 前结束时可能没有可 drain trace，不能伪造空 trace；这不影响其 public rejection 与 ledger 闭包作为一致性权威。显式 trace write-mode 可以 hard fail，但不能因此覆盖 public/ledger verdict。
+- `expected/<case>.freecad.json`：FreeCADCmd 生成的 public expected。
+- `expected/<case>.freecad.ledger.json`：与 public expected 同次生成的 authority ledger。
+- `cad-core-res/<case>.cad-core.json`：CAD Core 当前对照输出，不是 FreeCAD 权威。
+- `_assets/`：多个 fixture 共用的 BREP、STEP、IGES、STL 输入资源。
+- `_artifacts/`：历史构建/采集 receipt，不参与 fixture 输入发现。
+- `producer_trace_representatives/`：诊断 trace 样本，不是 phase。
 
-`--check` 默认比较重新生成的 public expected 和 ledger。只有 public/ledger 无法对齐且需要定位原因，或任务明确要求内部审计时，才校验已有 producer trace 的结构与闭包，并按 event 的 `slice`、checkpoint、`beforeSnapshot` / `afterSnapshot` 与 scope 链路定位；trace semantic differences 不进入 release comparator。
+机器可读分类由以下文件维护：
 
-## 推荐 phase 顺序与角色覆盖
+- `tools/freecad_expected_parity/fixture_capability_phases.v1.json`：允许的模块能力 phase；审计器 fail closed 校验。
+- `tools/freecad_expected_parity/fixture_legacy_phase_map.v1.json`：旧目录到新目录的可追溯迁移表。
+- `tools/freecad_expected_parity/fixture_roles.v1.json`：每个 case 的 `native`、`protocol_only`、`unsupported` 角色。
 
-表中的角色列来自 `fixture_roles.v1.json`；它们的和等于该 phase 的根输入数。`protocol_only` 有协议合同但不应调用 native 收集；`unsupported` 必须先补齐原生能力或得到明确的协议决策，不能用手写 expected 掩盖。
+迁移表保留 783 条旧路径记录，当前 corpus 也保留 783 个输入：564 个 `native`、14 个 `protocol_only`、205 个 `unsupported`。三个输入相同但权威谱系不同的 Loft 镜像使用 `-legacy-c5m3` case 后缀保留，避免合并不同的 public expected/ledger mapped-name 证据。
 
-| 顺序 | phase | 根输入 | native | protocol only | unsupported | 说明 |
-| ---: | --- | ---: | ---: | ---: | ---: | --- |
-| 1 | `p2` | 4 | 3 | 0 | 1 | 早期 PartDesign / Body 基础扩展。 |
-| 2 | `p3a` | 7 | 4 | 0 | 3 | P3 前半段扩展。 |
-| 3 | `p3b` | 29 | 17 | 0 | 12 | P3 后半段扩展。 |
-| 4 | `p4` | 8 | 4 | 0 | 4 | typed property、link/sublist、placement 等基础合同。 |
-| 5 | `p5` | 117 | 58 | 0 | 59 | Sketch / internal shape / solver-facing 状态等大批量 fixture。 |
-| 6 | `p6` | 15 | 7 | 0 | 8 | stable subname、Body history、UpToFace 等拓扑引用 fixture。 |
-| 7 | `p7` | 109 | 56 | 0 | 53 | PartDesign Pad/Pocket/Hole/Pattern/DressUp 等综合 fixture。 |
-| 8 | `p8` | 80 | 68 | 0 | 12 | Part workbench、Link、Assembly 早期能力等 fixture。 |
-| 9 | `c3m1` | 12 | 3 | 0 | 9 | C3-M1 里程碑。 |
-| 10 | `c3m2` | 12 | 1 | 11 | 0 | C3-M2 里程碑。 |
-| 11 | `c3m3` | 22 | 1 | 0 | 21 | C3-M3 里程碑。 |
-| 12 | `c3m4` | 30 | 17 | 0 | 13 | C3-M4 里程碑。 |
-| 13 | `c3m5` | 26 | 15 | 0 | 11 | C3-M5 里程碑。 |
-| 14 | `c3m6` | 73 | 71 | 0 | 2 | C3-M6 里程碑。 |
-| 15 | `c3m7` | 1 | 1 | 0 | 0 | C3-M7 里程碑。 |
-| 16 | `c4m1` | 20 | 19 | 0 | 1 | C4-M1 里程碑。 |
-| 17 | `c4m2` | 14 | 10 | 0 | 4 | C4-M2 里程碑。 |
-| 18 | `c4m3` | 18 | 8 | 0 | 10 | C4-M3 里程碑。 |
-| 19 | `c4m4` | 9 | 2 | 0 | 7 | C4-M4 里程碑。 |
-| 20 | `c4m5` | 3 | 3 | 0 | 0 | C4-M5 里程碑。 |
-| 21 | `c4m6` | 10 | 9 | 1 | 0 | C4-M6 里程碑。 |
-| 22 | `c5m1` | 10 | 6 | 0 | 4 | C5-M1 里程碑。 |
-| 23 | `c5m2` | 4 | 2 | 0 | 2 | C5-M2 里程碑。 |
-| 24 | `c5m3` | 6 | 4 | 0 | 2 | C5-M3 里程碑。 |
-| 25 | `c5m4` | 1 | 0 | 0 | 1 | C5-M4 里程碑。 |
-| 26 | `c5m7` | 9 | 9 | 0 | 0 | C5-M7 里程碑。 |
-| 27 | `c5m8` | 12 | 11 | 1 | 0 | C5-M8 里程碑。 |
-| 28 | `c5m9` | 5 | 4 | 0 | 1 | C5-M9 里程碑。 |
-| 29 | `c5m10` | 6 | 6 | 0 | 0 | C5-M10 里程碑。 |
-| 30 | `c5m12` | 5 | 4 | 0 | 1 | C5-M12 里程碑。 |
-| 31 | `c5m13` | 5 | 5 | 0 | 0 | C5-M13 里程碑。 |
-| 32 | `c51m1` | 12 | 7 | 0 | 5 | C5.1-M1；语义上按 C5.1 处理。 |
-| 33 | `c51m2` | 5 | 0 | 0 | 5 | C5.1-M2。 |
-| 34 | `c51m3` | 3 | 2 | 0 | 1 | C5.1-M3。 |
-| 35 | `c51m4` | 4 | 3 | 0 | 1 | C5.1-M4。 |
-| 36 | `c51m5` | 16 | 15 | 0 | 1 | C5.1-M5。 |
-| 37 | `c6m1` | 6 | 1 | 0 | 5 | C6-M1 里程碑。 |
-| 38 | `c6m3` | 3 | 0 | 0 | 3 | C6-M3 里程碑。 |
-| 39 | `c6m4` | 4 | 4 | 0 | 0 | C6-M4 里程碑。 |
-| 40 | `c6m5` | 7 | 6 | 1 | 0 | C6-M5 里程碑。 |
-| 41 | `c6m6` | 2 | 2 | 0 | 0 | C6-M6 里程碑。 |
-| 42 | `c6m7` | 2 | 0 | 0 | 2 | C6-M7 里程碑。 |
-| 43 | `c8m1` | 12 | 0 | 0 | 12 | C8-M1 里程碑。 |
-| 44 | `c8m2` | 1 | 0 | 0 | 1 | C8-M2 里程碑。 |
-| 45 | `c8m4` | 1 | 1 | 0 | 0 | C8-M4 里程碑。 |
-| 46 | `c9m5` | 1 | 0 | 0 | 1 | C9-M5 里程碑。 |
-| 47 | `c10m1` | 4 | 4 | 0 | 0 | C10-M1 里程碑。 |
-| 48 | `c12m12` | 1 | 1 | 0 | 0 | C12-M12 里程碑。 |
-| 49 | `c12m13` | 6 | 5 | 0 | 1 | C12-M13 里程碑。 |
-| 50 | `c12m14` | 1 | 0 | 0 | 1 | C12-M14 里程碑。 |
-| 51 | `c12m16` | 2 | 1 | 0 | 1 | C12-M16 里程碑。 |
-| **合计** | **51 phases** | **775** | **480** | **14** | **281** | **以 role manifest 为准。** |
+## 当前 39 个模块能力 phase
 
-## 单个 phase 内的文件边界
+| # | phase | 模块 | 能力 | 输入 | native | protocol only | unsupported |
+| ---: | --- | --- | --- | ---: | ---: | ---: | ---: |
+| 1 | `app-links` | App | links | 39 | 35 | 0 | 4 |
+| 2 | `app-properties` | App | properties | 3 | 3 | 0 | 0 |
+| 3 | `assembly-links` | Assembly | links | 3 | 3 | 0 | 0 |
+| 4 | `assembly-solve` | Assembly | solve | 74 | 74 | 0 | 0 |
+| 5 | `material-properties` | Material | properties | 3 | 3 | 0 | 0 |
+| 6 | `mesh-import` | Mesh | import | 3 | 3 | 0 | 0 |
+| 7 | `part-boolean` | Part | boolean | 7 | 7 | 0 | 0 |
+| 8 | `part-extrude` | Part | extrude | 21 | 12 | 0 | 9 |
+| 9 | `part-filling` | Part | filling | 28 | 26 | 2 | 0 |
+| 10 | `part-geomplate` | Part | geomplate | 17 | 17 | 0 | 0 |
+| 11 | `part-import` | Part | import | 5 | 5 | 0 | 0 |
+| 12 | `part-loft` | Part | loft | 12 | 8 | 0 | 4 |
+| 13 | `part-offset` | Part | offset | 9 | 6 | 0 | 3 |
+| 14 | `part-primitives` | Part | primitives | 28 | 27 | 0 | 1 |
+| 15 | `part-project-on-surface` | Part | project-on-surface | 17 | 15 | 0 | 2 |
+| 16 | `part-ruled-surface` | Part | ruled-surface | 5 | 4 | 0 | 1 |
+| 17 | `part-shapefix` | Part | shapefix | 2 | 0 | 0 | 2 |
+| 18 | `part-sweep` | Part | sweep | 23 | 21 | 0 | 2 |
+| 19 | `part-thickness` | Part | thickness | 2 | 2 | 0 | 0 |
+| 20 | `partdesign-binder` | PartDesign | binder | 14 | 6 | 0 | 8 |
+| 21 | `partdesign-body` | PartDesign | body | 24 | 12 | 0 | 12 |
+| 22 | `partdesign-boolean` | PartDesign | boolean | 13 | 5 | 0 | 8 |
+| 23 | `partdesign-datum` | PartDesign | datum | 24 | 18 | 0 | 6 |
+| 24 | `partdesign-dressup` | PartDesign | dressup | 23 | 19 | 0 | 4 |
+| 25 | `partdesign-extrude` | PartDesign | extrude | 51 | 32 | 0 | 19 |
+| 26 | `partdesign-hole` | PartDesign | hole | 52 | 19 | 0 | 33 |
+| 27 | `partdesign-loft` | PartDesign | loft | 9 | 7 | 0 | 2 |
+| 28 | `partdesign-pattern` | PartDesign | pattern | 31 | 25 | 0 | 6 |
+| 29 | `partdesign-pipe` | PartDesign | pipe | 25 | 13 | 0 | 12 |
+| 30 | `partdesign-revolve` | PartDesign | revolve | 27 | 15 | 0 | 12 |
+| 31 | `runtime-limits` | Runtime | limits | 1 | 1 | 0 | 0 |
+| 32 | `sketcher-external-geometry` | Sketcher | external-geometry | 41 | 28 | 5 | 8 |
+| 33 | `sketcher-geometry` | Sketcher | geometry | 18 | 14 | 0 | 4 |
+| 34 | `sketcher-internal-shape` | Sketcher | internal-shape | 27 | 26 | 0 | 1 |
+| 35 | `sketcher-solve` | Sketcher | solve | 44 | 28 | 0 | 16 |
+| 36 | `spreadsheet-recompute` | Spreadsheet | recompute | 3 | 3 | 0 | 0 |
+| 37 | `topology-element-map` | Topology | element-map | 9 | 2 | 0 | 7 |
+| 38 | `topology-resolve` | Topology | resolve | 36 | 11 | 6 | 19 |
+| 39 | `topology-state` | Topology | state | 10 | 9 | 1 | 0 |
+| **合计** | **39 phases** |  |  | **783** | **564** | **14** | **205** |
 
-根输入 fixture 是 `fixtures/<phase>/*.json`。例如 `p2` 当前包含：
+## 权威与覆盖结论不可混写
 
-```text
-body-basefeature-pad.json
-pocket-open-sketch.json
-pocket-without-base.json
-rect-pad-pocket.json
-```
+以下三件事必须分别报告：
 
-`collect_freecad_expected.py --phase <phase>` 根据角色 catalog 枚举根输入，不会递归进入 `expected/`、`cad-core-res/` 或 `cad-rs-res/`。`--skip-unsupported` 只在 phase 模式中跳过 manifest 标为 `unsupported` 的用例；它不会把 `protocol_only` 伪装成 native。
+1. **fixture corpus closure**：输入、角色、native expected/ledger 是否严格闭包。目前为 `passed`。
+2. **模块 API coverage**：公开能力/主要分支是否都有代表性 fixture。目前仍为 `partial`；报告明确保留 thin、uncovered 和 non-native exception。
+3. **CAD Core runtime parity**：CAD Core 是否与 native public expected 等价。目录迁移和权威闭包不证明这一点，目前总报告为 `not_evaluated`。
 
-`tests/test_expected_fixtures.py` 扫描 `fixtures/*/expected/*.freecad.json`。其中 `known_gap` 的 expected 被跳过，只说明该 public oracle 当前不参与该测试，不等于根输入不存在。
+因此，retained-module coverage gate 通过不能写成“全部 FreeCAD API 已覆盖”，native expected 可复现也不能写成“CAD Core runtime 已 parity”。
 
-## 常用检查与收集命令
-
-查看 live phase / 角色统计（不依赖平台特定 `find` 选项）：
-
-```bash
-cd /Users/li/Chili3DProject/FreeCAD
-python3 - <<'PY'
-import json
-from collections import Counter, defaultdict
-from pathlib import Path
-
-root = Path("cad-core/fixtures")
-roles = json.loads(
-    Path("cad-core/tools/freecad_expected_parity/fixture_roles.v1.json").read_text()
-)["roles"]
-by_phase = defaultdict(Counter)
-for item in roles:
-    by_phase[item["phase"]][item["role"]] += 1
-for phase in sorted(p.name for p in root.iterdir() if p.is_dir()):
-    inputs = len(list((root / phase).glob("*.json")))
-    row = by_phase[phase]
-    print(phase, inputs, row["native"], row["protocol_only"], row["unsupported"])
-PY
-```
-
-安全地在 `/tmp` 收集单个 native fixture 的三侧产物：
-
-```bash
-cd /Users/li/Chili3DProject/FreeCAD
-mkdir -p /tmp/freecad-expected
-python3 cad-core/tools/collect_freecad_expected.py \
-  cad-core/fixtures/c4m6/topo-state-body-tip-stable-recovery.json \
-  --out /tmp/freecad-expected/topo-state-body-tip-stable-recovery.freecad.json \
-  --validate-ledger
-```
-
-上例会同时写出：
-
-```text
-/tmp/freecad-expected/topo-state-body-tip-stable-recovery.freecad.json
-/tmp/freecad-expected/topo-state-body-tip-stable-recovery.freecad.ledger.json
-/tmp/freecad-expected/topo-state-body-tip-stable-recovery.freecad.producer-trace.json
-```
-
-检查 phase 的 public / ledger；只有需要定位差异时才另查 trace：
-
-```bash
-cd /Users/li/Chili3DProject/FreeCAD
-python3 cad-core/tools/collect_freecad_expected.py \
-  --phase <phase> \
-  --check \
-  --skip-unsupported \
-  --validate-ledger
-```
-
-当前 fixture tree 有 480 份 trace 诊断 sidecar，但 `--phase ... --check` 的 public/ledger verdict 不依赖它们。显式 trace 诊断遇到缺失或 invalid 时可以 fail closed；不得用空文件绕过，也不得把该失败写成 public/ledger red。
-
-收集产生的 expected、ledger、trace 都是 native 工具的输出；不要手改 fixture 以“补齐”任一 sidecar。先用 `/tmp` 验证，只有明确要刷新 public/ledger oracle 或专项 trace 证据时才写回 `expected/`。
-
-运行通用 public expected fixture 回归：
+## 常用命令
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD/cad-core
-python3 -m unittest tests.test_expected_fixtures
+
+# 审计目录角色、模块 coverage 与公开能力反向清单
+python3 tools/audit_freecad_fixture_authority.py \
+  --report tools/freecad_expected_parity/reports/fixture_authority_inventory.v1.json \
+  --coverage-report tools/freecad_expected_parity/reports/retained_module_fixture_coverage.v1.json \
+  --capability-report tools/freecad_expected_parity/reports/retained_public_capability_coverage.v1.json \
+  --producer-report tools/freecad_expected_parity/reports/all-native-check.v1.json \
+  --non-cad-smoke-root tools/freecad_expected_parity/reports/non_cad_smoke \
+  --require-coverage-passed
+
+# 严格验证全部 native public expected/ledger
+python3 tools/validate_freecad_expected_ledger.py --all --strict \
+  --report tools/freecad_expected_parity/reports/ledger-strict-validation.v1.json
+
+# 单个模块能力 phase 的 native 可复现检查
+FREECADCMD=/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd \
+python3 tools/collect_freecad_expected.py \
+  --phase material-properties --check --skip-unsupported --validate-ledger
 ```
+
+`*.freecad.json` 与 `*.freecad.ledger.json` 都是 collector-owned artifact，不得手改。共享资源路径变化若改变 DocumentObject graph，必须先刷新输入的 `topoNamingState.documentHash`，再由同一次 FreeCADCmd 重新生成 public expected 与 ledger。

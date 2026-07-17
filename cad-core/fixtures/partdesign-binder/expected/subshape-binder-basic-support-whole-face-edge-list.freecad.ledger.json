@@ -1,0 +1,1150 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "subshape-binder-basic-support-whole-face-edge-list",
+    "expectedPayloadHash": "sha256:e49ef9edd6d63eb4b161d59bb57544074bdb79431f6cf10b11a22eefbe41dc7f",
+    "inputHash": "sha256:74109d011b18a846a9fb7bb8b9d5bb8e4e6afa88b1a3bb4dde0d65f0b0b0f7ec",
+    "phase": "partdesign-binder",
+    "topoNamingStateHash": "sha256:8212d5ccb2e46d491897634019780966875f5b7e656ccc02f25d976ff9022107"
+  },
+  "inputReferences": [],
+  "objects": {
+    "SubShapeBinderEdgeList": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "Edge1;:H*,E;WIR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:H*,E;WIR;:H*:*,E",
+              "raw": "Edge1;:H2f0,E;WIR;:H2f0:4,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Edge4"
+            }
+          },
+          "Edge1;:H*,E;WIR;:H*:*,E;FAC;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:H*,E;WIR;:H*:*,E;FAC;:H*:*,F",
+              "raw": "Edge1;:H2f0,E;WIR;:H2f0:4,E;FAC;:H2f0:4,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Face1"
+            }
+          },
+          "Edge2;:H*,E;WIR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:H*,E;WIR;:H*:*,E",
+              "raw": "Edge2;:H2f0,E;WIR;:H2f0:4,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Edge1"
+            }
+          },
+          "Edge3;:H*,E;WIR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:H*,E;WIR;:H*:*,E",
+              "raw": "Edge3;:H2f0,E;WIR;:H2f0:4,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Edge2"
+            }
+          },
+          "Edge4;:H*,E;WIR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:H*,E;WIR;:H*:*,E",
+              "raw": "Edge4;:H2f0,E;WIR;:H2f0:4,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Edge3"
+            }
+          },
+          "Vertex1;:H*,V;WIR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V;WIR;:H*:*,V",
+              "raw": "Vertex1;:H2f0,V;WIR;:H2f0:4,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Vertex2"
+            }
+          },
+          "Vertex2;:H*,V;WIR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V;WIR;:H*:*,V",
+              "raw": "Vertex2;:H2f0,V;WIR;:H2f0:4,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Vertex4"
+            }
+          },
+          "Vertex3;:H*,V;WIR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:H*,V;WIR;:H*:*,V",
+              "raw": "Vertex3;:H2f0,V;WIR;:H2f0:4,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Vertex1"
+            }
+          },
+          "Vertex4;:H*,V;WIR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:H*,V;WIR;:H*:*,V",
+              "raw": "Vertex4;:H2f0,V;WIR;:H2f0:4,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "SubShapeBinderEdgeList",
+              "subname": "Vertex3"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::SubShapeBinder"
+    },
+    "SubShapeBinderFace": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "Edge1;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:H*,E",
+              "raw": "Edge1;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderFace",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "SubShapeBinderFace",
+              "subname": "Edge1"
+            }
+          },
+          "Edge2;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:H*,E",
+              "raw": "Edge2;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderFace",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "SubShapeBinderFace",
+              "subname": "Edge2"
+            }
+          },
+          "Edge3;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:H*,E",
+              "raw": "Edge3;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderFace",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "SubShapeBinderFace",
+              "subname": "Edge3"
+            }
+          },
+          "Edge4;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:H*,E",
+              "raw": "Edge4;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderFace",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "SubShapeBinderFace",
+              "subname": "Edge4"
+            }
+          },
+          "Face1;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face1;:H*,F",
+              "raw": "Face1;:H2f0,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubShapeBinderFace",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "SubShapeBinderFace",
+              "subname": "Face1"
+            }
+          },
+          "Vertex1;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V",
+              "raw": "Vertex1;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderFace",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "SubShapeBinderFace",
+              "subname": "Vertex1"
+            }
+          },
+          "Vertex2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V",
+              "raw": "Vertex2;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderFace",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "SubShapeBinderFace",
+              "subname": "Vertex2"
+            }
+          },
+          "Vertex3;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:H*,V",
+              "raw": "Vertex3;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderFace",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "SubShapeBinderFace",
+              "subname": "Vertex3"
+            }
+          },
+          "Vertex4;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:H*,V",
+              "raw": "Vertex4;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderFace",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "SubShapeBinderFace",
+              "subname": "Vertex4"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::SubShapeBinder"
+    },
+    "SubShapeBinderWhole": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "Edge10;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge10;:H*,E",
+              "raw": "Edge10;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge10"
+            }
+          },
+          "Edge11;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge11;:H*,E",
+              "raw": "Edge11;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge11"
+            }
+          },
+          "Edge12;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge12;:H*,E",
+              "raw": "Edge12;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge12"
+            }
+          },
+          "Edge1;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:H*,E",
+              "raw": "Edge1;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge1"
+            }
+          },
+          "Edge2;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:H*,E",
+              "raw": "Edge2;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge2"
+            }
+          },
+          "Edge3;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:H*,E",
+              "raw": "Edge3;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge3"
+            }
+          },
+          "Edge4;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:H*,E",
+              "raw": "Edge4;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge4"
+            }
+          },
+          "Edge5;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge5;:H*,E",
+              "raw": "Edge5;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge5"
+            }
+          },
+          "Edge6;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge6;:H*,E",
+              "raw": "Edge6;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge6"
+            }
+          },
+          "Edge7;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge7;:H*,E",
+              "raw": "Edge7;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge7"
+            }
+          },
+          "Edge8;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge8;:H*,E",
+              "raw": "Edge8;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge8"
+            }
+          },
+          "Edge9;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge9;:H*,E",
+              "raw": "Edge9;:H2f0,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Edge9"
+            }
+          },
+          "Face1;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face1;:H*,F",
+              "raw": "Face1;:H2f0,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face1"
+            }
+          },
+          "Face2;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face2;:H*,F",
+              "raw": "Face2;:H2f0,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face2"
+            }
+          },
+          "Face3;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face3;:H*,F",
+              "raw": "Face3;:H2f0,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face3"
+            }
+          },
+          "Face4;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face4;:H*,F",
+              "raw": "Face4;:H2f0,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face4"
+            }
+          },
+          "Face5;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face5;:H*,F",
+              "raw": "Face5;:H2f0,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face5"
+            }
+          },
+          "Face6;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face6;:H*,F",
+              "raw": "Face6;:H2f0,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Face6"
+            }
+          },
+          "Vertex1;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V",
+              "raw": "Vertex1;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex1"
+            }
+          },
+          "Vertex2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V",
+              "raw": "Vertex2;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex2"
+            }
+          },
+          "Vertex3;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:H*,V",
+              "raw": "Vertex3;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex3"
+            }
+          },
+          "Vertex4;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:H*,V",
+              "raw": "Vertex4;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex4"
+            }
+          },
+          "Vertex5;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex5;:H*,V",
+              "raw": "Vertex5;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex5"
+            }
+          },
+          "Vertex6;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex6;:H*,V",
+              "raw": "Vertex6;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex6"
+            }
+          },
+          "Vertex7;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex7;:H*,V",
+              "raw": "Vertex7;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex7"
+            }
+          },
+          "Vertex8;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex8;:H*,V",
+              "raw": "Vertex8;:H2f0,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "SubShapeBinderWhole",
+              "subname": "Vertex8"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::SubShapeBinder"
+    },
+    "SupportBox": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "SubShapeBinderEdgeList": {
+        "covers": [
+          "SubShapeBinderEdgeList"
+        ],
+        "ledgerObject": "SubShapeBinderEdgeList",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SubShapeBinderFace": {
+        "covers": [
+          "SubShapeBinderFace"
+        ],
+        "ledgerObject": "SubShapeBinderFace",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SubShapeBinderWhole": {
+        "covers": [
+          "SubShapeBinderWhole"
+        ],
+        "ledgerObject": "SubShapeBinderWhole",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SupportBox": {
+        "covers": [
+          "SupportBox"
+        ],
+        "ledgerObject": "SupportBox",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:8212d5ccb2e46d491897634019780966875f5b7e656ccc02f25d976ff9022107",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

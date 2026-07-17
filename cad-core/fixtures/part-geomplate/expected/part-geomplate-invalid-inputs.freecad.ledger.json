@@ -1,0 +1,224 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [
+    {
+      "code": "missing_constraints",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_curve_source",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_point_constraint",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_wrapper_lifecycle",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "events": [],
+  "fixture": {
+    "case": "part-geomplate-invalid-inputs",
+    "expectedPayloadHash": "sha256:26909f124a780ba344b0e1ab7feda3da8e5620dee1d032f46d87057babb8cb54",
+    "inputHash": "sha256:d9b0ed1814d480734d5603509890a2ddf193b0c01e4f0a1017bec22b49dab246",
+    "phase": "part-geomplate",
+    "topoNamingStateHash": "sha256:d9516810a958ee1dd11cde320f470397371dc4d2e268c6ade50892bc0f57775e"
+  },
+  "inputReferences": [],
+  "objects": {
+    "EmptyConstraints": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeomPlateSurface"
+    },
+    "InvalidCurveSource": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeomPlateSurface"
+    },
+    "InvalidParameter": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeomPlateSurface"
+    },
+    "InvalidPoint": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeomPlateSurface"
+    },
+    "LineSource": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "PointSource": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    },
+    "UnsupportedPlateSurfaceCurves": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeomPlateSurface"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "EmptyConstraints": {
+        "covers": [
+          "EmptyConstraints"
+        ],
+        "ledgerObject": "EmptyConstraints",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "InvalidCurveSource": {
+        "covers": [
+          "InvalidCurveSource"
+        ],
+        "ledgerObject": "InvalidCurveSource",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "InvalidParameter": {
+        "covers": [
+          "InvalidParameter"
+        ],
+        "ledgerObject": "InvalidParameter",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "InvalidPoint": {
+        "covers": [
+          "InvalidPoint"
+        ],
+        "ledgerObject": "InvalidPoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "LineSource": {
+        "covers": [
+          "LineSource"
+        ],
+        "ledgerObject": "LineSource",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "PointSource": {
+        "covers": [
+          "PointSource"
+        ],
+        "ledgerObject": "PointSource",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "UnsupportedPlateSurfaceCurves": {
+        "covers": [
+          "UnsupportedPlateSurfaceCurves"
+        ],
+        "ledgerObject": "UnsupportedPlateSurfaceCurves",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:d9516810a958ee1dd11cde320f470397371dc4d2e268c6ade50892bc0f57775e",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

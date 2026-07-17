@@ -1,0 +1,147 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "partdesign-pipe-auxiliary-binormal-modes",
+    "expectedPayloadHash": "sha256:726d82275409cb0bfafadec73dd7347bfd63affcc730cc4955ec0dc3507139b6",
+    "inputHash": "sha256:5e9bd07c4897030eac8669031a71f88f0a1d8f0a920a62344c133f36e3439dce",
+    "phase": "partdesign-pipe",
+    "topoNamingStateHash": "sha256:fdb675ac8fcf32c2d96018c49a6de130c1bcd9b4ecf3e9b0b1ef03c1eeea6d77"
+  },
+  "inputReferences": [],
+  "objects": {
+    "AdditivePipeAuxiliary": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::AdditivePipe"
+    },
+    "AdditivePipeBinormal": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::AdditivePipe"
+    },
+    "AuxiliarySpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "PipeSpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SketchPipeProfile": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "AdditivePipeAuxiliary": {
+        "covers": [
+          "AdditivePipeAuxiliary"
+        ],
+        "ledgerObject": "AdditivePipeAuxiliary",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "AdditivePipeBinormal": {
+        "covers": [
+          "AdditivePipeBinormal"
+        ],
+        "ledgerObject": "AdditivePipeBinormal",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "AuxiliarySpine": {
+        "covers": [
+          "AuxiliarySpine"
+        ],
+        "ledgerObject": "AuxiliarySpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "PipeSpine": {
+        "covers": [
+          "PipeSpine"
+        ],
+        "ledgerObject": "PipeSpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeProfile": {
+        "covers": [
+          "SketchPipeProfile"
+        ],
+        "ledgerObject": "SketchPipeProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:fdb675ac8fcf32c2d96018c49a6de130c1bcd9b4ecf3e9b0b1ef03c1eeea6d77",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

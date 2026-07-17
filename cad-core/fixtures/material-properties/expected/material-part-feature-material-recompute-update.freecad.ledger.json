@@ -1,0 +1,92 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "material-part-feature-material-recompute-update",
+    "expectedPayloadHash": "sha256:2dc9618535275214ec0f80ff8a33a562fafa66b4ce6dac11573ce7b14316467b",
+    "inputHash": "sha256:a848792042c5d81ee5ab82e2eb5d1d0684a62b2c8b3c9b20b3eccd1abbf36a59",
+    "phase": "material-properties",
+    "topoNamingStateHash": "sha256:44d921b2e39d7da76b675e65183b24c01edb6bd0a47ae640c49507dcefc8c148"
+  },
+  "inputReferences": [],
+  "objects": {
+    "MaterialBox": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "MaterialBox": {
+        "covers": [
+          "MaterialBox"
+        ],
+        "ledgerObject": "MaterialBox",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:44d921b2e39d7da76b675e65183b24c01edb6bd0a47ae640c49507dcefc8c148",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

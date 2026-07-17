@@ -1,0 +1,1494 @@
+{
+  "schema": "cad-rs.ffi-build-receipt.v1",
+  "createdAt": "2026-07-11T19:47:51.190760+00:00",
+  "library": "target/debug/libcad_core_ffi.dylib",
+  "librarySha256": "072bf3e5ad64e6d16144d216330954daaebeeea5ab5a359fa9cc373c9333a77d",
+  "profile": "debug",
+  "cargoFeatures": [],
+  "buildCommand": [
+    "cargo",
+    "build",
+    "-p",
+    "cad-core-ffi",
+    "--lib"
+  ],
+  "cleanCommand": null,
+  "gitHead": "45d7e1f651cecb86cf114a869f57ba1465e799b0",
+  "cargoLockSha256": "261e24afbd7ef6f66ee6a56abf69d95fa5a04812c71bfb226a9edece6d0a9f01",
+  "buildInputs": {
+    "algorithm": "sha256",
+    "digest": "ab7fdf32471e223445c79687f316b607806ad5e6fe063dead4fc460ddf7aeeaa",
+    "files": [
+      {
+        "path": ".cargo/config.toml",
+        "sha256": "51217bec5d1dd5cb46d130d2b2e499014a901bf17f3f2a9e8bde97adf9d7375b"
+      },
+      {
+        "path": "Cargo.lock",
+        "sha256": "261e24afbd7ef6f66ee6a56abf69d95fa5a04812c71bfb226a9edece6d0a9f01"
+      },
+      {
+        "path": "Cargo.toml",
+        "sha256": "3795a9f39aa610d84a14c21b7543b4312597e9c8497de2b1b5bb3b2b27101117"
+      },
+      {
+        "path": "crates/cad-core-ffi/Cargo.toml",
+        "sha256": "2e80eaf91c3cc726d28312c2e52cd519a18fd84bcf1efefd1a74cb4072994de4"
+      },
+      {
+        "path": "crates/cad-core-ffi/include/cad_rs.h",
+        "sha256": "c9bb7067e35364cf2287c46d0527f0ea7c2ce0263a2e2eaa75fd42dabb7aef51"
+      },
+      {
+        "path": "crates/cad-core-ffi/src/lib.rs",
+        "sha256": "1bdb5a06366b48bc6464c2f662de949d548b97e04d1f3ec8b875f6fe6d74072f"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/c_api.rs",
+        "sha256": "698ee4fa0056d9b4326720c967f1f9fb562e0398120383d42aceff72cdc71c17"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/c_api_errors.rs",
+        "sha256": "f91cefb459bd896d526f25a8431d007f0f4cec0a4ddea05adbfbd6330ebd6efa"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/c_api_export.rs",
+        "sha256": "eab982525af9fad18c7f0992f774ce332e6ce641310e702eeedb9d806f53c02d"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/c_api_json.rs",
+        "sha256": "e1aa2984bddc3c6178db9e79d40add893465d6b42eb70eb0163d495928031ad7"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/c_api_lifecycle.rs",
+        "sha256": "9727537f035c2c4cf2d16dff0c1271ebf7ff71852d191ce98083ac834da946ff"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/c_api_mesh_binary.rs",
+        "sha256": "39d6253c70c677f48ef7ac623f032e18b1dd2f9d7896e8d8717bc0b4ce2761b8"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/box_export_brep.json",
+        "sha256": "862e095722049b43452ef1c7fafeb0a62caadebf141bc4e7a3d71559c4064abd"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/box_export_step.json",
+        "sha256": "1bf829cdac01028dc12f83f17fbc771d5c59c0e4ceeaf86e7f151632cf663fcf"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/box_export_stl.json",
+        "sha256": "ae64bc334fe189db3dfdf7a4c7e82c4e85264c97acbe427766c195dd759ed9cf"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/box_mesh_binary.json",
+        "sha256": "20b69f59d076806b1712de6fc0d61f9154efbe06316f04e7e98c123d2663ea03"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/box_mesh_binary_limited.json",
+        "sha256": "f9a03d017fcd8a7df02c00ac971c4d8adb8eb486e3d75012cade172f6d2fa662"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/box_recompute.json",
+        "sha256": "e0e05eafbf71c218a597be3ab8bed6fd23e7593550109e861637956a3e18eab3"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/invalid_json.txt",
+        "sha256": "a6fb08fda1acb957b6116bd37811a1fe41a01611c0631edbf786d6889a27a55c"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/invalid_root_array.json",
+        "sha256": "3b00f300e62b86a8ccc9b24eacab18e480dc2653fea83626bda75648fa17625b"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/oversized_seed.json",
+        "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/server_path_rejected.json",
+        "sha256": "c9d4b3a6adcb407619e3dc733fc81ea98a9e3e6faf2cd7d1077c0239721b6fd9"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/unsupported_format.json",
+        "sha256": "bd49a0a551a97b2e4846662b7648bf853851df52e5c0562ee79115c409e8f92f"
+      },
+      {
+        "path": "crates/cad-core-ffi/tests/fixtures/unsupported_recompute.json",
+        "sha256": "0316f79855e7b19e9f00eec1a291457b4f1dfcd270c55628b48b72ecb773f809"
+      },
+      {
+        "path": "crates/cad-server/Cargo.toml",
+        "sha256": "d0c319eac33965c2e8c75a52a62489b851a02d5ecbcd86cc228cdba92b6ba23c"
+      },
+      {
+        "path": "crates/cad-server/config/cad-server.ini",
+        "sha256": "4a3595ffed7cfb294abd73f3a3c1d29a5409a9fed7cb74166bf03d43b4727c64"
+      },
+      {
+        "path": "crates/cad-server/src/boot/app.rs",
+        "sha256": "886fcdc5271b3c0aef9d36fd0b6050c7f2c1a713899c7c359258cb9f68e9116e"
+      },
+      {
+        "path": "crates/cad-server/src/boot/error.rs",
+        "sha256": "bf43b79b2c3e15d415b33c3c08386f32766d63046f7e22f73ee992c6be7517df"
+      },
+      {
+        "path": "crates/cad-server/src/boot/mod.rs",
+        "sha256": "c761e3be62609cc6796a1f68b7ba00a25891e49edc0b214a587dc4e1021c02e0"
+      },
+      {
+        "path": "crates/cad-server/src/cli.rs",
+        "sha256": "b04c7770c6f76fbe517570042566ef49c59488f7f56191cc7f47d2ffae8ce73c"
+      },
+      {
+        "path": "crates/cad-server/src/config.rs",
+        "sha256": "382a3b6ea167bbc945637f9c1f98bc1fddb3b8edb3c0d17fba8e33fafa5500ba"
+      },
+      {
+        "path": "crates/cad-server/src/controller/cad.rs",
+        "sha256": "339ab2b23ade31c3a942307ac425e80e4e79cd4ea9f49ac5f8a1bcea7784e35a"
+      },
+      {
+        "path": "crates/cad-server/src/controller/mod.rs",
+        "sha256": "a91e462235f968837b631a5d60f4268467dfaabbfeecdb4ec4181f38bb2103f9"
+      },
+      {
+        "path": "crates/cad-server/src/http.rs",
+        "sha256": "6cf1f87c23659ce31410a13ca2a63b75b03223dd01cad5611f8b904bf9f05831"
+      },
+      {
+        "path": "crates/cad-server/src/lib.rs",
+        "sha256": "be7641fec1b6f6a172f39335defc3ed0960d0f026f47dffb3e1db9f15213fde1"
+      },
+      {
+        "path": "crates/cad-server/src/log.rs",
+        "sha256": "1a16862e80d0484fc612329eeba8c44a6fb50130de41f79b47c0323d9199056c"
+      },
+      {
+        "path": "crates/cad-server/src/main.rs",
+        "sha256": "dc6a832cf50ff621f4beba957eb4b3a4c4044ac432f7d09953bed3260e107904"
+      },
+      {
+        "path": "crates/cad-server/src/middleware/mod.rs",
+        "sha256": "81623a25ba68f98eadfe767988a915f375e81af6128cb3cd21cc1ca9d8b2686e"
+      },
+      {
+        "path": "crates/cad-server/src/middleware/request_log.rs",
+        "sha256": "fc95f919d17ca987e985d0964c0e2b00c369b74eceb843a7052c7c1073e7b9b1"
+      },
+      {
+        "path": "crates/cad-server/src/route/mod.rs",
+        "sha256": "7e6a30d31fa5eeb2f1310b49fa4a9de294c97184dbd489981add5f5181186c09"
+      },
+      {
+        "path": "crates/cad-server/src/route/route_cad.rs",
+        "sha256": "11893b58807aa1248a8723e7f4e1d3fa9c22693df6f9e3df5b1837b49fd37f24"
+      },
+      {
+        "path": "crates/cad-server/worker/README.md",
+        "sha256": "acba7ef3c2db8d2f7e1e3b2be6146a6b45db21a7df6e28eafb6fad1b3ca0bc76"
+      },
+      {
+        "path": "crates/cad-server/worker/cad-rs-worker.mjs",
+        "sha256": "f971d1f034e50c372a70906e13dfef1a91ef14b1121c0eaa9a23e839da92e056"
+      },
+      {
+        "path": "crates/kicad-parser/Cargo.toml",
+        "sha256": "3377ff2904a429b14bc8d7e71f27f3d1aabc4567d5d83678eb0b26c7f1791332"
+      },
+      {
+        "path": "crates/kicad-parser/sample-files/sample.kicad_pcb",
+        "sha256": "6292c5361769da67faa110fc68db25827277838437c082f8f2568d6691f121eb"
+      },
+      {
+        "path": "crates/kicad-parser/src/board.rs",
+        "sha256": "a70f6265d975f46bd96b526f1bdf8894339e94b9be48370ac2de43f33e1ded24"
+      },
+      {
+        "path": "crates/kicad-parser/src/graphics.rs",
+        "sha256": "0c7a074e7a3352847dc15a0bbb6c5153150499d6c0c8e55018ae20dc85ddfe40"
+      },
+      {
+        "path": "crates/kicad-parser/src/lib.rs",
+        "sha256": "c7b2c6d793dee6a23cfff967e5c04ee1bf5008bcf1b048a2d841a5e5e4a5eecd"
+      },
+      {
+        "path": "crates/model-api/Cargo.toml",
+        "sha256": "ff5c71980932cb503059b912510a368d09866930f44350e59cc57575b41cc7f7"
+      },
+      {
+        "path": "crates/model-api/src/angle.rs",
+        "sha256": "4c5f5e22692b44b8e5dfdfbbbaf6e0598f4c0b7131260f4662f3bf033820e36a"
+      },
+      {
+        "path": "crates/model-api/src/lib.rs",
+        "sha256": "3999b791d029fe211e246a5e39ee5e9e2244ebb891e9c9126742e1007c2d89ec"
+      },
+      {
+        "path": "crates/model-api/src/primitives.rs",
+        "sha256": "10abebd045dffc2214e863793afe822f0bd2ffc76e593a5dfeec38a5cef6b8b6"
+      },
+      {
+        "path": "crates/model-api/src/primitives/compound.rs",
+        "sha256": "473eeaa12ac8e5c06495164ac7f8a759fb9fa880140bcd26b16fb754cd849831"
+      },
+      {
+        "path": "crates/model-api/src/primitives/edge.rs",
+        "sha256": "a414303c842646d1de895b3369224c4d74183cd24d91d3dce64f89f7ce5c2603"
+      },
+      {
+        "path": "crates/model-api/src/primitives/face.rs",
+        "sha256": "28544fcda89fb389b35f9bf55087bc22c4eb4292fce3b356b1ab928d7cde8d32"
+      },
+      {
+        "path": "crates/model-api/src/primitives/shape.rs",
+        "sha256": "eddd308abfd356b7392c830fe91d5622db29433e3d81c37c170c41807f3e84ce"
+      },
+      {
+        "path": "crates/model-api/src/primitives/shell.rs",
+        "sha256": "b26f669af449925b540e88fd7e98eb839c743ed0cc3f79e1a0996cd7aa2ad14c"
+      },
+      {
+        "path": "crates/model-api/src/primitives/solid.rs",
+        "sha256": "fe78c447e338dd83604018fa8d6ea792be9ab89ab1e9fbddd7887ee053be1f31"
+      },
+      {
+        "path": "crates/model-api/src/primitives/wire.rs",
+        "sha256": "4476c5b5c9fcfbd84530217a1e4a21b2379468570259d62e95c33583eef27342"
+      },
+      {
+        "path": "crates/model-api/src/wasm.rs",
+        "sha256": "3f99896eee5195e6a9d360505b84515ac4a63e33f250a9b0fb75b68ac65913fb"
+      },
+      {
+        "path": "crates/model-api/src/workplane.rs",
+        "sha256": "e3d05ccf7265bb69bd99ed5d2f15539280e9e071afe2340160bcb295fbf2b720"
+      },
+      {
+        "path": "crates/model-api/wit/model-api.wit",
+        "sha256": "41c870e3002e9edfc925c7ff458e3bdecbd13a148c0a27d3b4ce18edd983230d"
+      },
+      {
+        "path": "crates/occt-sys/Cargo.toml",
+        "sha256": "28652af00fc03d8232354ce6c66063e4014dd4c382dae2affdef7edaa052efec"
+      },
+      {
+        "path": "crates/occt-sys/build.rs",
+        "sha256": "ce634010d7f30c01416c20bd3b9ff602398eac4a0db80269b04a326a6a5aacd8"
+      },
+      {
+        "path": "crates/occt-sys/examples/print_paths.rs",
+        "sha256": "27da807b6400624b62820bfcad2a385aee861475c5610b5c7c2eab1a5993fcd0"
+      },
+      {
+        "path": "crates/occt-sys/patch/adm/MODULES",
+        "sha256": "b503e895d6ce7ca4dde2cfba5113f13dc989547d153d78880ae9b1565e86b1ef"
+      },
+      {
+        "path": "crates/occt-sys/patch/adm/RESOURCES",
+        "sha256": "dc721a2b0911fbd5fdab8222ddba4182b1bc573d93be0c3a5320e4ac01b2b4f0"
+      },
+      {
+        "path": "crates/occt-sys/src/lib.rs",
+        "sha256": "ffb882137030597c4e722f916602efce37c92ff7226a80bf3d79dce4fa40d30a"
+      },
+      {
+        "path": "crates/ondsel-solver-sys/Cargo.toml",
+        "sha256": "55a6ee40c573f6b5d41f8ebcb6b265fb5939d6b1dbdec489db9eda2eb941bddd"
+      },
+      {
+        "path": "crates/ondsel-solver-sys/build.rs",
+        "sha256": "06a7fd82cfc0097e510f4f5085beab904cd216f3bf8cd7137e1ccdb38882571e"
+      },
+      {
+        "path": "crates/ondsel-solver-sys/include/ondsel_solver_bridge.h",
+        "sha256": "f7b54852e4e5c7ae3a31bfb793110b416423812c12d4cbe05996e4975ef1bd7b"
+      },
+      {
+        "path": "crates/ondsel-solver-sys/src/bridge.cc",
+        "sha256": "142f319b24f3e33910d65896104c2c26d269d5a1f84f714ef6c4a5c513bf2313"
+      },
+      {
+        "path": "crates/ondsel-solver-sys/src/lib.rs",
+        "sha256": "d774b4a7c818bf43d182d0b14d944bb4a23b02b4710a0a733e5d97be01e045a4"
+      },
+      {
+        "path": "crates/opencascade-sys/Cargo.toml",
+        "sha256": "5ab17cd3453e961a509533be0d5d70cf46a91e51f28c3cbb4a69adc636e8f1b9"
+      },
+      {
+        "path": "crates/opencascade-sys/OCCT/CMakeLists.txt",
+        "sha256": "59f8912f0dde634ee481b30c3d8dc3e25ebda2172b54a5e93ceaea98a627a168"
+      },
+      {
+        "path": "crates/opencascade-sys/build.rs",
+        "sha256": "55842ea032e313e4c71fa3effd1b768cd74949fe86b26459e34125efd7027b13"
+      },
+      {
+        "path": "crates/opencascade-sys/examples/bottle.rs",
+        "sha256": "79d0438aa4df5a3916c627f5a19a14670a27c20a9407377f7e90e3382ee78ab7"
+      },
+      {
+        "path": "crates/opencascade-sys/examples/simple.rs",
+        "sha256": "7bc855d72acb597e0be4b2673460df9bc29f5e8f8dba60599b88ce5662413a45"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep.hxx",
+        "sha256": "19cca85b1ca16dfe0617a0a6d6bb27159c2e681218d34d57e66d34f845abd652"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_adaptor.hxx",
+        "sha256": "b3f1fb69287beb6d75c14fb43b632448986af92cd0d5d265bde976db429eb74a"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_algo_api.hxx",
+        "sha256": "602b3fa0969ceea23042fd9ffe3b9b1a4ca2791ebae7caa6cbe3fa7ac9d1f94d"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_bnd_lib.hxx",
+        "sha256": "78fbbf2363211a91d5d9d73e7ba8df5fa08a554fa3d262480a6588da4c24ebd4"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_builder_api.hxx",
+        "sha256": "f3ccbb909fa4dc9fab0c27ef3665effd39906b0b17f7c775b3e20ec25f76576d"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_class.hxx",
+        "sha256": "83f156636ea9420fe78d971093bf0ab9268980a89368c781c45835df906fa314"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_extrema.hxx",
+        "sha256": "8a82f439d12fde270d0df96eea554072fb44c447a221af981a6fcf5da1a68047"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_feat.hxx",
+        "sha256": "b3b87b9a67dbe13854678201fef90a021c358be7c041a1b9da248fdd9009c349"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_fill.hxx",
+        "sha256": "a0754623227ede1c33db4e8db10dc382ce783954c2f369a4db43098481cad95a"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_fillet_api.hxx",
+        "sha256": "3e503dea261ec45456cc70cf2e398df584daaec661bc4d4932055da228d10358"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_g_prop.hxx",
+        "sha256": "8588be24b87916af2f2421a15c4f1a9c58ee16fe509da1d1ed4fd4ff669d4190"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_int_curve_surface.hxx",
+        "sha256": "fad599835db4f56f0ec29e833dd27297b22face4ea6cbc9a5b6d2a86865bfbba"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_lib.hxx",
+        "sha256": "3225de8790fbd11944e0d80fe67f89e9e39d73dd098290275513f58ae01b016d"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_mesh.hxx",
+        "sha256": "cfddd81be42407ff0d8988e7a95af211b2a4c09afb67387bd2783ce9ae81dca6"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_offset_api.hxx",
+        "sha256": "9f76b9906a3383bff3fefdbc406c3c33779bfa1fa52aea72812566922f1ad487"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_prim_api.hxx",
+        "sha256": "bfb91511d536ffc7bb90b8e39e27e498ad786a8c785c22644848b19cca6c1d0a"
+      },
+      {
+        "path": "crates/opencascade-sys/include/b_rep_tools.hxx",
+        "sha256": "c2cc0394e0b6fb28e1f387962f305c4c511e17b792dac4e3919270e4d3e9d257"
+      },
+      {
+        "path": "crates/opencascade-sys/include/bin_tools.hxx",
+        "sha256": "d6d7e2f1bb65e36648c7d065142a82b501cad4df13b32405607e4208d93b3aaf"
+      },
+      {
+        "path": "crates/opencascade-sys/include/bindings_common.hxx",
+        "sha256": "8d3086f45f6cb1564a5cffc57d6c78b061d9177187e8baba9b277ee14f0f8c4d"
+      },
+      {
+        "path": "crates/opencascade-sys/include/bnd.hxx",
+        "sha256": "374865aa2acdd1d977bc7060d6589c4d3ddadbf432b4d2b126deb81fa3a980d7"
+      },
+      {
+        "path": "crates/opencascade-sys/include/bop_algo.hxx",
+        "sha256": "88f0af793146293bae099e4246da10ac8b2ff131f4d57b42671421c6c0c81ee9"
+      },
+      {
+        "path": "crates/opencascade-sys/include/face_maker.hxx",
+        "sha256": "fa05316d156e955c7ffae968eb0a80ddd6a49f18fadaa1aa7436aa991719f6d8"
+      },
+      {
+        "path": "crates/opencascade-sys/include/g_prop.hxx",
+        "sha256": "b18ff5fa756b477272c815a1f00dd7db6b63e1118a8187be4da3665cdbcdb5b8"
+      },
+      {
+        "path": "crates/opencascade-sys/include/gc.hxx",
+        "sha256": "11e8a3391a8dd4246d4db52a8c840fbddc35d991867c86a22c316ece78c9e5ff"
+      },
+      {
+        "path": "crates/opencascade-sys/include/gc_pnts.hxx",
+        "sha256": "3de1aac108bd9c58d1a3a965bdae184e7c218e3da5fb7aed9b0f485021d818d7"
+      },
+      {
+        "path": "crates/opencascade-sys/include/geom.hxx",
+        "sha256": "8b996832c949dfe181ced1b47b9953ca70c8b4d4d2f8d3408f99f9f730b955dd"
+      },
+      {
+        "path": "crates/opencascade-sys/include/geom2d.hxx",
+        "sha256": "05aa03d53a99053145edb6856949e830eae9f7bea15b26401b524c93a6610707"
+      },
+      {
+        "path": "crates/opencascade-sys/include/geom_abs.hxx",
+        "sha256": "b137315389bb96cab9e7e8c0b38fbb2291812f916505633c5453f6809b750152"
+      },
+      {
+        "path": "crates/opencascade-sys/include/geom_api.hxx",
+        "sha256": "5a0b13778807eaec47660d54801032f62e5d05ded4770a2c50c345e2c27b539b"
+      },
+      {
+        "path": "crates/opencascade-sys/include/gp.hxx",
+        "sha256": "f4c2a9c8731b55433a787579cba3588bbe00a2f99f7459b33a899597f7fcef0f"
+      },
+      {
+        "path": "crates/opencascade-sys/include/hlr_b_rep.hxx",
+        "sha256": "8b5fecbc3e88facf7b771b711cd4678bfb225bfa40095d563cbf9f0d4f81f296"
+      },
+      {
+        "path": "crates/opencascade-sys/include/if_select.hxx",
+        "sha256": "a505fde77b204ed3fe567a392e3a0d4812fedde3acedebd445395a59a0c16ac9"
+      },
+      {
+        "path": "crates/opencascade-sys/include/iges_control.hxx",
+        "sha256": "fdfdf6b43cd7d1056cdb838e12ffed1be677186fd8f498286c63ab933732cc16"
+      },
+      {
+        "path": "crates/opencascade-sys/include/law.hxx",
+        "sha256": "00e1b0d8f2ad888ad25e8191995825687ccfa5e0e333c8857ace58eb3bd91b0a"
+      },
+      {
+        "path": "crates/opencascade-sys/include/message.hxx",
+        "sha256": "6c14793f864a6acaa31eb565a5469a064afe84aa8621a17c61d5e88f7c34c584"
+      },
+      {
+        "path": "crates/opencascade-sys/include/poly.hxx",
+        "sha256": "3517d2f4addf38fdb047ac9788e7130be34ad6a56be42ba7e778f0c894266cb2"
+      },
+      {
+        "path": "crates/opencascade-sys/include/shape_analysis.hxx",
+        "sha256": "d70b7d08f8a0b88bb061fc3c0f6db8bef0393ea0c4d89879b4520924e0c5a9c8"
+      },
+      {
+        "path": "crates/opencascade-sys/include/shape_fix.hxx",
+        "sha256": "d8954c542d3eb75380189692a9da57a6b1167313af3addb3b082f0722b4316df"
+      },
+      {
+        "path": "crates/opencascade-sys/include/shape_upgrade.hxx",
+        "sha256": "5ecb81582855dbb9bca163b4484f03c4dbef759db45309c82d0265b41c1692f6"
+      },
+      {
+        "path": "crates/opencascade-sys/include/standard.hxx",
+        "sha256": "8b5d590050d7fb2c6b383262a2f361be82204ed8c85cdd47fbbce5001d7b7415"
+      },
+      {
+        "path": "crates/opencascade-sys/include/step_control.hxx",
+        "sha256": "65b454b420e517718d41b104b3a133e546a21ee98a75a320c69a9823ca040c38"
+      },
+      {
+        "path": "crates/opencascade-sys/include/stl_api.hxx",
+        "sha256": "06180ff05115b30ecb4a9c1255a124c2ff83593f599175c33f77edd215f24cd5"
+      },
+      {
+        "path": "crates/opencascade-sys/include/t_col_gp.hxx",
+        "sha256": "9e8b37c9af9e8cb2b74483f1268d546e3e8c064858be8f2cecec2be92e226452"
+      },
+      {
+        "path": "crates/opencascade-sys/include/t_col_std.hxx",
+        "sha256": "95dd616ec2a42713d724029df47ce745a03f8f64ab02190b9429954b77ca171b"
+      },
+      {
+        "path": "crates/opencascade-sys/include/top_abs.hxx",
+        "sha256": "45e0f6f66302633471270c85277320120592ec14f79561ea44ef2dd79974ba4c"
+      },
+      {
+        "path": "crates/opencascade-sys/include/top_exp.hxx",
+        "sha256": "afe5507b984ace72f9e4ca2ed87042c85fcdd0cab43386b2e8128a3215ae34a0"
+      },
+      {
+        "path": "crates/opencascade-sys/include/top_loc.hxx",
+        "sha256": "3818c8889629410e5c2b5d456e5b7ec5ff2dff446ea3d9e2bb496f4b53e314d7"
+      },
+      {
+        "path": "crates/opencascade-sys/include/top_tools.hxx",
+        "sha256": "b2d9457e51f195588dd971696c92c4ff904c2a2f99b9e687e4d8604943c3d423"
+      },
+      {
+        "path": "crates/opencascade-sys/include/topo_ds.hxx",
+        "sha256": "ec223bec94d0238b6b35f668946cb8baacbdae82ec4f752df6c7674e7f4d2557"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep.rs",
+        "sha256": "51bf54489a2074b0c914a795f36f1c80a17ba9b73dfe40222e34d91b8291febb"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_adaptor.rs",
+        "sha256": "629aab017b328f87f3b5ca6034b562a3e3cbf006ccec10cfbcd201d769242ee3"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_algo_api.rs",
+        "sha256": "364ed0ca4c1a7fae4482d77eba39402a5c18b9d85be3573c58ea6291a8ea862a"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_bnd_lib.rs",
+        "sha256": "8bf3cfc911cb906b6f8dc11ac70194866d29e69b2806852c9d84d88c2ad00e9a"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_builder_api.rs",
+        "sha256": "07d3acef05af499e71f748a0c970c0b06191204a23b7a6b1cecb016df595e2dc"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_class.rs",
+        "sha256": "1a344c6e4f8fa57456b823337a4866dc018da18a88d4cc22e7c21b13835c8e4f"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_extrema.rs",
+        "sha256": "6628a691e69f9d458ba1ba4ea37c863961d8bc2c1fe3c26fc954c585ef695eb2"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_feat.rs",
+        "sha256": "5a34cf09bcd8af9a855a5573daa1c66c3da3515cae5befc5f36a8ee77fc164a1"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_fill.rs",
+        "sha256": "710422afe0943e8972a71f1b181d811808c16d95102136696a79a03d5b826278"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_fillet_api.rs",
+        "sha256": "841b14390a7fd19aa22a7e078327fe99a969e28a81ff7fe6727db6b4c3c7e2a8"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_g_prop.rs",
+        "sha256": "20b5b4415c4f63b2c6299a425f2bcaaebccf7907c6479f6f98378a418b389db8"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_int_curve_surface.rs",
+        "sha256": "3445e373cb46ffb5bf92606ae3ce648afa2a14493ac31f625d87a770cafea960"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_lib.rs",
+        "sha256": "3da19ee7a0752305c4fdc21a4f8a5b9fd25e790d3cf622b40939a7018c64f115"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_mesh.rs",
+        "sha256": "0cbab6ae4e5b3fe183dd3fce4f10e1cbb4c437eaa104643d0fea4542bdacccf2"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_offset_api.rs",
+        "sha256": "1e68dd5b705640d407e4210fd7501a3099bf03402bd51b08b8bce9d5077ce520"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_prim_api.rs",
+        "sha256": "eb74fd4d50dba98f79548b1b93b86c71feb2257722a79727f33c9c5fc3f00834"
+      },
+      {
+        "path": "crates/opencascade-sys/src/b_rep_tools.rs",
+        "sha256": "5ab0f6d0d9adfa03389b6fcca6471c3cde22485aefaa35395d2c2e1326e8e3a0"
+      },
+      {
+        "path": "crates/opencascade-sys/src/bin_tools.rs",
+        "sha256": "e8c4fa836b8695461b9769a825531c5324c3187e2e3c69f294d3426f47de8d4f"
+      },
+      {
+        "path": "crates/opencascade-sys/src/bnd.rs",
+        "sha256": "c7186029c99afe63a8f05f3dc9628f5f38a87bde5416efb01d8ff3397c0dd153"
+      },
+      {
+        "path": "crates/opencascade-sys/src/bop_algo.rs",
+        "sha256": "fab9e264fe3c5f3984b8d399dd7c5aedc91227c4caf152a3a6f9fbf2a6aa1f3a"
+      },
+      {
+        "path": "crates/opencascade-sys/src/face_maker.rs",
+        "sha256": "5e03ba8056cdc960575e3bc5ad0ac189abbdcc98dc78d2fc3bf8505bf7bf05bb"
+      },
+      {
+        "path": "crates/opencascade-sys/src/g_prop.rs",
+        "sha256": "5d209bbef669535172c7451e09ee74ff4e432db68ec5506e033b8640963e43a4"
+      },
+      {
+        "path": "crates/opencascade-sys/src/gc.rs",
+        "sha256": "8167fdc43907dd6b8d854ab32a7804b2af6adb35646d871043a883c54546a294"
+      },
+      {
+        "path": "crates/opencascade-sys/src/gc_pnts.rs",
+        "sha256": "2863c20fcf12f5bfa76921e6f0fcf33f347aa8f611358f126426c15b912c55e5"
+      },
+      {
+        "path": "crates/opencascade-sys/src/geom.rs",
+        "sha256": "59411a148be1886a2306b8d5d6f7eac71e9f4a1e33529c2f6bb3e2cce95de961"
+      },
+      {
+        "path": "crates/opencascade-sys/src/geom2d.rs",
+        "sha256": "37f0b72fcba6e5a679f010c5d8d67343ea02322ab175b54b1018291d919266e4"
+      },
+      {
+        "path": "crates/opencascade-sys/src/geom_abs.rs",
+        "sha256": "cdf2218668dc503b614ab26487a178f0f4b89e6a952eb783f6ded86f57354a2e"
+      },
+      {
+        "path": "crates/opencascade-sys/src/geom_api.rs",
+        "sha256": "fa1c741ca4742ceeb95283ecfb60bc7b34e1094e9b0593c9c60059e9758d72d9"
+      },
+      {
+        "path": "crates/opencascade-sys/src/gp.rs",
+        "sha256": "745505a5f58de404e225038d7e05340ebed0c3f53a7d664ea1d34b82b40b1ebc"
+      },
+      {
+        "path": "crates/opencascade-sys/src/hlr_b_rep.rs",
+        "sha256": "957d26d5c3d57f26b0cbb61c159b3b091161f53705d7cd21c6b9a54e1fdc0322"
+      },
+      {
+        "path": "crates/opencascade-sys/src/if_select.rs",
+        "sha256": "d5568991ab825a9e3627404800fa1c4852e2fc449c7481c6653059dd8a12d526"
+      },
+      {
+        "path": "crates/opencascade-sys/src/iges_control.rs",
+        "sha256": "58826bebeb821185e2cebaaf4184ab481231d9bfaaba6b1792c42484f598c0c4"
+      },
+      {
+        "path": "crates/opencascade-sys/src/law.rs",
+        "sha256": "07b38ff2e2be9181e4fb7f56bb0c858ff12cd0cab08ea4b54e03d9a2648ab787"
+      },
+      {
+        "path": "crates/opencascade-sys/src/lib.rs",
+        "sha256": "ae15ae2ebca20b69f4fc27b4ab4141b56bfbd9dfe6e57ca51b19717fab8a8c4b"
+      },
+      {
+        "path": "crates/opencascade-sys/src/message.rs",
+        "sha256": "f4352b6343ce397f04bb5021815733bf17eb04aaabee4d2aa0ac0d7b332eb267"
+      },
+      {
+        "path": "crates/opencascade-sys/src/poly.rs",
+        "sha256": "c68d02b6c995f106f4ace4f697dff67a9b34ffebe8ec32edbcb1374b0e323a35"
+      },
+      {
+        "path": "crates/opencascade-sys/src/shape_analysis.rs",
+        "sha256": "66941c2b4998ccf3ffd8e995ffbf8f8387c4367f3f35c4bec08c909df6ccdbe1"
+      },
+      {
+        "path": "crates/opencascade-sys/src/shape_fix.rs",
+        "sha256": "c8fc0522c5d9d877368905c85fb93597a9b37a62ceae08dd70c007afdbf4525f"
+      },
+      {
+        "path": "crates/opencascade-sys/src/shape_upgrade.rs",
+        "sha256": "333e0d7830e2c37f0ff03a950dba661d9bf434badcec47f8578edf01c257582a"
+      },
+      {
+        "path": "crates/opencascade-sys/src/standard.rs",
+        "sha256": "769dcf9569744669a6241f22da78f9f354a03dfb57bbb4bd871b9a4827a64049"
+      },
+      {
+        "path": "crates/opencascade-sys/src/step_control.rs",
+        "sha256": "93e94fe345a7a68dc4fc194736267852a0cc151c65228ac32f2aa02ff3be2756"
+      },
+      {
+        "path": "crates/opencascade-sys/src/stl_api.rs",
+        "sha256": "b9f8570106fee0ba6f7db6e3769f40279d09e917db5df33a2f8c8dd51119e5d7"
+      },
+      {
+        "path": "crates/opencascade-sys/src/t_col_gp.rs",
+        "sha256": "f8c69a8039f6bbe1623a14909a095aabce146a495364cab75c4c80173b2fa6fa"
+      },
+      {
+        "path": "crates/opencascade-sys/src/t_col_std.rs",
+        "sha256": "762b1b4d25945e734f3f1f8b3ff9300d373c08df99e47a464e76a145eab5f0b3"
+      },
+      {
+        "path": "crates/opencascade-sys/src/top_abs.rs",
+        "sha256": "4216049c96f9db553bdb59e92c8102638d015ef75a2fd75c68d0a20558a02d8e"
+      },
+      {
+        "path": "crates/opencascade-sys/src/top_exp.rs",
+        "sha256": "ff718af33bebf196f1ff0eacf50fb8c06faf458b2ad864ba4844ee2fe944f4bd"
+      },
+      {
+        "path": "crates/opencascade-sys/src/top_loc.rs",
+        "sha256": "68b0722ef25face829acdffa6e1140932f15429f900430c420f7692fcbfaa2e3"
+      },
+      {
+        "path": "crates/opencascade-sys/src/top_tools.rs",
+        "sha256": "fe4bac9574871165de3383394dd1f475a21e4885a6b9b8934ea85372c1d7ea0d"
+      },
+      {
+        "path": "crates/opencascade-sys/src/topo_ds.rs",
+        "sha256": "376fd0b72908d027552f13cf246c29e38db6879782361505ce527eea4d93d090"
+      },
+      {
+        "path": "crates/opencascade-sys/tests/triangulation.rs",
+        "sha256": "f047486f652f79cd2dd0661835921a5c8785b56be016b5d49a17ca784a92493c"
+      },
+      {
+        "path": "crates/opencascade/Cargo.toml",
+        "sha256": "9d7a0a760ab456e6eeb7d36fa3ac242fbf5aa3ac636880790ef312002bab96f2"
+      },
+      {
+        "path": "crates/opencascade/nako.log",
+        "sha256": "8c684b20090573b0f6c7bb632323a6dec1788ad966a12b85072224bf4919de81"
+      },
+      {
+        "path": "crates/opencascade/src/angle.rs",
+        "sha256": "4c5f5e22692b44b8e5dfdfbbbaf6e0598f4c0b7131260f4662f3bf033820e36a"
+      },
+      {
+        "path": "crates/opencascade/src/app/datums.rs",
+        "sha256": "a80008cdeef6d5f00b3d7463d66baa9f325b033dcaab6bd7832f89d1100d8051"
+      },
+      {
+        "path": "crates/opencascade/src/app/datums_tests.rs",
+        "sha256": "322f69546e58b61671a33ed34f4cc41b1acdc465e2c2e2dfb813a2a75f11abfb"
+      },
+      {
+        "path": "crates/opencascade/src/app/document_object.rs",
+        "sha256": "c9388c9dd3895f862aa3ecf3c05f46952ccf561a5d9b67131e5fd92690ac8904"
+      },
+      {
+        "path": "crates/opencascade/src/app/element_map_producer_trace.rs",
+        "sha256": "432c3f84e1d07e95896eae6b27b348cff9e26fe89a4688ef2d220c041108cc9f"
+      },
+      {
+        "path": "crates/opencascade/src/app/geo_feature.rs",
+        "sha256": "cac18922f448acedc7b54b4d5f606cfd658fd4155b2fff8841ebab8ff7c2cb3d"
+      },
+      {
+        "path": "crates/opencascade/src/app/group.rs",
+        "sha256": "5ec9cfa550902db1a9b2e4a31eff3e4b7e5c4ce6e34572fb7af09085ca00937f"
+      },
+      {
+        "path": "crates/opencascade/src/app/group_tests.rs",
+        "sha256": "ec18e8ec1e63ee3f5d7854f9f0a3c7e5e30dcbfe0465ed6f7b7bc8c4e1b4a6bd"
+      },
+      {
+        "path": "crates/opencascade/src/app/link.rs",
+        "sha256": "fa7fcd5bed0699a4ec76fd9270846e5c30d0187860478eee3d63dec154713c3d"
+      },
+      {
+        "path": "crates/opencascade/src/app/link_tests.rs",
+        "sha256": "4cb59f4fd58d900e3f3ca2d40b8e71ac57fabc9b0830307a1b16260ff0eed075"
+      },
+      {
+        "path": "crates/opencascade/src/app/mod.rs",
+        "sha256": "cdfae9c5e736fa7c4b53cdef680793433d5016546130ef7d211a2f99bf472cdb"
+      },
+      {
+        "path": "crates/opencascade/src/app/part.rs",
+        "sha256": "c8a875f1979d4704fe50d6e4cf45e85c647114930c412083062fbd94867e5b37"
+      },
+      {
+        "path": "crates/opencascade/src/app/part_tests.rs",
+        "sha256": "216ac18c9beea560a08bf9043d48abb96f6717df318be11f180c63c01dbf8ff9"
+      },
+      {
+        "path": "crates/opencascade/src/app/property_geo.rs",
+        "sha256": "887b744fa632a75447c4fd75af10485c52c63a9f63645721590935e308af2630"
+      },
+      {
+        "path": "crates/opencascade/src/app/property_links.rs",
+        "sha256": "fb7d8142eb67ff052d049ec9d5c713d95be1a11c72db732576d8ebfb07b8a780"
+      },
+      {
+        "path": "crates/opencascade/src/assembly/mod.rs",
+        "sha256": "32df1a42b13200591da2b59829c252b03bdd5daceb0c973a051632a4395aefca"
+      },
+      {
+        "path": "crates/opencascade/src/bounding_box.rs",
+        "sha256": "599e0d26d4612f89b0ebb28564673f652e648f403e2ce56afba2e6c90cc59799"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/adapter_limits.rs",
+        "sha256": "36e875f161a34241fa7636538711142b52b8f576bed096fa4f992f1240d026cf"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/binary_payload.rs",
+        "sha256": "c246d486d85086bc97d6ef311cd8981c01371a1db72ae8db4c8aacae7fa61bca"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/capabilities.rs",
+        "sha256": "2a82711fde8f177775ba7b8fcf247f9291f5c89734ca1a22fd39ac71654b6e6d"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/compute_context.rs",
+        "sha256": "e611815f0486e9dcd176eb8d5e2bd1161356cee8faf49cdd9d20bceeb104aef2"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/document_runtime.rs",
+        "sha256": "ffd9e0d606140ca53a4c00123ad5d7435d9455b0cd7da900db939937f7e3b31c"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/error.rs",
+        "sha256": "32032a66579ba1dece12c21450ffa3b87d2ff2c0d5aa8534972347d31ae9e85f"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/export.rs",
+        "sha256": "6a16fc0276c1f1cd271a05747a2c6c6d7bd5cd3c030bbce5bcf265b4f60ff21e"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/feature_registry.rs",
+        "sha256": "351526b9baf52e0f07b65235df3c48ceba41e1b6b4d926a8e69ed42a0c981e13"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/graph_analyzer.rs",
+        "sha256": "9b6190f502f7b48fae1bb83d70f0d12bb88813b88db3804b25d7112872e3059f"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/mod.rs",
+        "sha256": "f8f1ea96894005965fbebea5c72a15a8949f954f087356d9eb24b9a5065c6717"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/normalization.rs",
+        "sha256": "13b3f2dc93d11246b37004c7b724924b11ffb72d0854b873fc09efb8a6c0b96c"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/recompute.rs",
+        "sha256": "f9092797240d66eda2928d628bb859fbad0a26ddffd72f548ee724121733586a"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/recompute_plan.rs",
+        "sha256": "fb893311349d71afd73f3b5faafa2cf19ac61c40081c2da7d9c86a9d999e44f7"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/request.rs",
+        "sha256": "181611eb9d50edc3a33a765f6a0b98e98ce57c05b45a746ff44ebc3c0e8ab1ad"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/response.rs",
+        "sha256": "fd38bab9f0e6c2c404b859aa9dd9cad8e798a29070a47b0a563e4aa6d6d643a8"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/response_projection.rs",
+        "sha256": "b7f0e95ab21f12e725cc48311d1b288417b56f714bc27198edd4d11aeabecdd3"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/tests.rs",
+        "sha256": "9d0a1c7c2d1ca8ba00d11dd2bfd70e9b117fccd47d645ff1689243d1d35050a0"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/tests/freecad_fixtures.rs",
+        "sha256": "3c2e51a647de96fd74b0c87f1533d66fb7e3198f90544fe1c0e2551274064003"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/tests/graph.rs",
+        "sha256": "0d3378432f6618341ee260ccfecc08a73c6abc0da6a6d8be9fcc831c028e0c7a"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/topo_state.rs",
+        "sha256": "b88e955d62c4ec1d3fcb3cd5cb4837c0d8edd04716fb9927e982e6099149686d"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/topo_state_admission.rs",
+        "sha256": "3ae53c0fc08cb8476678e5fe70b4f5caed0f34b409a307520e8fffc068b0e105"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/topo_state_projection.rs",
+        "sha256": "d21ede6338fa08b991a65f6e4b90764d5990b2c196bdb9e54affefc5175bad90"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/topo_state_reference.rs",
+        "sha256": "29308520d235008e12dc9a012e75d5addcdd7e365fd5eb4dc6071c6e744e10c7"
+      },
+      {
+        "path": "crates/opencascade/src/kicad.rs",
+        "sha256": "d5667312a86c74c29ce3ac2b201b1d70ef9da29ab55293ffbd0e231e98b6aaee"
+      },
+      {
+        "path": "crates/opencascade/src/law_function.rs",
+        "sha256": "de7e42a93a600bbdfdada9b88e0396e63d4f6e59588c1cc2969880f16cb4bad2"
+      },
+      {
+        "path": "crates/opencascade/src/lib.rs",
+        "sha256": "cb4d14dfc026df83884a4d47318a24688cc507d4bbf2282e003cf18abfb13665"
+      },
+      {
+        "path": "crates/opencascade/src/make_pipe_shell.rs",
+        "sha256": "9d5de6f15c9a8be2b0f3420f50b054964ee2f6c7afda759e007c0992f9f8a071"
+      },
+      {
+        "path": "crates/opencascade/src/mesh.rs",
+        "sha256": "3261cc981f2459bdff2adc9c4a92b493c11a5d1a3737e65d79c0ddd3bb0589b7"
+      },
+      {
+        "path": "crates/opencascade/src/nako/config.rs",
+        "sha256": "445330c598a39246e7d459ec882d63982d12af1688e8e6a4dcdf7e21238bec88"
+      },
+      {
+        "path": "crates/opencascade/src/nako/db.rs",
+        "sha256": "791d9f713ff5cfc130a100d2f130bb681d4952d394d5744de031a6f07acf2adc"
+      },
+      {
+        "path": "crates/opencascade/src/nako/embed.rs",
+        "sha256": "8b57f3096c88f6bbcd67d07cc4f3afdf022dfdbe64fc242e5c4cac9e32018e88"
+      },
+      {
+        "path": "crates/opencascade/src/nako/log.rs",
+        "sha256": "8c1cce344a3a624c8c464d159182f93feb52fc6d72a229af52b20746e6cd798e"
+      },
+      {
+        "path": "crates/opencascade/src/nako/mod.rs",
+        "sha256": "a647a1a9cfdb44f163488e2ecf3c126bb76b227ccfc04d96f082708e2fdc42b5"
+      },
+      {
+        "path": "crates/opencascade/src/part/attach_extension.rs",
+        "sha256": "f4f196813aeb319aa67db8109282633ef18f4f91c5983adaabfbeec73ce5a92e"
+      },
+      {
+        "path": "crates/opencascade/src/part/attacher.rs",
+        "sha256": "5697408434d068c6e13577c6463b3cf6a2080bea02310c87b1b3a939f311b023"
+      },
+      {
+        "path": "crates/opencascade/src/part/body_base.rs",
+        "sha256": "1d6ab2e12013db1fec3d163d70f6e3428b586e7758253551ea143ab303bbb6d5"
+      },
+      {
+        "path": "crates/opencascade/src/part/face_maker.rs",
+        "sha256": "d3f486244266db921f407170b1a1e20145ad28b666e06ed1c0c56a373204656a"
+      },
+      {
+        "path": "crates/opencascade/src/part/face_maker_build_face.rs",
+        "sha256": "a26de8970f4079d86c87ec6026ab5553ccc3701d25383c8abd1a91a2b18ef676"
+      },
+      {
+        "path": "crates/opencascade/src/part/face_maker_bullseye.rs",
+        "sha256": "7c414fd082d5a5b3f118d59161d4f46ba4d8821f7774bb00371864866d184e23"
+      },
+      {
+        "path": "crates/opencascade/src/part/general_fuse_result.rs",
+        "sha256": "fab994aa8e6ca1d1af6024fa126ec9f9f6978c7e1d596cc8bb037c700b04e858"
+      },
+      {
+        "path": "crates/opencascade/src/part/mod.rs",
+        "sha256": "831ef6bff122e200946973fac094f94f855c70c1669ea61d4db40bf19ba98d8b"
+      },
+      {
+        "path": "crates/opencascade/src/part/part_feature.rs",
+        "sha256": "7d7c10cf9c997565bd7a18f03f1770a57da5310c00a923f368f45ca8aff2c34b"
+      },
+      {
+        "path": "crates/opencascade/src/part/part_feature_tests.rs",
+        "sha256": "fd9993419e247579f3b2c9032f217538f0b7ea217cfc96996b19bf3b390a01f4"
+      },
+      {
+        "path": "crates/opencascade/src/part/property_topo_shape.rs",
+        "sha256": "dc157a26b691fda438a7172a46ee273f1d3ee3ef168c59b086fa1f152a65c231"
+      },
+      {
+        "path": "crates/opencascade/src/part/shape_exporter.rs",
+        "sha256": "d6d54ad98a1f1e1d66adaefc04d6cadca0e8db6f437cd154139b454eb08fe771"
+      },
+      {
+        "path": "crates/opencascade/src/part/shape_merge.rs",
+        "sha256": "18cdf228bb5ed2c17bcb71ec40d74098b23959236d33ef1e1beaf7efa3cbe7bc"
+      },
+      {
+        "path": "crates/opencascade/src/part/topo_shape.rs",
+        "sha256": "93f2b3bb9ac2ec32295b5bc9d13c73d80d4c017b67758f44ff164b61aae94df8"
+      },
+      {
+        "path": "crates/opencascade/src/part/topo_shape_expansion.rs",
+        "sha256": "82f80368707c375ca58d4cec9e02a159196d0f0ce800e792b0e043d8ad4fa374"
+      },
+      {
+        "path": "crates/opencascade/src/part/topo_shape_mapper.rs",
+        "sha256": "6c1fc412fb223f4e55670478b61447bf146b093cf5162b3960a7c1020350a110"
+      },
+      {
+        "path": "crates/opencascade/src/part/topo_shape_reference.rs",
+        "sha256": "12a33219b860a131ba720f5f261e521d43d9c08d65e36f8d3db085e658ddd6fa"
+      },
+      {
+        "path": "crates/opencascade/src/part/topo_shape_tests.rs",
+        "sha256": "bf6e47ab576e91e2948b1afb0a32843b040138d7288996922e58f93a52759c8e"
+      },
+      {
+        "path": "crates/opencascade/src/part/wire_joiner.rs",
+        "sha256": "ce5443b71570d12b6c596ca403b6d3590cc3c592b938ad83fef8df2387855414"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/body.rs",
+        "sha256": "b2d765c721f92effa7d46058e34f9c466b717d4d32b1f3552d197bd293a191f5"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/body_tests.rs",
+        "sha256": "cc8a86a6fd3fd1f547a11c3372aefd58d0fc3768f07af351600939df56b19ac8"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/datum_attachment_tests.rs",
+        "sha256": "3ff97411e39e10840420f23cab124f3deef51ec31517108e9dac1b04682a68c2"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/datum_line.rs",
+        "sha256": "215eaeb50323bbb14b1470b0a3a0ef48811345c547241ea4db51860462427ff5"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/datum_plane.rs",
+        "sha256": "a951981abb1134071cbd526a1e266bf449d51551c29edd7bc7da034b1b280a75"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/datum_reference.rs",
+        "sha256": "56a3b843da68e3f047d2d08db2abd4cdb7f4faa9922428c8494a1aaa524566b7"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature.rs",
+        "sha256": "29bb5e4f0f77900252649623fb8cb5f58f9eca6d3ab6a0315857cd89a42c063d"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_add_sub.rs",
+        "sha256": "1b822f85b07b2dc678fa8f87b29aecc0068262194291b000d8f52a8a3dcf5dc4"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_base.rs",
+        "sha256": "65d379652c102e2e98cf474d687e3a1a73c1abb84d29fc8bbd4c3efaf49b5476"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_base_tests.rs",
+        "sha256": "86d81fcdb1dfce0e2df2367c16715b5fc67a211a332adae27652c635740bf231"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_boolean.rs",
+        "sha256": "5c121f349ee56175f3f85197ed0d142a19dd1f3ef8d44e3c900f1fd13e23bc92"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_boolean_tests.rs",
+        "sha256": "e1a97953f22f34fa90451fad1251f39d65e6180bd9b2a789eba8d94de51dae9a"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_draft.rs",
+        "sha256": "bc2f44333435403d67ccc46b6b6c53b046eaf23b42b3e7f42c7ff8e4d2d09ec9"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_draft_tests.rs",
+        "sha256": "cbfc2978cbaae50ad70cc9565ca431b5517637059757f5d029ba9e287c23cc32"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_dress_up.rs",
+        "sha256": "7d2216015e9215f110219c3811d171b0fa0872b206086e9c25ef0a27dcc3bffe"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_dress_up_tests.rs",
+        "sha256": "544576c7119323703d41a738d17e304d74fc05f86d1b7ef3e4040cba870d3c32"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_extrude.rs",
+        "sha256": "12638b504d011f8689a0149b71cab7ddf73c99a3e6ce0fad04024af9fd02a43d"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_helix.rs",
+        "sha256": "889b99b194716d28d79aea5b818d75f091c18f7881905cfa878b56aa8768af3e"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_hole.rs",
+        "sha256": "3b883f6ab6b3b1162ccc0dffb5e7efc5cce0bb7031de5778bfb2cdcfce24d867"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_hole_tests.rs",
+        "sha256": "72febb1e9ddcbc56677511092e7072845b7ba957e33ff115a7357dd54a88da39"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_linear_pattern.rs",
+        "sha256": "e4a0491e393d908ab4892f8855353dfdd9d8cbea59136a47a9b44b7ae6b5cf01"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_loft.rs",
+        "sha256": "38ff040aaf4bdd9b26a0ad45aa2f988d446016a5573ddd18c0cbff4c8c7f10c5"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_loft_tests.rs",
+        "sha256": "10779a99e8e07e0b927ed3e3cfa37af9322de7b17babda416344261a4bad53f5"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_mirrored.rs",
+        "sha256": "28c4ffcd0621d474f3aec9e577c6957b6507bba84565cf03f2a3494d627ecc92"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_multi_transform.rs",
+        "sha256": "d2922009fce2794644543c55bbef531a05aea1f3070aee825ab0ad4152b80be3"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_pad.rs",
+        "sha256": "f009ae57a2c3a1207eb1e61e673aa0f0ba63926a386ba34d06b8cf584c8d99a3"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_pad_tests.rs",
+        "sha256": "25e4986343fd2c10bb9a87d07b9143c004bc5edb258f506140c6e6c348a382bc"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_pipe.rs",
+        "sha256": "2bf93c4f6b51ce8d76d22927b71367a03894c0a8a1c9e8dd044611ee4898d78b"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_pipe_tests.rs",
+        "sha256": "02de56c6f9dae78948abe4426a33bcde7865c6df18cfb4725a25d22d77e6a390"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_pocket.rs",
+        "sha256": "fa63d37b4e15cab8c248c4ae55c82abd0245fbda298c0191e413eda8eb8beddc"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_pocket_tests.rs",
+        "sha256": "5347fd4e09affb690eed29e72f7a0825cdc5ced1b5b3b3e3bf676c5e2b906f2a"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_polar_pattern.rs",
+        "sha256": "f4904f40d9070acead1c3ac704482a52c5a59e76662ffac40a0961724446c112"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_primitive.rs",
+        "sha256": "2289f5a42643c83a37c440c1196081d379384f111fc8f6b57f2da47e68967708"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_primitive_tests.rs",
+        "sha256": "9119b6ca2d9d80b91eb9fb41cf4d9905f3d957187cafe31f359968bcb90ea0f5"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_revolved.rs",
+        "sha256": "cc96a0e43b56dc0a3b516b50cf0ee764aed809beddcda7c26cab96bc8d31a1cc"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_revolved_tests.rs",
+        "sha256": "422be9d05cde2c1ebe8f5ab17e01b63b6a317ea294b37d35a5a79a74b7ef39e9"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_scaled.rs",
+        "sha256": "df0e62ff464263cfa7da2f3c71f64a235c8564da25d94fd8447d0fabdf75a915"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_sketch_based.rs",
+        "sha256": "2e3da5d51f19b8bed0394474b27d2522138bac0ebc7a0977208d4bf3357759ed"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_thickness.rs",
+        "sha256": "436151eddf1d9b58f566b56b6aaa7fa8016124a91e7463f7d5fb7c37270a5d06"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_transformed.rs",
+        "sha256": "c7a563ce75b319b66eb07b48e1f16b26946055736c5ad16e71e19284f0cc69ca"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/feature_transformed_tests.rs",
+        "sha256": "d2d1c8907df7382b3502ce9d710a3ea5ad7de37c16352a26d86fd8187929b3d8"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/mod.rs",
+        "sha256": "2d49f8d9968bea25a56ec3e450bb79b706b3b657ce6edc1b0301cdf4353a3388"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/shape_binder.rs",
+        "sha256": "41f155800d6b1f0e4763baa5a53ab8df99c5935cc9c4cf519b0ba1a0850f9bb7"
+      },
+      {
+        "path": "crates/opencascade/src/part_design/shape_binder_tests.rs",
+        "sha256": "787d41f07f6d06a0e27a021ea66d4e026e420fb727134e5da63a395846102c4d"
+      },
+      {
+        "path": "crates/opencascade/src/primitives.rs",
+        "sha256": "71b5be46618f51d3251baf0bc8aece7022a30b33b0c18a4cdc6ef2eb825ab3bb"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/boolean_shape.rs",
+        "sha256": "8c89112b3702b3ec10542b047d32d59f26071bec8deaee7c29e3fa8c4a298611"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/compound.rs",
+        "sha256": "fca130733a34eba180dc71140eb4a46f9e28914a934dad1888df37e1d351ae6a"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/edge.rs",
+        "sha256": "26f259cabe2ad8df1f63d0e9773b2b314a4f88978e389a2b704ccea43a5febfe"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/face.rs",
+        "sha256": "76f7ab3e867135057741ef31aed3617ac8dd1f87b93396f624750068eb884467"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/shape.rs",
+        "sha256": "53fbb0d9e1ed4b50b84c7b41882418e925b741e37d82a93f3a79be3671caa27e"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/shell.rs",
+        "sha256": "acba1d214b80d056270a89d4b85dac8a7df38c0322999cfa805a0595f68b0917"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/solid.rs",
+        "sha256": "3484f9c5cb6706ba5af42f99a473691fca7036d6c65492036b36f973d5e16493"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/surface.rs",
+        "sha256": "b6009944887a7498875d1b7be6a337cb796f5618d245cda5fe25511d654548da"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/vertex.rs",
+        "sha256": "c1b4bcdf8e9302e88ae86f81586f002a02eab0dfe6813876425277943b378ed0"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/wire.rs",
+        "sha256": "d712c0cee703e49452a9997f2ff3a254704157ffdc99cba6aaa8ca0a68c7682e"
+      },
+      {
+        "path": "crates/opencascade/src/primitives/wire_joiner.rs",
+        "sha256": "0fd97964794358184b958eb37e836d4d63b1630ecb508674c1dac55c8ff89b4f"
+      },
+      {
+        "path": "crates/opencascade/src/section.rs",
+        "sha256": "a5ab53ddcbd681c1a2fe67fbf53cd1a62e24a9978cac24748c658dd49c4c623e"
+      },
+      {
+        "path": "crates/opencascade/src/sketcher/mod.rs",
+        "sha256": "5e2426f6f0dbd79dcc48458f9e4dcb395e89082b58f0d8c55b44f6007129a9eb"
+      },
+      {
+        "path": "crates/opencascade/src/sketcher/sketch.rs",
+        "sha256": "4376e14a1b3942c0c761ee6f7bdb8ab6ba29d658751121d8d3acb1f392c96cb7"
+      },
+      {
+        "path": "crates/opencascade/src/sketcher/sketch_object.rs",
+        "sha256": "67ae9b251fff11f7ece0bb2dce5ff1e242e87fb1b58215438ec37a62037c2bac"
+      },
+      {
+        "path": "crates/opencascade/src/sketcher/sketch_object_constraints.rs",
+        "sha256": "3992fd1d381e214f6ef81fdec35b9c63070a325b073c15ad6a040d52f538d10a"
+      },
+      {
+        "path": "crates/opencascade/src/sketcher/sketch_object_external.rs",
+        "sha256": "369f8bbf1791d03067c05cc428bdf4f94824b27d41c4822559d1204cf81ed9bd"
+      },
+      {
+        "path": "crates/opencascade/src/sketcher/sketch_object_geometry.rs",
+        "sha256": "abb5c579f25d9337c1b9972935209028af5383e5cb0d38397b718d11ade61b23"
+      },
+      {
+        "path": "crates/opencascade/src/sketcher/sketch_object_operations.rs",
+        "sha256": "45c47ee174722a6552086de0dfd996d08a15b28197f2f53028467012b717633d"
+      },
+      {
+        "path": "crates/opencascade/src/sketcher/sketch_object_sf.rs",
+        "sha256": "f57c849378ce4700e9f1f57d7546e917e48cd1743e049afd3f722ca87d2925dd"
+      },
+      {
+        "path": "crates/opencascade/src/sketcher/sketch_object_tests.rs",
+        "sha256": "122fcf5829c3ea6bb0586c42006de5961a417f5d596e5e37332afc668d8d0a4b"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_blend_curve.rs",
+        "sha256": "253e8517844a7853b1fc778846d1f27a93eec51d3588e020536e79e6e89e985d"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_blend_curve_tests.rs",
+        "sha256": "e73a2a5803377e82b85abd48c420a4e2ce49ac5618cde95a2d53d64c2c448a2d"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_cut.rs",
+        "sha256": "8784d2285ad2c31efb7f6c97f0cf36193eecb5a30ffcadc346704f8eeb1a5002"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_cut_tests.rs",
+        "sha256": "4d58df2f1910cac632278c00ac0e95ded515e360f8e90c905d0f4d2d36c00441"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_extend.rs",
+        "sha256": "502d837ede9ae9d822aed19dda80559a48b0f2a4b2bd6983f085e1073a58a281"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_extend_tests.rs",
+        "sha256": "966988ebc7c0b22cdc440570a99ea123b7eab471484a731983fff49faeb15e8c"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_filling.rs",
+        "sha256": "ec8fd403a1450f3f192b6dae0b7f1dba3d792e1a0721cc64b7319cf95bed51aa"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_filling_tests.rs",
+        "sha256": "9eb925424c60f82d19b45fe78e2cfbf080719b482a68847ffec6fee364463366"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_geom_fill_surface.rs",
+        "sha256": "b2f1e8e6bac82435f0f73146f8a98ec369133bab163b8671e31b171ca56db282"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_geom_fill_surface_tests.rs",
+        "sha256": "fad9748447f9c52930f2e0345ddc3370861c50a126f10750a86c6ce823351d63"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_sections.rs",
+        "sha256": "5f5f12c7cf6e2219d698484dccf66f0a064ef60c44f14d6fe5ccc564de0431d3"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_sections_tests.rs",
+        "sha256": "4078c1db07b378e3324944eb2529ef1a8cbdb85e49f555ae68b3875f5e3c2cc3"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_sewing.rs",
+        "sha256": "8fe31bef4cc30f9fb583883434f8ebaa2b1b97baec7e5202b4b7dd8a22dbdef2"
+      },
+      {
+        "path": "crates/opencascade/src/surface/feature_sewing_tests.rs",
+        "sha256": "233fb4769cd5ec9ecdf7bd31a0cde6d0576415b2078f084becd5f3824cb24b11"
+      },
+      {
+        "path": "crates/opencascade/src/surface/mod.rs",
+        "sha256": "729e2d465c40e4e812e40b38646ef32e211321b00418be52c52161166f91542f"
+      },
+      {
+        "path": "crates/opencascade/src/test_support/document_graph.rs",
+        "sha256": "bbfc27074929bf6b3d1e39d5ede9e36fdcbd969d2598f29b748e45e1f605c421"
+      },
+      {
+        "path": "crates/opencascade/src/test_support/fixture_values.rs",
+        "sha256": "49d8d30e3c62253444d8dd17f691bd8011b30ddc2800655c459d6eafb6f7020f"
+      },
+      {
+        "path": "crates/opencascade/src/test_support/mod.rs",
+        "sha256": "633feab738bf747a3128f73192e170693c5341661d8f3ad244289d69122a3c28"
+      },
+      {
+        "path": "crates/opencascade/src/test_support/shape_summary.rs",
+        "sha256": "80d10058384a1c00d2a036623b7ff3f11b463070b82e57da97c807fa5ac31bec"
+      },
+      {
+        "path": "crates/opencascade/src/test_support/sketch_json.rs",
+        "sha256": "94692bb41c149dd18065a260c2a574e6783067cdcd486068dc38a01b0e40a591"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/element_map.rs",
+        "sha256": "77c27345c007c45864b9295b483fb7ace75ea551fbfd0ef4978ee754e7ac046c"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/element_naming_utils.rs",
+        "sha256": "71e35603a5224e39e2598f1ad87b69a91b6d74e307e88c3bae97f4230a9914d5"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/evidence_ledger.rs",
+        "sha256": "af16bde00fec0e780147ef5f5292cd879a42b267358c7610c3e1c54c3857ff97"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/indexed_name.rs",
+        "sha256": "89eeb36d7a1fb6fd67fbc226c2de1fa53879dd78a479f7a266448f0b09cea3fe"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/mapped_element.rs",
+        "sha256": "45426ade67e34fbbdcb73c3b5c5b0ac15bc01227bc292e183ef989e28229a7c6"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/mapped_name.rs",
+        "sha256": "e40aa1cd7476c2c782591ccd4198fb5bcb0e1b3dc9d4b65d54ebd250be81b632"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/mapper.rs",
+        "sha256": "73992c2b082b21e58dca36520401011e05c54e63421b439b7ab103d02d90eba2"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/mod.rs",
+        "sha256": "f5add77b7e8d63ffbd7ead1d390580f279867eab7c751199df2c90cfaccfccd8"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/named_shape.rs",
+        "sha256": "25726cb08cdca2389639c256d4d367488d9a7923cb64653c46e13a446f8404df"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/shape_index.rs",
+        "sha256": "725ee4504178b3019b2e32c491c74be766d7ba66560410f931e3aca9df6bdcdb"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/string_hasher.rs",
+        "sha256": "7b2f41da4a5f9142c938b38ce9ebd3d8219ad8ed4a3bf82e6918dbdb9ddaa8ee"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/subshape_identity.rs",
+        "sha256": "65b30ed34d3198bf057a9ffd54c6af514aee6a8431374ab91cf627f39bd3b4f3"
+      },
+      {
+        "path": "crates/opencascade/src/workplane.rs",
+        "sha256": "8ace5ef4db86be6249759cf7482f2a16a6c1a2e088e829472c9ee829de42f7e3"
+      },
+      {
+        "path": "crates/viewer/Cargo.toml",
+        "sha256": "919e7c15e626b9fef0e236b2a3f26704508858fccba0830264d013d54f5d7e86"
+      },
+      {
+        "path": "crates/viewer/build.rs",
+        "sha256": "5c7726a2d0d0245b27f82f8b7fdc1bbd19e8c7996a7e97491b0af42f8adcf5ec"
+      },
+      {
+        "path": "crates/viewer/models/nist_ftc_06.step",
+        "sha256": "b87afb7f25adc0d44d12e182209d50f0b085b533c0742fb8ffd58f4c87403447"
+      },
+      {
+        "path": "crates/viewer/shaders/edge.wgsl",
+        "sha256": "1f9fa92a3797aa2b42b6784949f3cab19d4786623abb17c665bab81eddc26914"
+      },
+      {
+        "path": "crates/viewer/shaders/surface.wgsl",
+        "sha256": "1cb4944c2818112d484d4696d1fbc2382ca7d7a2f556d5c8fdfda6aecacb1798"
+      },
+      {
+        "path": "crates/viewer/src/camera.rs",
+        "sha256": "f8eaf218c2fb180196da67e35ef9e82c847651580b1ff266ddde897095fc6041"
+      },
+      {
+        "path": "crates/viewer/src/edge_drawer.rs",
+        "sha256": "42ff43df1bb8d5200e15d1f9bf7ae8fccfb1f8fae5471ace1e77ccb95ebef0cc"
+      },
+      {
+        "path": "crates/viewer/src/main.rs",
+        "sha256": "78494e0621245b523ee01e7ce9f503e3b96237624a30a11198dbcf2007b50865"
+      },
+      {
+        "path": "crates/viewer/src/surface_drawer.rs",
+        "sha256": "871537d2389a87ac94a92e5c6c01cac19611244de55683f3e53d8e7263a97457"
+      },
+      {
+        "path": "crates/viewer/src/wasm_engine.rs",
+        "sha256": "f8bbad7b3075a3da19500c0f863e1da3f4b4d415bc389ff950b4b9c2b7de6c9b"
+      },
+      {
+        "path": "crates/wasm-example/Cargo.toml",
+        "sha256": "e3b57a9882fdcdda6c99f889f73ebf55f1683d268bc73118e5301985f5ee7033"
+      },
+      {
+        "path": "crates/wasm-example/README.md",
+        "sha256": "eca6e0b0010a18e94297740f9479e60acb5caaa7ccc8f1cde59d7be0b2c2187b"
+      },
+      {
+        "path": "crates/wasm-example/src/lib.rs",
+        "sha256": "6bc52a7ddb1d34025cb5c2e09bd437315aebaa0be1a095b88cff6423a6328d83"
+      },
+      {
+        "path": "rustfmt.toml",
+        "sha256": "f2b29508968b86ff46435485441e9efe078a145341bf9010c4f2aa49031007c9"
+      }
+    ],
+    "configuration": {
+      "cargoFeatures": [],
+      "ondselSolverDir": null
+    }
+  },
+  "dirtyState": {
+    "algorithm": "sha256",
+    "digest": "d74c70a64aa9d87770d85903b478771cb29ef5c9554471ba12487572c2356fef",
+    "buildInputDigest": "ab7fdf32471e223445c79687f316b607806ad5e6fe063dead4fc460ddf7aeeaa",
+    "gitStatusSha256": "4d94f20d577e5a2eb6c3a7abf8e83767f308ac89e227daf42cef66ef2ca7fdf5",
+    "gitDiffSha256": "284851d6b2c2049124548aeb0f4595635a50a88444499954d9a960f213ccd0f5"
+  },
+  "toolchain": {
+    "rustcVerbose": "rustc 1.96.1 (31fca3adb 2026-06-26) (Homebrew)\nbinary: rustc\ncommit-hash: 31fca3adb283cc9dfd56b49cdee9a96eb9c96ffd\ncommit-date: 2026-06-26\nhost: aarch64-apple-darwin\nrelease: 1.96.1\nLLVM version: 22.1.8",
+    "rustcVerboseSha256": "1f8ad6cda3c7b5e783a1cfcc30dbf68c9b8b08c5840a07047e0051661751e3b0",
+    "cargoVersion": "cargo 1.96.1 (356927216 2026-06-26) (Homebrew)",
+    "cargoVersionSha256": "d47d00c18e324747f7d1f88cf9d8bf6012e01b69330c22b63b41e437898057fd"
+  },
+  "linkedOcct": {
+    "configPath": "target/debug/build/opencascade-sys-fa40b90af39eb847/out/share/occ_info.txt",
+    "configSha256": "e632b6226e39e171b70c196038f608aa36a454f8fba65cdbc7c9392a2ad859d8",
+    "version": "7.8",
+    "libraryDir": "/Users/li/Chili3DProject/opencascade-rs/target/OCCT/lib",
+    "buildSharedLibs": "",
+    "compiledConfigSha256": "e632b6226e39e171b70c196038f608aa36a454f8fba65cdbc7c9392a2ad859d8",
+    "runtimeEntrypoint": "cad_rs_version_json"
+  }
+}

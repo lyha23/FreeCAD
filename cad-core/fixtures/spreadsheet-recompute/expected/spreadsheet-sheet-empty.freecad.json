@@ -1,0 +1,40 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "EmptySheet",
+      "object_fields": {
+        "cell_count": 0,
+        "shape": "spreadsheet",
+        "status": "ok"
+      },
+      "spreadsheet": {
+        "cells": []
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:d63ff1262a8bf80a6df59a3bf4bcb2c532c0d76fabc85a6aa316dc4ead4706a9",
+    "objects": {
+      "EmptySheet": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d8421b4e5999f1a228cf133e28d18f0caa171f4cdb00a73990a195ecf6bf0974",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

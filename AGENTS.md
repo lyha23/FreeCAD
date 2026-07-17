@@ -65,7 +65,7 @@
   ```bash
   cd ~/Chili3DProject/FreeCAD/cad-core
   mkdir -p out
-  ./cad-core recompute fixtures/p2/rect-pad-pocket.json --output out/rect-pad-pocket.result.json
+  ./cad-core recompute fixtures/partdesign-extrude/rect-pad-pocket.json --output out/rect-pad-pocket.result.json
   ```
 - Python 测试按修改范围选择 focused module，例如：
   ```bash

@@ -1,0 +1,221 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          1.0,
+          2.0,
+          1e+100
+        ],
+        "min": [
+          1.0,
+          2.0,
+          -1e+100
+        ]
+      },
+      "object": "ShapeBinderLine",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ShapeBinderLine.Edge1",
+          "id": "ShapeBinderLine:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        }
+      ],
+      "topology_counts": {
+        "edges": 1,
+        "faces": 0,
+        "vertices": 0
+      },
+      "volume": 0.0
+    },
+    {
+      "bbox": {
+        "max": [
+          1e+100,
+          1e+100,
+          6.0
+        ],
+        "min": [
+          -1e+100,
+          -1e+100,
+          6.0
+        ]
+      },
+      "object": "ShapeBinderPlane",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ShapeBinderPlane.Face1",
+          "id": "ShapeBinderPlane:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        }
+      ],
+      "topology_counts": {
+        "edges": 0,
+        "faces": 1,
+        "vertices": 0
+      },
+      "volume": 1.6e+101
+    },
+    {
+      "bbox": {
+        "max": [
+          7.0,
+          8.0,
+          9.0
+        ],
+        "min": [
+          7.0,
+          8.0,
+          9.0
+        ]
+      },
+      "object": "ShapeBinderPoint",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ShapeBinderPoint.Vertex1",
+          "id": "ShapeBinderPoint:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        }
+      ],
+      "topology_counts": {
+        "edges": 0,
+        "faces": 0,
+        "vertices": 1
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:c8f8fda6aefc035c0ad1c820e60e5eedaee17f23dc3510c99abd78ac52ed0931",
+    "objects": {
+      "AppLine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:00a2039d6f0873e568602ca3794cd1344500121fd3de42ebad1831904d8cfdd5",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          }
+        }
+      },
+      "AppPlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:f1be82f6e0ae59a8edba2322077a67d0f37813815eff30e50ab8528b665ec9b3",
+        "subshapes": {
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          }
+        }
+      },
+      "AppPoint": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:86e018b4ebc44f77d0199f48ec57c051fbc092d721aa288926a686894a92ddc9",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "ShapeBinderLine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:a93e5ec461ac253e27da58c110f3c3a80490a6e3f3a3c820b4a19fd6b3ea9581",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          }
+        }
+      },
+      "ShapeBinderPlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8c5e777e23e0f665e1db82f69eba9ce9f77c736e911aebf9c3ef5c49bab90f72",
+        "subshapes": {
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          }
+        }
+      },
+      "ShapeBinderPoint": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:87979fd043ba9339fd46e673e3820e249db7c9d42a2e975229d60f91579f761a",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

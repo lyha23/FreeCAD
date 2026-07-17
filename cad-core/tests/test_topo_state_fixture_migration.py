@@ -118,7 +118,7 @@ class TopoStateFixtureMigrationTest(unittest.TestCase):
 
     def test_rect_pad_pocket_existing_state_is_preserved(self) -> None:
         tool = load_tool()
-        fixture_path = ROOT / "fixtures" / "p2" / "rect-pad-pocket.json"
+        fixture_path = ROOT / "fixtures" / "partdesign-extrude" / "rect-pad-pocket.json"
         fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
         args = argparse.Namespace(
             history_mode="minimal",

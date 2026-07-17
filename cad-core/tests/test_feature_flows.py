@@ -12,45 +12,45 @@ except ImportError:  # pragma: no cover - supports `unittest discover tests`.
 
 class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_rect_pad_pocket_outputs_cut_body(self) -> None:
-        result = self.run_recompute("rect-pad-pocket", "p2")
-        expected = self.expected_freecad("p2", "rect-pad-pocket")
+        result = self.run_recompute("rect-pad-pocket", "partdesign-extrude")
+        expected = self.expected_freecad("partdesign-extrude", "rect-pad-pocket")
         expected_object = next(iter(self.expected_result_objects(expected)))
         mesh = result["mesh"][expected_object]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p2", "rect-pad-pocket")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "rect-pad-pocket")
         self.assertGreater(mesh["summary"]["triangle_count"], 0)
         self.assertNotIn("shapes", result)
 
     def test_body_basefeature_pad_uses_base_solid(self) -> None:
-        result = self.run_recompute("body-basefeature-pad", "p2")
+        result = self.run_recompute("body-basefeature-pad", "partdesign-body")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p2", "body-basefeature-pad")
+        self.assert_object_matches_expected(result, "partdesign-body", "body-basefeature-pad")
 
     def test_p3a_pocket_through_all_outputs_cut_body(self) -> None:
-        result = self.run_recompute("pocket-through-all", "p3a")
+        result = self.run_recompute("pocket-through-all", "partdesign-extrude")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p3a", "pocket-through-all")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pocket-through-all")
         self.assertEqual(result["objects"]["Pocket"]["method"], "ThroughAll")
 
     def test_p3a_pocket_through_all_without_base_does_not_fake_body(self) -> None:
-        result = self.run_recompute("pocket-through-all-without-base", "p3a")
+        result = self.run_recompute("pocket-through-all-without-base", "partdesign-extrude")
 
-        self.assertEqual(self.diagnostic_codes("pocket-through-all-without-base", "p3a"), ["execution_failed"])
+        self.assertEqual(self.diagnostic_codes("pocket-through-all-without-base", "partdesign-extrude"), ["execution_failed"])
         self.assertEqual(result["objects"]["Pocket"]["status"], "error")
         self.assertEqual(result["objects"]["Body"]["status"], "skipped")
         self.assertNotIn("Body", result["mesh"])
 
     def test_p3a_pocket_up_to_face_outputs_cut_body(self) -> None:
-        result = self.run_recompute("pocket-up-to-face", "p3a")
-        repeat = self.run_recompute("pocket-up-to-face", "p3a")
-        expected = self.expected_freecad("p3a", "pocket-up-to-face")
+        result = self.run_recompute("pocket-up-to-face", "partdesign-extrude")
+        repeat = self.run_recompute("pocket-up-to-face", "partdesign-extrude")
+        expected = self.expected_freecad("partdesign-extrude", "pocket-up-to-face")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(repeat["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p3a", "pocket-up-to-face")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pocket-up-to-face")
         self.assert_expected_object(repeat, expected["object"], expected)
         self.assertEqual(result["objects"]["Pocket"]["method"], "UpToFace")
         self.assertEqual(sorted(result["subshapes"]["Body"]), sorted(repeat["subshapes"]["Body"]))
@@ -60,23 +60,23 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "pocket-up-to-shape-face",
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3a")
+                result = self.run_recompute(fixture)
 
                 self.assertEqual(result["diagnostics"], [])
-                self.assert_object_matches_expected(result, "p3a", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
                 self.assertEqual(result["objects"]["Pocket"]["method"], "UpToShape")
 
     def test_p3a_pad_up_to_face_outputs_solid(self) -> None:
-        result = self.run_recompute("pad-up-to-face", "p3a")
+        result = self.run_recompute("pad-up-to-face", "partdesign-extrude")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["method"], "UpToFace")
-        self.assert_object_matches_expected(result, "p3a", "pad-up-to-face")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-up-to-face")
 
     def test_p3a_up_to_shape_multi_face_failure_boundaries_are_structured(self) -> None:
-        offset = self.run_recompute("pocket-up-to-shape-multiple-faces-offset", "p3a")
-        invalid = self.run_recompute("pocket-up-to-shape-edge-subshape", "p3a")
+        offset = self.run_recompute("pocket-up-to-shape-multiple-faces-offset", "partdesign-extrude")
+        invalid = self.run_recompute("pocket-up-to-shape-edge-subshape", "partdesign-extrude")
 
         self.assertEqual([item["code"] for item in offset["diagnostics"]], ["unsupported_property"])
         self.assertEqual(offset["diagnostics"][0]["message"], "Extrude: Can only offset one face")
@@ -88,12 +88,12 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(invalid["objects"]["Pocket"]["status"], "error")
 
     def test_p3b_two_sides_length_outputs_expected_extents(self) -> None:
-        result = self.run_recompute("pad-two-sides-length", "p3b")
+        result = self.run_recompute("pad-two-sides-length", "partdesign-extrude")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["method"], "Two sides")
-        self.assert_object_matches_expected(result, "p3b", "pad-two-sides-length")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-two-sides-length")
 
     def test_p3b_two_sides_up_to_targets(self) -> None:
         for fixture in [
@@ -103,12 +103,12 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "pad-two-sides-up-to-shape2",
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3b")
+                result = self.run_recompute(fixture)
                 pad = result["objects"]["Pad"]
 
                 self.assertEqual(result["diagnostics"], [])
                 self.assertEqual(pad["method"], "Two sides")
-                self.assert_object_matches_expected(result, "p3b", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p3b_up_to_first_last_selects_nearest_or_furthest_body_face(self) -> None:
         for fixture, method in [
@@ -116,27 +116,27 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("pad-up-to-last", "UpToLast"),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3b")
+                result = self.run_recompute(fixture)
 
                 self.assertEqual(result["diagnostics"], [])
                 self.assertEqual(result["objects"]["Pad"]["method"], method)
-                self.assert_object_matches_expected(result, "p3b", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p3b_pocket_two_sides_length_cuts_body(self) -> None:
-        result = self.run_recompute("pocket-two-sides-length", "p3b")
+        result = self.run_recompute("pocket-two-sides-length", "partdesign-extrude")
         pocket = result["objects"]["Pocket"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pocket["method"], "Two sides")
-        self.assert_object_matches_expected(result, "p3b", "pocket-two-sides-length")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pocket-two-sides-length")
 
     def test_p3b_symmetric_length_outputs_expected_extents(self) -> None:
         for fixture in ["pad-symmetric-length", "pocket-symmetric-length"]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3b")
+                result = self.run_recompute(fixture)
 
                 self.assertEqual(result["diagnostics"], [])
-                self.assert_object_matches_expected(result, "p3b", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p3b_start_offset_moves_profile_before_side_logic(self) -> None:
         for fixture, expected_min, expected_max, method in [
@@ -145,7 +145,7 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("pad-symmetric-start-offset", [0.0, 0.0, -5.0], [10.0, 5.0, 15.0], "Symmetric"),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3b")
+                result = self.run_recompute(fixture)
                 pad = result["objects"]["Pad"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -153,85 +153,85 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assert_bbox_close(pad["bbox"], expected_min, expected_max)
 
     def test_p3b_custom_vector_uses_along_sketch_normal_length(self) -> None:
-        result = self.run_recompute("pad-custom-vector", "p3b")
+        result = self.run_recompute("pad-custom-vector", "partdesign-extrude")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p3b", "pad-custom-vector")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-custom-vector")
 
     def test_p3b_pocket_custom_vector_cuts_body(self) -> None:
-        result = self.run_recompute("pocket-custom-vector", "p3b")
+        result = self.run_recompute("pocket-custom-vector", "partdesign-extrude")
         pocket = result["objects"]["Pocket"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pocket["method"], "Length")
-        self.assert_object_matches_expected(result, "p3b", "pocket-custom-vector")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pocket-custom-vector")
 
     def test_p3b_reference_axis_uses_sketch_normal_axis(self) -> None:
         for fixture in ["pad-reference-axis", "pad-reference-axis-edge"]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3b")
+                result = self.run_recompute(fixture)
 
                 self.assertEqual(result["diagnostics"], [])
-                self.assert_object_matches_expected(result, "p3b", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p3b_sketch_placement_transforms_profile(self) -> None:
-        result = self.run_recompute("pad-sketch-placement", "p3b")
+        result = self.run_recompute("pad-sketch-placement", "partdesign-extrude")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p3b", "pad-sketch-placement")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-sketch-placement")
 
     def test_p3b_custom_direction_with_placement(self) -> None:
         for fixture in ["pad-custom-direction-placement", "pad-custom-direction-sketch-rotation"]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3b")
+                result = self.run_recompute(fixture)
 
                 self.assertEqual(result["diagnostics"], [])
-                self.assert_object_matches_expected(result, "p3b", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p3b_body_and_featurebase_placement(self) -> None:
-        result = self.run_recompute("pocket-body-placement", "p3b")
+        result = self.run_recompute("pocket-body-placement", "partdesign-extrude")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p3b", "pocket-body-placement")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pocket-body-placement")
 
-        result = self.run_recompute("body-basefeature-placement", "p3b")
+        result = self.run_recompute("body-basefeature-placement", "partdesign-body")
         body = result["objects"]["Body"]
         feature_base = result["objects"]["FeatureBase"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p3b", "body-basefeature-placement")
+        self.assert_object_matches_expected(result, "partdesign-body", "body-basefeature-placement")
         self.assertEqual(feature_base["bbox"], body["bbox"])
         self.assertAlmostEqual(feature_base["volume"], body["volume"])
 
     def test_p3b_taper_outputs_geometry_and_consumes_thru_sections_history(self) -> None:
-        result = self.run_recompute("pad-length-taper", "p3b")
+        result = self.run_recompute("pad-length-taper", "partdesign-extrude")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("topo_naming", pad)
         self.assertEqual(pad["topo_naming_history"], "maker_history:taper_thru_sections")
-        self.assert_object_matches_expected(result, "p3b", "pad-length-taper")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-length-taper")
 
-        result = self.run_recompute("pad-two-sides-taper", "p3b")
+        result = self.run_recompute("pad-two-sides-taper", "partdesign-extrude")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("topo_naming", pad)
         self.assertEqual(pad["topo_naming_history"], "maker_history:taper_thru_sections")
         self.assertEqual(pad["method"], "Two sides")
-        self.assert_object_matches_expected(result, "p3b", "pad-two-sides-taper")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-two-sides-taper")
 
-        result = self.run_recompute("pad-symmetric-taper", "p3b")
+        result = self.run_recompute("pad-symmetric-taper", "partdesign-extrude")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("topo_naming", pad)
         self.assertEqual(pad["topo_naming_history"], "maker_history:taper_thru_sections")
         self.assertEqual(pad["method"], "Symmetric")
-        self.assert_object_matches_expected(result, "p3b", "pad-symmetric-taper")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-symmetric-taper")
 
     def test_p3b_taper_supports_inner_wire_profile(self) -> None:
-        result = self.run_recompute("pad-length-taper-inner-wire", "p3b")
+        result = self.run_recompute("pad-length-taper-inner-wire", "partdesign-extrude")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -240,45 +240,45 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["edge_count"], 8)
         self.assertNotIn("topo_naming", pad)
         self.assertEqual(pad["topo_naming_history"], "maker_history:taper_thru_sections")
-        self.assert_object_matches_expected(result, "p3b", "pad-length-taper-inner-wire")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-length-taper-inner-wire")
 
     def test_p3b_pocket_taper_cuts_body(self) -> None:
-        result = self.run_recompute("pocket-length-taper", "p3b")
+        result = self.run_recompute("pocket-length-taper", "partdesign-extrude")
         pocket = result["objects"]["Pocket"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("topo_naming", pocket)
         self.assertEqual(pocket["topo_naming_history"], "maker_history:taper_thru_sections")
-        self.assert_object_matches_expected(result, "p3b", "pocket-length-taper")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pocket-length-taper")
 
     def test_p4_normalized_links_drive_graph_and_executors(self) -> None:
-        result = self.run_recompute("body-link-list", "p4")
+        result = self.run_recompute("body-link-list", "app-links")
         body = result["objects"]["Body"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(body["status"], "ok")
         self.assertEqual(body["group"], ["Sketch", "Pad"])
         self.assertEqual(body["tip"], "Pad")
-        self.assert_object_matches_expected(result, "p4", "body-link-list")
+        self.assert_object_matches_expected(result, "app-links", "body-link-list")
 
-        result = self.run_recompute("feature-link-sub-list", "p4")
+        result = self.run_recompute("feature-link-sub-list", "app-links")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["status"], "ok")
         self.assertEqual(pad["method"], "UpToShape")
         self.assertEqual(pad["source_profile"], "Sketch")
-        self.assert_object_matches_expected(result, "p4", "feature-link-sub-list")
+        self.assert_object_matches_expected(result, "app-links", "feature-link-sub-list")
 
     def test_p4_part_local_placement_transforms_body_output(self) -> None:
-        result = self.run_recompute("part-placement-body", "p4")
+        result = self.run_recompute("part-placement-body", "app-properties")
         body = result["objects"]["Body"]
         part = result["objects"]["Part"]
         mesh_summary = result["mesh"]["Body"]["summary"]
         part_mesh_summary = result["mesh"]["Part"]["summary"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p4", "part-placement-body")
+        self.assert_object_matches_expected(result, "app-properties", "part-placement-body")
         self.assertEqual(part["display_object"], "Body")
         self.assertEqual(part["bbox"], body["bbox"])
         self.assertEqual(mesh_summary["bbox"], body["bbox"])
@@ -287,39 +287,39 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(part["volume"], body["volume"])
 
     def test_p4_sketch_placement_pocket_uses_same_body_coordinates(self) -> None:
-        result = self.run_recompute("sketch-placement-pocket", "p4")
+        result = self.run_recompute("sketch-placement-pocket", "app-properties")
         body = result["objects"]["Body"]
         mesh_summary = result["mesh"]["Body"]["summary"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p4", "sketch-placement-pocket")
+        self.assert_object_matches_expected(result, "app-properties", "sketch-placement-pocket")
         self.assertEqual(mesh_summary["bbox"], body["bbox"])
         self.assertAlmostEqual(mesh_summary["volume"], body["volume"])
 
     def test_p4_typed_scalar_properties_feed_feature_extrude(self) -> None:
-        result = self.run_recompute("typed-property-pad", "p4")
+        result = self.run_recompute("typed-property-pad", "app-properties")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["status"], "ok")
         self.assertEqual(pad["method"], "Length")
-        self.assert_object_matches_expected(result, "p4", "typed-property-pad")
+        self.assert_object_matches_expected(result, "app-properties", "typed-property-pad")
 
     def test_p4_datum_plane_support_places_sketch_profile(self) -> None:
-        result = self.run_recompute("datum-plane-support", "p4")
+        result = self.run_recompute("datum-plane-support", "partdesign-datum")
         body = result["objects"]["Body"]
         pad = result["objects"]["Pad"]
         mesh_summary = result["mesh"]["Body"]["summary"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["objects"]["DatumPlane"]["status"], "ok")
-        self.assert_object_matches_expected(result, "p4", "datum-plane-support")
+        self.assert_object_matches_expected(result, "partdesign-datum", "datum-plane-support")
         self.assertEqual(pad["bbox"], body["bbox"])
         self.assertEqual(mesh_summary["bbox"], body["bbox"])
         self.assertAlmostEqual(mesh_summary["volume"], body["volume"])
 
     def test_p4_datum_line_reference_axis_drives_pad_direction(self) -> None:
-        result = self.run_recompute("datum-line-reference-axis", "p4")
+        result = self.run_recompute("datum-line-reference-axis", "partdesign-datum")
         datum_line = result["objects"]["DatumLine"]
         pad = result["objects"]["Pad"]
 
@@ -330,10 +330,10 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(datum_line["direction"][1], 0.0)
         self.assertAlmostEqual(datum_line["direction"][2], 0.7071067811865475)
         self.assertEqual(pad["method"], "Length")
-        self.assert_object_matches_expected(result, "p4", "datum-line-reference-axis")
+        self.assert_object_matches_expected(result, "partdesign-datum", "datum-line-reference-axis")
 
     def test_p4_datum_point_uses_parent_part_placement(self) -> None:
-        result = self.run_recompute("datum-point-part-placement", "p4")
+        result = self.run_recompute("datum-point-part-placement", "partdesign-datum")
         datum_point = result["objects"]["DatumPoint"]
 
         self.assertEqual(result["diagnostics"], [])

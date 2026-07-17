@@ -1,0 +1,72 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-sphere",
+    "expectedPayloadHash": "sha256:38dae656e9273dda9813eff8d8cd9fae6178ebcbe6eacd1c9da555db78836157",
+    "inputHash": "sha256:cdbf10ec8e2cd28b756decd1dc58a91a7a5fcc3250286589c8db8888a86b2923",
+    "phase": "part-primitives",
+    "topoNamingStateHash": "sha256:2726db26fe585e21aeb9e23119d9b8afc6d81592f9f1cf9c3a4b14b08c725d3d"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Sphere": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Sphere"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Sphere": {
+        "covers": [
+          "Sphere"
+        ],
+        "ledgerObject": "Sphere",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:2726db26fe585e21aeb9e23119d9b8afc6d81592f9f1cf9c3a4b14b08c725d3d",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

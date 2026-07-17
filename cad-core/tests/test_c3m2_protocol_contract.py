@@ -9,12 +9,12 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .fixture_runner import BIN, ROOT
+    from .fixture_runner import BIN, ROOT, semantic_fixture_path
 except ImportError:  # pragma: no cover - supports `unittest discover tests`.
-    from fixture_runner import BIN, ROOT
+    from fixture_runner import BIN, ROOT, semantic_fixture_path
 
 
-PHASE = "c3m2"
+LEGACY_PHASE = "c3m2"
 EVIDENCE_FIELDS = {
     "authority",
     "close_condition",
@@ -29,7 +29,7 @@ class C3M2ProtocolContractTest(unittest.TestCase):
 
     @staticmethod
     def response_for(case: str) -> dict[str, Any]:
-        input_path = ROOT / "fixtures" / PHASE / f"{case}.json"
+        input_path = semantic_fixture_path(case)
         with tempfile.TemporaryDirectory(prefix="c3m2-protocol-contract-") as directory:
             output_path = Path(directory) / "response.json"
             environment = os.environ.copy()
@@ -112,7 +112,18 @@ class C3M2ProtocolContractTest(unittest.TestCase):
     def test_c3m2_protocol_contracts_match_live_runtime(self) -> None:
         roles_path = ROOT / "tools" / "freecad_expected_parity" / "fixture_roles.v1.json"
         roles = json.loads(roles_path.read_text(encoding="utf-8"))["roles"]
-        c3m2_roles = [entry for entry in roles if entry.get("phase") == PHASE]
+        migration = json.loads(
+            (
+                ROOT
+                / "tools"
+                / "freecad_expected_parity"
+                / "fixture_legacy_phase_map.v1.json"
+            ).read_text(encoding="utf-8")
+        )["cases"]
+        legacy_cases = {
+            entry["case"] for entry in migration if entry["legacyPhase"] == LEGACY_PHASE
+        }
+        c3m2_roles = [entry for entry in roles if entry.get("case") in legacy_cases]
 
         self.assertEqual(12, len(c3m2_roles))
         protocol_roles = [entry for entry in c3m2_roles if entry.get("role") == "protocol_only"]
@@ -123,7 +134,7 @@ class C3M2ProtocolContractTest(unittest.TestCase):
 
         for entry in sorted(protocol_roles, key=lambda item: item["case"]):
             case = entry["case"]
-            artifact_path = ROOT / "fixtures" / PHASE / "expected" / f"{case}.expeted.json"
+            artifact_path = semantic_fixture_path(case).parent / "expected" / f"{case}.expeted.json"
             with self.subTest(case=case):
                 artifact = json.loads(artifact_path.read_text(encoding="utf-8"))
                 evidence = artifact["oracle_evidence"]

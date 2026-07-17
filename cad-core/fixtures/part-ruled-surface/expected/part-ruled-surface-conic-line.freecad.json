@@ -1,0 +1,147 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          5.534123567749435,
+          1.434173939982948,
+          0.0
+        ],
+        "min": [
+          4.0,
+          -1.233475097903745,
+          0.0
+        ]
+      },
+      "length": 3.9512611707400667,
+      "length_delta": 1e-05,
+      "object": "HyperbolaEdge",
+      "object_fields": {
+        "curve_kind": "hyperbola",
+        "curve_type": "GeomAbs_Hyperbola",
+        "dto": "PartConicCurveDTO",
+        "feature": "part_geometry_curve",
+        "part_geometry_type": "Part.Hyperbola",
+        "shape": "occt_edge",
+        "status": "ok"
+      },
+      "topology_counts": {
+        "edges": 1,
+        "faces": 0,
+        "vertices": 2
+      },
+      "volume": 0.0
+    },
+    {
+      "bbox": {
+        "max": [
+          5.6,
+          1.4500000000000002,
+          2.8
+        ],
+        "min": [
+          4.0,
+          -1.2,
+          2.5
+        ]
+      },
+      "object": "BridgeLine",
+      "object_fields": {
+        "feature": "part_line",
+        "primitive": "line",
+        "shape": "occt_edge",
+        "status": "ok"
+      },
+      "topology_counts": {
+        "edges": 1,
+        "faces": 0,
+        "vertices": 2
+      },
+      "volume": 0.0
+    },
+    {
+      "bbox": {
+        "max": [
+          5.600000100000001,
+          1.450000100000001,
+          2.8000001
+        ],
+        "min": [
+          3.9999999,
+          -1.233475197903745,
+          -1e-07
+        ]
+      },
+      "object": "ConicRuledSurface",
+      "object_fields": {
+        "feature": "part_ruled_surface",
+        "orientation": "Automatic",
+        "shape": "occt_face",
+        "source_curve1": "HyperbolaEdge",
+        "source_curve1_curve_kind": "hyperbola",
+        "source_curve1_curve_type": "GeomAbs_Hyperbola",
+        "source_curve1_dto": "PartConicCurveDTO",
+        "source_curve1_feature": "part_geometry_curve",
+        "source_curve1_part_geometry_type": "Part.Hyperbola",
+        "source_curve2": "BridgeLine",
+        "source_curve2_feature": "part_line",
+        "status": "ok"
+      },
+      "topology_counts": {
+        "edges": 4,
+        "faces": 1,
+        "vertices": 4
+      },
+      "volume": -2.079463829065496
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:94ecdc77de3bbf5ad273b2b798addc1aa5545124729942c740aa8474ad6d0092",
+    "objects": {
+      "BridgeLine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:23b4a577f48736754ad0b56b157e885eecfdafc7bbc389a2767509774bc141a6",
+        "subshapes": {}
+      },
+      "ConicRuledSurface": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:568bf12df6a2408450c734b339178eae5b2409b4982f675c44a3f00914a4524f",
+        "subshapes": {}
+      },
+      "HyperbolaEdge": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:4a54cc60d76e2c70f9ecce1b8d84f83cfe2847f8129f0b311b995f70d1ffc62b",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

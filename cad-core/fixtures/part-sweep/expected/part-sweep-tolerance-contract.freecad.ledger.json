@@ -1,0 +1,151 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "InvalidToleranceTol3d",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell Tolerance.tol3d must be a finite number",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "LegacyScalarTolerance",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell Tolerance must be an object with tol3d/boundTol/tolAngular",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "events": [],
+  "fixture": {
+    "case": "part-sweep-tolerance-contract",
+    "expectedPayloadHash": "sha256:b1381395aa4f59bd0224e446e3990c5ef6367f1982ce35c6fd100b76ef5984a9",
+    "inputHash": "sha256:6b6350e77b22499323b878396f43c7f002cab0b6b97b826aedccac5575da82a6",
+    "phase": "part-sweep",
+    "topoNamingStateHash": "sha256:25590ca1a4f6e6b0c899c3bc0c8dfd060bfef9760d100f5915826cf46852984e"
+  },
+  "inputReferences": [],
+  "objects": {
+    "InvalidToleranceTol3d": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "LegacyScalarTolerance": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "PipeSpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SketchPipeProfile": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "ToleranceSweep": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Sweep"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {
+      "InvalidToleranceTol3d": {
+        "coveredBy": "PipeSpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "LegacyScalarTolerance": {
+        "coveredBy": "PipeSpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      }
+    },
+    "publishedObjects": {
+      "PipeSpine": {
+        "covers": [
+          "PipeSpine"
+        ],
+        "ledgerObject": "PipeSpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeProfile": {
+        "covers": [
+          "SketchPipeProfile"
+        ],
+        "ledgerObject": "SketchPipeProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ToleranceSweep": {
+        "covers": [
+          "ToleranceSweep"
+        ],
+        "ledgerObject": "ToleranceSweep",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:25590ca1a4f6e6b0c899c3bc0c8dfd060bfef9760d100f5915826cf46852984e",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

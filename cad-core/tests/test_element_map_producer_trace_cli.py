@@ -9,6 +9,7 @@ import unittest
 from pathlib import Path
 
 from tools.element_map_producer_trace import validate_trace
+from tests.fixture_runner import semantic_fixture_path
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,14 +49,14 @@ class ElementMapProducerTraceCliTests(unittest.TestCase):
         return output, trace
 
     def test_default_sidecar_path_for_cad_core_output(self) -> None:
-        self.run_case(ROOT / "fixtures" / "p5" / "sketch-open-wire-internal-empty.json", "open.cad-core.json")
+        self.run_case(ROOT / "fixtures" / "sketcher-geometry" / "sketch-open-wire-internal-empty.json", "open.cad-core.json")
 
     def test_default_sidecar_path_for_plain_output(self) -> None:
-        self.run_case(ROOT / "fixtures" / "p5" / "sketch-open-wire-internal-empty.json", "open.json")
+        self.run_case(ROOT / "fixtures" / "sketcher-geometry" / "sketch-open-wire-internal-empty.json", "open.json")
 
     def test_preflight_rejection_has_closed_abort_transaction(self) -> None:
         output, trace_path = self.run_case(
-            ROOT / "fixtures" / "c4m6" / "topo-state-schema-incompatible.json",
+            ROOT / "fixtures" / "topology-state" / "topo-state-schema-incompatible.json",
             "rejected.cad-core.json",
         )
         response = json.loads(output.read_text(encoding="utf-8"))
@@ -70,7 +71,7 @@ class ElementMapProducerTraceCliTests(unittest.TestCase):
         trace_path = self.directory / "open.cad-core.producer-trace.json"
         trace_path.write_text('{"stale":true}\n', encoding="utf-8")
         _, published = self.run_case(
-            ROOT / "fixtures" / "p5" / "sketch-open-wire-internal-empty.json",
+            ROOT / "fixtures" / "sketcher-geometry" / "sketch-open-wire-internal-empty.json",
             "open.cad-core.json",
         )
         self.assertNotIn("stale", json.loads(published.read_text(encoding="utf-8")))
@@ -84,7 +85,7 @@ class ElementMapProducerTraceCliTests(unittest.TestCase):
             [
                 str(CLI),
                 "recompute",
-                str(ROOT / "fixtures" / "p5" / "sketch-open-wire-internal-empty.json"),
+                str(ROOT / "fixtures" / "sketcher-geometry" / "sketch-open-wire-internal-empty.json"),
                 "--output",
                 str(output),
             ],
@@ -195,16 +196,14 @@ class ElementMapProducerTraceCliTests(unittest.TestCase):
                 "LinearPattern": ["DatumLine", "Pad", "Pocket"],
             },
         }
-        phase = ROOT / "fixtures" / "c3m5"
-
         for case_name in cases:
             with self.subTest(case=case_name):
-                fixture = phase / f"{case_name}.json"
+                fixture = semantic_fixture_path(case_name)
                 _output, trace_path = self.run_case(fixture, f"{case_name}.cad-core.json")
                 request = json.loads(fixture.read_text(encoding="utf-8"))
                 trace = json.loads(trace_path.read_text(encoding="utf-8"))
                 native_trace = json.loads(
-                    (phase / "expected" / f"{case_name}.freecad.producer-trace.json").read_text(
+                    (fixture.parent / "expected" / f"{case_name}.freecad.producer-trace.json").read_text(
                         encoding="utf-8"
                     )
                 )
@@ -232,12 +231,11 @@ class ElementMapProducerTraceCliTests(unittest.TestCase):
                     self.assertEqual(expected_dependencies, input_slots[object_name])
 
     def test_dressup_addsub_cache_is_built_only_when_transformed_consumes_it(self) -> None:
-        phase = ROOT / "fixtures" / "c3m5"
-
         for case_name in ("chamfer-two-distances-edge", "fillet-face-selection-history"):
             with self.subTest(case=case_name):
+                fixture = semantic_fixture_path(case_name)
                 _output, trace_path = self.run_case(
-                    phase / f"{case_name}.json", f"{case_name}.cad-core.json"
+                    fixture, f"{case_name}.cad-core.json"
                 )
                 trace = json.loads(trace_path.read_text(encoding="utf-8"))
                 cut_scopes = [
@@ -283,7 +281,7 @@ class ElementMapProducerTraceCliTests(unittest.TestCase):
         ]
         self.assertEqual(1, len(pattern_fuses))
     def test_sketch_face_maker_names_result_before_wire_joiner_handoff(self) -> None:
-        fixture = ROOT / "fixtures/c3m5/body-addsub-replay-stops-at-tip.json"
+        fixture = ROOT / "fixtures/partdesign-body/body-addsub-replay-stops-at-tip.json"
         _output, trace_path = self.run_case(fixture, "face-maker-order.cad-core.json")
         trace = json.loads(trace_path.read_text(encoding="utf-8"))
         events = trace["events"]
@@ -332,7 +330,7 @@ class ElementMapProducerTraceCliTests(unittest.TestCase):
         self.assertTrue(all(event["producer"] == "Part::TopoShape" for event in maker_scopes))
 
     def test_partdesign_boolean_preserves_native_pad_subshape_identity_order(self) -> None:
-        fixture = ROOT / "fixtures/c3m5/body-addsub-replay-stops-at-tip.json"
+        fixture = ROOT / "fixtures/partdesign-body/body-addsub-replay-stops-at-tip.json"
         _output, trace_path = self.run_case(fixture, "pad-boolean-subshape-order.cad-core.json")
         events = json.loads(trace_path.read_text(encoding="utf-8"))["events"]
 

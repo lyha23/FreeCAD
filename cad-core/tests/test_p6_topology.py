@@ -8,16 +8,16 @@ from pathlib import Path
 
 try:
     from .fixture_expected import ExpectedFixtureAssertions
-    from .fixture_runner import BIN, CadCoreFixtureTestCase, ROOT
+    from .fixture_runner import BIN, CadCoreFixtureTestCase, ROOT, semantic_fixture_path
 except ImportError:  # pragma: no cover - supports `unittest discover tests`.
     from fixture_expected import ExpectedFixtureAssertions
-    from fixture_runner import BIN, CadCoreFixtureTestCase, ROOT
+    from fixture_runner import BIN, CadCoreFixtureTestCase, ROOT, semantic_fixture_path
 
 
 class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def run_c3m1_probe(self, fixture: str) -> dict:
         probe = ROOT / "build" / "cad-core-c3m1-topology-probe"
-        fixture_path = ROOT / "fixtures" / "c3m1" / f"{fixture}.json"
+        fixture_path = semantic_fixture_path(fixture)
         completed = subprocess.run(
             [str(probe), str(fixture_path)],
             cwd=ROOT,
@@ -28,7 +28,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         return json.loads(completed.stdout)
 
     def c4m4_result(self, fixture: str) -> dict:
-        return self.run_recompute(fixture, "c4m4")
+        return self.run_recompute(fixture)
 
     def single_reference_update_item(self, result: dict) -> dict:
         self.assertEqual(len(result["elementReferenceUpdates"]), 1)
@@ -39,7 +39,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         return update
 
     def p6_payload(self, fixture: str) -> dict:
-        path = ROOT / "fixtures" / "p6" / f"{fixture}.json"
+        path = semantic_fixture_path(fixture)
         return json.loads(path.read_text(encoding="utf-8"))
 
     def run_payload(self, payload: dict) -> dict:
@@ -206,7 +206,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         return diagnostic
 
     def test_p6_body_tip_face_profile_replays_body_until_target_feature(self) -> None:
-        result = self.run_recompute("body-tip-face-profile-pad-after-revolution", "p6")
+        result = self.run_recompute("body-tip-face-profile-pad-after-revolution", "partdesign-body")
 
         self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
         self.assertEqual(result["objects"]["Revolution"]["status"], "error")
@@ -227,7 +227,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertTrue(all(item["subshapes"] == [] for item in result["results"]))
 
     def test_p6_revolution_body_display_face_is_not_feature_local_profile(self) -> None:
-        result = self.run_recompute("body-pad3body-duplicate-stable-subname", "p6")
+        result = self.run_recompute("body-pad3body-duplicate-stable-subname", "partdesign-body")
 
         self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
         self.assertEqual(result["objects"]["Revolution"]["status"], "error")
@@ -241,7 +241,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("Pad3Body", result["subshapes"])
 
     def test_p6_body_face_profile_prefers_body_topo_shape_over_direct_feature_face(self) -> None:
-        result = self.run_recompute("body-tip-face-profile-pad-after-sketch-axis-revolution", "p6")
+        result = self.run_recompute("body-tip-face-profile-pad-after-sketch-axis-revolution", "partdesign-body")
 
         self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
         self.assertEqual(result["objects"]["Revolution"]["status"], "error")
@@ -759,7 +759,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_c3m1_element_map_child_map_recurses_nested_compound_ranges(self) -> None:
-        result = self.run_recompute("element-map-child-map-recursive-compound", "c3m1")
+        result = self.run_recompute("element-map-child-map-recursive-compound", "topology-element-map")
         compound_ab = result["named_shapes"]["CompoundAB"]
         compound_nested = result["named_shapes"]["CompoundNested"]
 
@@ -958,7 +958,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(len(encoded_keys), len(set(encoded_keys)))
 
     def test_c3m1_import_step_keeps_imported_faces_current_only_without_mapper_evidence(self) -> None:
-        result = self.run_recompute("part-import-step-face-stable", "c3m1")
+        result = self.run_recompute("part-import-step-face-stable", "part-import")
         named_shape = result["named_shapes"]["ImportedStep"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -979,7 +979,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_c3m1_import_brep_keeps_imported_edges_current_only_without_mapper_evidence(self) -> None:
-        result = self.run_recompute("part-import-brep-edge-stable", "c3m1")
+        result = self.run_recompute("part-import-brep-edge-stable", "part-import")
         named_shape = result["named_shapes"]["ImportedCylinder"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1000,10 +1000,10 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_p6_named_shape_exports_indexed_element_ledger(self) -> None:
-        result = self.run_recompute("named-shape-indexed-pad", "p6")
+        result = self.run_recompute("named-shape-indexed-pad", "topology-element-map")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_result_matches_expected(result, "p6", "named-shape-indexed-pad")
+        self.assert_result_matches_expected(result, "topology-element-map", "named-shape-indexed-pad")
 
     def test_p6_two_side_and_symmetric_fast_prisms_keep_profile_history(self) -> None:
         for fixture, owner, source in [
@@ -1013,10 +1013,10 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("pocket-symmetric-length", "Pocket", "SketchPocket"),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3b")
+                result = self.run_recompute(fixture)
 
                 self.assertEqual(result["diagnostics"], [])
-                self.assert_object_matches_expected(result, "p3b", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p6_multi_prism_xor_propagates_profile_history(self) -> None:
         for fixture in [
@@ -1026,10 +1026,10 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "pad-two-sides-up-to-shape2",
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3b")
+                result = self.run_recompute(fixture)
 
                 self.assertEqual(result["diagnostics"], [])
-                self.assert_object_matches_expected(result, "p3b", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p6_taper_thru_sections_history_is_mapper_backed(self) -> None:
         for fixture, owner, source in [
@@ -1040,7 +1040,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("pocket-length-taper", "Pocket", "SketchPocket"),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p3b")
+                result = self.run_recompute(fixture)
                 owner_object = result["objects"][owner]
                 named_shape = result["named_shapes"][owner]
                 history_kinds = {item["kind"] for item in named_shape["history"]}
@@ -1053,7 +1053,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(result["diagnostics"], [])
                 self.assertNotIn("topo_naming", owner_object)
                 self.assertEqual(owner_object["topo_naming_history"], "maker_history:taper_thru_sections")
-                self.assert_object_matches_expected(result, "p3b", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
                 self.assertEqual(named_shape["element_map_status"], "history_partial")
                 self.assertIn("generated", history_kinds)
                 self.assertTrue(
@@ -1078,13 +1078,13 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "body-boolean-history": ("Pad.", "Pocket."),
         }.items():
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p6")
+                result = self.run_recompute(fixture)
 
                 self.assertEqual(result["diagnostics"], [])
-                self.assert_result_matches_expected(result, "p6", fixture)
+                self.assert_result_matches_expected(result, None, fixture)
 
     def test_p6_mapper_history_core_serializes_legacy_history_and_preserved_aliases(self) -> None:
-        result = self.run_recompute("body-boolean-history", "p6")
+        result = self.run_recompute("body-boolean-history", "partdesign-body")
         named_shape = result["named_shapes"]["Body"]
         mapper_history = named_shape["mapper_history"]
 
@@ -1147,13 +1147,13 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("Pocket.Face5", named_shape["element_map"])
 
     def test_p6_body_split_history_promotes_unique_same_kind_targets(self) -> None:
-        result = self.run_recompute("body-split-history", "p6")
+        result = self.run_recompute("body-split-history", "partdesign-body")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_result_matches_expected(result, "p6", "body-split-history")
+        self.assert_result_matches_expected(result, "partdesign-body", "body-split-history")
 
     def test_p6_split_stable_subname_reaches_downstream_geometry_after_recovery(self) -> None:
-        diagnostic = self.run_recompute("up-to-face-stable-body-split", "p6")["diagnostics"][0]
+        diagnostic = self.run_recompute("up-to-face-stable-body-split", "topology-resolve")["diagnostics"][0]
 
         self.assertEqual(diagnostic["code"], "execution_failed")
 
@@ -1163,7 +1163,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "up-to-face-stable-indexed-opaque-sublist",
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p6")
+                result = self.run_recompute(fixture)
                 feature = result["objects"].get("ProbePad", result["objects"].get("Pocket"))
 
                 self.assertEqual(result["diagnostics"], [])
@@ -1171,7 +1171,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(feature["method"], "UpToFace")
 
     def test_c3m2_source_object_rename_recovery_round_trips_generated_state(self) -> None:
-        path = ROOT / "fixtures" / "c3m2" / "source-object-rename-recovery.json"
+        path = ROOT / "fixtures" / "topology-resolve" / "source-object-rename-recovery.json"
         payload = json.loads(path.read_text(encoding="utf-8"))
         payload.pop("topoNamingState")
 
@@ -1229,7 +1229,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIsNone(rejected.get("topoNamingState"))
 
     def test_p6_external_geometry_link_sub_list_uses_element_map(self) -> None:
-        result = self.run_recompute("sketch-external-edge-stable-indexed-opaque-sublist", "p6")
+        result = self.run_recompute("sketch-external-edge-stable-indexed-opaque-sublist", "sketcher-external-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 

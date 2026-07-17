@@ -1,0 +1,327 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_subshape",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_subshape",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "MissingSupport",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell SpineSupport must be a link",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "InvalidSupportMode",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell SupportMode must be None or SurfaceNormal",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "InvalidSupportSubshape",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell SpineSupport cannot resolve SupportPlane.Face99: subshape token Face99 is out of range",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "MissingAuxiliaryTarget",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell AuxiliarySpine target MissingAuxiliary was not created",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "InvalidAuxiliarySubshape",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell AuxiliarySpine cannot resolve SupportPlane.Face99: subshape token Face99 is out of range",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "InvalidAuxiliaryCurvilinear",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell AuxiliaryCurvilinear must be boolean",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "ZeroBinormal",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell Binormal must be non-zero",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "MalformedBiNormal",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell BiNormal must be a finite number",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "events": [],
+  "fixture": {
+    "case": "part-sweep-support-mode-diagnostics",
+    "expectedPayloadHash": "sha256:d98be9dd28cd396894a8805d6471f78cfbd5517c03a2b27b6a7f52526b6e9003",
+    "inputHash": "sha256:a0eadc5f42e280aa7a073c268d10b8980aca671fd4c7ffac3642b444640ef9d2",
+    "phase": "part-sweep",
+    "topoNamingStateHash": "sha256:322a1758cfc2cac67f3d6b194fcd06de292fb63c74e72db0b77868c4f05997b3"
+  },
+  "inputReferences": [],
+  "objects": {
+    "AuxiliarySpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "InvalidAuxiliaryCurvilinear": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "InvalidAuxiliarySubshape": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "InvalidSupportMode": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "InvalidSupportSubshape": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "MalformedBiNormal": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "MissingAuxiliaryTarget": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "MissingSupport": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "PipeSpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SketchPipeProfile": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SupportPlane": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    },
+    "ZeroBinormal": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {
+      "InvalidAuxiliaryCurvilinear": {
+        "coveredBy": "AuxiliarySpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "InvalidAuxiliarySubshape": {
+        "coveredBy": "AuxiliarySpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "InvalidSupportMode": {
+        "coveredBy": "AuxiliarySpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "InvalidSupportSubshape": {
+        "coveredBy": "AuxiliarySpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "MalformedBiNormal": {
+        "coveredBy": "AuxiliarySpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "MissingAuxiliaryTarget": {
+        "coveredBy": "AuxiliarySpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "MissingSupport": {
+        "coveredBy": "AuxiliarySpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "ZeroBinormal": {
+        "coveredBy": "AuxiliarySpine",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      }
+    },
+    "publishedObjects": {
+      "AuxiliarySpine": {
+        "covers": [
+          "AuxiliarySpine"
+        ],
+        "ledgerObject": "AuxiliarySpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "PipeSpine": {
+        "covers": [
+          "PipeSpine"
+        ],
+        "ledgerObject": "PipeSpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeProfile": {
+        "covers": [
+          "SketchPipeProfile"
+        ],
+        "ledgerObject": "SketchPipeProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SupportPlane": {
+        "covers": [
+          "SupportPlane"
+        ],
+        "ledgerObject": "SupportPlane",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:322a1758cfc2cac67f3d6b194fcd06de292fb63c74e72db0b77868c4f05997b3",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

@@ -1,0 +1,317 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumCSMissingSupport",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTN",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSWrongShape",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTN",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSWrongProjectionSupport",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTB",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSZeroDerivative",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTN",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSUndefinedNormal",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTN",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSInfiniteCurvature",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "Concentric",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:fd6cc544d4cf73ad85e9b33eb9d14358e3ef35d23c9dd939b223650161caf36f",
+    "objects": {
+      "DatumCSInfiniteCurvature": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:ec3b9a630599845e5c7b9cb41013d3cffddab7f8d2017fabd74d79d7d8460521",
+        "subshapes": {}
+      },
+      "DatumCSMissingSupport": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:cca11f0ae84c385f22c683b2e0eebd4e5b1010c754d3b79b329821489db257df",
+        "subshapes": {}
+      },
+      "DatumCSUndefinedNormal": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:58477763546e145b4a3fb4969dac7cadb28b4d52f6d468434dcf6858b6c406f4",
+        "subshapes": {}
+      },
+      "DatumCSWrongProjectionSupport": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:574cfab09b850a1ed0e059a8cdecf11405665945fb3b7451602ada64cf40a220",
+        "subshapes": {}
+      },
+      "DatumCSWrongShape": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:90f80d953d32751a042bd1803b37fef01f048634f8acd936db355a8062d44ae6",
+        "subshapes": {}
+      },
+      "DatumCSZeroDerivative": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1b544f8ae7d8eaa9f2ce5b3510b496fbfac536b6d561581231851ca593a6a4b3",
+        "subshapes": {}
+      },
+      "StraightPath": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:cafd74cba4ced07cd94f3e632bebf9a805382db3d69a6be995b1e8a990fb31e9",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "WrongPoint": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:573ad21f3e9bc2d13de4724edb85aa19b5208b9f8a982999ff6f3cb1de88e6c9",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "ZeroDerivativeSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d4a5c233acba64df490563f1e62c27b9fe637259cac91df983f0972fa6ca8c01",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

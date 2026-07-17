@@ -212,7 +212,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         }
 
     def c12m16_split_fragment_reference_payload(self) -> dict:
-        fixture_path = ROOT / "fixtures" / "c12m16" / "sketch-split-fragment-line-reference.json"
+        fixture_path = ROOT / "fixtures" / "sketcher-internal-shape" / "sketch-split-fragment-line-reference.json"
         return json.loads(fixture_path.read_text(encoding="utf-8"))
 
     def assert_segment_matches_geometry(self, segment: dict, geometry: dict) -> None:
@@ -523,7 +523,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "part-extrusion-facemaker-bullseye-intersected-holes",
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p5")
+                result = self.run_recompute(fixture)
                 diagnostics = self.assert_internal_history_publication_surface(result)
 
                 self.assertEqual(result["diagnostics"], [])
@@ -531,8 +531,21 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertIn("facemaker", diagnostics)
 
     def test_p5_all_fixtures_omit_generated_and_disable_legacy_helper_output(self) -> None:
-        p5_fixture_dir = ROOT / "fixtures" / "p5"
-        for fixture_path in sorted(p5_fixture_dir.glob("*.json")):
+        migration = json.loads(
+            (
+                ROOT
+                / "tools"
+                / "freecad_expected_parity"
+                / "fixture_legacy_phase_map.v1.json"
+            ).read_text(encoding="utf-8")
+        )["cases"]
+        fixture_paths = sorted(
+            ROOT / "fixtures" / entry["phase"] / f"{entry['case']}.json"
+            for entry in migration
+            if entry["legacyPhase"] == "p5"
+        )
+        self.assertTrue(fixture_paths)
+        for fixture_path in fixture_paths:
             with self.subTest(fixture=fixture_path.stem):
                 result = self.run_recompute_file(fixture_path)
                 for object_name, obj in result["objects"].items():
@@ -544,7 +557,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p7_sketch_internal_history_consumes_result_wire_producer_identity(self) -> None:
         for fixture in self.P7_RESULT_WIRE_IDENTITY_FIXTURES:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p5")
+                result = self.run_recompute(fixture)
                 self.assert_sketch_internal_history_publication(result)
 
     def assert_sketch_internal_history_publication(
@@ -563,7 +576,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_p5_coincident_constraints_merge_profile_endpoints(self) -> None:
-        result = self.run_recompute("sketch-coincident-profile", "p5")
+        result = self.run_recompute("sketch-coincident-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -571,10 +584,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["edge_count"], 4)
         self.assertEqual(sketch["coincident_constraints_applied"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-coincident-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-coincident-profile")
 
     def test_p5_horizontal_vertical_constraints_accept_satisfied_lines(self) -> None:
-        result = self.run_recompute("sketch-horizontal-vertical-profile", "p5")
+        result = self.run_recompute("sketch-horizontal-vertical-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -582,10 +595,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["edge_count"], 4)
         self.assertEqual(sketch["coincident_constraints_applied"], 0)
         self.assertEqual(sketch["orientation_constraints_applied"], 4)
-        self.assert_object_matches_expected(result, "p5", "sketch-horizontal-vertical-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-horizontal-vertical-profile")
 
     def test_p5_dimension_constraints_accept_satisfied_datums(self) -> None:
-        result = self.run_recompute("sketch-dimensional-constraints-profile", "p5")
+        result = self.run_recompute("sketch-dimensional-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -594,10 +607,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["coincident_constraints_applied"], 0)
         self.assertEqual(sketch["orientation_constraints_applied"], 0)
         self.assertEqual(sketch["dimension_constraints_applied"], 4)
-        self.assert_object_matches_expected(result, "p5", "sketch-dimensional-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-dimensional-constraints-profile")
 
     def test_p5_diameter_constraints_accept_satisfied_datums(self) -> None:
-        result = self.run_recompute("sketch-diameter-constraints-profile", "p5")
+        result = self.run_recompute("sketch-diameter-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -606,10 +619,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["coincident_constraints_applied"], 0)
         self.assertEqual(sketch["orientation_constraints_applied"], 0)
         self.assertEqual(sketch["dimension_constraints_applied"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-diameter-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-diameter-constraints-profile")
 
     def test_p5_point_pair_constraints_accept_satisfied_datums(self) -> None:
-        result = self.run_recompute("sketch-point-pair-constraints-profile", "p5")
+        result = self.run_recompute("sketch-point-pair-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -618,10 +631,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["coincident_constraints_applied"], 0)
         self.assertEqual(sketch["orientation_constraints_applied"], 2)
         self.assertEqual(sketch["dimension_constraints_applied"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-point-pair-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-point-pair-constraints-profile")
 
     def test_p5_coordinate_constraints_accept_satisfied_line_end_datums(self) -> None:
-        result = self.run_recompute("sketch-coordinate-constraints-profile", "p5")
+        result = self.run_recompute("sketch-coordinate-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -630,10 +643,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["coincident_constraints_applied"], 0)
         self.assertEqual(sketch["orientation_constraints_applied"], 0)
         self.assertEqual(sketch["dimension_constraints_applied"], 4)
-        self.assert_object_matches_expected(result, "p5", "sketch-coordinate-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-coordinate-constraints-profile")
 
     def test_p5_line_relation_constraints_accept_satisfied_lines(self) -> None:
-        result = self.run_recompute("sketch-line-relation-constraints-profile", "p5")
+        result = self.run_recompute("sketch-line-relation-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -643,10 +656,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["orientation_constraints_applied"], 0)
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-line-relation-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-line-relation-constraints-profile")
 
     def test_p5_tangent_constraints_accept_satisfied_direct_and_pointwise_tangency(self) -> None:
-        result = self.run_recompute("sketch-tangent-constraints-profile", "p5")
+        result = self.run_recompute("sketch-tangent-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -657,10 +670,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 6)
         self.assertEqual(sketch["block_constraints_applied"], 0)
-        self.assert_object_matches_expected(result, "p5", "sketch-tangent-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-tangent-constraints-profile")
 
     def test_p5_perpendicular_constraints_accept_satisfied_pointwise_relations(self) -> None:
-        result = self.run_recompute("sketch-perpendicular-pointwise-constraints-profile", "p5")
+        result = self.run_recompute("sketch-perpendicular-pointwise-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -671,10 +684,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 4)
         self.assertEqual(sketch["block_constraints_applied"], 0)
-        self.assert_object_matches_expected(result, "p5", "sketch-perpendicular-pointwise-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-perpendicular-pointwise-constraints-profile")
 
     def test_p5_perpendicular_constraints_accept_satisfied_curve_midpoints(self) -> None:
-        result = self.run_recompute("sketch-perpendicular-curve-constraints-profile", "p5")
+        result = self.run_recompute("sketch-perpendicular-curve-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -685,10 +698,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 2)
         self.assertEqual(sketch["block_constraints_applied"], 0)
-        self.assert_object_matches_expected(result, "p5", "sketch-perpendicular-curve-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-perpendicular-curve-constraints-profile")
 
     def test_p5_point_on_object_constraints_accept_satisfied_points(self) -> None:
-        result = self.run_recompute("sketch-point-on-object-constraints-profile", "p5")
+        result = self.run_recompute("sketch-point-on-object-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -698,10 +711,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["orientation_constraints_applied"], 0)
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 3)
-        self.assert_object_matches_expected(result, "p5", "sketch-point-on-object-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-point-on-object-constraints-profile")
 
     def test_p5_symmetric_constraints_accept_satisfied_points(self) -> None:
-        result = self.run_recompute("sketch-symmetric-constraints-profile", "p5")
+        result = self.run_recompute("sketch-symmetric-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -711,10 +724,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["orientation_constraints_applied"], 0)
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-symmetric-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-symmetric-constraints-profile")
 
     def test_p5_block_constraints_accept_supported_geometry(self) -> None:
-        result = self.run_recompute("sketch-block-constraints-profile", "p5")
+        result = self.run_recompute("sketch-block-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -725,10 +738,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 0)
         self.assertEqual(sketch["block_constraints_applied"], 3)
-        self.assert_object_matches_expected(result, "p5", "sketch-block-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-block-constraints-profile")
 
     def test_p5_equal_constraints_accept_satisfied_geometries(self) -> None:
-        result = self.run_recompute("sketch-equal-constraints-profile", "p5")
+        result = self.run_recompute("sketch-equal-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -738,10 +751,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["orientation_constraints_applied"], 0)
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-equal-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-equal-constraints-profile")
 
     def test_p5_angle_constraints_accept_satisfied_line_pair_datums(self) -> None:
-        result = self.run_recompute("sketch-angle-constraints-profile", "p5")
+        result = self.run_recompute("sketch-angle-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -751,10 +764,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["orientation_constraints_applied"], 0)
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-angle-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-angle-constraints-profile")
 
     def test_p5_angle_constraints_accept_satisfied_pointwise_datums(self) -> None:
-        result = self.run_recompute("sketch-angle-pointwise-constraints-profile", "p5")
+        result = self.run_recompute("sketch-angle-pointwise-constraints-profile", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -765,10 +778,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 3)
         self.assertEqual(sketch["block_constraints_applied"], 0)
-        self.assert_object_matches_expected(result, "p5", "sketch-angle-pointwise-constraints-profile")
+        self.assert_object_matches_expected(result, "sketcher-solve", "sketch-angle-pointwise-constraints-profile")
 
     def test_p5_sketch_rejects_constraint_that_requires_solver_movement(self) -> None:
-        result = self.run_recompute("sketch-solver-movement-rejected", "p5")
+        result = self.run_recompute("sketch-solver-movement-rejected", "sketcher-solve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_property"])
@@ -778,7 +791,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Sketch"]["status"], "error")
 
     def test_c4m3_sketch_constraint_supported_state_fixture(self) -> None:
-        result = self.run_recompute("sketch-constraint-supported-state", "c4m3")
+        result = self.run_recompute("sketch-constraint-supported-state", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -790,7 +803,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["orientation_constraints_applied"], 4)
 
     def test_c4m3_sketch_constraint_geometry_update_fixture(self) -> None:
-        result = self.run_recompute("sketch-constraint-geometry-update", "c4m3")
+        result = self.run_recompute("sketch-constraint-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -802,7 +815,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["solver_geometry_update_status"], "whole_line_orientation_first_slice")
 
     def test_c4m3_sketch_constraint_conflict_diagnostic_fixture(self) -> None:
-        result = self.run_recompute("sketch-constraint-conflict-diagnostic", "c4m3")
+        result = self.run_recompute("sketch-constraint-conflict-diagnostic", "sketcher-solve")
         diagnostic = result["diagnostics"][0]
         sketch = result["objects"]["Sketch"]
 
@@ -816,7 +829,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["solver_state"], "conflict")
 
     def test_c4m3_sketch_constraint_unsupported_relation_has_locator(self) -> None:
-        result = self.run_recompute("sketch-constraint-unsupported-relation", "c4m3")
+        result = self.run_recompute("sketch-constraint-unsupported-relation", "sketcher-solve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual(
@@ -833,7 +846,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Sketch"]["status"], "error")
 
     def test_c3m3_sketch_horizontal_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-horizontal-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-horizontal-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -853,7 +866,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_c3m3_sketch_coordinate_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-coordinate-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-coordinate-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -873,7 +886,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_c3m3_sketch_circle_radius_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-circle-radius-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-circle-radius-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -894,7 +907,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["bbox"], {"min": [-3.0, -3.0, 0.0], "max": [3.0, 3.0, 4.0]})
 
     def test_c3m3_sketch_line_length_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-line-length-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-line-length-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -916,7 +929,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 2.0, 3.0]})
 
     def test_c3m3_sketch_arc_length_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-arc-length-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-arc-length-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -938,7 +951,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["bbox"], {"min": [-1.0, 0.0, 0.0], "max": [1.0, 1.0, 3.0]})
 
     def test_c3m3_sketch_point_on_line_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-point-on-line-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-point-on-line-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         extrude = result["objects"]["Extrude"]
 
@@ -962,7 +975,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrude["bbox"], {"min": [-4.0, 0.0, 0.0], "max": [0.0, 5.0, 1.0]})
 
     def test_c3m3_sketch_parallel_line_pair_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-parallel-line-pair-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-parallel-line-pair-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         extrude = result["objects"]["Extrude"]
 
@@ -986,7 +999,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrude["bbox"], {"min": [0.0, 0.0, 0.0], "max": [4.0, 2.0, 1.0]})
 
     def test_c3m3_sketch_perpendicular_line_pair_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-perpendicular-line-pair-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-perpendicular-line-pair-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         extrude = result["objects"]["Extrude"]
 
@@ -1010,7 +1023,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrude["bbox"], {"min": [0.0, 0.0, 0.0], "max": [4.0, 6.0, 1.0]})
 
     def test_c3m3_sketch_perpendicular_line_circle_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-perpendicular-line-circle-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-perpendicular-line-circle-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -1035,7 +1048,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["bbox"], {"min": [1.0, -1.0, 0.0], "max": [3.0, 1.0, 2.0]})
 
     def test_c3m3_sketch_equal_circle_radius_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-equal-circle-radius-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-equal-circle-radius-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -1061,7 +1074,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["bbox"], {"min": [3.0, -2.0, 0.0], "max": [7.0, 2.0, 2.0]})
 
     def test_c3m3_sketch_tangent_line_circle_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-tangent-line-circle-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-tangent-line-circle-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -1088,7 +1101,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["bbox"], {"min": [1.0, 0.0, 0.0], "max": [3.0, 2.0, 2.0]})
 
     def test_c3m3_sketch_symmetric_line_axis_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-symmetric-line-axis-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-symmetric-line-axis-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         extrude = result["objects"]["Extrude"]
 
@@ -1118,7 +1131,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrude["bbox"], {"min": [-1.0, 1.0, 0.0], "max": [1.0, 1.0, 1.0]})
 
     def test_c3m3_sketch_symmetric_center_point_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-symmetric-center-point-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-symmetric-center-point-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         extrude = result["objects"]["Extrude"]
 
@@ -1148,7 +1161,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrude["bbox"], {"min": [-1.0, 1.0, 0.0], "max": [1.0, 1.0, 1.0]})
 
     def test_c3m3_sketch_symmetric_arc_endpoint_constraint_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-symmetric-arc-endpoint-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-symmetric-arc-endpoint-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         extrude = result["objects"]["Extrude"]
 
@@ -1180,7 +1193,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(extrude["bbox"]["max"][1], 0.9)
 
     def test_c3m3_sketch_symmetric_coupled_curve_relation_updates_solver_geometry(self) -> None:
-        result = self.run_recompute("sketch-symmetric-coupled-curve-relation-solver-geometry-update", "c3m3")
+        result = self.run_recompute("sketch-symmetric-coupled-curve-relation-solver-geometry-update", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
         extrude = result["objects"]["Extrude"]
 
@@ -1202,7 +1215,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreaterEqual(extrude["bbox"]["max"][0], 3.0)
 
     def test_c3m3_sketch_dof_underconstrained_after_satisfied_constraint(self) -> None:
-        result = self.run_recompute("sketch-dof-underconstrained-after-constraint", "c3m3")
+        result = self.run_recompute("sketch-dof-underconstrained-after-constraint", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1216,7 +1229,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["relation_constraints_applied"], 0)
 
     def test_c3m3_sketch_full_solver_dof_reports_dependent_groups(self) -> None:
-        result = self.run_recompute("sketch-full-solver-dof-dependent-group", "c3m3")
+        result = self.run_recompute("sketch-full-solver-dof-dependent-group", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1229,7 +1242,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["solver_geometry_update_status"], "none")
 
     def test_c3m3_sketch_conflicting_constraints_block_profile_output(self) -> None:
-        result = self.run_recompute("sketch-conflicting-constraints", "c3m3")
+        result = self.run_recompute("sketch-conflicting-constraints", "sketcher-solve")
         diagnostic = result["diagnostics"][0]
         sketch = result["objects"]["Sketch"]
 
@@ -1247,7 +1260,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["solver_redundant_constraints"], [])
 
     def test_c3m3_sketch_redundant_constraints_block_profile_output(self) -> None:
-        result = self.run_recompute("sketch-redundant-constraints", "c3m3")
+        result = self.run_recompute("sketch-redundant-constraints", "sketcher-solve")
         diagnostic = result["diagnostics"][0]
         sketch = result["objects"]["Sketch"]
 
@@ -1265,7 +1278,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["solver_redundant_constraints"], [1, 2])
 
     def test_c3m3_sketch_partially_redundant_constraints_warn_without_blocking_profile(self) -> None:
-        result = self.run_recompute("sketch-partially-redundant-block-horizontal", "c3m3")
+        result = self.run_recompute("sketch-partially-redundant-block-horizontal", "sketcher-solve")
         diagnostic = result["diagnostics"][0]
         sketch = result["objects"]["Sketch"]
 
@@ -1289,7 +1302,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["block_constraints_applied"], 1)
 
     def test_c3m3_sketch_malformed_constraints_block_profile_output(self) -> None:
-        result = self.run_recompute("sketch-malformed-constraints", "c3m3")
+        result = self.run_recompute("sketch-malformed-constraints", "sketcher-solve")
         diagnostic = result["diagnostics"][0]
         sketch = result["objects"]["Sketch"]
 
@@ -1311,7 +1324,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["solver_redundant_constraints"], [])
 
     def test_c3m3_sketch_without_constraints_reports_underconstrained_state(self) -> None:
-        result = self.run_recompute("sketch-underconstrained-no-constraints", "c3m3")
+        result = self.run_recompute("sketch-underconstrained-no-constraints", "sketcher-solve")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1323,17 +1336,17 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["solver_redundant_constraints"], [])
 
     def test_p5_circle_profile_outputs_pad(self) -> None:
-        result = self.run_recompute("sketch-circle-profile", "p5")
+        result = self.run_recompute("sketch-circle-profile", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["edge_count"], 1)
-        self.assert_object_matches_expected(result, "p5", "sketch-circle-profile")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-circle-profile")
 
     def test_p5_mixed_closed_wires_make_profile_with_hole(self) -> None:
-        result = self.run_recompute("sketch-rect-circle-hole", "p5")
+        result = self.run_recompute("sketch-rect-circle-hole", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -1348,42 +1361,42 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn({"Edge1", "Edge2", "Edge3", "Edge4"}, generated_face_sources)
         self.assertIn({"Edge5"}, generated_face_sources)
         self.assertNotIn({"Edge1", "Edge2", "Edge3", "Edge4", "Edge5"}, generated_face_sources)
-        self.assert_object_matches_expected(result, "p5", "sketch-rect-circle-hole")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-rect-circle-hole")
 
     def test_p5_nested_closed_wires_keep_island_face(self) -> None:
-        result = self.run_recompute("sketch-rect-circle-island", "p5")
+        result = self.run_recompute("sketch-rect-circle-island", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["edge_count"], 6)
-        self.assert_object_matches_expected(result, "p5", "sketch-rect-circle-island")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-rect-circle-island")
 
     def test_p5_arc_profile_outputs_pad(self) -> None:
-        result = self.run_recompute("sketch-arc-profile", "p5")
+        result = self.run_recompute("sketch-arc-profile", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["edge_count"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-arc-profile")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-arc-profile")
 
     def test_p5_arc_ellipse_profile_outputs_pad(self) -> None:
-        result = self.run_recompute("sketch-arc-ellipse-profile", "p5")
+        result = self.run_recompute("sketch-arc-ellipse-profile", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["edge_count"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-arc-ellipse-profile")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-arc-ellipse-profile")
 
     def test_p5_conic_arc_profiles_are_supported_open_edges(self) -> None:
         for fixture in ["sketch-hyperbola-arc-profile", "sketch-parabola-arc-profile"]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p5")
+                result = self.run_recompute(fixture)
                 sketch = result["objects"]["Sketch"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -1391,20 +1404,20 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["edge_count"], 1)
                 self.assertEqual(sketch["raw_edge_count"], 1)
                 self.assertFalse(sketch["profile_ready"])
-                self.assert_object_matches_expected(result, "p5", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p5_ellipse_profile_outputs_pad(self) -> None:
-        result = self.run_recompute("sketch-ellipse-profile", "p5")
+        result = self.run_recompute("sketch-ellipse-profile", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["edge_count"], 1)
-        self.assert_object_matches_expected(result, "p5", "sketch-ellipse-profile")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-ellipse-profile")
 
     def test_p5_bspline_profile_builds_internal_shape(self) -> None:
-        result = self.run_recompute("sketch-bspline-profile", "p5")
+        result = self.run_recompute("sketch-bspline-profile", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1413,10 +1426,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(sketch["profile_ready"])
         self.assertEqual(sketch["raw_edge_count"], 2)
         self.assertEqual(sketch["internal_shape"], "occt_internal_shape")
-        self.assert_object_matches_expected(result, "p5", "sketch-bspline-profile")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-bspline-profile")
 
     def test_p5_construction_geometry_is_ignored_for_profile(self) -> None:
-        result = self.run_recompute("sketch-construction-ignored", "p5")
+        result = self.run_recompute("sketch-construction-ignored", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -1424,10 +1437,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["edge_count"], 4)
         self.assertEqual(sketch["coincident_constraints_applied"], 1)
-        self.assert_object_matches_expected(result, "p5", "sketch-construction-ignored")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-construction-ignored")
 
     def test_p5_conic_construction_arcs_are_ignored_for_profile(self) -> None:
-        result = self.run_recompute("sketch-conic-arcs-construction-filter", "p5")
+        result = self.run_recompute("sketch-conic-arcs-construction-filter", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1435,10 +1448,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(sketch["profile_ready"])
         self.assertEqual(sketch["edge_count"], 4)
         self.assertEqual(sketch["raw_edge_count"], 4)
-        self.assert_object_matches_expected(result, "p5", "sketch-conic-arcs-construction-filter")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-conic-arcs-construction-filter")
 
     def test_p5_external_edge_projects_as_construction_geometry(self) -> None:
-        result = self.run_recompute("sketch-external-edge", "p5")
+        result = self.run_recompute("sketch-external-edge", "sketcher-external-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -1446,10 +1459,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["edge_count"], 4)
         self.assertEqual(sketch["external_geometry_count"], 1)
-        self.assert_object_matches_expected(result, "p5", "sketch-external-edge")
+        self.assert_object_matches_expected(result, "sketcher-external-geometry", "sketch-external-edge")
 
     def test_p5_external_vertex_projects_as_construction_geometry(self) -> None:
-        result = self.run_recompute("sketch-external-vertex", "p5")
+        result = self.run_recompute("sketch-external-vertex", "sketcher-external-geometry")
         sketch = result["objects"]["Sketch"]
         pad = result["objects"]["Pad"]
 
@@ -1458,12 +1471,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["edge_count"], 4)
         self.assertEqual(sketch["external_geometry_count"], 1)
         self.assertEqual(sketch["external_point_count"], 1)
-        self.assert_object_matches_expected(result, "p5", "sketch-external-vertex")
+        self.assert_object_matches_expected(result, "sketcher-external-geometry", "sketch-external-vertex")
 
     def test_p5_external_curve_edges_project_as_construction_geometry(self) -> None:
         for fixture in ["sketch-external-circle-edge", "sketch-external-ellipse-edge"]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p5")
+                result = self.run_recompute(fixture)
                 sketch = result["objects"]["Sketch"]
                 pad = result["objects"]["Pad"]
 
@@ -1472,10 +1485,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["edge_count"], 4)
                 self.assertEqual(sketch["external_geometry_count"], 1)
                 self.assertEqual(sketch["external_curve_count"], 1)
-                self.assert_object_matches_expected(result, "p5", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p5_conic_external_geometry_projects_as_construction_curves(self) -> None:
-        result = self.run_recompute("sketch-conic-arcs-external-geometry-projected", "p5")
+        result = self.run_recompute("sketch-conic-arcs-external-geometry-projected", "sketcher-geometry")
         source = result["objects"]["SourceSketch"]
         sketch = result["objects"]["Sketch"]
 
@@ -1486,7 +1499,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["edge_count"], 4)
         self.assertEqual(sketch["external_geometry_count"], 2)
         self.assertEqual(sketch["external_curve_count"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-conic-arcs-external-geometry-projected")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-conic-arcs-external-geometry-projected")
 
     def test_p5_external_face_projects_boundary_as_construction_geometry(self) -> None:
         for fixture, expected_count in [
@@ -1497,7 +1510,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("sketch-external-whole-box", 12),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p5")
+                result = self.run_recompute(fixture)
                 sketch = result["objects"]["Sketch"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -1506,12 +1519,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["external_geometry_count"], expected_count)
                 self.assertEqual(sketch["external_curve_count"], 0)
                 self.assertEqual(sketch["external_point_count"], 0)
-                self.assert_object_matches_expected(result, "p5", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p5_external_geometry_defining_participates_in_profile(self) -> None:
-        result = self.run_recompute("sketch-external-defining-profile", "p5")
+        result = self.run_recompute("sketch-external-defining-profile", "sketcher-external-geometry")
         sketch = result["objects"]["Sketch"]
-        expected = self.expected_freecad("p5", "sketch-external-defining-profile")
+        expected = self.expected_freecad("sketcher-external-geometry", "sketch-external-defining-profile")
         sketch_expected = expected["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1524,11 +1537,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["external_geometry_state_counts"]["defining"], 1)
         self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Defining"], 4)
         self.assertEqual(sketch_expected["sketch_external"]["construction_count"], 4)
-        self.assert_object_matches_expected(result, "p5", "sketch-external-defining-profile")
+        self.assert_object_matches_expected(result, "sketcher-external-geometry", "sketch-external-defining-profile")
 
     def test_p5_external_geometry_frozen_source_change_matches_freecad_oracle(self) -> None:
-        result = self.run_recompute("sketch-external-frozen-source-changed", "p5")
-        expected = self.expected_freecad("p5", "sketch-external-frozen-source-changed")
+        result = self.run_recompute("sketch-external-frozen-source-changed", "sketcher-external-geometry")
+        expected = self.expected_freecad("sketcher-external-geometry", "sketch-external-frozen-source-changed")
         sketch_expected = expected["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1536,11 +1549,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["frozen"], 1)
         self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Frozen"], 4)
         self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Sync"], 0)
-        self.assert_object_matches_expected(result, "p5", "sketch-external-frozen-source-changed")
+        self.assert_object_matches_expected(result, "sketcher-external-geometry", "sketch-external-frozen-source-changed")
 
     def test_p5_external_geometry_frozen_sync_source_change_matches_freecad_oracle(self) -> None:
-        result = self.run_recompute("sketch-external-frozen-sync-source-changed", "p5")
-        expected = self.expected_freecad("p5", "sketch-external-frozen-sync-source-changed")
+        result = self.run_recompute("sketch-external-frozen-sync-source-changed", "sketcher-external-geometry")
+        expected = self.expected_freecad("sketcher-external-geometry", "sketch-external-frozen-sync-source-changed")
         sketch_expected = expected["objects"]["Sketch"]
         updates = result["documentObjectUpdates"]
 
@@ -1551,11 +1564,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["sync"], 1)
         self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Frozen"], 4)
         self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Sync"], 0)
-        self.assert_object_matches_expected(result, "p5", "sketch-external-frozen-sync-source-changed")
+        self.assert_object_matches_expected(result, "sketcher-external-geometry", "sketch-external-frozen-sync-source-changed")
 
     def test_p5_external_geometry_detached_source_change_matches_freecad_oracle(self) -> None:
-        result = self.run_recompute("sketch-external-detached-source-changed", "p5")
-        expected = self.expected_freecad("p5", "sketch-external-detached-source-changed")
+        result = self.run_recompute("sketch-external-detached-source-changed", "sketcher-external-geometry")
+        expected = self.expected_freecad("sketcher-external-geometry", "sketch-external-detached-source-changed")
         sketch_expected = expected["objects"]["Sketch"]
         updates = result["documentObjectUpdates"]
 
@@ -1568,11 +1581,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertNotIn("Ref", item)
         self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["detached"], 1)
         self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Detached"], 0)
-        self.assert_object_matches_expected(result, "p5", "sketch-external-detached-source-changed")
+        self.assert_object_matches_expected(result, "sketcher-external-geometry", "sketch-external-detached-source-changed")
 
     def test_p5_external_geometry_missing_source_recovery_matches_freecad_oracle(self) -> None:
-        result = self.run_recompute("sketch-external-missing-source-recovered", "p5")
-        expected = self.expected_freecad("p5", "sketch-external-missing-source-recovered")
+        result = self.run_recompute("sketch-external-missing-source-recovered", "sketcher-external-geometry")
+        expected = self.expected_freecad("sketcher-external-geometry", "sketch-external-missing-source-recovered")
         sketch_expected = expected["objects"]["Sketch"]
         updates = result["documentObjectUpdates"]
 
@@ -1583,7 +1596,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["missing"], 1)
         self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["recovered_missing"], 1)
         self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Missing"], 0)
-        self.assert_object_matches_expected(result, "p5", "sketch-external-missing-source-recovered")
+        self.assert_object_matches_expected(result, "sketcher-external-geometry", "sketch-external-missing-source-recovered")
 
     def test_p5_reference_only_external_geometry_does_not_build_profile(self) -> None:
         result = self.run_payload(self.external_geometry_pad_payload([]))
@@ -1657,7 +1670,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("ExternalFlags", sub_set[0])
 
     def test_c3m2_external_geometry_missing_recovery_fixture_clears_missing_flag(self) -> None:
-        result = self.run_recompute("sketch-external-missing-fix", "c3m2")
+        result = self.run_recompute("sketch-external-missing-fix", "sketcher-external-geometry")
         sketch = result["objects"]["Sketch"]
         updates = result["documentObjectUpdates"]
 
@@ -1675,7 +1688,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_c3m2_external_geometry_frozen_brep_snapshot_reuses_old_subshape(self) -> None:
         for attempt in range(2):
             with self.subTest(attempt=attempt):
-                result = self.run_recompute("sketch-external-frozen-brep-reuse", "c3m2")
+                result = self.run_recompute("sketch-external-frozen-brep-reuse", "sketcher-external-geometry")
                 sketch = result["objects"]["Sketch"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -1688,7 +1701,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertNotIn("missing_link_target", [item["code"] for item in result["diagnostics"]])
 
     def test_c3m2_external_geometry_frozen_missing_snapshot_reports_diagnostic(self) -> None:
-        result = self.run_recompute("sketch-external-frozen-missing-snapshot", "c3m2")
+        result = self.run_recompute("sketch-external-frozen-missing-snapshot", "sketcher-external-geometry")
         diagnostics = result["diagnostics"]
 
         self.assertEqual([item["code"] for item in diagnostics], ["missing_external_geometry_snapshot"])
@@ -1702,7 +1715,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_c3m2_external_geometry_missing_brep_snapshot_reuses_old_subshape(self) -> None:
         for attempt in range(2):
             with self.subTest(attempt=attempt):
-                result = self.run_recompute("sketch-external-missing-brep-reuse", "c3m2")
+                result = self.run_recompute("sketch-external-missing-brep-reuse", "sketcher-external-geometry")
                 sketch = result["objects"]["Sketch"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -1716,7 +1729,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertNotIn("missing_link_target", [item["code"] for item in result["diagnostics"]])
 
     def test_c3m2_external_geometry_missing_without_snapshot_reports_diagnostic(self) -> None:
-        result = self.run_recompute("sketch-external-missing-missing-snapshot", "c3m2")
+        result = self.run_recompute("sketch-external-missing-missing-snapshot", "sketcher-external-geometry")
         diagnostics = result["diagnostics"]
 
         self.assertEqual([item["code"] for item in diagnostics], ["missing_external_geometry_snapshot"])
@@ -1766,7 +1779,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("sketch-external-internal-frozen-brep-snapshot", {"frozen": 1}, None, False),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c4m3")
+                result = self.run_recompute(fixture)
                 sketch = result["objects"]["Sketch"]
 
                 self.assertEqual(result["diagnostics"], [])
@@ -1778,10 +1791,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 else:
                     self.assertEqual([item["reason"] for item in result["documentObjectUpdates"]], [update_reason])
                 if expected_backed:
-                    self.assert_result_matches_expected(result, "c4m3", fixture)
+                    self.assert_result_matches_expected(result, None, fixture)
 
     def test_c4m3_external_geometry_missing_snapshot_is_locatable_diagnostic(self) -> None:
-        result = self.run_recompute("sketch-external-internal-frozen-missing-snapshot-diagnostic", "c4m3")
+        result = self.run_recompute("sketch-external-internal-frozen-missing-snapshot-diagnostic", "sketcher-external-geometry")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["missing_external_geometry_snapshot"])
@@ -1792,7 +1805,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["subname"], "Face5")
 
     def test_p5_conic_native_external_geo_reuses_old_geometry(self) -> None:
-        result = self.run_recompute("sketch-conic-arcs-external-geometry-native", "p5")
+        result = self.run_recompute("sketch-conic-arcs-external-geometry-native", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -1832,7 +1845,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "sketch-external-tilted-ellipse-edge": 1,
         }.items():
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p5")
+                result = self.run_recompute(fixture)
                 sketch = result["objects"]["Sketch"]
                 pad = result["objects"]["Pad"]
 
@@ -1842,7 +1855,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["external_geometry_count"], 1)
                 self.assertEqual(sketch["external_curve_count"], expected_curve_count)
                 self.assertEqual(sketch["external_point_count"], 0)
-                self.assert_object_matches_expected(result, "p5", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
 
     def test_p5_invalid_conic_arc_params_report_unsupported_geometry(self) -> None:
         cases = [
@@ -1902,15 +1915,15 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["property"], "Geometry")
 
     def test_p5_closed_sketch_exports_internal_subshapes(self) -> None:
-        result = self.run_recompute("sketch-internal-face", "p5")
+        result = self.run_recompute("sketch-internal-face", "sketcher-internal-shape")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assert_object_matches_expected(result, "p5", "sketch-internal-face")
+        self.assert_object_matches_expected(result, "sketcher-internal-shape", "sketch-internal-face")
 
     def test_p5_sketch_internal_result_package_keeps_publication_fields(self) -> None:
-        result = self.run_recompute("sketch-internal-face", "p5")
+        result = self.run_recompute("sketch-internal-face", "sketcher-internal-shape")
         sketch = result["objects"]["Sketch"]
         subshapes = result["subshapes"]["Sketch"]
         mesh = result["mesh"]["Sketch"]
@@ -1940,7 +1953,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_p5_sketch_exports_internal_edge_vertex_stable_subnames(self) -> None:
-        result = self.run_recompute_ffi("sketch-internal-face", "p5")
+        result = self.run_recompute_ffi("sketch-internal-face", "sketcher-internal-shape")
         subshapes = {
             item["indexed"]: item
             for item in result["results"][0]["subshapes"]
@@ -2010,7 +2023,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     self.assertEqual(entry["sourceGeometryKind"], "LineSegment")
 
     def test_p5_sketch_internal_shape_named_shape_publishes_face_alias(self) -> None:
-        result = self.run_recompute("sketch-internal-face", "p5")
+        result = self.run_recompute("sketch-internal-face", "sketcher-internal-shape")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         sketch = result["objects"]["Sketch"]
 
@@ -2036,7 +2049,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(set(generated_face_history[0]["sources"]), {"Edge1", "Edge2", "Edge3", "Edge4"})
 
     def test_p5_sketch_internal_edge_stable_subname_checks_geometry(self) -> None:
-        result = self.run_recompute_ffi("sketch-internal-edge-arc-line-same-endpoints", "p5")
+        result = self.run_recompute_ffi("sketch-internal-edge-arc-line-same-endpoints", "sketcher-internal-shape")
         subshapes = {
             item["indexed"]: item
             for item in result["results"][0]["subshapes"]
@@ -2049,17 +2062,17 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("InternalFace", subshapes["InternalFace1"]["stableSubname"])
 
     def test_p5_split_line_builds_multiple_internal_faces(self) -> None:
-        result = self.run_recompute("sketch-internal-face-split-line", "p5")
+        result = self.run_recompute("sketch-internal-face-split-line", "sketcher-internal-shape")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         diagnostics = self.assert_internal_history_publication_surface(result)
         self.assertGreaterEqual(diagnostics["facemaker"]["bounded_face_count"], 2)
-        self.assert_object_matches_expected(result, "p5", "sketch-internal-face-split-line")
+        self.assert_object_matches_expected(result, "sketcher-internal-shape", "sketch-internal-face-split-line")
 
     def test_p5_through_open_cutter_publishes_named_shape_history(self) -> None:
-        result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
+        result = self.run_recompute("sketch-internal-face-through-open-cutter", "sketcher-internal-shape")
         sketch = result["objects"]["Sketch"]
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         diagnostics = self.assert_internal_history_publication_surface(result)
@@ -2075,10 +2088,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
         self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
         self.assert_wire_joiner_mapper_events_do_not_expose_producer_anatomy(named_shape)
-        self.assert_object_matches_expected(result, "p5", "sketch-internal-face-through-open-cutter")
+        self.assert_object_matches_expected(result, "sketcher-internal-shape", "sketch-internal-face-through-open-cutter")
 
     def test_p5_internal_shape_records_split_history_for_open_cutter_fragments(self) -> None:
-        result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
+        result = self.run_recompute("sketch-internal-face-through-open-cutter", "sketcher-internal-shape")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
 
         split_entries = [
@@ -2093,7 +2106,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(named_shape["elements"][entry["element"]]["status"], "split")
 
     def test_p5_facemaker_bounded_faces_emit_publication_events(self) -> None:
-        result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
+        result = self.run_recompute("sketch-internal-face-through-open-cutter", "sketcher-internal-shape")
         sketch = result["objects"]["Sketch"]
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         diagnostics = self.assert_internal_history_publication_surface(result)
@@ -2113,7 +2126,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertGreater(event["evidence"]["source_edge_index"], 0)
 
     def test_p5_summary_history_is_diagnostic_only(self) -> None:
-        result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
+        result = self.run_recompute("sketch-internal-face-through-open-cutter", "sketcher-internal-shape")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         mapper_history = named_shape["mapper_history"]
 
@@ -2135,7 +2148,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_p5_source_edge_one_to_many_split_uses_publication(self) -> None:
-        result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
+        result = self.run_recompute("sketch-internal-face-through-open-cutter", "sketcher-internal-shape")
         sketch = result["objects"]["Sketch"]
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
 
@@ -2154,7 +2167,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_c12m16_split_fragment_identity_publishes_response_ledger(self) -> None:
-        result = self.run_recompute("sketch-split-fragment-line-identity", "c12m16")
+        result = self.run_recompute("sketch-split-fragment-line-identity", "sketcher-internal-shape")
         sketch = result["objects"]["Sketch"]
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         raw_identity = sketch["raw_edge_identity"]
@@ -2194,7 +2207,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     self.assertEqual(entry["identityStatus"], "stable_split_fragment")
 
     def test_c12m16_split_fragment_migrated_source_ids_publish_durable_tokens(self) -> None:
-        result = self.run_recompute("sketch-split-fragment-line-identity", "c12m16")
+        result = self.run_recompute("sketch-split-fragment-line-identity", "sketcher-internal-shape")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         edge_segments = {
             item["indexed"]: item
@@ -2222,7 +2235,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     self.assertEqual(entry["identityStatus"], "stable_split_fragment")
 
     def test_c12m16_split_fragment_stable_sublist_resolves_current_fragment(self) -> None:
-        result = self.run_recompute("sketch-split-fragment-line-reference", "c12m16")
+        result = self.run_recompute("sketch-split-fragment-line-reference", "sketcher-internal-shape")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(len(result["elementReferenceUpdates"]), 1)
@@ -2255,7 +2268,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_p5_deleted_no_original_purge_is_diagnostic_not_unique_map(self) -> None:
-        result = self.run_recompute("sketch-internal-face-dangling-line", "p5")
+        result = self.run_recompute("sketch-internal-face-dangling-line", "sketcher-internal-shape")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         internal_map = result["objects"]["Sketch"]["internal_element_map"]
 
@@ -2276,7 +2289,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(event["evidence"].get("diagnostic_code"), "no_original_purge")
 
     def test_p5_wire_joiner_open_export_uses_publication_events(self) -> None:
-        result = self.run_recompute("sketch-internal-face-t-cutter", "p5")
+        result = self.run_recompute("sketch-internal-face-t-cutter", "sketcher-internal-shape")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         diagnostics = self.assert_internal_history_publication_surface(result)
 
@@ -2307,16 +2320,16 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]
         for fixture in fixtures:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p5")
+                result = self.run_recompute(fixture)
                 sketch = result["objects"]["Sketch"]
                 self.assertEqual(result["diagnostics"], [])
                 self.assertEqual(sketch["status"], "ok")
                 self.assert_internal_history_publication_surface(result)
-                self.assert_object_matches_expected(result, "p5", fixture)
+                self.assert_object_matches_expected(result, None, fixture)
                 self.assertIn("Sketch", result["mesh"])
 
     def test_p5_self_intersecting_cubic_bspline_splits_into_bounded_regions(self) -> None:
-        result = self.run_recompute("sketch-internal-face-cubic-figure8-bspline", "p5")
+        result = self.run_recompute("sketch-internal-face-cubic-figure8-bspline", "sketcher-internal-shape")
         sketch = result["objects"]["Sketch"]
         diagnostics = self.assert_internal_history_publication_surface(result)
 
@@ -2326,10 +2339,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(diagnostics["facemaker"]["pre_split_history"])
         self.assertFalse(diagnostics["facemaker"]["splitter_history"])
         self.assertEqual(diagnostics["facemaker"]["bounded_face_count"], sketch["internal_face_count"])
-        self.assert_object_matches_expected(result, "p5", "sketch-internal-face-cubic-figure8-bspline")
+        self.assert_object_matches_expected(result, "sketcher-internal-shape", "sketch-internal-face-cubic-figure8-bspline")
 
     def test_p5_self_intersecting_cubic_bspline_records_terminal_split_history(self) -> None:
-        result = self.run_recompute("sketch-internal-face-cubic-figure8-bspline", "p5")
+        result = self.run_recompute("sketch-internal-face-cubic-figure8-bspline", "sketcher-internal-shape")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
 
         split_entries = [
@@ -2356,7 +2369,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(sources, ["Edge1"])
 
     def test_p5_internal_shape_records_deleted_history_for_filtered_dangling_edge(self) -> None:
-        result = self.run_recompute("sketch-internal-face-dangling-line", "p5")
+        result = self.run_recompute("sketch-internal-face-dangling-line", "sketcher-internal-shape")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
 
         deleted_edges = [
@@ -2375,12 +2388,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(deleted_vertices, [{"element": "Vertex6", "kind": "deleted", "sources": ["Vertex6"]}])
 
     def test_p5_split_and_dangling_open_wires_keep_leftover_internal_edge(self) -> None:
-        result = self.run_recompute("sketch-internal-face-split-and-dangling", "p5")
+        result = self.run_recompute("sketch-internal-face-split-and-dangling", "sketcher-internal-shape")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assert_object_matches_expected(result, "p5", "sketch-internal-face-split-and-dangling")
+        self.assert_object_matches_expected(result, "sketcher-internal-shape", "sketch-internal-face-split-and-dangling")
         self.assertIn("Sketch", result["mesh"])
 
     def test_c4m3_internal_shape_expected_backed_pressure_package(self) -> None:
@@ -2391,14 +2404,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "sketch-external-internal-split-dangling-mixed",
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c4m3")
+                result = self.run_recompute(fixture)
                 sketch = result["objects"]["Sketch"]
 
                 self.assertEqual(result["diagnostics"], [])
                 self.assertEqual(sketch["status"], "ok")
-                self.assert_result_matches_expected(result, "c4m3", fixture)
+                self.assert_result_matches_expected(result, None, fixture)
 
-        mixed = self.run_recompute("sketch-external-internal-split-dangling-mixed", "c4m3")
+        mixed = self.run_recompute("sketch-external-internal-split-dangling-mixed", "sketcher-external-geometry")
         named_shape = mixed["named_shapes"]["Sketch.InternalShape"]
         self.assertIn("wire_joiner_history:splitter", named_shape["element_history_status"])
         self.assertIn("wire_joiner_history:modified", named_shape["element_history_status"])
@@ -2408,7 +2421,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("InternalEdge", "".join(named_shape["elements"]))
 
     def test_p5_pad_rejects_selected_internal_face_sublist(self) -> None:
-        result = self.run_recompute("pad-internal-face-sublist", "p5")
+        result = self.run_recompute("pad-internal-face-sublist", "topology-resolve")
         pad = result["objects"]["Pad"]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
@@ -2416,7 +2429,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["status"], "error")
 
     def test_p5_pad_accepts_internal_face_stable_sublist_with_internal_named_shape(self) -> None:
-        result = self.run_recompute("pad-internal-face-stable-sublist", "p5")
+        result = self.run_recompute("pad-internal-face-stable-sublist", "topology-resolve")
         pad = result["objects"]["Pad"]
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
 
@@ -2427,9 +2440,9 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(named_shape["element_map"]["g1:split1;SKT;FAC"], "InternalFace1")
         self.assertIn("InternalFace1", named_shape["elements"])
         self.assertEqual(pad["currentSubname"], "InternalFace1")
-        ffi_result = self.run_recompute_ffi("pad-internal-face-stable-sublist", "p5")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-stable-sublist", "topology-resolve")
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
-        self.assert_object_matches_expected(result, "p5", "pad-internal-face-stable-sublist")
+        self.assert_object_matches_expected(result, "topology-resolve", "pad-internal-face-stable-sublist")
 
     def test_p5_pad_resolves_internal_face_stable_sublist_after_resize(self) -> None:
         stable = self.stable_internal_face_alias(self.rectangle_geometry())
@@ -2495,7 +2508,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_rejects_missing_internal_face_stable_sublist(self) -> None:
-        fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-stable-sublist.json"
+        fixture_path = ROOT / "fixtures" / "topology-resolve" / "pad-internal-face-stable-sublist.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         profile = payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]
         profile["SubList"] = ["InternalFace99"]
@@ -2512,7 +2525,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_internal_face_stable_sublist_without_internal_shape_evidence(self) -> None:
-        fixture_path = ROOT / "fixtures" / "p5" / "pad-open-wire-profile.json"
+        fixture_path = ROOT / "fixtures" / "partdesign-extrude" / "pad-open-wire-profile.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         profile = payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]
         profile["SubList"] = ["InternalFace1"]
@@ -2529,17 +2542,17 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_reference_shadow_legacy_internal_face_sublist(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow", "topology-resolve")
         pad = result["objects"]["Pad"]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(result["diagnostics"][0]["subname"], "InternalFace1")
         self.assertEqual(pad["status"], "error")
-        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow", "p5")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow", "topology-resolve")
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_c4m3_reference_shadow_single_subshape_pressure_package(self) -> None:
-        ffi_result = self.run_recompute_ffi("sketch-external-internal-reference-shadow-edge-stable", "c4m3")
+        ffi_result = self.run_recompute_ffi("sketch-external-internal-reference-shadow-edge-stable", "sketcher-external-geometry")
         update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
         shadow = update["ReferenceShadow"][0]
 
@@ -2555,7 +2568,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(shadow["stableSubname"], "Edge1")
 
         payload = json.loads(
-            (ROOT / "fixtures" / "c4m3" / "sketch-external-internal-frozen-brep-snapshot.json").read_text(
+            (ROOT / "fixtures" / "sketcher-external-geometry" / "sketch-external-internal-frozen-brep-snapshot.json").read_text(
                 encoding="utf-8"
             )
         )
@@ -2571,7 +2584,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         # runtime path twice so a reader/destructor failure cannot hide behind a first-call cache.
         for attempt in range(2):
             with self.subTest(frozen_brep_attempt=attempt):
-                frozen = self.run_recompute("sketch-external-internal-frozen-brep-snapshot", "c4m3")
+                frozen = self.run_recompute("sketch-external-internal-frozen-brep-snapshot", "sketcher-external-geometry")
                 self.assertEqual(frozen["diagnostics"], [])
                 self.assertEqual(frozen["objects"]["Sketch"]["external_geometry_count"], 4)
                 self.assertEqual(
@@ -2580,7 +2593,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 )
 
     def test_p5_pad_rejects_shadow_sub_legacy_internal_face_sublist(self) -> None:
-        fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json"
+        fixture_path = ROOT / "fixtures" / "topology-resolve" / "pad-internal-face-reference-shadow.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]["SubList"] = ["InternalFace2"]
 
@@ -2613,7 +2626,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_recovers_empty_sublist_from_shadow_sub_reference_shadow(self) -> None:
-        fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json"
+        fixture_path = ROOT / "fixtures" / "topology-resolve" / "pad-internal-face-reference-shadow.json"
         for sublist_mode in ["omitted", "empty"]:
             with self.subTest(sublist_mode=sublist_mode):
                 payload = json.loads(fixture_path.read_text(encoding="utf-8"))
@@ -2643,7 +2656,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "pad-internal-face-reference-shadow-invalid-brep",
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p5")
+                result = self.run_recompute(fixture)
                 diagnostic_codes = [item["code"] for item in result["diagnostics"]]
 
                 self.assertIn("invalid_link_value", diagnostic_codes)
@@ -2653,7 +2666,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_reference_shadow_semantic_drift(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow-drift", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow-drift", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
@@ -2664,37 +2677,37 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_missing_internal_face_sublist_reference_shadow_recovery(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow-recover-sublist", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow-recover-sublist", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["subname"], "InternalFace99")
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
-        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "topology-resolve")
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_rejects_ambiguous_fingerprint_reference_shadow_brep_recovery(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow-brep-recover-sublist", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-recover-sublist", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["subname"], "InternalFace99")
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
-        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-recover-sublist", "p5")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-recover-sublist", "topology-resolve")
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_rejects_reference_shadow_brep_zstd_base64_recovery(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow-brep-bin-recover-sublist", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-bin-recover-sublist", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["subname"], "InternalFace99")
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
-        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-bin-recover-sublist", "p5")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-bin-recover-sublist", "topology-resolve")
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_rejects_reference_shadow_brep_zstd_base64_decode_error(self) -> None:
-        fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow-brep-bin-recover-sublist.json"
+        fixture_path = ROOT / "fixtures" / "topology-resolve" / "pad-internal-face-reference-shadow-brep-bin-recover-sublist.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]["ReferenceShadow"][0]["brep"]["data"] = "not-base64"
 
@@ -2718,7 +2731,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_reference_shadow_brep_sha_mismatch(self) -> None:
-        fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow-brep-recover-sublist.json"
+        fixture_path = ROOT / "fixtures" / "topology-resolve" / "pad-internal-face-reference-shadow-brep-recover-sublist.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]["ReferenceShadow"][0]["brep"]["sha256"] = "0" * 64
 
@@ -2741,7 +2754,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_reference_shadow_brep_uses_shared_vertex_geometry_not_bbox_fingerprint(self) -> None:
-        dummy_fixture = ROOT / "fixtures" / "p5" / "part-extrusion-dirlink-reference-shadow-brep-edge-split.json"
+        dummy_fixture = ROOT / "fixtures" / "part-extrude" / "part-extrusion-dirlink-reference-shadow-brep-edge-split.json"
         dummy_brep = json.loads(dummy_fixture.read_text(encoding="utf-8"))["Objects"][1]["Properties"]["DirLink"][
             "ReferenceShadow"
         ][0]["brep"]
@@ -2851,17 +2864,17 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
     def test_p5_pad_rejects_drifted_sublist_with_reference_shadow_brep(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow-brep-drift-recover", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-drift-recover", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["subname"], "InternalFace2")
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
-        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-drift-recover", "p5")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-drift-recover", "topology-resolve")
         self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_requires_reselect_when_reference_shadow_brep_is_split(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow-brep-split", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-split", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
@@ -2872,7 +2885,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_reports_deleted_reference_shadow_brep(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow-brep-deleted", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-deleted", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
@@ -2883,7 +2896,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_ambiguous_reference_shadow_recovery(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow-ambiguous", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow-ambiguous", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
@@ -2913,7 +2926,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
         ]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "c4m3")
+                result = self.run_recompute(fixture)
                 diagnostic = result["diagnostics"][0]
 
                 self.assertEqual([item["code"] for item in result["diagnostics"]], [code])
@@ -2928,7 +2941,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             with self.subTest(attempt=attempt):
                 result = self.run_recompute(
                     "sketch-external-internal-unsupported-reference-shadow-brep-diagnostic",
-                    "c4m3",
+                    "sketcher-external-geometry",
                 )
                 diagnostic = result["diagnostics"][0]
 
@@ -2943,7 +2956,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["subname"], "Face5")
 
     def test_p5_pad_rejects_missing_reference_shadow_recovery(self) -> None:
-        result = self.run_recompute("pad-internal-face-reference-shadow-missing", "p5")
+        result = self.run_recompute("pad-internal-face-reference-shadow-missing", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
@@ -2954,29 +2967,29 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_uses_selected_internal_face_from_cross_cutters(self) -> None:
-        result = self.run_recompute("pad-internal-face-cross-cutters-sublist", "p5")
+        result = self.run_recompute("pad-internal-face-cross-cutters-sublist", "topology-resolve")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["status"], "ok")
-        self.assert_object_matches_expected(result, "p5", "pad-internal-face-cross-cutters-sublist")
+        self.assert_object_matches_expected(result, "topology-resolve", "pad-internal-face-cross-cutters-sublist")
 
     def test_p5_pad_uses_bounded_profile_when_sketch_has_dangling_open_line(self) -> None:
-        result = self.run_recompute("pad-dangling-line-profile", "p5")
+        result = self.run_recompute("pad-dangling-line-profile", "partdesign-extrude")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["status"], "ok")
-        self.assert_object_matches_expected(result, "p5", "pad-dangling-line-profile")
+        self.assert_object_matches_expected(result, "partdesign-extrude", "pad-dangling-line-profile")
 
     def test_p5_pad_requires_sublist_for_multi_internal_face_sketch(self) -> None:
-        result = self.run_recompute("pad-internal-face-missing-sublist", "p5")
+        result = self.run_recompute("pad-internal-face-missing-sublist", "topology-resolve")
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_subshape"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_reports_missing_internal_face_subshape_context(self) -> None:
-        result = self.run_recompute("pad-internal-face-missing-subshape", "p5")
+        result = self.run_recompute("pad-internal-face-missing-subshape", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
@@ -2987,7 +3000,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_open_profile_legacy_internal_face_selection(self) -> None:
-        result = self.run_recompute("pad-open-wire-profile", "p5")
+        result = self.run_recompute("pad-open-wire-profile", "partdesign-extrude")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
@@ -2998,7 +3011,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_non_face_internal_profile_subshape(self) -> None:
-        result = self.run_recompute("pad-internal-face-invalid-kind", "p5")
+        result = self.run_recompute("pad-internal-face-invalid-kind", "topology-resolve")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_subshape_kind"])
@@ -3009,7 +3022,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_part_extrusion_uses_whole_sketch_base_not_internal_face_profile(self) -> None:
-        result = self.run_recompute("part-extrusion-sketch-solid", "p5")
+        result = self.run_recompute("part-extrusion-sketch-solid", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3024,7 +3037,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("Profile", extrusion)
 
     def test_p5_part_extrusion_keeps_edge_base_as_surface_when_solid_false(self) -> None:
-        result = self.run_recompute("part-extrusion-edge-surface", "p5")
+        result = self.run_recompute("part-extrusion-edge-surface", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3036,7 +3049,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 0.0, 5.0]})
 
     def test_p5_part_extrusion_uses_dirlink_edge_magnitude_when_lengths_are_zero(self) -> None:
-        result = self.run_recompute("part-extrusion-dirlink-edge", "p5")
+        result = self.run_recompute("part-extrusion-dirlink-edge", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3047,7 +3060,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 0.0, 4.0]})
 
     def test_p5_part_extrusion_dirlink_reports_reference_shadow_edge_split(self) -> None:
-        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-edge-split", "p5")
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-edge-split", "part-extrude")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_split_requires_reselect"])
@@ -3059,7 +3072,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
     def test_p5_part_extrusion_dirlink_reports_reference_shadow_edge_deleted(self) -> None:
-        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-edge-deleted", "p5")
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-edge-deleted", "part-extrude")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
@@ -3071,7 +3084,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
     def test_p5_part_extrusion_dirlink_reports_reference_shadow_arc_edge_split(self) -> None:
-        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-arc-edge-split", "p5")
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-arc-edge-split", "part-extrude")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_split_requires_reselect"])
@@ -3083,7 +3096,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
     def test_p5_part_extrusion_dirlink_reports_reference_shadow_arc_edge_deleted(self) -> None:
-        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-arc-edge-deleted", "p5")
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-arc-edge-deleted", "part-extrude")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
@@ -3095,7 +3108,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
     def test_p5_part_extrusion_dirlink_reports_reference_shadow_bspline_edge_split(self) -> None:
-        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-bspline-edge-split", "p5")
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-bspline-edge-split", "part-extrude")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_split_requires_reselect"])
@@ -3107,7 +3120,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
     def test_p5_part_extrusion_dirlink_reports_reference_shadow_bspline_edge_deleted(self) -> None:
-        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-bspline-edge-deleted", "p5")
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-bspline-edge-deleted", "part-extrude")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
@@ -3119,7 +3132,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
     def test_p5_part_extrusion_dirlink_reports_reference_shadow_vertex_deleted(self) -> None:
-        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-vertex-deleted", "p5")
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-vertex-deleted", "part-extrude")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
@@ -3131,7 +3144,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
     def test_p5_part_extrusion_uses_planar_base_normal(self) -> None:
-        result = self.run_recompute("part-extrusion-normal-plane", "p5")
+        result = self.run_recompute("part-extrusion-normal-plane", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3142,7 +3155,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [2.0, 3.0, 5.0]})
 
     def test_p5_part_extrusion_supports_forward_taper(self) -> None:
-        result = self.run_recompute("part-extrusion-taper", "p5")
+        result = self.run_recompute("part-extrusion-taper", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3156,7 +3169,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_part_extrusion_publishes_prism_and_taper_history(self) -> None:
         for fixture in ["part-extrusion-sketch-solid", "part-extrusion-taper"]:
             with self.subTest(fixture=fixture):
-                result = self.run_recompute(fixture, "p5")
+                result = self.run_recompute(fixture)
                 named_shape = result["named_shapes"]["Extrude"]
                 history_kinds = {item["kind"] for item in named_shape["history"]}
 
@@ -3187,7 +3200,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     )
 
     def test_p5_part_extrusion_supports_reverse_taper(self) -> None:
-        result = self.run_recompute("part-extrusion-reverse-taper", "p5")
+        result = self.run_recompute("part-extrusion-reverse-taper", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3200,7 +3213,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertLess(extrusion["bbox"]["max"][2], 1.0)
 
     def test_p5_part_extrusion_supports_two_sided_taper(self) -> None:
-        result = self.run_recompute("part-extrusion-two-sided-taper", "p5")
+        result = self.run_recompute("part-extrusion-two-sided-taper", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3213,7 +3226,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(extrusion["bbox"]["max"][2], 5.99)
 
     def test_p5_part_extrusion_supports_facemaker_simple_without_holes(self) -> None:
-        result = self.run_recompute("part-extrusion-facemaker-simple", "p5")
+        result = self.run_recompute("part-extrusion-facemaker-simple", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3223,7 +3236,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
 
     def test_p5_part_extrusion_supports_facemaker_cheese_holes(self) -> None:
-        result = self.run_recompute("part-extrusion-facemaker-cheese", "p5")
+        result = self.run_recompute("part-extrusion-facemaker-cheese", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3233,7 +3246,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
 
     def test_p5_part_extrusion_default_bullseye_promotes_nested_island(self) -> None:
-        result = self.run_recompute("part-extrusion-facemaker-bullseye-nested-island", "p5")
+        result = self.run_recompute("part-extrusion-facemaker-bullseye-nested-island", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3243,7 +3256,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
 
     def test_p5_part_extrusion_default_bullseye_handles_intersected_inner_wires(self) -> None:
-        result = self.run_recompute("part-extrusion-facemaker-bullseye-intersected-holes", "p5")
+        result = self.run_recompute("part-extrusion-facemaker-bullseye-intersected-holes", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3255,7 +3268,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreaterEqual(diagnostics["facemaker"]["bounded_face_count"], 1)
 
     def test_p5_part_extrusion_cheese_keeps_nested_wire_as_hole(self) -> None:
-        result = self.run_recompute("part-extrusion-facemaker-cheese-nested-holes", "p5")
+        result = self.run_recompute("part-extrusion-facemaker-cheese-nested-holes", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3265,7 +3278,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
 
     def test_p5_part_extrusion_supports_facemaker_mode_extrusion(self) -> None:
-        result = self.run_recompute("part-extrusion-facemaker-mode-extrusion", "p5")
+        result = self.run_recompute("part-extrusion-facemaker-mode-extrusion", "part-extrude")
         extrusion = result["objects"]["Extrude"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -3275,7 +3288,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
 
     def test_p5_part_extrusion_rejects_unknown_facemaker_class(self) -> None:
-        result = self.run_recompute("part-extrusion-facemaker-unknown", "p5")
+        result = self.run_recompute("part-extrusion-facemaker-unknown", "part-extrude")
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_property"])
@@ -3284,20 +3297,20 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
     def test_p5_external_geometry_resolves_internal_edge(self) -> None:
-        result = self.run_recompute("sketch-external-internal-edge", "p5")
+        result = self.run_recompute("sketch-external-internal-edge", "sketcher-external-geometry")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p5", "sketch-external-internal-edge")
+        self.assert_object_matches_expected(result, "sketcher-external-geometry", "sketch-external-internal-edge")
 
     def test_p5_external_geometry_recovers_internal_edge_from_stable_sublist(self) -> None:
-        result = self.run_recompute("sketch-external-internal-edge-stable-recover", "p5")
+        result = self.run_recompute("sketch-external-internal-edge-stable-recover", "sketcher-external-geometry")
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["status"], "ok")
         self.assertEqual(pad["shape"], "occt_solid")
         self.assertAlmostEqual(pad["volume"], 36.0)
-        ffi_result = self.run_recompute_ffi("sketch-external-internal-edge-stable-recover", "p5")
+        ffi_result = self.run_recompute_ffi("sketch-external-internal-edge-stable-recover", "sketcher-external-geometry")
         update = ffi_result["elementReferenceUpdates"][0]
         sub_set = update["SubSet"][0]
         self.assertEqual(sub_set["SubList"], ["InternalEdge1"])
@@ -3305,7 +3318,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sub_set["ReferenceShadow"][0]["subname"], "InternalEdge1")
 
     def test_p5_external_geometry_uses_shadow_sub_before_projection(self) -> None:
-        fixture_path = ROOT / "fixtures" / "p5" / "sketch-external-internal-edge-stable-recover.json"
+        fixture_path = ROOT / "fixtures" / "sketcher-external-geometry" / "sketch-external-internal-edge-stable-recover.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         external = payload["Objects"][1]["Properties"]["ExternalGeometry"]["SubSet"][0]
         external["SubList"] = ["InternalVertex1"]
@@ -3328,10 +3341,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["external_point_count"], 0)
         self.assertEqual(pad["status"], "ok")
 
-        result = self.run_recompute("sketch-external-internal-vertex", "p5")
+        result = self.run_recompute("sketch-external-internal-vertex", "sketcher-external-geometry")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assert_object_matches_expected(result, "p5", "sketch-external-internal-vertex")
+        self.assert_object_matches_expected(result, "sketcher-external-geometry", "sketch-external-internal-vertex")
 
     def test_p5_open_wire_edge_identity_publishes_geometry_ids(self) -> None:
         result = self.open_wire_identity_ffi_result(self.open_wire_identity_geometry())
@@ -3427,14 +3440,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Sketch"]["raw_edge_identity"]["byStableSubname"]["g102"], "Edge3")
 
     def test_p5_mixed_internal_open_edge_identity_matches_source_geometry(self) -> None:
-        fixture = ROOT / "fixtures" / "p7" / "sketch-mixed-internal-open-edge-stable-identity.json"
+        fixture = ROOT / "fixtures" / "sketcher-geometry" / "sketch-mixed-internal-open-edge-stable-identity.json"
         payload = json.loads(fixture.read_text(encoding="utf-8"))
         geometry_by_id = {
             item["id"]: item
             for item in payload["Objects"][0]["Properties"]["Geometry"]
         }
 
-        result = self.run_recompute("sketch-mixed-internal-open-edge-stable-identity", "p7")
+        result = self.run_recompute("sketch-mixed-internal-open-edge-stable-identity", "sketcher-geometry")
         segments_by_source_id = {
             segment["sourceGeometryId"]: segment
             for segment in result["mesh"]["Sketch"]["edgeSegments"]
@@ -3762,13 +3775,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["Sketch"]["status"], "error")
 
     def test_p5_open_sketch_keeps_raw_shape_without_profile_face(self) -> None:
-        result = self.run_recompute("sketch-open-wire-internal-empty", "p5")
+        result = self.run_recompute("sketch-open-wire-internal-empty", "sketcher-geometry")
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["shape"], "occt_sketch_shape")
-        self.assert_object_matches_expected(result, "p5", "sketch-open-wire-internal-empty")
+        self.assert_object_matches_expected(result, "sketcher-geometry", "sketch-open-wire-internal-empty")
         subshapes = result["subshapes"]["Sketch"]
         mesh = result["mesh"]["Sketch"]
         edge_segments = mesh["edgeSegments"]

@@ -7888,7 +7888,7 @@ def geomplate_projected_curve2d_known_gap(fixture_path: Path) -> dict[str, Any]:
             "source_authority": [
                 "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp::CurveConstraintPy::setProjectedCurve()",
             ],
-            "cad_core_fixture": f"cad-core/fixtures/c5m7/{fixture_path.name}",
+            "cad_core_fixture": f"cad-core/fixtures/part-geomplate/{fixture_path.name}",
             "freecadcmd_evidence": {
                 "helper": "Part.GeomPlate.CurveConstraint.setProjectedCurve",
                 "probe_case": "geomplate_projected_curve2d",
@@ -12121,7 +12121,11 @@ def fixture_name_from_expected_path(path: Path) -> str:
 
 
 def is_c4m6_expected_path(path: Path) -> bool:
-    return len(path.parts) >= 3 and path.parent.name == "expected" and path.parent.parent.name == "c4m6"
+    return (
+        len(path.parts) >= 3
+        and path.parent.name == "expected"
+        and path.parent.parent.name == "topology-state"
+    )
 
 
 def mapper_history_ids(object_state: dict[str, Any]) -> dict[str, dict[str, Any]]:

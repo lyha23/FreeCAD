@@ -1,0 +1,14 @@
+{
+  "known_gap": {
+    "kind": "part_filling_explicit_params_product_freecadcmd_exit_245",
+    "route": "native_oracle_blocked",
+    "reason": "FreeCADCmd exits 245 before writing output when collecting the C6-M5 Part::FilledFace explicit parameter product-contract fixture.",
+    "command": "FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd python3 cad-core/tools/collect_freecad_expected.py cad-core/fixtures/part-filling/part-filling-explicit-params-product.json --out cad-core/out/filling-exit245-20260709/c6m5-part-filling-explicit-params-product.freecad.json --pretty",
+    "observed": {
+      "returncode": 245,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    "delete_condition": "Replace this file with part-filling-explicit-params-product.freecad.json and part-filling-explicit-params-product.freecad.ledger.json only after the same collector command returns 0 and writes stable native expected output."
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumLineDirectrixMissingSupport",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "Directrix1",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineDirectrixWrongShape",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "Directrix1",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineDirectrixNonConic",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "Directrix1",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineParabolaDirectrix2",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "Directrix2",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineEllipseAsymptote1",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "Asymptote1",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumPointParabolaFocus2",
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus2",
+        "point": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:ddeb4c19c71b5c2e3135be9517d60b4ffbc5de57b5cbf2aca1a11f9f6106ffdd",
+    "objects": {
+      "DatumLineDirectrixMissingSupport": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:028bd163a9602236c9b0a3f41eb571173b4a22cc5cb4e23933df62abd821c36e",
+        "subshapes": {}
+      },
+      "DatumLineDirectrixNonConic": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:5907cdd8be903cfb86f10425d4c55c3906c8e26e84ee91c8434e4e38e8f415ec",
+        "subshapes": {}
+      },
+      "DatumLineDirectrixWrongShape": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:12fd39e2011e009c1e83f17e3d79444fc0bdfee044796f828b7bd03dd950dc78",
+        "subshapes": {}
+      },
+      "DatumLineEllipseAsymptote1": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:238f055ec72237cfaaf6509a6bed7758763d316d392d3b7e9c6fdde999bfece0",
+        "subshapes": {}
+      },
+      "DatumLineParabolaDirectrix2": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:feaa3f4fa549bc4ca939db9cda0be475b264766433f68e84f93c52a92c67dfc6",
+        "subshapes": {}
+      },
+      "DatumPointParabolaFocus2": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:e382c37464901247736df00dc86e0f63a2ec142e61e8696024b8fa7fc6879024",
+        "subshapes": {}
+      },
+      "EllipseEdge": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1d9e0aa0b5ddedf1c8ef344b3e049ffce929e16fe5dff4543876270a0f6d5621",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "ParabolaSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:70b366aedaf18d593fc6713a0519fca818e0c6b29d4010e6557609780c8c8ed4",
+        "subshapes": {}
+      },
+      "StraightPath": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:fe193b7167f701f37827f123119e77bd7fb8bf22183623c0d7c85eb4d8e2c7d7",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "WrongPoint": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:34ad654b4d4ee6155ed48fa8c71525221fb7dff5ad5d2a7e757987b8ee83ddd9",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

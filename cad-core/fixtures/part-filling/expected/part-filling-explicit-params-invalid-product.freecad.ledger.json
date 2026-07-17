@@ -1,0 +1,177 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "events": [],
+  "fixture": {
+    "case": "part-filling-explicit-params-invalid-product",
+    "expectedPayloadHash": "sha256:2a6301296ee0c963fda3aa467c7cc73f50044b12c4680d8b78a02b739167e25b",
+    "inputHash": "sha256:90fcefdddf107cff69a549b027272c16910feb30c66df5364da0d1fde3cda914",
+    "phase": "part-filling",
+    "topoNamingStateHash": "sha256:11f47ccf693b2fe5809db46fc619f7fbe09cbbc34605040acc9d018e9fb248e6"
+  },
+  "inputReferences": [],
+  "objects": {
+    "InvalidMaxSegments": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::FilledFace"
+    },
+    "InvalidPtsOnCurve": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::FilledFace"
+    },
+    "InvalidTolG1": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::FilledFace"
+    },
+    "InvalidTolG2": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::FilledFace"
+    },
+    "Profile": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "InvalidMaxSegments": {
+        "covers": [
+          "InvalidMaxSegments"
+        ],
+        "ledgerObject": "InvalidMaxSegments",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "InvalidPtsOnCurve": {
+        "covers": [
+          "InvalidPtsOnCurve"
+        ],
+        "ledgerObject": "InvalidPtsOnCurve",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "InvalidTolG1": {
+        "covers": [
+          "InvalidTolG1"
+        ],
+        "ledgerObject": "InvalidTolG1",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "InvalidTolG2": {
+        "covers": [
+          "InvalidTolG2"
+        ],
+        "ledgerObject": "InvalidTolG2",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Profile": {
+        "covers": [
+          "Profile"
+        ],
+        "ledgerObject": "Profile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:11f47ccf693b2fe5809db46fc619f7fbe09cbbc34605040acc9d018e9fb248e6",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

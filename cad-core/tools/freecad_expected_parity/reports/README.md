@@ -5,18 +5,12 @@
 `collect_non_cad_smoke.py` 生成的可复查报告。当前受控 producer 入口固定为：
 
 ```text
-/Users/li/.cargo/bin/FreeCADCmd
+/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd
 ```
 
-该入口解析到：
-
-```text
-/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd
-```
-
-当前报告记录 FreeCAD `1.2.0 revision 20260519`、OCCT `7.8.1`，二进制
+当前报告记录 FreeCAD `1.2.0 revision 47063`、OCCT `7.8.1`，二进制
 SHA-256 为
-`391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a`。
+`51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674`。
 producer 源工作区的 build directory、CMake 信息和 dirty 状态属于可选
 provenance；缺失时只产生 warning，不改变 public expected 或 ledger 门禁结论。
 
@@ -33,7 +27,7 @@ provenance；缺失时只产生 warning，不改变 public expected 或 ledger �
 | unsupported | 205 |
 | public expected | 564 |
 | ledger | 564 |
-| 历史 producer trace | 480 |
+| 历史 producer trace | 478 |
 
 205 个 unsupported case 均已证据化分类：
 
@@ -112,7 +106,7 @@ headless 保留范围，现有 smoke 足够，若未来保留范围扩大再单�
 
 | 报告 | 结论 |
 | --- | --- |
-| `fixture_authority_inventory.v1.json` | 783 个输入；564/14/205 role 闭合；collector/general 和未调查队列清零 |
+| `fixture_authority_inventory.v1.json` | 783 个输入；564/14/205 role 闭合；39 个模块-能力 phase；collector/general 和未调查队列清零 |
 | `retained_module_fixture_coverage.v1.json` | 固定保留闭包全部闭合；CAD 模块通过，Help/AddonManager 为 `non_cad_smoke` |
 | `retained_public_capability_coverage.v1.json` | corpus `passed`；模块 API `partial`；CAD Core parity `not_evaluated` |
 | `all-native-check.v1.json` | 两个独立 FreeCADCmd 进程每轮 564/564，0 failure；跨轮 public/ledger 差异和 variation 均为 0 |
@@ -127,14 +121,12 @@ headless 保留范围，现有 smoke 足够，若未来保留范围扩大再单�
 - `status = passed`
 - `publicExpectedStatus = passed`
 - `ledgerValidationStatus = passed`
-- `ledgerDriftStatus = drifted`
+- `ledgerDriftStatus = unchanged`
 - `producerTraceStatus = not_evaluated`
 
-这里的 `ledgerDriftStatus = drifted` 表示新采候选 ledger 相对部分历史签入 ledger 的
-collector/tool hash 或内部证据发生变化，是诊断项；两个最终独立 run 之间 ledger
-drift 为 0，564 个候选 ledger 均通过 strict validation，public expected 语义差异也为
-0，因此不阻断 authority Gate。producer trace 默认不生成、不比较，只在
-expected/ledger 分叉调查时使用。
+这里的 `ledgerDriftStatus = unchanged` 表示两个最终独立 run 之间 ledger drift 为 0；
+564 个候选 ledger 均通过 strict validation，public expected 语义差异也为 0。
+producer trace 默认不生成、不比较，只在 expected/ledger 分叉调查时使用。
 
 ## 重建与使用
 
@@ -144,24 +136,24 @@ expected/ledger 分叉调查时使用。
 
 ```bash
 python3 tools/collect_freecad_expected.py \
-  fixtures/p8/part-box.json \
+  fixtures/part-primitives/part-box.json \
   --check --validate-ledger --repeat 2 \
   --candidate-root /tmp/part-box-repeat2 \
   --report /tmp/part-box-repeat2.json \
-  --freecadcmd /Users/li/.cargo/bin/FreeCADCmd
+  --freecadcmd /Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd
 
 python3 tools/collect_freecad_expected.py \
-  --phase c4m6 --check --validate-ledger --repeat 2 \
-  --candidate-root /tmp/c4m6-repeat2 \
-  --report /tmp/c4m6-repeat2.json \
-  --freecadcmd /Users/li/.cargo/bin/FreeCADCmd
+  --phase topology-state --check --validate-ledger --repeat 2 \
+  --candidate-root /tmp/topology-state-repeat2 \
+  --report /tmp/topology-state-repeat2.json \
+  --freecadcmd /Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd
 
 python3 tools/collect_freecad_expected.py \
   --all-native --fixtures-root fixtures \
   --check --validate-ledger --repeat 2 \
   --candidate-root /tmp/freecad-expected-all-native \
   --report tools/freecad_expected_parity/reports/all-native-check.v1.json \
-  --freecadcmd /Users/li/.cargo/bin/FreeCADCmd
+  --freecadcmd /Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd
 ```
 
 每次都要读取报告中的 `discovered`/`processed` 或子 run 报告，确认选择非零且全部
@@ -176,7 +168,7 @@ python3 tools/validate_freecad_expected_ledger.py \
   --report tools/freecad_expected_parity/reports/ledger-strict-validation.v1.json
 
 python3 tools/collect_non_cad_smoke.py \
-  --freecadcmd /Users/li/.cargo/bin/FreeCADCmd \
+  --freecadcmd /Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd \
   --out-root tools/freecad_expected_parity/reports/non_cad_smoke
 
 python3 tools/audit_freecad_fixture_authority.py \
@@ -198,11 +190,11 @@ phase/case 名称向 collector 添加特判。若最终重复采集发现 author
 
 ## 方案闭合状态
 
-- E0：783 条 inventory、role、authority 产物和异常检查已闭合。
+- E0：783 条 inventory、role、authority 产物和异常检查已闭合；fixture 仍保持 `fixtures/<phase>/<case>.json`，39 个 phase 全部使用模块-能力名称。
 - E1：single/phase/all-native check、独立 repeat 2、分栏 verdict 和 fail-closed 已闭合。
 - E2：205 条 unsupported 已逐项证据化分类，无未调查项。
 - E3：通用 TypeId/property、Sketcher constraints、history-only ledger、Material、Spreadsheet、promotion/revocation 和 non-CAD smoke 能力已闭合，保留模块 collector 队列为 0。
-- E4：native authority 从 480 扩容到 564；新增 case 均由 staging/promotion/post-repeat 回执闭合，发现不稳定的 case 已事务化撤销。
+- E4：native authority 从 480 扩容到 564；历史 phase 的 3 个重复 Loft 镜像保留为同一能力 phase 下的独立 case，其中 2 个 native authority 分别保留 public expected/ledger 谱系；其余新增 case 均由 staging/promotion/post-repeat 回执闭合。
 - E5：564 个 native 的全量 repeat 2、strict ledger、producer provenance、逐模块 corpus coverage 和最终 audit 全部通过。
 - E6：14 模块、57 能力的独立反向清单已签入；当前 API coverage 明确为 `partial`，不把 corpus closure 升格为全 API 覆盖或 CAD Core runtime parity。
 

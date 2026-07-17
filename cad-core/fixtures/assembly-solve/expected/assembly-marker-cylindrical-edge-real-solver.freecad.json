@@ -1,0 +1,708 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          2.0,
+          2.0,
+          2.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "native_marker_oracle": {
+        "requires_cad_core_marker_parity": true,
+        "solver_joints": [
+          {
+            "jcs_swapped_for_solver": false,
+            "joint_type": "Cylindrical",
+            "native_reference1": {
+              "connector_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "frame": "part_local",
+              "jcs_global_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "marker_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "moving_part": "ComponentA",
+              "object_global_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+              "part_global_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "reference": {
+                "object": "ComponentA",
+                "subnames": [
+                  "Edge1"
+                ]
+              },
+              "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
+              "status": "resolved_native_handle_one_side",
+              "subshape_reference": true
+            },
+            "native_reference2": {
+              "connector_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "frame": "part_local",
+              "jcs_global_placement": {
+                "Base": [
+                  4.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "marker_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "moving_part": "ComponentB",
+              "object_global_placement": {
+                "Base": [
+                  4.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+              "part_global_placement": {
+                "Base": [
+                  4.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "reference": {
+                "object": "ComponentB",
+                "subnames": [
+                  "Edge1"
+                ]
+              },
+              "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
+              "status": "resolved_native_handle_one_side",
+              "subshape_reference": true
+            },
+            "object": "CylindricalJoint",
+            "solver_reference1": {
+              "connector_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "frame": "part_local",
+              "jcs_global_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "marker_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "moving_part": "ComponentA",
+              "object_global_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+              "part_global_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "reference": {
+                "object": "ComponentA",
+                "subnames": [
+                  "Edge1"
+                ]
+              },
+              "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
+              "status": "resolved_native_handle_one_side",
+              "subshape_reference": true
+            },
+            "solver_reference2": {
+              "connector_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "frame": "part_local",
+              "jcs_global_placement": {
+                "Base": [
+                  4.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "marker_placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "moving_part": "ComponentB",
+              "object_global_placement": {
+                "Base": [
+                  4.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+              "part_global_placement": {
+                "Base": [
+                  4.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "reference": {
+                "object": "ComponentB",
+                "subnames": [
+                  "Edge1"
+                ]
+              },
+              "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
+              "status": "resolved_native_handle_one_side",
+              "subshape_reference": true
+            }
+          }
+        ],
+        "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint(); /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp::getJointCurrentValue()"
+      },
+      "native_solver": {
+        "return_code": 0
+      },
+      "object": "Assembly",
+      "object_fields": {
+        "assembly": "object",
+        "group": [
+          "ComponentA",
+          "ComponentB",
+          "Joints"
+        ],
+        "joint_groups": [
+          "Joints"
+        ],
+        "joints": [
+          "GroundedJoint",
+          "CylindricalJoint"
+        ],
+        "solve": "solved"
+      },
+      "solver_adapter": {
+        "grounded_joints": [
+          "GroundedJoint"
+        ],
+        "joints": [
+          "CylindricalJoint"
+        ],
+        "mode": "real_ondsel_solver",
+        "placement_updates": [
+          {
+            "action": "assembly_set_placement",
+            "assembly": "Assembly",
+            "joint": "OndselSolver",
+            "joint_type": "solver_result",
+            "object": "ComponentB",
+            "objectId": 4,
+            "properties": {
+              "Placement": {
+                "Base": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              }
+            },
+            "reason": "assembly_solver_placement_writeback",
+            "typeId": "Assembly::AssemblyLink"
+          }
+        ],
+        "solver_joints": [
+          {
+            "joint_type": "Cylindrical",
+            "object": "CylindricalJoint",
+            "reference1": {
+              "object": "ComponentA",
+              "subnames": [
+                "Edge1"
+              ]
+            },
+            "reference2": {
+              "object": "ComponentB",
+              "subnames": [
+                "Edge1"
+              ]
+            },
+            "suppressed": false
+          }
+        ],
+        "status": "solved",
+        "unsupported_joints": []
+      },
+      "topology_counts": {
+        "edges": 24,
+        "faces": 12,
+        "vertices": 16
+      },
+      "volume": 15.999999999999993
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:130c1ff44f0ea9a473e48b4e6ebe0e226876eec36332fefc2c4b43c42adaff74",
+    "objects": {
+      "Assembly": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:fdfcf2ddfe20d2ab70c41a26ee0a8c6d1894c46bfd012d257c4433fb141f659a",
+        "subshapes": {}
+      },
+      "BoxA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d72bebcb5ddf90747bccff170f59434b2014dbeff952b42444549308ebcbd652",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "current_only",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "current_only",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "current_only",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "current_only",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "current_only",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "current_only",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "current_only",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "current_only",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "current_only",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "current_only",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "current_only",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "current_only",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "current_only",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "current_only",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "current_only",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "current_only",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "current_only",
+            "subname": "Vertex8"
+          }
+        }
+      },
+      "BoxB": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:26a43e8780a08ce121e9869e3f07d110ba506d9b4715f120a7ac50e464ab1c62",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "current_only",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "current_only",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "current_only",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "current_only",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "current_only",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "current_only",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "current_only",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "current_only",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "current_only",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "current_only",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "current_only",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "current_only",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "current_only",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "current_only",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "current_only",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "current_only",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "current_only",
+            "subname": "Vertex8"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

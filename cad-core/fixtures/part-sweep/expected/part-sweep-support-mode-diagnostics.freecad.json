@@ -1,0 +1,190 @@
+{
+  "diagnostics": [
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_subshape",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_subshape",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "MissingSupport",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell SpineSupport must be a link",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "InvalidSupportMode",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell SupportMode must be None or SurfaceNormal",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "InvalidSupportSubshape",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell SpineSupport cannot resolve SupportPlane.Face99: subshape token Face99 is out of range",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "MissingAuxiliaryTarget",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell AuxiliarySpine target MissingAuxiliary was not created",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "InvalidAuxiliarySubshape",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell AuxiliarySpine cannot resolve SupportPlane.Face99: subshape token Face99 is out of range",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "InvalidAuxiliaryCurvilinear",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell AuxiliaryCurvilinear must be boolean",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "ZeroBinormal",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell Binormal must be non-zero",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "MalformedBiNormal",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell BiNormal must be a finite number",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": [],
+  "topoNamingState": {
+    "documentHash": "sha256:9a1b17543ec69362923430c9f68811a13fcd1a9d8cfa1d4a73aeffbd38fafe8c",
+    "objects": {
+      "AuxiliarySpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8e42554f3a8b4b72f30bc47766982d9ca59037d0130c7878d64482d051a9f341",
+        "subshapes": {}
+      },
+      "PipeSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:35c2d7914263c7fbd36f5722431598c7320a2c474aab85730fc0c7d8ca430799",
+        "subshapes": {}
+      },
+      "SketchPipeProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1e7d65765a3be1fa3170772425f7aeddf4affbd20b8e8f110332464675647054",
+        "subshapes": {}
+      },
+      "SupportPlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:739bd378de3470fb3e71f1f5ee3745e60a731d9db37493f6ef0e1517a8d26d8a",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 47063",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

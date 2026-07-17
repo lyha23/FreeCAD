@@ -18,7 +18,7 @@ from tools.element_map_producer_trace import (
 
 ROOT = Path(__file__).resolve().parents[1]
 CLI = ROOT / "build" / "cad-core"
-FIXTURE = ROOT / "fixtures" / "p2" / "rect-pad-pocket.json"
+FIXTURE = ROOT / "fixtures" / "partdesign-extrude" / "rect-pad-pocket.json"
 
 
 class ElementMapProducerTraceTests(unittest.TestCase):

@@ -1,0 +1,145 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "partdesign-datum-point-proximity-diagnostics",
+    "expectedPayloadHash": "sha256:ee66d7352f54c524d0bf9f056d3ca09605e8d65a397aad8b0dc297bcd12c20ba",
+    "inputHash": "sha256:0ff3119e23c5f6cf9535e103ae107cb7b31da3ad4c2efd7899af3bc87cc695c4",
+    "phase": "partdesign-datum",
+    "topoNamingStateHash": "sha256:ac184056d9cd8bbac532be09abc80af3d3915d2d84e13284fb368aca6965c257"
+  },
+  "inputReferences": [],
+  "objects": {
+    "BadSubnamePlane": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    },
+    "DatumPointProximityBadSubname": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Point"
+    },
+    "DatumPointProximityMissingSecond": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Point"
+    },
+    "SinglePoint": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "BadSubnamePlane": {
+        "covers": [
+          "BadSubnamePlane"
+        ],
+        "ledgerObject": "BadSubnamePlane",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumPointProximityBadSubname": {
+        "covers": [
+          "DatumPointProximityBadSubname"
+        ],
+        "ledgerObject": "DatumPointProximityBadSubname",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "DatumPointProximityMissingSecond": {
+        "covers": [
+          "DatumPointProximityMissingSecond"
+        ],
+        "ledgerObject": "DatumPointProximityMissingSecond",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SinglePoint": {
+        "covers": [
+          "SinglePoint"
+        ],
+        "ledgerObject": "SinglePoint",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:ac184056d9cd8bbac532be09abc80af3d3915d2d84e13284fb368aca6965c257",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}
