@@ -1,8 +1,8 @@
 {
   "anomalies": [],
-  "coverageHash": "sha256:0a761d12d1a19bcbbf8a280a4f9293926757838d72d278f69da2d50d32b5f90f",
+  "coverageHash": "sha256:534f772ba2d8d6a13f519aa9361c02d582ad9bf4d80721670d349cb67abd01b4",
   "coverageStatus": "passed",
-  "globalFixtureCount": 765,
+  "globalFixtureCount": 771,
   "modules": [
     {
       "capabilityFamilies": [
@@ -85,6 +85,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "assembly_mesh"
@@ -508,6 +510,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "material"
@@ -818,7 +822,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "spreadsheet"
         },
@@ -845,7 +851,7 @@
       ],
       "evidenceExcludedCount": 194,
       "fixtureAssociation": "runtime_execution_path",
-      "fixtureCount": 765,
+      "fixtureCount": 771,
       "fixtures": [
         "c10m1/sketch-coincident-shared-edge",
         "c10m1/sketch-near-overlap-rectangles",
@@ -1568,7 +1574,11 @@
         "p8/assembly-joint-group-diagnostics",
         "p8/assembly-joint-hidden-reference-diagnostics",
         "p8/assembly-link-basic",
+        "p8/material-part-feature-material-recompute-update",
+        "p8/material-part-feature-minimal-material",
         "p8/material-part-feature-shape-material",
+        "p8/mesh-import-closed-tetrahedron",
+        "p8/mesh-import-file-recompute-update",
         "p8/mesh-import-stl",
         "p8/part-boolean-fragments",
         "p8/part-boolean-fragments-compsolid",
@@ -1611,10 +1621,12 @@
         "p8/part-vertex",
         "p8/part-wedge",
         "p8/part-xor",
-        "p8/spreadsheet-sheet-expression-dependency"
+        "p8/spreadsheet-sheet-empty",
+        "p8/spreadsheet-sheet-expression-dependency",
+        "p8/spreadsheet-sheet-recompute-update"
       ],
       "name": "FreeCADBase",
-      "nativeAuthorityCount": 558,
+      "nativeAuthorityCount": 564,
       "nativeEligibleWithoutAuthorityCount": 0,
       "notInvestigatedCount": 0,
       "properties": [
@@ -2199,7 +2211,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Cells"
         },
@@ -3449,6 +3463,8 @@
             "c4m4/topo-reference-pressure-import-change-ambiguous-diagnostic",
             "c4m4/topo-reference-pressure-import-change-deleted",
             "c4m4/topo-reference-pressure-import-unchanged",
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl",
             "p8/part-boolean-fragments-shell-split",
             "p8/part-import-brep",
@@ -4575,6 +4591,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -5317,6 +5335,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -8126,6 +8146,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "ShapeMaterial"
@@ -10069,6 +10091,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -13221,6 +13245,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Materials::PropertyMaterial"
@@ -13240,7 +13266,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::PropertySheet"
         }
@@ -13706,6 +13734,8 @@
         },
         {
           "fixtures": [
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "Mesh::Import"
@@ -13867,6 +13897,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -15984,7 +16016,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::Sheet"
         }
@@ -16071,6 +16105,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "assembly_mesh"
@@ -16494,6 +16530,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "material"
@@ -16804,7 +16842,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "spreadsheet"
         },
@@ -16831,7 +16871,7 @@
       ],
       "evidenceExcludedCount": 194,
       "fixtureAssociation": "runtime_execution_path",
-      "fixtureCount": 765,
+      "fixtureCount": 771,
       "fixtures": [
         "c10m1/sketch-coincident-shared-edge",
         "c10m1/sketch-near-overlap-rectangles",
@@ -17554,7 +17594,11 @@
         "p8/assembly-joint-group-diagnostics",
         "p8/assembly-joint-hidden-reference-diagnostics",
         "p8/assembly-link-basic",
+        "p8/material-part-feature-material-recompute-update",
+        "p8/material-part-feature-minimal-material",
         "p8/material-part-feature-shape-material",
+        "p8/mesh-import-closed-tetrahedron",
+        "p8/mesh-import-file-recompute-update",
         "p8/mesh-import-stl",
         "p8/part-boolean-fragments",
         "p8/part-boolean-fragments-compsolid",
@@ -17597,10 +17641,12 @@
         "p8/part-vertex",
         "p8/part-wedge",
         "p8/part-xor",
-        "p8/spreadsheet-sheet-expression-dependency"
+        "p8/spreadsheet-sheet-empty",
+        "p8/spreadsheet-sheet-expression-dependency",
+        "p8/spreadsheet-sheet-recompute-update"
       ],
       "name": "FreeCADApp",
-      "nativeAuthorityCount": 558,
+      "nativeAuthorityCount": 564,
       "nativeEligibleWithoutAuthorityCount": 0,
       "notInvestigatedCount": 0,
       "properties": [
@@ -18185,7 +18231,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Cells"
         },
@@ -19435,6 +19483,8 @@
             "c4m4/topo-reference-pressure-import-change-ambiguous-diagnostic",
             "c4m4/topo-reference-pressure-import-change-deleted",
             "c4m4/topo-reference-pressure-import-unchanged",
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl",
             "p8/part-boolean-fragments-shell-split",
             "p8/part-import-brep",
@@ -20561,6 +20611,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -21303,6 +21355,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -24112,6 +24166,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "ShapeMaterial"
@@ -26055,6 +26111,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -29207,6 +29265,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Materials::PropertyMaterial"
@@ -29226,7 +29286,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::PropertySheet"
         }
@@ -29692,6 +29754,8 @@
         },
         {
           "fixtures": [
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "Mesh::Import"
@@ -29853,6 +29917,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -31970,7 +32036,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::Sheet"
         }
@@ -32057,6 +32125,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "assembly_mesh"
@@ -32480,6 +32550,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "material"
@@ -32790,7 +32862,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "spreadsheet"
         },
@@ -32817,7 +32891,7 @@
       ],
       "evidenceExcludedCount": 194,
       "fixtureAssociation": "runtime_execution_path",
-      "fixtureCount": 765,
+      "fixtureCount": 771,
       "fixtures": [
         "c10m1/sketch-coincident-shared-edge",
         "c10m1/sketch-near-overlap-rectangles",
@@ -33540,7 +33614,11 @@
         "p8/assembly-joint-group-diagnostics",
         "p8/assembly-joint-hidden-reference-diagnostics",
         "p8/assembly-link-basic",
+        "p8/material-part-feature-material-recompute-update",
+        "p8/material-part-feature-minimal-material",
         "p8/material-part-feature-shape-material",
+        "p8/mesh-import-closed-tetrahedron",
+        "p8/mesh-import-file-recompute-update",
         "p8/mesh-import-stl",
         "p8/part-boolean-fragments",
         "p8/part-boolean-fragments-compsolid",
@@ -33583,10 +33661,12 @@
         "p8/part-vertex",
         "p8/part-wedge",
         "p8/part-xor",
-        "p8/spreadsheet-sheet-expression-dependency"
+        "p8/spreadsheet-sheet-empty",
+        "p8/spreadsheet-sheet-expression-dependency",
+        "p8/spreadsheet-sheet-recompute-update"
       ],
       "name": "FreeCADMainCmd",
-      "nativeAuthorityCount": 558,
+      "nativeAuthorityCount": 564,
       "nativeEligibleWithoutAuthorityCount": 0,
       "notInvestigatedCount": 0,
       "properties": [
@@ -34171,7 +34251,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Cells"
         },
@@ -35421,6 +35503,8 @@
             "c4m4/topo-reference-pressure-import-change-ambiguous-diagnostic",
             "c4m4/topo-reference-pressure-import-change-deleted",
             "c4m4/topo-reference-pressure-import-unchanged",
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl",
             "p8/part-boolean-fragments-shell-split",
             "p8/part-import-brep",
@@ -36547,6 +36631,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -37289,6 +37375,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -40098,6 +40186,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "ShapeMaterial"
@@ -42041,6 +42131,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -45193,6 +45285,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Materials::PropertyMaterial"
@@ -45212,7 +45306,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::PropertySheet"
         }
@@ -45678,6 +45774,8 @@
         },
         {
           "fixtures": [
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "Mesh::Import"
@@ -45839,6 +45937,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -47956,7 +48056,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::Sheet"
         }
@@ -48043,6 +48145,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "assembly_mesh"
@@ -48466,6 +48570,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "material"
@@ -48776,7 +48882,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "spreadsheet"
         },
@@ -48803,7 +48911,7 @@
       ],
       "evidenceExcludedCount": 194,
       "fixtureAssociation": "runtime_execution_path",
-      "fixtureCount": 765,
+      "fixtureCount": 771,
       "fixtures": [
         "c10m1/sketch-coincident-shared-edge",
         "c10m1/sketch-near-overlap-rectangles",
@@ -49526,7 +49634,11 @@
         "p8/assembly-joint-group-diagnostics",
         "p8/assembly-joint-hidden-reference-diagnostics",
         "p8/assembly-link-basic",
+        "p8/material-part-feature-material-recompute-update",
+        "p8/material-part-feature-minimal-material",
         "p8/material-part-feature-shape-material",
+        "p8/mesh-import-closed-tetrahedron",
+        "p8/mesh-import-file-recompute-update",
         "p8/mesh-import-stl",
         "p8/part-boolean-fragments",
         "p8/part-boolean-fragments-compsolid",
@@ -49569,10 +49681,12 @@
         "p8/part-vertex",
         "p8/part-wedge",
         "p8/part-xor",
-        "p8/spreadsheet-sheet-expression-dependency"
+        "p8/spreadsheet-sheet-empty",
+        "p8/spreadsheet-sheet-expression-dependency",
+        "p8/spreadsheet-sheet-recompute-update"
       ],
       "name": "FreeCADMainPy",
-      "nativeAuthorityCount": 558,
+      "nativeAuthorityCount": 564,
       "nativeEligibleWithoutAuthorityCount": 0,
       "notInvestigatedCount": 0,
       "properties": [
@@ -50157,7 +50271,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Cells"
         },
@@ -51407,6 +51523,8 @@
             "c4m4/topo-reference-pressure-import-change-ambiguous-diagnostic",
             "c4m4/topo-reference-pressure-import-change-deleted",
             "c4m4/topo-reference-pressure-import-unchanged",
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl",
             "p8/part-boolean-fragments-shell-split",
             "p8/part-import-brep",
@@ -52533,6 +52651,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -53275,6 +53395,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -56084,6 +56206,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "ShapeMaterial"
@@ -58027,6 +58151,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -61179,6 +61305,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Materials::PropertyMaterial"
@@ -61198,7 +61326,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::PropertySheet"
         }
@@ -61664,6 +61794,8 @@
         },
         {
           "fixtures": [
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "Mesh::Import"
@@ -61825,6 +61957,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -63942,7 +64076,9 @@
         },
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::Sheet"
         }
@@ -63952,6 +64088,8 @@
       "capabilityFamilies": [
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "material"
@@ -63966,35 +64104,45 @@
       ],
       "evidenceExcludedCount": 0,
       "fixtureAssociation": "semantic_owner",
-      "fixtureCount": 1,
+      "fixtureCount": 3,
       "fixtures": [
+        "p8/material-part-feature-material-recompute-update",
+        "p8/material-part-feature-minimal-material",
         "p8/material-part-feature-shape-material"
       ],
       "name": "Material",
-      "nativeAuthorityCount": 1,
+      "nativeAuthorityCount": 3,
       "nativeEligibleWithoutAuthorityCount": 0,
       "notInvestigatedCount": 0,
       "properties": [
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Height"
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Length"
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "ShapeMaterial"
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Width"
@@ -64003,6 +64151,8 @@
       "propertyTypes": [
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Materials::PropertyMaterial"
@@ -64012,6 +64162,8 @@
       "typeIds": [
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Part::Box"
@@ -64233,6 +64385,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "material"
@@ -64462,7 +64616,7 @@
       ],
       "evidenceExcludedCount": 56,
       "fixtureAssociation": "semantic_owner",
-      "fixtureCount": 377,
+      "fixtureCount": 379,
       "fixtures": [
         "c12m13/part-sweep-helper-mutable-sequence",
         "c12m13/partdesign-pipe-last-section-vertex",
@@ -64799,6 +64953,8 @@
         "p8/assembly-joint-group-diagnostics",
         "p8/assembly-joint-hidden-reference-diagnostics",
         "p8/assembly-link-basic",
+        "p8/material-part-feature-material-recompute-update",
+        "p8/material-part-feature-minimal-material",
         "p8/material-part-feature-shape-material",
         "p8/part-boolean-fragments",
         "p8/part-boolean-fragments-compsolid",
@@ -64843,7 +64999,7 @@
         "p8/part-xor"
       ],
       "name": "Part",
-      "nativeAuthorityCount": 315,
+      "nativeAuthorityCount": 317,
       "nativeEligibleWithoutAuthorityCount": 0,
       "notInvestigatedCount": 0,
       "properties": [
@@ -66182,6 +66338,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -66565,6 +66723,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -68189,6 +68349,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "ShapeMaterial"
@@ -68910,6 +69072,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -71002,6 +71166,8 @@
         },
         {
           "fixtures": [
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material"
           ],
           "name": "Materials::PropertyMaterial"
@@ -71598,6 +71764,8 @@
             "p8/assembly-joint-group-diagnostics",
             "p8/assembly-joint-hidden-reference-diagnostics",
             "p8/assembly-link-basic",
+            "p8/material-part-feature-material-recompute-update",
+            "p8/material-part-feature-minimal-material",
             "p8/material-part-feature-shape-material",
             "p8/part-boolean-fragments",
             "p8/part-boolean-fragments-compsolid",
@@ -91300,6 +91468,8 @@
       "capabilityFamilies": [
         {
           "fixtures": [
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "assembly_mesh"
@@ -91314,17 +91484,21 @@
       ],
       "evidenceExcludedCount": 0,
       "fixtureAssociation": "semantic_owner",
-      "fixtureCount": 1,
+      "fixtureCount": 3,
       "fixtures": [
+        "p8/mesh-import-closed-tetrahedron",
+        "p8/mesh-import-file-recompute-update",
         "p8/mesh-import-stl"
       ],
       "name": "Mesh",
-      "nativeAuthorityCount": 1,
+      "nativeAuthorityCount": 3,
       "nativeEligibleWithoutAuthorityCount": 0,
       "notInvestigatedCount": 0,
       "properties": [
         {
           "fixtures": [
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "FileName"
@@ -91335,6 +91509,8 @@
       "typeIds": [
         {
           "fixtures": [
+            "p8/mesh-import-closed-tetrahedron",
+            "p8/mesh-import-file-recompute-update",
             "p8/mesh-import-stl"
           ],
           "name": "Mesh::Import"
@@ -91345,7 +91521,9 @@
       "capabilityFamilies": [
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "spreadsheet"
         }
@@ -91359,18 +91537,22 @@
       ],
       "evidenceExcludedCount": 0,
       "fixtureAssociation": "semantic_owner",
-      "fixtureCount": 1,
+      "fixtureCount": 3,
       "fixtures": [
-        "p8/spreadsheet-sheet-expression-dependency"
+        "p8/spreadsheet-sheet-empty",
+        "p8/spreadsheet-sheet-expression-dependency",
+        "p8/spreadsheet-sheet-recompute-update"
       ],
       "name": "Spreadsheet",
-      "nativeAuthorityCount": 1,
+      "nativeAuthorityCount": 3,
       "nativeEligibleWithoutAuthorityCount": 0,
       "notInvestigatedCount": 0,
       "properties": [
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Cells"
         }
@@ -91378,7 +91560,9 @@
       "propertyTypes": [
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::PropertySheet"
         }
@@ -91387,7 +91571,9 @@
       "typeIds": [
         {
           "fixtures": [
-            "p8/spreadsheet-sheet-expression-dependency"
+            "p8/spreadsheet-sheet-empty",
+            "p8/spreadsheet-sheet-expression-dependency",
+            "p8/spreadsheet-sheet-recompute-update"
           ],
           "name": "Spreadsheet::Sheet"
         }
@@ -96298,18 +96484,18 @@
       "typeIds": []
     }
   ],
-  "nativeAfter": 558,
+  "nativeAfter": 564,
   "nativeBaseline": 480,
   "nativeEligibleWithoutAuthorityCount": 0,
   "nativeExpanded": true,
   "notInvestigatedCount": 0,
   "producerValidation": {
     "errors": [],
-    "nativeCaseCount": 558,
+    "nativeCaseCount": 564,
     "report": {
       "exists": true,
       "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/all-native-check.v1.json",
-      "sha256": "da2a53840640cf4b6ea5e1a66e428534a71497a71f003d5b7adcd49a4ccd087b"
+      "sha256": "b9dad04d8762806ad76c149758a54b1d91518efa012ba0e23093c6886e8ae20c"
     },
     "status": "passed"
   },
@@ -96339,7 +96525,7 @@
     "producerReport": {
       "exists": true,
       "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/all-native-check.v1.json",
-      "sha256": "da2a53840640cf4b6ea5e1a66e428534a71497a71f003d5b7adcd49a4ccd087b"
+      "sha256": "b9dad04d8762806ad76c149758a54b1d91518efa012ba0e23093c6886e8ae20c"
     },
     "pruningPlan": {
       "exists": true,

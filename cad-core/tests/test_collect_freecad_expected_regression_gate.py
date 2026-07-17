@@ -1616,6 +1616,68 @@ class CollectionReportTests(unittest.TestCase):
         self.assertEqual([("A1", "3"), ("B1", "=left + 4")], sheet.set_calls)
         self.assertEqual([("A1", "left")], sheet.alias_calls)
 
+    def test_recompute_mutations_run_between_two_native_recomputes(self) -> None:
+        class Material:
+            UUID = "runtime-uuid"
+
+        class Box:
+            Name = "Box"
+            TypeId = "Part::Box"
+            ShapeMaterial = None
+
+        class Document:
+            def __init__(self) -> None:
+                self.calls: list[list[str]] = []
+
+            def recompute(self, objects: list[object]) -> int:
+                self.calls.append([str(getattr(item, "Name")) for item in objects])
+                return 0
+
+        fixture = {
+            "Objects": [
+                {
+                    "Name": "Box",
+                    "TypeId": "Part::Box",
+                    "Properties": {},
+                }
+            ],
+            "recompute": {
+                "objs": ["Box"],
+                "mutations": [
+                    {
+                        "object": "Box",
+                        "properties": {
+                            "ShapeMaterial": {
+                                "PropertyType": "Materials::PropertyMaterial",
+                                "Name": "Updated steel",
+                            }
+                        },
+                    }
+                ],
+            },
+        }
+        box = Box()
+        doc = Document()
+
+        with mock.patch.dict(
+            sys.modules,
+            {"Materials": SimpleNamespace(Material=Material)},
+        ):
+            collector.run_recompute_sequence(
+                object(),
+                doc,
+                {"Box": box},
+                fixture,
+            )
+
+        self.assertEqual([["Box"], ["Box"]], doc.calls)
+        self.assertEqual("Updated steel", box.ShapeMaterial.Name)
+
+    def test_mesh_transform_noop_is_not_enabled_as_native_geometry(self) -> None:
+        # FreeCAD FeatureMeshTransform.cpp::Transform::execute() has its mesh-copy and
+        # Position transform body commented out and returns StdReturn without a Mesh result.
+        self.assertNotIn("Mesh::Transform", collector.SUPPORTED_NATIVE_TYPES)
+
     def test_stable_subshape_index_order_is_not_a_public_semantic_difference(self) -> None:
         def result_subshape(indexed: str, token: str) -> dict[str, object]:
             return {

@@ -49475,6 +49475,102 @@
       "role": "native"
     },
     {
+      "case": "material-part-feature-material-recompute-update",
+      "contract": {
+        "capabilityFamilies": [
+          "material"
+        ],
+        "properties": [
+          "Height",
+          "Length",
+          "ShapeMaterial",
+          "Width"
+        ],
+        "propertyTypes": [
+          "Materials::PropertyMaterial"
+        ],
+        "typeIds": [
+          "Part::Box"
+        ]
+      },
+      "inRetainedClosure": true,
+      "input": {
+        "exists": true,
+        "path": "fixtures/p8/material-part-feature-material-recompute-update.json",
+        "sha256": "3df051c739a4a8d3a331730e1d663732a67c0c28b3d3baadd31b7e0a5017ee84"
+      },
+      "ledger": {
+        "exists": true,
+        "path": "fixtures/p8/expected/material-part-feature-material-recompute-update.freecad.ledger.json",
+        "sha256": "b0f7b6f63a30dc57f6ed74ded1db94ddd488dd844992cbc0a69643dede9157d0"
+      },
+      "objectCount": 1,
+      "ownerModules": [
+        "Material",
+        "Part"
+      ],
+      "phase": "p8",
+      "producerTrace": {
+        "exists": false,
+        "path": "fixtures/p8/expected/material-part-feature-material-recompute-update.freecad.producer-trace.json",
+        "sha256": null
+      },
+      "publicExpected": {
+        "exists": true,
+        "path": "fixtures/p8/expected/material-part-feature-material-recompute-update.freecad.json",
+        "sha256": "4d683143e4c6185fcd59a81a1b2cf4050a67469df3d2674ab0092fd687ef9dd3"
+      },
+      "role": "native"
+    },
+    {
+      "case": "material-part-feature-minimal-material",
+      "contract": {
+        "capabilityFamilies": [
+          "material"
+        ],
+        "properties": [
+          "Height",
+          "Length",
+          "ShapeMaterial",
+          "Width"
+        ],
+        "propertyTypes": [
+          "Materials::PropertyMaterial"
+        ],
+        "typeIds": [
+          "Part::Box"
+        ]
+      },
+      "inRetainedClosure": true,
+      "input": {
+        "exists": true,
+        "path": "fixtures/p8/material-part-feature-minimal-material.json",
+        "sha256": "45b755ab7e1c8ecf20866108923a46418107b1aed682e158effb1614ed80372b"
+      },
+      "ledger": {
+        "exists": true,
+        "path": "fixtures/p8/expected/material-part-feature-minimal-material.freecad.ledger.json",
+        "sha256": "b1e61b5270cd010e15c99fa17992339fc1bab63fa6298c54169a610547c0fddb"
+      },
+      "objectCount": 1,
+      "ownerModules": [
+        "Material",
+        "Part"
+      ],
+      "phase": "p8",
+      "producerTrace": {
+        "exists": false,
+        "path": "fixtures/p8/expected/material-part-feature-minimal-material.freecad.producer-trace.json",
+        "sha256": null
+      },
+      "publicExpected": {
+        "exists": true,
+        "path": "fixtures/p8/expected/material-part-feature-minimal-material.freecad.json",
+        "sha256": "f43d20bfcaa497b232667bcecbe5aa058aa44a6c6f0261b1513ee7c0c2685594"
+      },
+      "role": "native"
+    },
+    {
       "case": "material-part-feature-shape-material",
       "contract": {
         "capabilityFamilies": [
@@ -49519,6 +49615,90 @@
         "exists": true,
         "path": "fixtures/p8/expected/material-part-feature-shape-material.freecad.json",
         "sha256": "e35e6f88ffdb41d6a6e49d2031f9aff052e1f62d6b909703a1314dd8575b18af"
+      },
+      "role": "native"
+    },
+    {
+      "case": "mesh-import-closed-tetrahedron",
+      "contract": {
+        "capabilityFamilies": [
+          "assembly_mesh"
+        ],
+        "properties": [
+          "FileName"
+        ],
+        "propertyTypes": [],
+        "typeIds": [
+          "Mesh::Import"
+        ]
+      },
+      "inRetainedClosure": true,
+      "input": {
+        "exists": true,
+        "path": "fixtures/p8/mesh-import-closed-tetrahedron.json",
+        "sha256": "3a56a753489f902d1b5d4f0cec10fe58cbec8bad562d7ad66479fed9749dcaca"
+      },
+      "ledger": {
+        "exists": true,
+        "path": "fixtures/p8/expected/mesh-import-closed-tetrahedron.freecad.ledger.json",
+        "sha256": "215cc5c700047b4980073d9e8000fdbbec46891ebccd42df5e155641ed45de55"
+      },
+      "objectCount": 1,
+      "ownerModules": [
+        "Mesh"
+      ],
+      "phase": "p8",
+      "producerTrace": {
+        "exists": false,
+        "path": "fixtures/p8/expected/mesh-import-closed-tetrahedron.freecad.producer-trace.json",
+        "sha256": null
+      },
+      "publicExpected": {
+        "exists": true,
+        "path": "fixtures/p8/expected/mesh-import-closed-tetrahedron.freecad.json",
+        "sha256": "0df5573e4554727a4daea36c2367e843493d4f38eb8134aa2620b8a54159b991"
+      },
+      "role": "native"
+    },
+    {
+      "case": "mesh-import-file-recompute-update",
+      "contract": {
+        "capabilityFamilies": [
+          "assembly_mesh"
+        ],
+        "properties": [
+          "FileName"
+        ],
+        "propertyTypes": [],
+        "typeIds": [
+          "Mesh::Import"
+        ]
+      },
+      "inRetainedClosure": true,
+      "input": {
+        "exists": true,
+        "path": "fixtures/p8/mesh-import-file-recompute-update.json",
+        "sha256": "1b8f1ebac1091146ca35ed636423c064843dfa14499acda53898171784f64f77"
+      },
+      "ledger": {
+        "exists": true,
+        "path": "fixtures/p8/expected/mesh-import-file-recompute-update.freecad.ledger.json",
+        "sha256": "668259b0642cc969434c9a01f9aa72aa07d4048899b2f4e42c2559723c4ae9f3"
+      },
+      "objectCount": 1,
+      "ownerModules": [
+        "Mesh"
+      ],
+      "phase": "p8",
+      "producerTrace": {
+        "exists": false,
+        "path": "fixtures/p8/expected/mesh-import-file-recompute-update.freecad.producer-trace.json",
+        "sha256": null
+      },
+      "publicExpected": {
+        "exists": true,
+        "path": "fixtures/p8/expected/mesh-import-file-recompute-update.freecad.json",
+        "sha256": "4ecc4a17e1aa937732060124a69b482d67bc17e68e13e05503fe36e9e6a286d6"
       },
       "role": "native"
     },
@@ -51619,6 +51799,50 @@
       "role": "native"
     },
     {
+      "case": "spreadsheet-sheet-empty",
+      "contract": {
+        "capabilityFamilies": [
+          "spreadsheet"
+        ],
+        "properties": [
+          "Cells"
+        ],
+        "propertyTypes": [
+          "Spreadsheet::PropertySheet"
+        ],
+        "typeIds": [
+          "Spreadsheet::Sheet"
+        ]
+      },
+      "inRetainedClosure": true,
+      "input": {
+        "exists": true,
+        "path": "fixtures/p8/spreadsheet-sheet-empty.json",
+        "sha256": "35ce1d84ebdb8d54a106af6eda449420e3d14bbc588611db6abf06718b0e3fa6"
+      },
+      "ledger": {
+        "exists": true,
+        "path": "fixtures/p8/expected/spreadsheet-sheet-empty.freecad.ledger.json",
+        "sha256": "2b408b3af156eabce855cf801f6975bc6018850d04d8063bf967fb916685709d"
+      },
+      "objectCount": 1,
+      "ownerModules": [
+        "Spreadsheet"
+      ],
+      "phase": "p8",
+      "producerTrace": {
+        "exists": false,
+        "path": "fixtures/p8/expected/spreadsheet-sheet-empty.freecad.producer-trace.json",
+        "sha256": null
+      },
+      "publicExpected": {
+        "exists": true,
+        "path": "fixtures/p8/expected/spreadsheet-sheet-empty.freecad.json",
+        "sha256": "24a1abd0d1fc52c6bd227441e24106ce19b942c8ead19a93c1f1487c99e0b9ed"
+      },
+      "role": "native"
+    },
+    {
       "case": "spreadsheet-sheet-expression-dependency",
       "contract": {
         "capabilityFamilies": [
@@ -51661,6 +51885,50 @@
         "sha256": "1da64b19a8c4ffeeaa80f98c8f99de636ec272d984345d40fa24daeeb931dfae"
       },
       "role": "native"
+    },
+    {
+      "case": "spreadsheet-sheet-recompute-update",
+      "contract": {
+        "capabilityFamilies": [
+          "spreadsheet"
+        ],
+        "properties": [
+          "Cells"
+        ],
+        "propertyTypes": [
+          "Spreadsheet::PropertySheet"
+        ],
+        "typeIds": [
+          "Spreadsheet::Sheet"
+        ]
+      },
+      "inRetainedClosure": true,
+      "input": {
+        "exists": true,
+        "path": "fixtures/p8/spreadsheet-sheet-recompute-update.json",
+        "sha256": "14d5e515b8e7c5669debde55bd1ca998de0c1dfd8acc63387fae9b2df2f8cecc"
+      },
+      "ledger": {
+        "exists": true,
+        "path": "fixtures/p8/expected/spreadsheet-sheet-recompute-update.freecad.ledger.json",
+        "sha256": "39f2788ff1da23046234c1217734c7953a586365432c7cf35fb91c569caae076"
+      },
+      "objectCount": 1,
+      "ownerModules": [
+        "Spreadsheet"
+      ],
+      "phase": "p8",
+      "producerTrace": {
+        "exists": false,
+        "path": "fixtures/p8/expected/spreadsheet-sheet-recompute-update.freecad.producer-trace.json",
+        "sha256": null
+      },
+      "publicExpected": {
+        "exists": true,
+        "path": "fixtures/p8/expected/spreadsheet-sheet-recompute-update.freecad.json",
+        "sha256": "744b612b39ec531aa30be54c174c5524ed4f1b1c16e2b64ea03fa0ef1c00c013"
+      },
+      "role": "native"
     }
   ],
   "classificationPolicy": {
@@ -51675,19 +51943,19 @@
   },
   "collector": {
     "path": "tools/collect_freecad_expected.py",
-    "sha256": "230a742420a29ba91a98c2a9c428bbf7ed039dcfa7333d535291536669f92bd7"
+    "sha256": "f5030e689afe9cab5c76dc931033d7a991b39ce6cd81f6a8d6d11118ada1b291"
   },
   "collectorImplementationQueue": [],
   "counts": {
     "artifacts": {
-      "ledger": 558,
+      "ledger": 564,
       "producerTrace": 480,
       "protocolExpected": 14,
-      "publicExpected": 558
+      "publicExpected": 564
     },
-    "inputs": 777,
+    "inputs": 783,
     "roles": {
-      "native": 558,
+      "native": 564,
       "protocol_only": 14,
       "unsupported": 205
     },
@@ -51697,7 +51965,7 @@
     }
   },
   "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
-  "inventoryHash": "sha256:7c1024de3c8b609ec42dc3bcd511446b9ceabcdb3298ae49def71d57def30e8a",
+  "inventoryHash": "sha256:188da62a738144c0b3d0aacae510e848cb02b111cd093059386d5194c1679b22",
   "nextNativeCandidates": [],
   "probeReceipts": [
     {
@@ -55602,7 +55870,7 @@
   "retainedModuleCollectorImplementationQueue": [],
   "roles": {
     "path": "tools/freecad_expected_parity/fixture_roles.v1.json",
-    "sha256": "c329852db31fc50b3a70c09228ab37c03152b9fb759512c41fb7dd9f2ef27195"
+    "sha256": "5c3ea8fe55aa1e4b3609b6731c230ce0170ebd1bc4c07eb4fa82fd54f2bb0d09"
   },
   "schema": "freecad-fixture-authority-inventory/v1",
   "stagingCandidateQueue": [],

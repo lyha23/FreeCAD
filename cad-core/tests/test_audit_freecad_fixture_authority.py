@@ -412,6 +412,180 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
         self.assertEqual("material", audit.business_family(material_fixture))
         self.assertEqual("spreadsheet", audit.business_family(spreadsheet_fixture))
 
+    def test_public_capability_report_separates_execution_thin_and_uncovered(self) -> None:
+        authority = {
+            "cases": [
+                {"phase": "p1", "case": "native", "role": "native"},
+                {"phase": "p1", "case": "protocol", "role": "protocol_only"},
+            ]
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            contract_path = Path(temp_dir) / "capabilities.json"
+            self.write_json(
+                contract_path,
+                {
+                    "schema": "freecad-retained-public-capabilities/v1",
+                    "scope": "representative public capabilities and major runtime branches",
+                    "requiredModules": ["Part"],
+                    "modules": [
+                        {
+                            "name": "Part",
+                            "capabilities": [
+                                {
+                                    "id": "primitive_execute",
+                                    "publicSurface": "Part::Box",
+                                    "runtimeBranch": "Execute a primitive",
+                                    "disposition": "native_fixture",
+                                    "sourceEvidence": ["src/Mod/Part/App/PrimitiveFeature.cpp::Box::execute"],
+                                    "fixtureEvidence": [
+                                        {"fixture": "p1/native", "level": "target_result"}
+                                    ],
+                                },
+                                {
+                                    "id": "property_only",
+                                    "publicSurface": "Part::Feature properties",
+                                    "runtimeBranch": "TypeId and property presence only",
+                                    "disposition": "native_fixture",
+                                    "sourceEvidence": ["src/Mod/Part/App/PartFeature.cpp::Feature"],
+                                    "fixtureEvidence": [
+                                        {"fixture": "p1/native", "level": "typeid_property_only"}
+                                    ],
+                                },
+                                {
+                                    "id": "export_side_effect",
+                                    "publicSurface": "Part shape export",
+                                    "runtimeBranch": "Write a STEP file",
+                                    "disposition": "uncovered",
+                                    "sourceEvidence": ["src/Mod/Part/App/TopoShapePyImp.cpp::exportStep"],
+                                    "rationale": "No retained fixture exercises the public export side effect.",
+                                    "fixtureEvidence": [],
+                                },
+                                {
+                                    "id": "restore_only_state",
+                                    "publicSurface": "App link restore",
+                                    "runtimeBranch": "Repair a persisted label reference",
+                                    "disposition": "protocol_only",
+                                    "sourceEvidence": ["src/App/PropertyLinks.cpp::restoreLabelReference"],
+                                    "rationale": "The state only exists during persisted restore.",
+                                    "fixtureEvidence": [
+                                        {"fixture": "p1/protocol", "level": "protocol_contract"}
+                                    ],
+                                },
+                            ],
+                        }
+                    ],
+                },
+            )
+
+            report = retained_coverage.build_public_capability_coverage_report(
+                authority,
+                capability_contract_path=contract_path,
+                fixture_corpus_closure_status="passed",
+            )
+
+        capabilities = {
+            item["id"]: item for item in report["modules"][0]["capabilities"]
+        }
+        self.assertEqual("passed", report["fixtureCorpusClosure"]["status"])
+        self.assertEqual("partial", report["moduleApiCoverage"]["status"])
+        self.assertEqual("not_evaluated", report["cadCoreRuntimeParity"]["status"])
+        self.assertEqual("covered", capabilities["primitive_execute"]["coverageStatus"])
+        self.assertEqual("thin", capabilities["property_only"]["coverageStatus"])
+        self.assertEqual("uncovered", capabilities["export_side_effect"]["coverageStatus"])
+        self.assertEqual(
+            "non_native_exception",
+            capabilities["restore_only_state"]["coverageStatus"],
+        )
+
+    def test_public_capability_contract_fails_when_required_module_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            contract_path = Path(temp_dir) / "capabilities.json"
+            self.write_json(
+                contract_path,
+                {
+                    "schema": "freecad-retained-public-capabilities/v1",
+                    "scope": "fail-closed module inventory",
+                    "requiredModules": ["Part", "Mesh"],
+                    "modules": [
+                        {
+                            "name": "Part",
+                            "capabilities": [
+                                {
+                                    "id": "primitive_execute",
+                                    "publicSurface": "Part::Box",
+                                    "runtimeBranch": "Box execute",
+                                    "disposition": "uncovered",
+                                    "sourceEvidence": [
+                                        "src/Mod/Part/App/PrimitiveFeature.cpp::Box::execute"
+                                    ],
+                                    "fixtureEvidence": [],
+                                    "rationale": "No fixture in the test inventory.",
+                                }
+                            ],
+                        }
+                    ],
+                },
+            )
+
+            report = retained_coverage.build_public_capability_coverage_report(
+                {"cases": []},
+                capability_contract_path=contract_path,
+                fixture_corpus_closure_status="passed",
+            )
+
+        self.assertEqual("failed", report["status"])
+        self.assertIn(
+            "capability contract modules must exactly match requiredModules order",
+            report["errors"],
+        )
+
+    def test_public_capability_report_fails_when_native_authority_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            contract_path = Path(temp_dir) / "capabilities.json"
+            self.write_json(
+                contract_path,
+                {
+                    "schema": "freecad-retained-public-capabilities/v1",
+                    "scope": "fail-closed native authority mapping",
+                    "requiredModules": ["Part"],
+                    "modules": [
+                        {
+                            "name": "Part",
+                            "capabilities": [
+                                {
+                                    "id": "primitive_execute",
+                                    "publicSurface": "Part::Box",
+                                    "runtimeBranch": "Box execute",
+                                    "disposition": "native_fixture",
+                                    "sourceEvidence": [
+                                        "src/Mod/Part/App/PrimitiveFeature.cpp::Box::execute"
+                                    ],
+                                    "fixtureEvidence": [
+                                        {
+                                            "fixture": "p1/missing",
+                                            "level": "target_result",
+                                        }
+                                    ],
+                                }
+                            ],
+                        }
+                    ],
+                },
+            )
+
+            report = retained_coverage.build_public_capability_coverage_report(
+                {"cases": []},
+                capability_contract_path=contract_path,
+                fixture_corpus_closure_status="passed",
+            )
+
+        self.assertEqual("failed", report["status"])
+        self.assertEqual("failed", report["moduleApiCoverage"]["status"])
+        self.assertEqual(
+            "missing_authority",
+            report["modules"][0]["capabilities"][0]["coverageStatus"],
+        )
+
     def test_non_cad_smoke_requires_structured_passing_evidence(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             receipt_path = Path(temp_dir) / "Help.json"
@@ -561,6 +735,55 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
         self.assertEqual(checked_in, live)
         self.assertEqual("passed", live["coverageStatus"])
         self.assertEqual(0, live["retainedModuleCollectorImplementationQueueCount"])
+
+    def test_checked_in_public_capability_report_matches_live_reverse_inventory(self) -> None:
+        parity_root = TOOLS / "freecad_expected_parity"
+        report_path = (
+            parity_root / "reports" / "retained_public_capability_coverage.v1.json"
+        )
+        contract_path = parity_root / "retained_public_capabilities.v1.json"
+        closure_path = (
+            parity_root / "reports" / "retained_module_fixture_coverage.v1.json"
+        )
+        self.assertTrue(report_path.is_file())
+        self.assertTrue(contract_path.is_file())
+
+        contract = json.loads(contract_path.read_text(encoding="utf-8"))
+        for module in contract["modules"]:
+            for capability in module["capabilities"]:
+                for source in capability["sourceEvidence"]:
+                    source_path = CAD_CORE_ROOT.parent / source.split("::", 1)[0]
+                    self.assertTrue(source_path.exists(), source)
+
+        checked_in = json.loads(report_path.read_text(encoding="utf-8"))
+        closure = json.loads(closure_path.read_text(encoding="utf-8"))
+        authority = audit.build_report(CAD_CORE_ROOT, audit.ROLES_PATH)
+        live = retained_coverage.build_public_capability_coverage_report(
+            authority,
+            capability_contract_path=contract_path,
+            fixture_corpus_closure_status=closure["coverageStatus"],
+        )
+        self.assertEqual(checked_in, live)
+        self.assertEqual("passed", live["fixtureCorpusClosure"]["status"])
+        self.assertEqual("partial", live["moduleApiCoverage"]["status"])
+        self.assertEqual("not_evaluated", live["cadCoreRuntimeParity"]["status"])
+
+        modules = {row["name"]: row for row in live["modules"]}
+        for module_name in ("Material", "Mesh", "Spreadsheet"):
+            covered = [
+                row
+                for row in modules[module_name]["capabilities"]
+                if row["coverageStatus"] == "covered"
+            ]
+            self.assertGreaterEqual(len(covered), 3, module_name)
+
+        mesh_capabilities = {
+            row["id"]: row for row in modules["Mesh"]["capabilities"]
+        }
+        self.assertEqual(
+            "non_native_exception",
+            mesh_capabilities["feature_mesh_transform"]["coverageStatus"],
+        )
 
 
 if __name__ == "__main__":

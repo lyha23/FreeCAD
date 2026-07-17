@@ -4130,10 +4130,42 @@
     },
     {
       "errors": [],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/material-part-feature-material-recompute-update.freecad.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/material-part-feature-material-recompute-update.freecad.ledger.json",
+      "ledgerSha256": "b0f7b6f63a30dc57f6ed74ded1db94ddd488dd844992cbc0a69643dede9157d0",
+      "publicSha256": "4d683143e4c6185fcd59a81a1b2cf4050a67469df3d2674ab0092fd687ef9dd3",
+      "status": "passed"
+    },
+    {
+      "errors": [],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/material-part-feature-minimal-material.freecad.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/material-part-feature-minimal-material.freecad.ledger.json",
+      "ledgerSha256": "b1e61b5270cd010e15c99fa17992339fc1bab63fa6298c54169a610547c0fddb",
+      "publicSha256": "f43d20bfcaa497b232667bcecbe5aa058aa44a6c6f0261b1513ee7c0c2685594",
+      "status": "passed"
+    },
+    {
+      "errors": [],
       "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/material-part-feature-shape-material.freecad.json",
       "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/material-part-feature-shape-material.freecad.ledger.json",
       "ledgerSha256": "cbfe1cca344aa0592ecda4c98c10bbb2c9123d3f52e04e377823b0aac04015c0",
       "publicSha256": "e35e6f88ffdb41d6a6e49d2031f9aff052e1f62d6b909703a1314dd8575b18af",
+      "status": "passed"
+    },
+    {
+      "errors": [],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/mesh-import-closed-tetrahedron.freecad.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/mesh-import-closed-tetrahedron.freecad.ledger.json",
+      "ledgerSha256": "215cc5c700047b4980073d9e8000fdbbec46891ebccd42df5e155641ed45de55",
+      "publicSha256": "0df5573e4554727a4daea36c2367e843493d4f38eb8134aa2620b8a54159b991",
+      "status": "passed"
+    },
+    {
+      "errors": [],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/mesh-import-file-recompute-update.freecad.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/mesh-import-file-recompute-update.freecad.ledger.json",
+      "ledgerSha256": "668259b0642cc969434c9a01f9aa72aa07d4048899b2f4e42c2559723c4ae9f3",
+      "publicSha256": "4ecc4a17e1aa937732060124a69b482d67bc17e68e13e05503fe36e9e6a286d6",
       "status": "passed"
     },
     {
@@ -4458,10 +4490,26 @@
     },
     {
       "errors": [],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/spreadsheet-sheet-empty.freecad.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/spreadsheet-sheet-empty.freecad.ledger.json",
+      "ledgerSha256": "2b408b3af156eabce855cf801f6975bc6018850d04d8063bf967fb916685709d",
+      "publicSha256": "24a1abd0d1fc52c6bd227441e24106ce19b942c8ead19a93c1f1487c99e0b9ed",
+      "status": "passed"
+    },
+    {
+      "errors": [],
       "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/spreadsheet-sheet-expression-dependency.freecad.json",
       "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/spreadsheet-sheet-expression-dependency.freecad.ledger.json",
       "ledgerSha256": "9b8e025146074f5a8d1d48e12d4f223f912cf941ed51b51b772dec28f043b653",
       "publicSha256": "1da64b19a8c4ffeeaa80f98c8f99de636ec272d984345d40fa24daeeb931dfae",
+      "status": "passed"
+    },
+    {
+      "errors": [],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/spreadsheet-sheet-recompute-update.freecad.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/spreadsheet-sheet-recompute-update.freecad.ledger.json",
+      "ledgerSha256": "39f2788ff1da23046234c1217734c7953a586365432c7cf35fb91c569caae076",
+      "publicSha256": "744b612b39ec531aa30be54c174c5524ed4f1b1c16e2b64ea03fa0ef1c00c013",
       "status": "passed"
     }
   ],
@@ -4469,10 +4517,10 @@
   "failed": 0,
   "firstFailure": null,
   "schema": "freecad-ledger-validation-report/v1",
-  "selected": 558,
+  "selected": 564,
   "status": "passed",
   "strict": true,
-  "validated": 558,
+  "validated": 564,
   "validator": {
     "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/validate_freecad_expected_ledger.py",
     "sha256": "cf2fb370fb132370385dbc350682cd87d5a446c788f633697d0b5e29056abd53"

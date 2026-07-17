@@ -4536,7 +4536,27 @@
       "role": "native"
     },
     {
+      "case": "material-part-feature-material-recompute-update",
+      "phase": "p8",
+      "role": "native"
+    },
+    {
+      "case": "material-part-feature-minimal-material",
+      "phase": "p8",
+      "role": "native"
+    },
+    {
       "case": "material-part-feature-shape-material",
+      "phase": "p8",
+      "role": "native"
+    },
+    {
+      "case": "mesh-import-closed-tetrahedron",
+      "phase": "p8",
+      "role": "native"
+    },
+    {
+      "case": "mesh-import-file-recompute-update",
       "phase": "p8",
       "role": "native"
     },
@@ -4759,7 +4779,17 @@
       "role": "native"
     },
     {
+      "case": "spreadsheet-sheet-empty",
+      "phase": "p8",
+      "role": "native"
+    },
+    {
       "case": "spreadsheet-sheet-expression-dependency",
+      "phase": "p8",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-sheet-recompute-update",
       "phase": "p8",
       "role": "native"
     }

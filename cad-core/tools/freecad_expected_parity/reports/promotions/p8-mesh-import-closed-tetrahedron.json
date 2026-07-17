@@ -1,0 +1,82 @@
+{
+  "case": "mesh-import-closed-tetrahedron",
+  "phase": "p8",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "f5030e689afe9cab5c76dc931033d7a991b39ce6cd81f6a8d6d11118ada1b291"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "4f6cde21d581a0c0ab69cac82712b04a9aca862d95446177c24f24c71935adc1",
+    "manifestBeforeSha256": "34ae76e7dee4d79baf787e754df84bfe5ae855789ede2ff8b3e4a1b60f236c29",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p8/mesh-import-closed-tetrahedron/collect.json",
+      "sha256": "52f751e289e10234afec18fcb55185976ef10c97d9e3f410f7a5b3070d13d557"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/mesh-import-closed-tetrahedron.json",
+      "sha256": "3a56a753489f902d1b5d4f0cec10fe58cbec8bad562d7ad66479fed9749dcaca"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/expected/mesh-import-closed-tetrahedron.freecad.ledger.json",
+      "sha256": "215cc5c700047b4980073d9e8000fdbbec46891ebccd42df5e155641ed45de55"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/expected/mesh-import-closed-tetrahedron.freecad.json",
+      "sha256": "0df5573e4554727a4daea36c2367e843493d4f38eb8134aa2620b8a54159b991"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p8/mesh-import-closed-tetrahedron/repeat2.json",
+      "sha256": "e8c4a87ef2f57a935b1bd1706a129b8b8f835374d99d16da217efff9bc4bab3b"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/mesh-import-closed-tetrahedron.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/mesh-import-closed-tetrahedron.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p8-mesh-import-closed-tetrahedron.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/mesh-import-closed-tetrahedron.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

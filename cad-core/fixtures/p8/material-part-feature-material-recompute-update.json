@@ -1,0 +1,48 @@
+{
+  "Objects": [
+    {
+      "Name": "MaterialBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4,
+        "ShapeMaterial": {
+          "PropertyType": "Materials::PropertyMaterial",
+          "Name": "Initial aluminum",
+          "Author": "FreeCAD fixture"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["MaterialBox"],
+    "mutations": [
+      {
+        "object": "MaterialBox",
+        "properties": {
+          "ShapeMaterial": {
+            "PropertyType": "Materials::PropertyMaterial",
+            "Name": "Updated steel",
+            "Author": "FreeCAD fixture",
+            "License": "CC0-1.0",
+            "Description": "Material reassignment after an initial recompute",
+            "URL": "https://www.freecad.org/",
+            "Reference": "retained fixture capability coverage"
+          }
+        }
+      }
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:886efb875794474b6bcc13b6d72fa8b5b6090a1678d1f786743f9aca3daee523"
+  }
+}

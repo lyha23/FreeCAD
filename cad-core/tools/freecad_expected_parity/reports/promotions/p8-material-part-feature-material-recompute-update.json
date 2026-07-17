@@ -1,0 +1,82 @@
+{
+  "case": "material-part-feature-material-recompute-update",
+  "phase": "p8",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "f5030e689afe9cab5c76dc931033d7a991b39ce6cd81f6a8d6d11118ada1b291"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "084f14bfd04768b84d32c1e6afd8d7585198ef0aae8db4c225d4c497f8113679",
+    "manifestBeforeSha256": "c329852db31fc50b3a70c09228ab37c03152b9fb759512c41fb7dd9f2ef27195",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p8/material-part-feature-material-recompute-update/collect.json",
+      "sha256": "64418d90fd049d27757169be9014d67e0b25d3e405e692d3687696482825371a"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/material-part-feature-material-recompute-update.json",
+      "sha256": "3df051c739a4a8d3a331730e1d663732a67c0c28b3d3baadd31b7e0a5017ee84"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/expected/material-part-feature-material-recompute-update.freecad.ledger.json",
+      "sha256": "b0f7b6f63a30dc57f6ed74ded1db94ddd488dd844992cbc0a69643dede9157d0"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/expected/material-part-feature-material-recompute-update.freecad.json",
+      "sha256": "4d683143e4c6185fcd59a81a1b2cf4050a67469df3d2674ab0092fd687ef9dd3"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p8/material-part-feature-material-recompute-update/repeat2.json",
+      "sha256": "1467cdc05e2513feb7cc71fecaeedf240c5dc8dc8265606ae841c71aa752a34e"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/material-part-feature-material-recompute-update.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/material-part-feature-material-recompute-update.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p8-material-part-feature-material-recompute-update.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/material-part-feature-material-recompute-update.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

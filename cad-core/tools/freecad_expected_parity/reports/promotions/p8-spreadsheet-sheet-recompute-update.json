@@ -1,0 +1,82 @@
+{
+  "case": "spreadsheet-sheet-recompute-update",
+  "phase": "p8",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "f5030e689afe9cab5c76dc931033d7a991b39ce6cd81f6a8d6d11118ada1b291"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "14036ee4ff532ae2aeda251d59393713a78bb0025a6bc6f33909e7418bc8c006",
+    "manifestBeforeSha256": "0842ceb9d567482316a6b5f1dc1f3a8ee7fdf806d57fbe5dec92e3af6702f887",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p8/spreadsheet-sheet-recompute-update/collect.json",
+      "sha256": "3ed5e1ccd3622350b9a972ea7735d82ebf15dd55e1e82c2d658b59c55e5083ba"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/spreadsheet-sheet-recompute-update.json",
+      "sha256": "14d5e515b8e7c5669debde55bd1ca998de0c1dfd8acc63387fae9b2df2f8cecc"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/expected/spreadsheet-sheet-recompute-update.freecad.ledger.json",
+      "sha256": "39f2788ff1da23046234c1217734c7953a586365432c7cf35fb91c569caae076"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/expected/spreadsheet-sheet-recompute-update.freecad.json",
+      "sha256": "744b612b39ec531aa30be54c174c5524ed4f1b1c16e2b64ea03fa0ef1c00c013"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p8/spreadsheet-sheet-recompute-update/repeat2.json",
+      "sha256": "4824373da4e0234a308fe5d55e0d320f422895eae93de11c3ee589003275cdf6"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/spreadsheet-sheet-recompute-update.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/spreadsheet-sheet-recompute-update.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p8-spreadsheet-sheet-recompute-update.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/spreadsheet-sheet-recompute-update.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

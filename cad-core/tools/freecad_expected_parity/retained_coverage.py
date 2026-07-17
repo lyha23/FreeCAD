@@ -30,6 +30,252 @@ CORE_TARGET_ORDER = (
 NON_CAD_ENTRY_ORDER = ("Help", "AddonManager")
 COVERAGE_SCHEMA = "freecad-retained-module-fixture-coverage/v1"
 NON_CAD_SMOKE_SCHEMA = "freecad-non-cad-smoke/v1"
+PUBLIC_CAPABILITY_CONTRACT_SCHEMA = "freecad-retained-public-capabilities/v1"
+PUBLIC_CAPABILITY_REPORT_SCHEMA = "freecad-retained-public-capability-coverage/v1"
+EXECUTION_EVIDENCE_LEVELS = frozenset(
+    {"target_result", "dependency_result", "native_diagnostic"}
+)
+THIN_EVIDENCE_LEVELS = frozenset({"entrypoint_smoke_only", "typeid_property_only"})
+NON_NATIVE_EVIDENCE_LEVELS = frozenset(
+    {"protocol_contract", "unsupported_contract"}
+)
+CAPABILITY_EVIDENCE_LEVELS = (
+    EXECUTION_EVIDENCE_LEVELS
+    | THIN_EVIDENCE_LEVELS
+    | NON_NATIVE_EVIDENCE_LEVELS
+)
+NON_NATIVE_CAPABILITY_DISPOSITIONS = frozenset(
+    {"protocol_only", "unsupported", "non_cad_smoke"}
+)
+
+
+def build_public_capability_coverage_report(
+    authority_report: dict[str, Any],
+    *,
+    capability_contract_path: Path,
+    fixture_corpus_closure_status: str,
+) -> dict[str, Any]:
+    """Map an explicit retained capability inventory back to fixture evidence.
+
+    The inventory is intentionally independent from the fixture corpus. Inferring it from
+    existing fixtures would make a closed corpus look like complete module API coverage even
+    when a whole public branch has no fixture expression.
+    """
+
+    contract = json.loads(capability_contract_path.read_text(encoding="utf-8"))
+    errors: list[str] = []
+    if contract.get("schema") != PUBLIC_CAPABILITY_CONTRACT_SCHEMA:
+        errors.append(
+            "capability contract schema must be " + PUBLIC_CAPABILITY_CONTRACT_SCHEMA
+        )
+    scope = contract.get("scope")
+    if not isinstance(scope, str) or not scope:
+        errors.append("capability contract scope must be a non-empty string")
+    required_modules = contract.get("requiredModules")
+    if not isinstance(required_modules, list) or not required_modules or not all(
+        isinstance(item, str) and item for item in required_modules
+    ):
+        errors.append("capability contract requiredModules must be a non-empty string list")
+        required_modules = []
+    elif len(required_modules) != len(set(required_modules)):
+        errors.append("capability contract requiredModules must be unique")
+
+    role_by_fixture = {
+        f"{row.get('phase')}/{row.get('case')}": str(row.get("role"))
+        for row in authority_report.get("cases", [])
+        if isinstance(row, dict)
+    }
+    seen_modules: set[str] = set()
+    seen_capabilities: set[tuple[str, str]] = set()
+    modules: list[dict[str, Any]] = []
+    coverage_counts: Counter[str] = Counter()
+
+    for module_index, module in enumerate(contract.get("modules", [])):
+        if not isinstance(module, dict):
+            errors.append(f"modules[{module_index}] must be an object")
+            continue
+        module_name = module.get("name")
+        if not isinstance(module_name, str) or not module_name:
+            errors.append(f"modules[{module_index}].name must be a non-empty string")
+            continue
+        if module_name in seen_modules:
+            errors.append(f"duplicate capability module {module_name}")
+        seen_modules.add(module_name)
+        capability_rows: list[dict[str, Any]] = []
+        capabilities = module.get("capabilities")
+        if not isinstance(capabilities, list) or not capabilities:
+            errors.append(f"{module_name}.capabilities must be a non-empty list")
+            capabilities = []
+        for capability_index, capability in enumerate(capabilities):
+            if not isinstance(capability, dict):
+                errors.append(
+                    f"{module_name}.capabilities[{capability_index}] must be an object"
+                )
+                continue
+            capability_id = capability.get("id")
+            disposition = capability.get("disposition")
+            source_evidence = capability.get("sourceEvidence")
+            fixture_evidence = capability.get("fixtureEvidence")
+            rationale = capability.get("rationale")
+            if not isinstance(capability_id, str) or not capability_id:
+                errors.append(
+                    f"{module_name}.capabilities[{capability_index}].id must be a non-empty string"
+                )
+                continue
+            identity = (module_name, capability_id)
+            if identity in seen_capabilities:
+                errors.append(f"duplicate capability {module_name}/{capability_id}")
+            seen_capabilities.add(identity)
+            for field in ("publicSurface", "runtimeBranch"):
+                value = capability.get(field)
+                if not isinstance(value, str) or not value:
+                    errors.append(
+                        f"{module_name}/{capability_id}.{field} must be a non-empty string"
+                    )
+            if not isinstance(source_evidence, list) or not source_evidence or not all(
+                isinstance(item, str) and item for item in source_evidence
+            ):
+                errors.append(
+                    f"{module_name}/{capability_id} requires FreeCAD sourceEvidence"
+                )
+                source_evidence = []
+            if not isinstance(fixture_evidence, list):
+                errors.append(
+                    f"{module_name}/{capability_id}.fixtureEvidence must be a list"
+                )
+                fixture_evidence = []
+
+            evidence_rows: list[dict[str, Any]] = []
+            for evidence_index, evidence in enumerate(fixture_evidence):
+                if not isinstance(evidence, dict):
+                    errors.append(
+                        f"{module_name}/{capability_id}.fixtureEvidence[{evidence_index}] must be an object"
+                    )
+                    continue
+                fixture = evidence.get("fixture")
+                level = evidence.get("level")
+                if not isinstance(fixture, str) or "/" not in fixture:
+                    errors.append(
+                        f"{module_name}/{capability_id}.fixtureEvidence[{evidence_index}].fixture is invalid"
+                    )
+                    continue
+                if not isinstance(level, str) or not level:
+                    errors.append(
+                        f"{module_name}/{capability_id}.fixtureEvidence[{evidence_index}].level is invalid"
+                    )
+                    continue
+                if level not in CAPABILITY_EVIDENCE_LEVELS:
+                    errors.append(
+                        f"{module_name}/{capability_id}.fixtureEvidence[{evidence_index}].level is unsupported: {level}"
+                    )
+                evidence_rows.append(
+                    {
+                        "fixture": fixture,
+                        "level": level,
+                        "role": role_by_fixture.get(fixture, "missing"),
+                    }
+                )
+
+            coverage_status = "uncovered"
+            if disposition == "native_fixture":
+                if not evidence_rows or any(
+                    item["role"] != "native" for item in evidence_rows
+                ):
+                    coverage_status = "missing_authority"
+                elif any(
+                    item["level"] in EXECUTION_EVIDENCE_LEVELS
+                    for item in evidence_rows
+                ):
+                    coverage_status = "covered"
+                else:
+                    coverage_status = "thin"
+            elif disposition == "uncovered":
+                if not isinstance(rationale, str) or not rationale:
+                    errors.append(
+                        f"{module_name}/{capability_id} uncovered capability requires rationale"
+                    )
+            elif disposition in NON_NATIVE_CAPABILITY_DISPOSITIONS:
+                coverage_status = "non_native_exception"
+                if not isinstance(rationale, str) or not rationale:
+                    errors.append(
+                        f"{module_name}/{capability_id} non-native exception requires rationale"
+                    )
+            else:
+                errors.append(
+                    f"{module_name}/{capability_id} has invalid disposition {disposition!r}"
+                )
+                coverage_status = "invalid"
+
+            coverage_counts[coverage_status] += 1
+            capability_rows.append(
+                {
+                    "id": capability_id,
+                    "publicSurface": capability.get("publicSurface"),
+                    "runtimeBranch": capability.get("runtimeBranch"),
+                    "disposition": disposition,
+                    "coverageStatus": coverage_status,
+                    "sourceEvidence": source_evidence,
+                    "fixtureEvidence": evidence_rows,
+                    "rationale": rationale,
+                }
+            )
+        module_status = (
+            "failed"
+            if any(
+                item["coverageStatus"] in {"missing_authority", "invalid"}
+                for item in capability_rows
+            )
+            else "partial"
+            if any(
+                item["coverageStatus"] in {"thin", "uncovered"}
+                for item in capability_rows
+            )
+            else "covered"
+        )
+        modules.append(
+            {
+                "name": module_name,
+                "coverageStatus": module_status,
+                "capabilityCount": len(capability_rows),
+                "capabilities": capability_rows,
+            }
+        )
+
+    actual_module_order = [item["name"] for item in modules]
+    if required_modules and actual_module_order != required_modules:
+        errors.append(
+            "capability contract modules must exactly match requiredModules order"
+        )
+
+    api_status = (
+        "failed"
+        if errors or any(item["coverageStatus"] == "failed" for item in modules)
+        else "partial"
+        if any(item["coverageStatus"] == "partial" for item in modules)
+        else "covered"
+    )
+    return {
+        "schema": PUBLIC_CAPABILITY_REPORT_SCHEMA,
+        "status": "failed" if errors or api_status == "failed" else "passed",
+        "scope": scope,
+        "scopeLimitations": contract.get("scopeLimitations", []),
+        "contract": _artifact(capability_contract_path),
+        "fixtureCorpusClosure": {
+            "status": fixture_corpus_closure_status,
+            "meaning": "registered fixture roles and native authority artifacts are closed",
+        },
+        "moduleApiCoverage": {
+            "status": api_status,
+            "counts": dict(sorted(coverage_counts.items())),
+            "meaning": "explicit retained public capabilities and major branches mapped to fixtures",
+        },
+        "cadCoreRuntimeParity": {
+            "status": "not_evaluated",
+            "meaning": "native fixture authority does not prove CAD Core runtime parity",
+        },
+        "modules": modules,
+        "errors": errors,
+    }
 
 
 def fixture_owner_modules(payload: dict[str, Any]) -> list[str]:

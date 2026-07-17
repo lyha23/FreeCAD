@@ -1,0 +1,28 @@
+{
+  "Objects": [
+    {
+      "Name": "EmptySheet",
+      "ID": 1,
+      "TypeId": "Spreadsheet::Sheet",
+      "Properties": {
+        "Cells": {
+          "PropertyType": "Spreadsheet::PropertySheet",
+          "cells": []
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["EmptySheet"]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:d63ff1262a8bf80a6df59a3bf4bcb2c532c0d76fabc85a6aa316dc4ead4706a9"
+  }
+}

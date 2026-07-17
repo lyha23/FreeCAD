@@ -19,6 +19,7 @@ from freecad_expected_parity.catalog import load_catalog
 from freecad_expected_parity.retained_coverage import (
     annotate_fixture_row,
     build_module_coverage_report,
+    build_public_capability_coverage_report,
     build_work_queues,
 )
 
@@ -29,6 +30,10 @@ FREECAD2_ROOT = ROOT.parent.parent / "FreeCAD2"
 DEFAULT_CLOSURE_CONTRACT = FREECAD2_ROOT / "tools" / "probe_release_contract.json"
 DEFAULT_PRUNING_PLAN = (
     FREECAD2_ROOT / "docs" / "减法实现" / "FreeCAD2-无QtApp减枝实施方案.md"
+)
+DEFAULT_PUBLIC_CAPABILITY_CONTRACT = (
+    Path(__file__).with_name("freecad_expected_parity")
+    / "retained_public_capabilities.v1.json"
 )
 SCHEMA = "freecad-fixture-authority-inventory/v1"
 
@@ -671,6 +676,15 @@ def main(argv: list[str] | None = None) -> int:
         help="write retained-module fixture coverage beside the authority inventory",
     )
     parser.add_argument(
+        "--capability-report",
+        help="write the explicit public-capability-to-fixture reverse coverage report",
+    )
+    parser.add_argument(
+        "--capability-contract",
+        default=str(DEFAULT_PUBLIC_CAPABILITY_CONTRACT),
+        help="explicit retained public capability and major-branch inventory",
+    )
+    parser.add_argument(
         "--closure-contract",
         default=str(DEFAULT_CLOSURE_CONTRACT),
         help="machine-readable FreeCAD2 retained target/runtime closure",
@@ -699,12 +713,21 @@ def main(argv: list[str] | None = None) -> int:
     root = Path(args.root).resolve()
     report_path = Path(args.report).resolve() if args.report else None
     coverage_path = Path(args.coverage_report).resolve() if args.coverage_report else None
+    capability_path = (
+        Path(args.capability_report).resolve() if args.capability_report else None
+    )
     if report_path is not None and report_path.is_relative_to((root / "fixtures").resolve()):
         parser.error("--report must be outside the checked-in fixture tree")
     if coverage_path is not None and coverage_path.is_relative_to(
         (root / "fixtures").resolve()
     ):
         parser.error("--coverage-report must be outside the checked-in fixture tree")
+    if capability_path is not None and capability_path.is_relative_to(
+        (root / "fixtures").resolve()
+    ):
+        parser.error("--capability-report must be outside the checked-in fixture tree")
+    if capability_path is not None and coverage_path is None:
+        parser.error("--capability-report requires --coverage-report")
     if args.require_coverage_passed and coverage_path is None:
         parser.error("--require-coverage-passed requires --coverage-report")
     report = build_report(root, Path(args.roles))
@@ -728,6 +751,18 @@ def main(argv: list[str] | None = None) -> int:
             else None,
         )
         write_json(coverage_path, coverage)
+    capability: dict[str, Any] | None = None
+    if capability_path is not None:
+        capability = build_public_capability_coverage_report(
+            report,
+            capability_contract_path=Path(args.capability_contract),
+            fixture_corpus_closure_status=(
+                str(coverage.get("coverageStatus"))
+                if isinstance(coverage, dict)
+                else "not_evaluated"
+            ),
+        )
+        write_json(capability_path, capability)
     if args.pretty:
         print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     else:
@@ -742,6 +777,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.require_coverage_passed and (
         coverage is None or coverage.get("coverageStatus") != "passed"
     ):
+        return 1
+    if capability is not None and capability.get("status") != "passed":
         return 1
     return 0
 

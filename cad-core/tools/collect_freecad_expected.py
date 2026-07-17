@@ -11303,6 +11303,69 @@ def recompute_fixture_request(doc: Any, created: dict[str, Any], fixture: dict) 
     return int(doc.recompute(recompute_objects))
 
 
+def apply_recompute_mutations(
+    FreeCAD: Any,
+    created: dict[str, Any],
+    fixture: dict[str, Any],
+) -> None:
+    recompute = fixture.get("recompute", {})
+    mutations = recompute.get("mutations") if isinstance(recompute, dict) else None
+    if mutations is None:
+        return
+    if not isinstance(mutations, list) or not mutations:
+        raise UnsupportedFixture("fixture recompute.mutations must be a non-empty list")
+    for index, mutation in enumerate(mutations):
+        if not isinstance(mutation, dict):
+            raise UnsupportedFixture(f"recompute.mutations[{index}] must be an object")
+        unknown = sorted(set(mutation) - {"object", "properties"})
+        if unknown:
+            raise UnsupportedFixture(
+                f"recompute.mutations[{index}] has unsupported fields: {unknown}"
+            )
+        object_name = mutation.get("object")
+        properties = mutation.get("properties")
+        if not isinstance(object_name, str) or not object_name:
+            raise UnsupportedFixture(
+                f"recompute.mutations[{index}].object must be a non-empty string"
+            )
+        if not isinstance(properties, dict) or not properties:
+            raise UnsupportedFixture(
+                f"recompute.mutations[{index}].properties must be a non-empty object"
+            )
+        obj = created.get(object_name)
+        if obj is None:
+            raise UnsupportedFixture(
+                f"recompute mutation target object {object_name} was not created"
+            )
+        type_id = str(getattr(obj, "TypeId", ""))
+        for property_name, property_value in properties.items():
+            if type_id == "Sketcher::SketchObject":
+                set_sketch_property(FreeCAD, created, obj, property_name, property_value)
+            else:
+                set_property(FreeCAD, created, obj, property_name, property_value)
+
+
+def run_recompute_sequence(
+    FreeCAD: Any,
+    doc: Any,
+    created: dict[str, Any],
+    fixture: dict[str, Any],
+) -> int:
+    """Execute, apply declared public property mutations, then execute the final request."""
+
+    recompute = fixture.get("recompute", {})
+    mutations = recompute.get("mutations") if isinstance(recompute, dict) else None
+    if mutations is not None:
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Document.cpp
+        # ::Document::recompute(const std::vector<DocumentObject*>&) executes the first
+        # touched state; subsequent Property::setValue() calls touch their owners, and the
+        # second recompute executes the modified graph. This preserves the actual public
+        # modification/recompute lifecycle instead of encoding only a final static value.
+        recompute_fixture_request(doc, created, fixture)
+        apply_recompute_mutations(FreeCAD, created, fixture)
+    return recompute_fixture_request(doc, created, fixture)
+
+
 def require_native_hole_profile_support(fixture: dict) -> None:
     specs = {spec.get("Name"): spec for spec in fixture.get("Objects", []) if isinstance(spec, dict)}
     for spec in fixture.get("Objects", []):
@@ -11626,7 +11689,7 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             previous_solve_on_recompute = assembly_solve_preferences.GetBool("SolveOnRecompute", True)
             assembly_solve_preferences.SetBool("SolveOnRecompute", False)
         created = create_objects(FreeCAD, doc, fixture)
-        recompute_fixture_request(doc, created, fixture)
+        run_recompute_sequence(FreeCAD, doc, created, fixture)
         if assembly_solve_preferences is not None:
             assembly_solve_preferences.SetBool("SolveOnRecompute", previous_solve_on_recompute)
             assembly_solve_preferences = None
