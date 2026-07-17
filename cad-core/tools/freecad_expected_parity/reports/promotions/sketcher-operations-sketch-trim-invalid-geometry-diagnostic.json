@@ -1,0 +1,82 @@
+{
+  "case": "sketch-trim-invalid-geometry-diagnostic",
+  "phase": "sketcher-operations",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "22638949267e239738b13a2a18e331511a9e826d9c56ea1cb8893f2e0cc1a05b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "df782e0f54398b108aaf1bad67319424bf596c87b6508c741bc70cd06b9c4e67",
+    "manifestBeforeSha256": "c7bd5b3141362581c1b908ad08dded95735c83524aa2e19e6dc4bb22814ef306",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-trim-invalid-geometry-diagnostic/collect.json",
+      "sha256": "b400fbf3160447d76e60f86efaf97af813376133ff1d55b58811e46848274a36"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/sketch-trim-invalid-geometry-diagnostic.json",
+      "sha256": "c82bcd430ede4372850f334501d131de2c70ac0d2580a1901082aaec3ea5bf55"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-trim-invalid-geometry-diagnostic.freecad.ledger.json",
+      "sha256": "4fb098bdc139e340b8f8d2b0ea404770328ed2ee59ba8915a7b9ca8539cd4a8a"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-trim-invalid-geometry-diagnostic.freecad.json",
+      "sha256": "7b515f23cd41c00204f8a6f5a3ac13851aaae5671e6b941c6c0e924a91bf5aa6"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-trim-invalid-geometry-diagnostic/repeat2.json",
+      "sha256": "c9983042ff02a3607a7d3d31f3fc0e013ca8e58170ef03082b7434a449088262"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-invalid-geometry-diagnostic.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-invalid-geometry-diagnostic.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/sketcher-operations-sketch-trim-invalid-geometry-diagnostic.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-invalid-geometry-diagnostic.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "Objects": [
+    {
+      "Name": "Left",
+      "TypeId": "Mesh::Cube",
+      "Properties": {
+        "Length": 2.0,
+        "Width": 2.0,
+        "Height": 2.0,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "Name": "Right",
+      "TypeId": "Mesh::Cube",
+      "Properties": {
+        "Length": 2.0,
+        "Width": 2.0,
+        "Height": 2.0,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "Name": "Result",
+      "TypeId": "Mesh::SetOperations",
+      "Properties": {
+        "Source1": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Left"
+        },
+        "Source2": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Right"
+        },
+        "OperationType": "difference"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Result"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:1277fa0ada7b7bbd0abfe66a4c0c2766e356ed94de8444c44bf9d73545667e53"
+  }
+}

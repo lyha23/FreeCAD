@@ -1,0 +1,54 @@
+{
+  "Objects": [
+    {
+      "Name": "Inconsistent",
+      "TypeId": "Mesh::Import",
+      "Properties": {
+        "FileName": "fixtures/_assets/inconsistent-tetrahedron.stl"
+      }
+    },
+    {
+      "Name": "Clean",
+      "TypeId": "Mesh::Import",
+      "Properties": {
+        "FileName": "fixtures/_assets/unit-tetrahedron.stl"
+      }
+    },
+    {
+      "Name": "Result",
+      "TypeId": "Mesh::HarmonizeNormals",
+      "Properties": {
+        "Source": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Inconsistent"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Result"
+    ],
+    "mutations": [
+      {
+        "object": "Result",
+        "properties": {
+          "Source": {
+            "PropertyType": "App::PropertyLink",
+            "value": "Clean"
+          }
+        }
+      }
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:ebeb9a282c345ae60956c023f949a742d94450e7181dcc180513c53bee1d409b"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "Objects": [
+    {
+      "Name": "Cylinder",
+      "TypeId": "Mesh::Cylinder",
+      "Properties": {
+        "Radius": 1.5,
+        "Length": 4.0,
+        "EdgeLength": 0.75,
+        "Closed": true,
+        "Sampling": 16
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Cylinder"
+    ],
+    "mutations": [
+      {
+        "object": "Cylinder",
+        "properties": {
+          "Radius": 2.0,
+          "Length": 2.5,
+          "EdgeLength": 0.5,
+          "Closed": false,
+          "Sampling": 20
+        }
+      }
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:ffe74e9e2764a4e092bc1f06a244a42b9258956bdc5e13e10702cad12000aadc"
+  }
+}

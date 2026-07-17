@@ -1,0 +1,76 @@
+{
+  "Objects": [
+    {
+      "Name": "Source",
+      "TypeId": "Mesh::Feature",
+      "Properties": {
+        "Mesh": {
+          "PropertyType": "Mesh::PropertyMeshKernel",
+          "vertices": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              5.0,
+              -0.1,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              5.0,
+              0.0
+            ]
+          ],
+          "facets": [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              0,
+              2,
+              3
+            ]
+          ],
+          "check": true
+        }
+      }
+    },
+    {
+      "Name": "Result",
+      "TypeId": "Mesh::FixDeformations",
+      "Properties": {
+        "Epsilon": 0.0001,
+        "MaxAngle": 5.0,
+        "Source": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Source"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Source",
+      "Result"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:249fc53424729bca2bf8d20f0f973f88de3763d55153cd862b5175a336753c78"
+  }
+}

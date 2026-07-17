@@ -1,0 +1,141 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sketch",
+      "object_fields": {
+        "external_curve_count": 0,
+        "external_geometry_count": 0,
+        "external_point_count": 0,
+        "raw_edge_count": 1,
+        "shape": "occt_sketch_shape",
+        "status": "ok"
+      },
+      "sketch_constraints": [],
+      "sketch_external": {
+        "construction_count": 0,
+        "flag_counts": {
+          "Defining": 0,
+          "Detached": 0,
+          "Frozen": 0,
+          "Missing": 0,
+          "Sync": 0
+        },
+        "flags": []
+      },
+      "sketch_geometry": [
+        {
+          "construction": false,
+          "degree": 2,
+          "index": 0,
+          "knots": [
+            0.0,
+            1.5707963267948966
+          ],
+          "multiplicities": [
+            3,
+            3
+          ],
+          "poles": [
+            [
+              5.0,
+              0.0,
+              0.0
+            ],
+            [
+              5.0,
+              2.999999999999999,
+              0.0
+            ],
+            [
+              3.061616997868383e-16,
+              3.0,
+              0.0
+            ]
+          ],
+          "shape": {
+            "bbox": {
+              "max": [
+                5.0,
+                3.0,
+                0.0
+              ],
+              "min": [
+                3.061616997868383e-16,
+                0.0,
+                0.0
+              ]
+            },
+            "length": 6.381749715768107,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                5.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.061616997868383e-16,
+                3.0,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomBSplineCurve"
+        }
+      ],
+      "sketch_internal": {
+        "profile_ready": false,
+        "raw_edge_count": 1,
+        "shape": "empty"
+      },
+      "sketch_operations": [
+        {
+          "evidenceLevel": "target_result",
+          "index": 0,
+          "operation": "convertToNURBS",
+          "result": null,
+          "stage": "initial"
+        }
+      ],
+      "sketch_solver": {
+        "conflictingConstraints": [],
+        "constraintCount": 0,
+        "degreesOfFreedom": 9,
+        "fullyConstrained": false,
+        "geometryCount": 1,
+        "malformedConstraints": [],
+        "openVertexCount": 2,
+        "partiallyRedundantConstraints": [],
+        "redundantConstraints": []
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:cab81b2ba100594d36a4dd18a668fca194480fed6e8196fad0e6c9492657213c",
+    "objects": {
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:181dc73dd944f83a0f03776945e9127be3c78e52234c02bd5dd9dca2a5319b55",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

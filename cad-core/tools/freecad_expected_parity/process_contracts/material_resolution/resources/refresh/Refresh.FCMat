@@ -1,0 +1,8 @@
+General:
+  UUID: "a2000000-0000-4000-8000-000000000301"
+  Name: "Refresh"
+  Description: "A2 refresh card initial state"
+Models:
+  FixturePhysical:
+    UUID: "a2000000-0000-4000-8000-000000000003"
+    Revision: "before-refresh"

@@ -1,0 +1,43 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sheet",
+      "TypeId": "Spreadsheet::Sheet",
+      "Properties": {
+        "Cells": {
+          "PropertyType": "Spreadsheet::PropertySheet",
+          "cells": [
+            {"address": "A1", "content": "Anchor"},
+            {"address": "B1", "content": "Cleared by merge"}
+          ],
+          "operations": [
+            {"op": "mergeCells", "range": "A1:B2"}
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sheet"],
+    "mutations": [
+      {
+        "object": "Sheet",
+        "properties": {
+          "Cells": {
+            "PropertyType": "Spreadsheet::PropertySheet",
+            "operations": [
+              {"op": "splitCell", "address": "B2"}
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {"cadCoreVersion": "fixture-contract-v1", "freecadVersion": "1.2.0 revision 20260519", "occtVersion": "fixture-occt-unspecified"},
+    "objects": {},
+    "documentHash": "sha256:41cbacdd5d7d73a51c81a4413b9212de91aa3a1ec00467e191025cd651767aca"
+  }
+}

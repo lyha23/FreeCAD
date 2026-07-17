@@ -7,10 +7,10 @@
   "events": [],
   "fixture": {
     "case": "mesh-import-closed-tetrahedron",
-    "expectedPayloadHash": "sha256:7ed262470acfd5d901e5a1a4cbd646b25ecac029ee49d2d80eb0031a123be6af",
+    "expectedPayloadHash": "sha256:f348ef65848d375a3036cbc79e810ac96fc0be7be2c78ac7f9a4ce24fa5a2f56",
     "inputHash": "sha256:22aef3a9132d2e0a09c272941f0c93c8622b4b0a2977d7d06be1caba20f96268",
     "phase": "mesh-import",
-    "topoNamingStateHash": "sha256:5fb074c687bc377c2f137eb2e7358af8cf1deb6e23231b7366bf8a4f407fab95"
+    "topoNamingStateHash": "sha256:2b4b6cc05db35c9645c31205cf25fbfcd828a2ccf668f09d7d4db594ce02bb04"
   },
   "inputReferences": [],
   "objects": {
@@ -31,7 +31,7 @@
   },
   "outcome": "accepted",
   "producer": {
-    "freecadVersion": "1.2.0 revision 47063",
+    "freecadVersion": "1.2.0 revision 20260519",
     "name": "FreeCADCmd",
     "occtVersion": "7.8.1",
     "scriptVersion": "collect_freecad_expected.py:ledger-v1"
@@ -51,7 +51,7 @@
   },
   "roundTrip": {
     "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:5fb074c687bc377c2f137eb2e7358af8cf1deb6e23231b7366bf8a4f407fab95",
+    "inputTopoNamingStateHash": "sha256:2b4b6cc05db35c9645c31205cf25fbfcd828a2ccf668f09d7d4db594ce02bb04",
     "results": [],
     "status": "passed"
   },

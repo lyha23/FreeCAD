@@ -1,0 +1,82 @@
+{
+  "case": "mesh-cylinder-recompute-properties",
+  "phase": "mesh-primitives",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "5ac4756447d42d7996616aec0b7c0d87a3b379e5b1d8474f93a1c124d039faf8"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "e71319bde2b893a674fd9002f634eda22d577174031a3c48dbfe350656513812",
+    "manifestBeforeSha256": "5e2563b164c78977a2ee2938ed4d99fc311066850ceb20509335807aa9fef809",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/private/tmp/freecad-mesh-api-collect-reports/mesh-cylinder-recompute-properties.json",
+      "sha256": "bc89198bf68b9fbe301fd96abbea9fca85e86c8ff844895b536643af8af01876"
+    },
+    "input": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-primitives/mesh-cylinder-recompute-properties.json",
+      "sha256": "dc0fe3cf3464c42a7153c4ea7ee2f9d613c70ca7481e08e7d98e4942ae43afa9"
+    },
+    "ledger": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-primitives/expected/mesh-cylinder-recompute-properties.freecad.ledger.json",
+      "sha256": "35d106ab309e7e9f6f5e40221cc75b4700a0804de832c92545e352d6d47613b0"
+    },
+    "publicExpected": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-primitives/expected/mesh-cylinder-recompute-properties.freecad.json",
+      "sha256": "60e9cf702e765ffa6cce6464f889c5a3c2e8e9495da0a9fe29107a7edcdd20f3"
+    },
+    "repeatReport": {
+      "path": "/private/tmp/freecad-mesh-api-staging-reports/mesh-cylinder-recompute-properties.json",
+      "sha256": "261477429cf32b399dca4ef6b320a18b66358832c3334db36701fcad674dd1fc"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cylinder-recompute-properties.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cylinder-recompute-properties.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-primitives-mesh-cylinder-recompute-properties.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cylinder-recompute-properties.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

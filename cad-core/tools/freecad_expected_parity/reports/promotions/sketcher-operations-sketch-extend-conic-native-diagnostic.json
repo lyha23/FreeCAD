@@ -1,0 +1,82 @@
+{
+  "case": "sketch-extend-conic-native-diagnostic",
+  "phase": "sketcher-operations",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "22638949267e239738b13a2a18e331511a9e826d9c56ea1cb8893f2e0cc1a05b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "b6d409cdd775c6e2a92e7bbaca116f92beeae64e56dc2c5ae6065360662bdf96",
+    "manifestBeforeSha256": "c7a5410f219ea79cecb521defc5244f6b8b1f6f9d736f3bb32f222bc84afab06",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-extend-conic-native-diagnostic/collect.json",
+      "sha256": "8fdf59bffb2cbeadb24cdda738ca1d3d49f5271968f9acc21f8bff5a60530d9f"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/sketch-extend-conic-native-diagnostic.json",
+      "sha256": "67032f705e2fb1f45441b8fd25286e9cc1c8526ceb0a4e4ce8248da2307ffe17"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-extend-conic-native-diagnostic.freecad.ledger.json",
+      "sha256": "2b654912b6a7354df0634752e4645b7b03a1d605b3b8b9b698fd2aa36029e45b"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-extend-conic-native-diagnostic.freecad.json",
+      "sha256": "1c697875efcff8ceda0b7430f5e99d3baf5286a2758a814fd577cba356efa407"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-extend-conic-native-diagnostic/repeat2.json",
+      "sha256": "4b98f11353358c9db13cb5364ea2a5627ad2bc834c8f88fd7b93a200af83bfa7"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-conic-native-diagnostic.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-conic-native-diagnostic.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/sketcher-operations-sketch-extend-conic-native-diagnostic.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-conic-native-diagnostic.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

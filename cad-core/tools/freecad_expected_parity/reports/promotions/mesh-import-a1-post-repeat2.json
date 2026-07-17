@@ -1,0 +1,455 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/private/tmp/freecad-expected-mesh-import-a1-refresh",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 3,
+    "entries": [
+      {
+        "case": "mesh-import-closed-tetrahedron",
+        "fixtureSha256": "8588a90b0f23f8050a65443fd2c40ff10200fff6b468bf335e2ddcab84ac3be5",
+        "ledgerSha256": "1375e5ad44740767cc7c03c05c80b77a855d4e9cb19a5874237263e94b589878",
+        "phase": "mesh-import",
+        "producerTraceSha256": null,
+        "publicSha256": "1e5bdb9e8baf41887fc5abafc4472a2154a8e9936a96e75300b6ddb8e4bf4640"
+      },
+      {
+        "case": "mesh-import-file-recompute-update",
+        "fixtureSha256": "19eace5b0f5826dbb883955f1b502ea57b99844ad8da1ca9a1daf97ed8938a45",
+        "ledgerSha256": "b3253c4493aa8baf2e0ffd8d7313f80cf94f9af1e719a6912acd3c9cef6f6ffb",
+        "phase": "mesh-import",
+        "producerTraceSha256": null,
+        "publicSha256": "21c799a050d25b34c783d554dd04431659e4be61b540313eae763e79d5df17d1"
+      },
+      {
+        "case": "mesh-import-stl",
+        "fixtureSha256": "aa6dac7dd8e5c247c57e8c518a91dbb4ef7f259d87b9ebe0a26798e323b840eb",
+        "ledgerSha256": "207856f88bdf8cffa31e9e6b22e76d9bbcc147a165c3f12ac099eabd31cf9cc8",
+        "phase": "mesh-import",
+        "producerTraceSha256": "0445ff6e90712b273dde31ecafbb12c5b281321de9ccade1e82213bd0205fe3f",
+        "publicSha256": "da98fcdd5939016819e675c64c9100c7dde6d8d5797b8b710273b5a1d3c9b07f"
+      }
+    ],
+    "phases": 1,
+    "sha256": "28d40bc60a5112b0de1b6cc5b22e0e48c30355dcbefa81dca31a007ec9db0d73"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-import\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-mesh-import-a1-refresh/run-a\", \"--report\", \"/tmp/freecad-expected-mesh-import-a1-refresh/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "1375e5ad44740767cc7c03c05c80b77a855d4e9cb19a5874237263e94b589878",
+                "path": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-a/mesh-import/expected/mesh-import-closed-tetrahedron.freecad.json",
+                "publicSha256": "1e5bdb9e8baf41887fc5abafc4472a2154a8e9936a96e75300b6ddb8e4bf4640",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-import-closed-tetrahedron",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/expected/mesh-import-closed-tetrahedron.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/mesh-import-closed-tetrahedron.json",
+            "fixtureSha256": "8588a90b0f23f8050a65443fd2c40ff10200fff6b468bf335e2ddcab84ac3be5",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "1375e5ad44740767cc7c03c05c80b77a855d4e9cb19a5874237263e94b589878",
+            "phase": "mesh-import",
+            "publicExpectedSha256": "1e5bdb9e8baf41887fc5abafc4472a2154a8e9936a96e75300b6ddb8e4bf4640",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "b3253c4493aa8baf2e0ffd8d7313f80cf94f9af1e719a6912acd3c9cef6f6ffb",
+                "path": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-a/mesh-import/expected/mesh-import-file-recompute-update.freecad.json",
+                "publicSha256": "21c799a050d25b34c783d554dd04431659e4be61b540313eae763e79d5df17d1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-import-file-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/expected/mesh-import-file-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/mesh-import-file-recompute-update.json",
+            "fixtureSha256": "19eace5b0f5826dbb883955f1b502ea57b99844ad8da1ca9a1daf97ed8938a45",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "b3253c4493aa8baf2e0ffd8d7313f80cf94f9af1e719a6912acd3c9cef6f6ffb",
+            "phase": "mesh-import",
+            "publicExpectedSha256": "21c799a050d25b34c783d554dd04431659e4be61b540313eae763e79d5df17d1",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "207856f88bdf8cffa31e9e6b22e76d9bbcc147a165c3f12ac099eabd31cf9cc8",
+                "path": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-a/mesh-import/expected/mesh-import-stl.freecad.json",
+                "publicSha256": "da98fcdd5939016819e675c64c9100c7dde6d8d5797b8b710273b5a1d3c9b07f",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-import-stl",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/expected/mesh-import-stl.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/mesh-import-stl.json",
+            "fixtureSha256": "aa6dac7dd8e5c247c57e8c518a91dbb4ef7f259d87b9ebe0a26798e323b840eb",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "207856f88bdf8cffa31e9e6b22e76d9bbcc147a165c3f12ac099eabd31cf9cc8",
+            "phase": "mesh-import",
+            "publicExpectedSha256": "da98fcdd5939016819e675c64c9100c7dde6d8d5797b8b710273b5a1d3c9b07f",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-import\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-mesh-import-a1-refresh/run-a\", \"--report\", \"/tmp/freecad-expected-mesh-import-a1-refresh/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 3,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 3,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-import\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-mesh-import-a1-refresh/run-b\", \"--report\", \"/tmp/freecad-expected-mesh-import-a1-refresh/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "1375e5ad44740767cc7c03c05c80b77a855d4e9cb19a5874237263e94b589878",
+                "path": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-b/mesh-import/expected/mesh-import-closed-tetrahedron.freecad.json",
+                "publicSha256": "1e5bdb9e8baf41887fc5abafc4472a2154a8e9936a96e75300b6ddb8e4bf4640",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-import-closed-tetrahedron",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/expected/mesh-import-closed-tetrahedron.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/mesh-import-closed-tetrahedron.json",
+            "fixtureSha256": "8588a90b0f23f8050a65443fd2c40ff10200fff6b468bf335e2ddcab84ac3be5",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "1375e5ad44740767cc7c03c05c80b77a855d4e9cb19a5874237263e94b589878",
+            "phase": "mesh-import",
+            "publicExpectedSha256": "1e5bdb9e8baf41887fc5abafc4472a2154a8e9936a96e75300b6ddb8e4bf4640",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "b3253c4493aa8baf2e0ffd8d7313f80cf94f9af1e719a6912acd3c9cef6f6ffb",
+                "path": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-b/mesh-import/expected/mesh-import-file-recompute-update.freecad.json",
+                "publicSha256": "21c799a050d25b34c783d554dd04431659e4be61b540313eae763e79d5df17d1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-import-file-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/expected/mesh-import-file-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/mesh-import-file-recompute-update.json",
+            "fixtureSha256": "19eace5b0f5826dbb883955f1b502ea57b99844ad8da1ca9a1daf97ed8938a45",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "b3253c4493aa8baf2e0ffd8d7313f80cf94f9af1e719a6912acd3c9cef6f6ffb",
+            "phase": "mesh-import",
+            "publicExpectedSha256": "21c799a050d25b34c783d554dd04431659e4be61b540313eae763e79d5df17d1",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "207856f88bdf8cffa31e9e6b22e76d9bbcc147a165c3f12ac099eabd31cf9cc8",
+                "path": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-b/mesh-import/expected/mesh-import-stl.freecad.json",
+                "publicSha256": "da98fcdd5939016819e675c64c9100c7dde6d8d5797b8b710273b5a1d3c9b07f",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-import-stl",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/expected/mesh-import-stl.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-import/mesh-import-stl.json",
+            "fixtureSha256": "aa6dac7dd8e5c247c57e8c518a91dbb4ef7f259d87b9ebe0a26798e323b840eb",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "207856f88bdf8cffa31e9e6b22e76d9bbcc147a165c3f12ac099eabd31cf9cc8",
+            "phase": "mesh-import",
+            "publicExpectedSha256": "da98fcdd5939016819e675c64c9100c7dde6d8d5797b8b710273b5a1d3c9b07f",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-import\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-mesh-import-a1-refresh/run-b\", \"--report\", \"/tmp/freecad-expected-mesh-import-a1-refresh/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 3,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 3,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-expected-mesh-import-a1-refresh/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

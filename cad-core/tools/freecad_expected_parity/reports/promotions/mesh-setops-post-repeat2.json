@@ -1,0 +1,825 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/private/tmp/freecad-expected-mesh-setops-post-promotion",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 8,
+    "entries": [
+      {
+        "case": "mesh-setops-difference",
+        "fixtureSha256": "f1d7f30a5c63d121faacc732a950f1ba7da2edb0435c0758a8579e288da447e7",
+        "ledgerSha256": "d140331df4040d764b17a3cb7a198506ec2a53a690bd2d53df72a8c046a0913e",
+        "phase": "mesh-setops",
+        "producerTraceSha256": null,
+        "publicSha256": "9e00d67b92b2ec685acd3e60455c5e60356cfbed422aff13f3d82599c3489984"
+      },
+      {
+        "case": "mesh-setops-disjoint-intersection",
+        "fixtureSha256": "2481458fb52431c33082b662bc189507a5ceef11d3daca76c0275ba814067879",
+        "ledgerSha256": "a31b4ca6124085262d5cc45d058f5c273029f6e07a6adff629e09762b2359660",
+        "phase": "mesh-setops",
+        "producerTraceSha256": null,
+        "publicSha256": "22e0d9e860ca6deb067424c90b255c581669089d23538f6e6b5bd4ea52ed8591"
+      },
+      {
+        "case": "mesh-setops-intersection",
+        "fixtureSha256": "e279f10f1458d31a3e4187fd4fb678b2327cbb3bc61a628e0a7b0e2015d1bdbf",
+        "ledgerSha256": "47d9ea4acfbe64549e6be72ef2d4004e5a6ae04047b078c7cbabe1e3b7846887",
+        "phase": "mesh-setops",
+        "producerTraceSha256": null,
+        "publicSha256": "848660a818eebe03fc61e11ed6e71b4dfbc1477d42698a56f3c5b67cc4f9e377"
+      },
+      {
+        "case": "mesh-setops-invalid-operation",
+        "fixtureSha256": "351df7f0cdd5ea4ac608e1b74c10ad4cbf6d972d6ac6bd20af5ec51088550a1f",
+        "ledgerSha256": "d3723f77ba06ce62d2f5be10706843121e68d0756f5909dd6e0bc5216d077f90",
+        "phase": "mesh-setops",
+        "producerTraceSha256": null,
+        "publicSha256": "9a1e9590f807f19c7bb79bdf1d4b303f0f0eea9a3da4c4c6cb8b0464f2eccc16"
+      },
+      {
+        "case": "mesh-setops-missing-source",
+        "fixtureSha256": "4e1ccc5abe6873766c8c6dc19f6f3c5f571134fbafacff4637fb727d3f8b0cab",
+        "ledgerSha256": "06b91777f22c7aeae4a78ea9e83421e004b910d8c3ffc7e24736ec5f1ca27b07",
+        "phase": "mesh-setops",
+        "producerTraceSha256": null,
+        "publicSha256": "b3fcb4c3a8bf305520c3c9a4f942d0bb71b5233d572eef6b82569176f728b3d7"
+      },
+      {
+        "case": "mesh-setops-switch-operation",
+        "fixtureSha256": "65da5daa6681f50f52938ff5a62d5e122b396a83e620e5058233636f7ab3441b",
+        "ledgerSha256": "472e4c109252e89bd4244768bc1002cc3d77452ce0deef12e462611558d565bc",
+        "phase": "mesh-setops",
+        "producerTraceSha256": null,
+        "publicSha256": "068f427cdf07f397f1d06ce53eda5a643b7a40f2fc2a8733a4ce43fa6d17c5fb"
+      },
+      {
+        "case": "mesh-setops-switch-source",
+        "fixtureSha256": "c5c44ee79e1f43885545e299a0de552b8d178fa589ac287c870c58b78ecf9966",
+        "ledgerSha256": "04824e6cfeb970816c3c9ebf91959f91248fe1be9a7dc73ecb13b781e41fce2a",
+        "phase": "mesh-setops",
+        "producerTraceSha256": null,
+        "publicSha256": "0be4a4850253c5055cca05958e7ba96caf1ec3de71beff22efb0b677d9702c5d"
+      },
+      {
+        "case": "mesh-setops-union",
+        "fixtureSha256": "5c498f5782e2f7a7bbd931d1d1860e505fcd9ef63290650fd0b4d6eb9992dc19",
+        "ledgerSha256": "34c0cf58750b5b184ef4d8ec690bf00ab11fd43a664c3dc407b208d2ecd307d0",
+        "phase": "mesh-setops",
+        "producerTraceSha256": null,
+        "publicSha256": "28b536fc5793f03182f31d6989eb7c763182b0ba8ae157d03a7d3fff06f3917b"
+      }
+    ],
+    "phases": 1,
+    "sha256": "fdb627e076f50355bbe227257f90ddc56abf478c84ee1c4b5bf87d4ceaa26743"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-setops\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-mesh-setops-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-mesh-setops-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d140331df4040d764b17a3cb7a198506ec2a53a690bd2d53df72a8c046a0913e",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a/mesh-setops/expected/mesh-setops-difference.freecad.json",
+                "publicSha256": "9e00d67b92b2ec685acd3e60455c5e60356cfbed422aff13f3d82599c3489984",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-difference",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-difference.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-difference.json",
+            "fixtureSha256": "f1d7f30a5c63d121faacc732a950f1ba7da2edb0435c0758a8579e288da447e7",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d140331df4040d764b17a3cb7a198506ec2a53a690bd2d53df72a8c046a0913e",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "9e00d67b92b2ec685acd3e60455c5e60356cfbed422aff13f3d82599c3489984",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "a31b4ca6124085262d5cc45d058f5c273029f6e07a6adff629e09762b2359660",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a/mesh-setops/expected/mesh-setops-disjoint-intersection.freecad.json",
+                "publicSha256": "22e0d9e860ca6deb067424c90b255c581669089d23538f6e6b5bd4ea52ed8591",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-disjoint-intersection",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-disjoint-intersection.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-disjoint-intersection.json",
+            "fixtureSha256": "2481458fb52431c33082b662bc189507a5ceef11d3daca76c0275ba814067879",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "a31b4ca6124085262d5cc45d058f5c273029f6e07a6adff629e09762b2359660",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "22e0d9e860ca6deb067424c90b255c581669089d23538f6e6b5bd4ea52ed8591",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "47d9ea4acfbe64549e6be72ef2d4004e5a6ae04047b078c7cbabe1e3b7846887",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a/mesh-setops/expected/mesh-setops-intersection.freecad.json",
+                "publicSha256": "848660a818eebe03fc61e11ed6e71b4dfbc1477d42698a56f3c5b67cc4f9e377",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-intersection",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-intersection.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-intersection.json",
+            "fixtureSha256": "e279f10f1458d31a3e4187fd4fb678b2327cbb3bc61a628e0a7b0e2015d1bdbf",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "47d9ea4acfbe64549e6be72ef2d4004e5a6ae04047b078c7cbabe1e3b7846887",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "848660a818eebe03fc61e11ed6e71b4dfbc1477d42698a56f3c5b67cc4f9e377",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d3723f77ba06ce62d2f5be10706843121e68d0756f5909dd6e0bc5216d077f90",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a/mesh-setops/expected/mesh-setops-invalid-operation.freecad.json",
+                "publicSha256": "9a1e9590f807f19c7bb79bdf1d4b303f0f0eea9a3da4c4c6cb8b0464f2eccc16",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-invalid-operation",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-invalid-operation.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-invalid-operation.json",
+            "fixtureSha256": "351df7f0cdd5ea4ac608e1b74c10ad4cbf6d972d6ac6bd20af5ec51088550a1f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d3723f77ba06ce62d2f5be10706843121e68d0756f5909dd6e0bc5216d077f90",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "9a1e9590f807f19c7bb79bdf1d4b303f0f0eea9a3da4c4c6cb8b0464f2eccc16",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "06b91777f22c7aeae4a78ea9e83421e004b910d8c3ffc7e24736ec5f1ca27b07",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a/mesh-setops/expected/mesh-setops-missing-source.freecad.json",
+                "publicSha256": "b3fcb4c3a8bf305520c3c9a4f942d0bb71b5233d572eef6b82569176f728b3d7",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-missing-source",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-missing-source.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-missing-source.json",
+            "fixtureSha256": "4e1ccc5abe6873766c8c6dc19f6f3c5f571134fbafacff4637fb727d3f8b0cab",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "06b91777f22c7aeae4a78ea9e83421e004b910d8c3ffc7e24736ec5f1ca27b07",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "b3fcb4c3a8bf305520c3c9a4f942d0bb71b5233d572eef6b82569176f728b3d7",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "472e4c109252e89bd4244768bc1002cc3d77452ce0deef12e462611558d565bc",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a/mesh-setops/expected/mesh-setops-switch-operation.freecad.json",
+                "publicSha256": "068f427cdf07f397f1d06ce53eda5a643b7a40f2fc2a8733a4ce43fa6d17c5fb",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-switch-operation",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-switch-operation.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-switch-operation.json",
+            "fixtureSha256": "65da5daa6681f50f52938ff5a62d5e122b396a83e620e5058233636f7ab3441b",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "472e4c109252e89bd4244768bc1002cc3d77452ce0deef12e462611558d565bc",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "068f427cdf07f397f1d06ce53eda5a643b7a40f2fc2a8733a4ce43fa6d17c5fb",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "04824e6cfeb970816c3c9ebf91959f91248fe1be9a7dc73ecb13b781e41fce2a",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a/mesh-setops/expected/mesh-setops-switch-source.freecad.json",
+                "publicSha256": "0be4a4850253c5055cca05958e7ba96caf1ec3de71beff22efb0b677d9702c5d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-switch-source",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-switch-source.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-switch-source.json",
+            "fixtureSha256": "c5c44ee79e1f43885545e299a0de552b8d178fa589ac287c870c58b78ecf9966",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "04824e6cfeb970816c3c9ebf91959f91248fe1be9a7dc73ecb13b781e41fce2a",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "0be4a4850253c5055cca05958e7ba96caf1ec3de71beff22efb0b677d9702c5d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "34c0cf58750b5b184ef4d8ec690bf00ab11fd43a664c3dc407b208d2ecd307d0",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a/mesh-setops/expected/mesh-setops-union.freecad.json",
+                "publicSha256": "28b536fc5793f03182f31d6989eb7c763182b0ba8ae157d03a7d3fff06f3917b",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-union",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-union.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-union.json",
+            "fixtureSha256": "5c498f5782e2f7a7bbd931d1d1860e505fcd9ef63290650fd0b4d6eb9992dc19",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "34c0cf58750b5b184ef4d8ec690bf00ab11fd43a664c3dc407b208d2ecd307d0",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "28b536fc5793f03182f31d6989eb7c763182b0ba8ae157d03a7d3fff06f3917b",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-setops\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-mesh-setops-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-mesh-setops-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 8,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 8,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-setops\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-mesh-setops-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-mesh-setops-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d140331df4040d764b17a3cb7a198506ec2a53a690bd2d53df72a8c046a0913e",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b/mesh-setops/expected/mesh-setops-difference.freecad.json",
+                "publicSha256": "9e00d67b92b2ec685acd3e60455c5e60356cfbed422aff13f3d82599c3489984",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-difference",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-difference.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-difference.json",
+            "fixtureSha256": "f1d7f30a5c63d121faacc732a950f1ba7da2edb0435c0758a8579e288da447e7",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d140331df4040d764b17a3cb7a198506ec2a53a690bd2d53df72a8c046a0913e",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "9e00d67b92b2ec685acd3e60455c5e60356cfbed422aff13f3d82599c3489984",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "a31b4ca6124085262d5cc45d058f5c273029f6e07a6adff629e09762b2359660",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b/mesh-setops/expected/mesh-setops-disjoint-intersection.freecad.json",
+                "publicSha256": "22e0d9e860ca6deb067424c90b255c581669089d23538f6e6b5bd4ea52ed8591",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-disjoint-intersection",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-disjoint-intersection.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-disjoint-intersection.json",
+            "fixtureSha256": "2481458fb52431c33082b662bc189507a5ceef11d3daca76c0275ba814067879",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "a31b4ca6124085262d5cc45d058f5c273029f6e07a6adff629e09762b2359660",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "22e0d9e860ca6deb067424c90b255c581669089d23538f6e6b5bd4ea52ed8591",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "47d9ea4acfbe64549e6be72ef2d4004e5a6ae04047b078c7cbabe1e3b7846887",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b/mesh-setops/expected/mesh-setops-intersection.freecad.json",
+                "publicSha256": "848660a818eebe03fc61e11ed6e71b4dfbc1477d42698a56f3c5b67cc4f9e377",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-intersection",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-intersection.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-intersection.json",
+            "fixtureSha256": "e279f10f1458d31a3e4187fd4fb678b2327cbb3bc61a628e0a7b0e2015d1bdbf",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "47d9ea4acfbe64549e6be72ef2d4004e5a6ae04047b078c7cbabe1e3b7846887",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "848660a818eebe03fc61e11ed6e71b4dfbc1477d42698a56f3c5b67cc4f9e377",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d3723f77ba06ce62d2f5be10706843121e68d0756f5909dd6e0bc5216d077f90",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b/mesh-setops/expected/mesh-setops-invalid-operation.freecad.json",
+                "publicSha256": "9a1e9590f807f19c7bb79bdf1d4b303f0f0eea9a3da4c4c6cb8b0464f2eccc16",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-invalid-operation",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-invalid-operation.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-invalid-operation.json",
+            "fixtureSha256": "351df7f0cdd5ea4ac608e1b74c10ad4cbf6d972d6ac6bd20af5ec51088550a1f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d3723f77ba06ce62d2f5be10706843121e68d0756f5909dd6e0bc5216d077f90",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "9a1e9590f807f19c7bb79bdf1d4b303f0f0eea9a3da4c4c6cb8b0464f2eccc16",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "06b91777f22c7aeae4a78ea9e83421e004b910d8c3ffc7e24736ec5f1ca27b07",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b/mesh-setops/expected/mesh-setops-missing-source.freecad.json",
+                "publicSha256": "b3fcb4c3a8bf305520c3c9a4f942d0bb71b5233d572eef6b82569176f728b3d7",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-missing-source",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-missing-source.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-missing-source.json",
+            "fixtureSha256": "4e1ccc5abe6873766c8c6dc19f6f3c5f571134fbafacff4637fb727d3f8b0cab",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "06b91777f22c7aeae4a78ea9e83421e004b910d8c3ffc7e24736ec5f1ca27b07",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "b3fcb4c3a8bf305520c3c9a4f942d0bb71b5233d572eef6b82569176f728b3d7",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "472e4c109252e89bd4244768bc1002cc3d77452ce0deef12e462611558d565bc",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b/mesh-setops/expected/mesh-setops-switch-operation.freecad.json",
+                "publicSha256": "068f427cdf07f397f1d06ce53eda5a643b7a40f2fc2a8733a4ce43fa6d17c5fb",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-switch-operation",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-switch-operation.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-switch-operation.json",
+            "fixtureSha256": "65da5daa6681f50f52938ff5a62d5e122b396a83e620e5058233636f7ab3441b",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "472e4c109252e89bd4244768bc1002cc3d77452ce0deef12e462611558d565bc",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "068f427cdf07f397f1d06ce53eda5a643b7a40f2fc2a8733a4ce43fa6d17c5fb",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "04824e6cfeb970816c3c9ebf91959f91248fe1be9a7dc73ecb13b781e41fce2a",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b/mesh-setops/expected/mesh-setops-switch-source.freecad.json",
+                "publicSha256": "0be4a4850253c5055cca05958e7ba96caf1ec3de71beff22efb0b677d9702c5d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-switch-source",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-switch-source.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-switch-source.json",
+            "fixtureSha256": "c5c44ee79e1f43885545e299a0de552b8d178fa589ac287c870c58b78ecf9966",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "04824e6cfeb970816c3c9ebf91959f91248fe1be9a7dc73ecb13b781e41fce2a",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "0be4a4850253c5055cca05958e7ba96caf1ec3de71beff22efb0b677d9702c5d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "34c0cf58750b5b184ef4d8ec690bf00ab11fd43a664c3dc407b208d2ecd307d0",
+                "path": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b/mesh-setops/expected/mesh-setops-union.freecad.json",
+                "publicSha256": "28b536fc5793f03182f31d6989eb7c763182b0ba8ae157d03a7d3fff06f3917b",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-setops-union",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-union.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-union.json",
+            "fixtureSha256": "5c498f5782e2f7a7bbd931d1d1860e505fcd9ef63290650fd0b4d6eb9992dc19",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "34c0cf58750b5b184ef4d8ec690bf00ab11fd43a664c3dc407b208d2ecd307d0",
+            "phase": "mesh-setops",
+            "publicExpectedSha256": "28b536fc5793f03182f31d6989eb7c763182b0ba8ae157d03a7d3fff06f3917b",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-setops\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-mesh-setops-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-mesh-setops-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 8,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 8,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-expected-mesh-setops-post-promotion/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

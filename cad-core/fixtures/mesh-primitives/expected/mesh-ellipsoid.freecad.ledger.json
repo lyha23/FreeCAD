@@ -1,0 +1,59 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-ellipsoid",
+    "expectedPayloadHash": "sha256:b6a2d5c57d005d19b1725c5ae16c70a432645091d22a1bbdd516ca1cef52464b",
+    "inputHash": "sha256:139e537e76ae57ed349039a78dda38c7c487ccb7bec03961be05d9b08ba09217",
+    "phase": "mesh-primitives",
+    "topoNamingStateHash": "sha256:ad9764a91e0f5cc5c9c8631aee03861758e32cd078dae354888f93a9620e7998"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Ellipsoid": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::Ellipsoid"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Ellipsoid": {
+        "covers": [
+          "Ellipsoid"
+        ],
+        "ledgerObject": "Ellipsoid",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:ad9764a91e0f5cc5c9c8631aee03861758e32cd078dae354888f93a9620e7998",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

@@ -1,0 +1,73 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              5,
+              0
+            ],
+            "kind": "LineSegment",
+            "start": [
+              -5,
+              0
+            ]
+          },
+          {
+            "end": [
+              -2,
+              2
+            ],
+            "kind": "LineSegment",
+            "start": [
+              -2,
+              -2
+            ]
+          },
+          {
+            "end": [
+              2,
+              2
+            ],
+            "kind": "LineSegment",
+            "start": [
+              2,
+              -2
+            ]
+          }
+        ],
+        "Operations": [
+          {
+            "expectedOutcome": "target_result",
+            "geometryId": 0,
+            "op": "trim",
+            "point": [
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "TypeId": "Sketcher::SketchObject"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:10cd64ff23f493190f28dc4348170c2acec50ce85d26e3c0ae2f574ca8865a9d",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

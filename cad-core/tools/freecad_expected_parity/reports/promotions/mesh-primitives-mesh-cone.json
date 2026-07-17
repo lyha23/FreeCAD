@@ -1,0 +1,82 @@
+{
+  "case": "mesh-cone",
+  "phase": "mesh-primitives",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "5ac4756447d42d7996616aec0b7c0d87a3b379e5b1d8474f93a1c124d039faf8"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "c7abd81b7b49499af6e90f58fa6f9d9d2163512ceeb8c4244fa2ca139189c895",
+    "manifestBeforeSha256": "d1e8126a0cc92f20760478571a2d100ea4667941a0a78f1c8b2b2d53c992d76e",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/private/tmp/freecad-mesh-api-collect-reports/mesh-cone.json",
+      "sha256": "604cbc279a116e9dc5a9f925c9d18881a044371e3f12f0e61d705f0fc235068e"
+    },
+    "input": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-primitives/mesh-cone.json",
+      "sha256": "0fc77bdf0edbbb2a3700a484feb38bfde482e8792c8a3adb9f549b6017e607d2"
+    },
+    "ledger": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-primitives/expected/mesh-cone.freecad.ledger.json",
+      "sha256": "fe3b98dbc842f3a27a95bc78b27cb8f44ce3341bb5acb28c28c39b600c26fe47"
+    },
+    "publicExpected": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-primitives/expected/mesh-cone.freecad.json",
+      "sha256": "ae556eb3af17822bba564de2c41ae42f07c866f84590b1fc97d2b11b0a658614"
+    },
+    "repeatReport": {
+      "path": "/private/tmp/freecad-mesh-api-staging-reports/mesh-cone.json",
+      "sha256": "3ffde6213be240cdcc9d6d7fa044439efac9e437073e59a865936f0dba34c609"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cone.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cone.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-primitives-mesh-cone.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cone.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

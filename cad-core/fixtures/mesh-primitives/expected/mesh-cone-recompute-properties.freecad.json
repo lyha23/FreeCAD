@@ -1,0 +1,74 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          3.0,
+          2.0,
+          2.0
+        ],
+        "min": [
+          0.0,
+          -2.0,
+          -2.0
+        ]
+      },
+      "closed": false,
+      "mesh_defects": {
+        "component_count": 1,
+        "has_non_manifolds": false,
+        "has_non_uniform_oriented_facets": false,
+        "has_self_intersections": false,
+        "non_uniform_oriented_facet_count": 0
+      },
+      "mesh_orientation": {
+        "first_facet_normal": [
+          0.4427925944328308,
+          -0.8855851888656616,
+          -0.14026284217834473
+        ],
+        "normal_sum": [
+          106.27021795511246,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh_summary": {
+        "triangle_count": 240,
+        "vertex_count": 140
+      },
+      "object": "Cone",
+      "topology_counts": {
+        "edges": 380,
+        "faces": 240,
+        "vertices": 140
+      },
+      "volume": 15.450835227966309
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:058256b8deebf404720a83dd1a156af931822666034f5d27b5fbfb9d79677912",
+    "objects": {
+      "Cone": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:bf585e72f0c89da9dff54c0e051d7d274f0beb9ba278873752ece456fad93f2f",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

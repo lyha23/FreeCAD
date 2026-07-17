@@ -1,0 +1,63 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sheet",
+      "object_fields": {
+        "cell_count": 1,
+        "shape": "spreadsheet",
+        "status": "ok"
+      },
+      "spreadsheet": {
+        "cells": [
+          {
+            "address": "A1",
+            "alias": null,
+            "content": "'Still valid",
+            "value": "Still valid"
+          }
+        ],
+        "layoutOperations": [
+          {
+            "arguments": {
+              "range": "not-a-range"
+            },
+            "evidenceLevel": "native_diagnostic",
+            "index": 0,
+            "nativeDiagnostic": {
+              "code": "spreadsheet_mergecells_failed",
+              "exceptionType": "RuntimeError",
+              "message": "Invalid cell specifier."
+            },
+            "operation": "mergeCells",
+            "stage": "initial"
+          }
+        ]
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:a69c9fc67f33c368dc70b82a5bf7f323b2583a226a73b24acd1a43cbc5b91c95",
+    "objects": {
+      "Sheet": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7f0463e012df228153f541f8d95a8783283c8f00074b093309a36ec61a3cd232",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

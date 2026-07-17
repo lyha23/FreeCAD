@@ -1,0 +1,82 @@
+{
+  "case": "mesh-defects-source-without-mesh-property",
+  "phase": "mesh-defects",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "701583e6e63e4c734162a47d3fdf213398daac4a679d31bd6fb71727e98de601",
+    "manifestBeforeSha256": "18efcacc048b3e8eec942ee2e97eeec68256134c145a893a10588def4ec8673e",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-defects/mesh-defects-source-without-mesh-property/collect.json",
+      "sha256": "576a7b619893ed52e061565527448f748c4f957aa5fbe4d1e8f211b936d921e5"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/mesh-defects-source-without-mesh-property.json",
+      "sha256": "5d59eb2d9fa4a7759d54f2ea7c1cdb653060cddcd21700907f3bf56a85e1ace7"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/expected/mesh-defects-source-without-mesh-property.freecad.ledger.json",
+      "sha256": "afeb283dba1bdb87c4f58cd3aad2ad370d47a40a40c840226d5bac5e875f60c9"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/expected/mesh-defects-source-without-mesh-property.freecad.json",
+      "sha256": "e6eb5502d22968c0b197b6260edc8975f0040da263275b5cc539919a5bc2a111"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-defects/mesh-defects-source-without-mesh-property/repeat2.json",
+      "sha256": "04914d75d591c2992ad35dd3084284e8388e61f20b1af122da4c56a6d802b3c1"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/mesh-defects-source-without-mesh-property.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-source-without-mesh-property.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-defects-mesh-defects-source-without-mesh-property.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-source-without-mesh-property.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

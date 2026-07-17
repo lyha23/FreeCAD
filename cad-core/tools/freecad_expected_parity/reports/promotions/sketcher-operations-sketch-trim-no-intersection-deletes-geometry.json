@@ -1,0 +1,82 @@
+{
+  "case": "sketch-trim-no-intersection-deletes-geometry",
+  "phase": "sketcher-operations",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "22638949267e239738b13a2a18e331511a9e826d9c56ea1cb8893f2e0cc1a05b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "35ff86c7355649f55322752fafca50559f12e53b6c38857c3f227056a5bb1fda",
+    "manifestBeforeSha256": "3a8b80ccd7e97d70f5ad6fc04c8452dd73bd289b27e20e9ebd934ddde0195146",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-trim-no-intersection-deletes-geometry/collect.json",
+      "sha256": "24f2217d394ee038d477fe1e16cd53275722f01a65cdc812294d0863a7765d26"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/sketch-trim-no-intersection-deletes-geometry.json",
+      "sha256": "e8a0bbabee9e1ccd88d495d4f9f9eda34302d1282d1fbf44ff1caac19eebc63c"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-trim-no-intersection-deletes-geometry.freecad.ledger.json",
+      "sha256": "09dadb3b61cd48951252a4e964f05a96232b8089209d3524d961c747a32ab720"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-trim-no-intersection-deletes-geometry.freecad.json",
+      "sha256": "baebe95bab42e24e9fb94900edd750187d687e2195dd6905194f906e491eebee"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-trim-no-intersection-deletes-geometry/repeat2.json",
+      "sha256": "6e8815d6d976d169924e0ab5fb2f97f6bdd010d9ef143e169e1851587722429e"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-no-intersection-deletes-geometry.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-no-intersection-deletes-geometry.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/sketcher-operations-sketch-trim-no-intersection-deletes-geometry.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-no-intersection-deletes-geometry.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

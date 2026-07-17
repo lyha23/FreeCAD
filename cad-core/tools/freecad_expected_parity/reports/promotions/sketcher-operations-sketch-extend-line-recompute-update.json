@@ -1,0 +1,82 @@
+{
+  "case": "sketch-extend-line-recompute-update",
+  "phase": "sketcher-operations",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "22638949267e239738b13a2a18e331511a9e826d9c56ea1cb8893f2e0cc1a05b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "9a5f0596f21f64aae81e12b95529d4957c15010c6e5f36c5b1c0cf2d8e64f22a",
+    "manifestBeforeSha256": "e3e5a4c2e98c40824db9ecee7d63033139a756f7315941fab834c2f59d3f8c17",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-extend-line-recompute-update/collect.json",
+      "sha256": "2ef1f13bdbfae5ec15b72225b0a4dec7c707035a5c976dafbc90800bf1e6aa79"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/sketch-extend-line-recompute-update.json",
+      "sha256": "41185cae193ef172de8f0a8d8006fee1fb1264b6e19a4b99673375fad6bc7abb"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-extend-line-recompute-update.freecad.ledger.json",
+      "sha256": "63f10a6fe9806eb27be99795478ad00983b17b59e72a73ec97e4924aef702f09"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-extend-line-recompute-update.freecad.json",
+      "sha256": "41ab090da3eb8176704b039e9af03e9e674d8666b9bb699a94f4e6c00911d77e"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-extend-line-recompute-update/repeat2.json",
+      "sha256": "e1bd81b01f722b605e2769c8560cc8b12dbf124a76faf68dd91096c3892dd7a7"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-line-recompute-update.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-line-recompute-update.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/sketcher-operations-sketch-extend-line-recompute-update.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-line-recompute-update.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

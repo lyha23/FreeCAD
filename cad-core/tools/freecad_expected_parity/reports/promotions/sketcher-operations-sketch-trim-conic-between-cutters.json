@@ -1,0 +1,82 @@
+{
+  "case": "sketch-trim-conic-between-cutters",
+  "phase": "sketcher-operations",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "22638949267e239738b13a2a18e331511a9e826d9c56ea1cb8893f2e0cc1a05b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "588c50b4c3cfaa8d9b2c10fb7e5d49e9ab49c21c0392a9baa4119a536322b8e9",
+    "manifestBeforeSha256": "203ba4a78c0d44437f9e28302928f9927e3afca257aa13c3e01dc44e1e3cb038",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-trim-conic-between-cutters/collect.json",
+      "sha256": "8dd135d993c60363013e761e10d4d86ddbcf8e2c85a77de7d3c8dff802026712"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/sketch-trim-conic-between-cutters.json",
+      "sha256": "5814e890df758362536c76d0563586e4244757cfd01038dacc4250e55e2b9aac"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-trim-conic-between-cutters.freecad.ledger.json",
+      "sha256": "506c6721e5ce6fa08fadb149acc9557f1c9398a2b5f19056eb935757f83bd2df"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/sketcher-operations/expected/sketch-trim-conic-between-cutters.freecad.json",
+      "sha256": "f20149eac1536c46a308110464b1460a0701a4b7cd48d1a54ad29a80d622e0b8"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/sketcher-operations/sketch-trim-conic-between-cutters/repeat2.json",
+      "sha256": "4d6724ae1df404d29a3069cbbdf0aece82741afb420b388692cb1385c4be58aa"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-conic-between-cutters.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-conic-between-cutters.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/sketcher-operations-sketch-trim-conic-between-cutters.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-conic-between-cutters.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

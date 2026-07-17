@@ -1,0 +1,82 @@
+{
+  "case": "mesh-setops-switch-operation",
+  "phase": "mesh-setops",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "96e03e2f0349f98dd0ad1e05d9cc8d0427072f65bdc607b7124fee23759f704f",
+    "manifestBeforeSha256": "b481cf378927ce9ecbacd69419585bc4fd898aae5bc1929ca5bdc05bc57e192d",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-setops/mesh-setops-switch-operation/collect.json",
+      "sha256": "2350d27fd8b8f17dccd908bdc9b0d4dbcae3505036e3ad577e1ffcc7883fe96f"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-setops/mesh-setops-switch-operation.json",
+      "sha256": "65da5daa6681f50f52938ff5a62d5e122b396a83e620e5058233636f7ab3441b"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-setops/expected/mesh-setops-switch-operation.freecad.ledger.json",
+      "sha256": "472e4c109252e89bd4244768bc1002cc3d77452ce0deef12e462611558d565bc"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-setops/expected/mesh-setops-switch-operation.freecad.json",
+      "sha256": "068f427cdf07f397f1d06ce53eda5a643b7a40f2fc2a8733a4ce43fa6d17c5fb"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-setops/mesh-setops-switch-operation/repeat2.json",
+      "sha256": "3519491f8bc34806e7d87b1adf0ab8480b8106c373f026289fb195e76f3b1502"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-switch-operation.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-switch-operation.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-setops-mesh-setops-switch-operation.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-switch-operation.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

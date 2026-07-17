@@ -1,0 +1,121 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              10,
+              0
+            ],
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ]
+          },
+          {
+            "end": [
+              10,
+              5
+            ],
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ]
+          },
+          {
+            "end": [
+              0,
+              5
+            ],
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ]
+          },
+          {
+            "end": [
+              0,
+              0
+            ],
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ]
+          }
+        ],
+        "Operations": [
+          {
+            "chamfer": false,
+            "createCorner": false,
+            "expectedOutcome": "target_result",
+            "geometryIds": [
+              0,
+              1
+            ],
+            "op": "fillet",
+            "radius": 1.0,
+            "referencePoints": [
+              [
+                8,
+                0
+              ],
+              [
+                10,
+                2
+              ]
+            ],
+            "trim": true
+          },
+          {
+            "constraint": {
+              "First": 4,
+              "Type": "Radius",
+              "Value": 1.0
+            },
+            "expectedOutcome": "target_result",
+            "op": "addConstraint"
+          }
+        ]
+      },
+      "TypeId": "Sketcher::SketchObject"
+    }
+  ],
+  "recompute": {
+    "mutations": [
+      {
+        "object": "Sketch",
+        "properties": {
+          "Operations": [
+            {
+              "constraintId": 2,
+              "expectedOutcome": "target_result",
+              "op": "setDatum",
+              "value": 2.0
+            }
+          ]
+        }
+      }
+    ],
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:a7d3dc562bbd50eafbe5ddcb31ea441948740c9d90a2405ffdd4d089db07d40f",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

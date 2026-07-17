@@ -1,0 +1,75 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "degree": 2,
+            "kind": "BSpline",
+            "poles": [
+              [
+                0,
+                0
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                4,
+                3
+              ],
+              [
+                6,
+                0
+              ]
+            ]
+          }
+        ],
+        "Operations": [
+          {
+            "expectedOutcome": "target_result",
+            "geometryId": 0,
+            "increment": 1,
+            "op": "increaseBSplineDegree"
+          }
+        ]
+      },
+      "TypeId": "Sketcher::SketchObject"
+    }
+  ],
+  "recompute": {
+    "mutations": [
+      {
+        "object": "Sketch",
+        "properties": {
+          "Operations": [
+            {
+              "expectedOutcome": "target_result",
+              "geometryId": 0,
+              "multiplicity": 1,
+              "op": "insertBSplineKnot",
+              "parameter": 0.25
+            }
+          ]
+        }
+      }
+    ],
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:796031f64fd36afd31b1e0348da36287f23927a74a7c4e186ea183f603f04c63",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

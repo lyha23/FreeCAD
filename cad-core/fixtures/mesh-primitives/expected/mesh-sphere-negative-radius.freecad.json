@@ -1,0 +1,74 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "closed": true,
+      "mesh_defects": {
+        "component_count": 0,
+        "has_non_manifolds": false,
+        "has_non_uniform_oriented_facets": false,
+        "has_self_intersections": false,
+        "non_uniform_oriented_facet_count": 0
+      },
+      "mesh_orientation": {
+        "first_facet_normal": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal_sum": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh_summary": {
+        "triangle_count": 0,
+        "vertex_count": 0
+      },
+      "object": "Sphere",
+      "topology_counts": {
+        "edges": 0,
+        "faces": 0,
+        "vertices": 0
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:d4ea8c9e018ab3e7c007aae96b09bfc74ca86538afa71be90cd92c4a12b57efd",
+    "objects": {
+      "Sphere": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:518b9f63ad7b5c05ee9d0509f1f87b9a2b86a1e9e265e0c70d633da3ffbb790e",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

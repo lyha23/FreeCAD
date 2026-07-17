@@ -1,0 +1,82 @@
+{
+  "case": "spreadsheet-layout-invalid-style-option-native-diagnostic",
+  "phase": "spreadsheet-layout",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "f7a89d436fbf98560934753fdb256b2a0ee54d2812cf299b4458fcc487145d23"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "0833b10101a119da8c6b3058096a4a6241b849bacf3f0040e8c2e08f9ad903e3",
+    "manifestBeforeSha256": "18a975302cc6b3532bb0bd5b77e3fb744ba5ae5eaa441cd6082cfac745f7797f",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/private/tmp/spreadsheet-layout-staging/spreadsheet-layout-invalid-style-option-native-diagnostic/run-a.report.json",
+      "sha256": "d63482d8f3373d23b4232a22c037c9f5faa68e165cd45beb7fa5e90cdf34f901"
+    },
+    "input": {
+      "path": "/private/tmp/spreadsheet-layout-staging/spreadsheet-layout-invalid-style-option-native-diagnostic/run-a/spreadsheet-layout/spreadsheet-layout-invalid-style-option-native-diagnostic.json",
+      "sha256": "06675e3995907919b7a47d016ce09aec4eafd1dd51eecee4924f61eb58441faf"
+    },
+    "ledger": {
+      "path": "/private/tmp/spreadsheet-layout-staging/spreadsheet-layout-invalid-style-option-native-diagnostic/run-a/spreadsheet-layout/expected/spreadsheet-layout-invalid-style-option-native-diagnostic.freecad.ledger.json",
+      "sha256": "1438b55970efa80f78359dbdc1b7a123ec8f94a291b342c0fc40822d35283a51"
+    },
+    "publicExpected": {
+      "path": "/private/tmp/spreadsheet-layout-staging/spreadsheet-layout-invalid-style-option-native-diagnostic/run-a/spreadsheet-layout/expected/spreadsheet-layout-invalid-style-option-native-diagnostic.freecad.json",
+      "sha256": "747c9aaa8efe83bacd94de43e655afcd7a28d3b332c45507e83cafdfccc521d5"
+    },
+    "repeatReport": {
+      "path": "/private/tmp/spreadsheet-layout-staging/reports/spreadsheet-layout-invalid-style-option-native-diagnostic.json",
+      "sha256": "7f6d240c306f9c8047985b012f1e1a022c3f416785f5d5e98b7ecc71b0b37221"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-invalid-style-option-native-diagnostic.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-invalid-style-option-native-diagnostic.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/spreadsheet-layout-spreadsheet-layout-invalid-style-option-native-diagnostic.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-invalid-style-option-native-diagnostic.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

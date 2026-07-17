@@ -1,0 +1,899 @@
+{
+  "boundary": {
+    "ambientResourcesDisabled": [
+      "built-in",
+      "workbench",
+      "user-config-directory"
+    ],
+    "classification": "host_resource_process_contract",
+    "documentGraphFieldsAdded": []
+  },
+  "caseCount": 8,
+  "cases": [
+    {
+      "id": "local-card-model-resolution",
+      "runs": [
+        {
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-1/local-card-model-resolution/user.cfg",
+              "-s",
+              "<TMP>/run-1/local-card-model-resolution/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-1/local-card-model-resolution/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-1/local-card-model-resolution/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-1/local-card-model-resolution/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "libraryName": "Custom",
+              "libraryNames": [
+                "Custom"
+              ],
+              "materialUuids": [
+                "a2000000-0000-4000-8000-000000000101"
+              ],
+              "materialsWithModel": [
+                "a2000000-0000-4000-8000-000000000101"
+              ],
+              "name": "Primary",
+              "pathUuid": "a2000000-0000-4000-8000-000000000101",
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000001"
+              ],
+              "physicalProperties": {
+                "Density": "7.5",
+                "Grade": "A2-normal"
+              },
+              "uuid": "a2000000-0000-4000-8000-000000000101"
+            },
+            "case": "local-card-model-resolution",
+            "expected": {
+              "libraryName": "Custom",
+              "libraryNames": [
+                "Custom"
+              ],
+              "materialUuids": [
+                "a2000000-0000-4000-8000-000000000101"
+              ],
+              "materialsWithModel": [
+                "a2000000-0000-4000-8000-000000000101"
+              ],
+              "name": "Primary",
+              "pathUuid": "a2000000-0000-4000-8000-000000000101",
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000001"
+              ],
+              "physicalProperties": {
+                "Density": "7.5",
+                "Grade": "A2-normal"
+              },
+              "uuid": "a2000000-0000-4000-8000-000000000101"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-2/local-card-model-resolution/user.cfg",
+              "-s",
+              "<TMP>/run-2/local-card-model-resolution/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-2/local-card-model-resolution/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-2/local-card-model-resolution/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-2/local-card-model-resolution/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "libraryName": "Custom",
+              "libraryNames": [
+                "Custom"
+              ],
+              "materialUuids": [
+                "a2000000-0000-4000-8000-000000000101"
+              ],
+              "materialsWithModel": [
+                "a2000000-0000-4000-8000-000000000101"
+              ],
+              "name": "Primary",
+              "pathUuid": "a2000000-0000-4000-8000-000000000101",
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000001"
+              ],
+              "physicalProperties": {
+                "Density": "7.5",
+                "Grade": "A2-normal"
+              },
+              "uuid": "a2000000-0000-4000-8000-000000000101"
+            },
+            "case": "local-card-model-resolution",
+            "expected": {
+              "libraryName": "Custom",
+              "libraryNames": [
+                "Custom"
+              ],
+              "materialUuids": [
+                "a2000000-0000-4000-8000-000000000101"
+              ],
+              "materialsWithModel": [
+                "a2000000-0000-4000-8000-000000000101"
+              ],
+              "name": "Primary",
+              "pathUuid": "a2000000-0000-4000-8000-000000000101",
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000001"
+              ],
+              "physicalProperties": {
+                "Density": "7.5",
+                "Grade": "A2-normal"
+              },
+              "uuid": "a2000000-0000-4000-8000-000000000101"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "card-inheritance-and-child-override",
+      "runs": [
+        {
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-1/card-inheritance-and-child-override/user.cfg",
+              "-s",
+              "<TMP>/run-1/card-inheritance-and-child-override/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-1/card-inheritance-and-child-override/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-1/card-inheritance-and-child-override/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-1/card-inheritance-and-child-override/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "parent": "a2000000-0000-4000-8000-000000000201",
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000002"
+              ],
+              "physicalProperties": {
+                "Density": "8.25",
+                "Grade": "child-override"
+              },
+              "uuid": "a2000000-0000-4000-8000-000000000202"
+            },
+            "case": "card-inheritance-and-child-override",
+            "expected": {
+              "parent": "a2000000-0000-4000-8000-000000000201",
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000002"
+              ],
+              "physicalProperties": {
+                "Density": "8.25",
+                "Grade": "child-override"
+              },
+              "uuid": "a2000000-0000-4000-8000-000000000202"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-2/card-inheritance-and-child-override/user.cfg",
+              "-s",
+              "<TMP>/run-2/card-inheritance-and-child-override/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-2/card-inheritance-and-child-override/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-2/card-inheritance-and-child-override/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-2/card-inheritance-and-child-override/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "parent": "a2000000-0000-4000-8000-000000000201",
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000002"
+              ],
+              "physicalProperties": {
+                "Density": "8.25",
+                "Grade": "child-override"
+              },
+              "uuid": "a2000000-0000-4000-8000-000000000202"
+            },
+            "case": "card-inheritance-and-child-override",
+            "expected": {
+              "parent": "a2000000-0000-4000-8000-000000000201",
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000002"
+              ],
+              "physicalProperties": {
+                "Density": "8.25",
+                "Grade": "child-override"
+              },
+              "uuid": "a2000000-0000-4000-8000-000000000202"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "manager-refresh-second-resolution",
+      "runs": [
+        {
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-1/manager-refresh-second-resolution/user.cfg",
+              "-s",
+              "<TMP>/run-1/manager-refresh-second-resolution/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-1/manager-refresh-second-resolution/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-1/manager-refresh-second-resolution/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-1/manager-refresh-second-resolution/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "after": "after-refresh",
+              "before": "before-refresh",
+              "uuidStable": true
+            },
+            "case": "manager-refresh-second-resolution",
+            "expected": {
+              "after": "after-refresh",
+              "before": "before-refresh",
+              "uuidStable": true
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-2/manager-refresh-second-resolution/user.cfg",
+              "-s",
+              "<TMP>/run-2/manager-refresh-second-resolution/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-2/manager-refresh-second-resolution/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-2/manager-refresh-second-resolution/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-2/manager-refresh-second-resolution/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "after": "after-refresh",
+              "before": "before-refresh",
+              "uuidStable": true
+            },
+            "case": "manager-refresh-second-resolution",
+            "expected": {
+              "after": "after-refresh",
+              "before": "before-refresh",
+              "uuidStable": true
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "missing-card-lookup",
+      "runs": [
+        {
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-1/missing-card-lookup/user.cfg",
+              "-s",
+              "<TMP>/run-1/missing-card-lookup/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-1/missing-card-lookup/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-1/missing-card-lookup/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-1/missing-card-lookup/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "error": {
+                "message": "Material not found",
+                "type": "LookupError"
+              },
+              "materialUuids": []
+            },
+            "case": "missing-card-lookup",
+            "expected": {
+              "error": {
+                "message": "Material not found",
+                "type": "LookupError"
+              },
+              "materialUuids": []
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-2/missing-card-lookup/user.cfg",
+              "-s",
+              "<TMP>/run-2/missing-card-lookup/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-2/missing-card-lookup/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-2/missing-card-lookup/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-2/missing-card-lookup/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "error": {
+                "message": "Material not found",
+                "type": "LookupError"
+              },
+              "materialUuids": []
+            },
+            "case": "missing-card-lookup",
+            "expected": {
+              "error": {
+                "message": "Material not found",
+                "type": "LookupError"
+              },
+              "materialUuids": []
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "unknown-model-reference",
+      "runs": [
+        {
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-1/unknown-model-reference/user.cfg",
+              "-s",
+              "<TMP>/run-1/unknown-model-reference/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-1/unknown-model-reference/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-1/unknown-model-reference/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-1/unknown-model-reference/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "physicalModels": [],
+              "physicalProperties": {},
+              "uuid": "a2000000-0000-4000-8000-000000000401"
+            },
+            "case": "unknown-model-reference",
+            "expected": {
+              "physicalModels": [],
+              "physicalProperties": {},
+              "uuid": "a2000000-0000-4000-8000-000000000401"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-2/unknown-model-reference/user.cfg",
+              "-s",
+              "<TMP>/run-2/unknown-model-reference/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-2/unknown-model-reference/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-2/unknown-model-reference/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-2/unknown-model-reference/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "physicalModels": [],
+              "physicalProperties": {},
+              "uuid": "a2000000-0000-4000-8000-000000000401"
+            },
+            "case": "unknown-model-reference",
+            "expected": {
+              "physicalModels": [],
+              "physicalProperties": {},
+              "uuid": "a2000000-0000-4000-8000-000000000401"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "invalid-model-schema",
+      "runs": [
+        {
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-1/invalid-model-schema/user.cfg",
+              "-s",
+              "<TMP>/run-1/invalid-model-schema/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-1/invalid-model-schema/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-1/invalid-model-schema/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-1/invalid-model-schema/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "error": {
+                "messagePrefix": "Model not found:",
+                "type": "LookupError"
+              },
+              "materialUuids": [],
+              "modelUuids": []
+            },
+            "case": "invalid-model-schema",
+            "expected": {
+              "error": {
+                "messagePrefix": "Model not found:",
+                "type": "LookupError"
+              },
+              "materialUuids": [],
+              "modelUuids": []
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-2/invalid-model-schema/user.cfg",
+              "-s",
+              "<TMP>/run-2/invalid-model-schema/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-2/invalid-model-schema/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-2/invalid-model-schema/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-2/invalid-model-schema/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "error": {
+                "messagePrefix": "Model not found:",
+                "type": "LookupError"
+              },
+              "materialUuids": [],
+              "modelUuids": []
+            },
+            "case": "invalid-model-schema",
+            "expected": {
+              "error": {
+                "messagePrefix": "Model not found:",
+                "type": "LookupError"
+              },
+              "materialUuids": [],
+              "modelUuids": []
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "invalid-property-type",
+      "runs": [
+        {
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-1/invalid-property-type/user.cfg",
+              "-s",
+              "<TMP>/run-1/invalid-property-type/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-1/invalid-property-type/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-1/invalid-property-type/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-1/invalid-property-type/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "Property 'InvalidValue' has unknown type 'DefinitelyNotAFreeCADMaterialType'. Ignoring\n",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "invalidValue": null,
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000006"
+              ],
+              "physicalProperties": {}
+            },
+            "case": "invalid-property-type",
+            "expected": {
+              "invalidValue": null,
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000006"
+              ],
+              "physicalProperties": {}
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-2/invalid-property-type/user.cfg",
+              "-s",
+              "<TMP>/run-2/invalid-property-type/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-2/invalid-property-type/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-2/invalid-property-type/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-2/invalid-property-type/user-temp"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "Property 'InvalidValue' has unknown type 'DefinitelyNotAFreeCADMaterialType'. Ignoring\n",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "invalidValue": null,
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000006"
+              ],
+              "physicalProperties": {}
+            },
+            "case": "invalid-property-type",
+            "expected": {
+              "invalidValue": null,
+              "physicalModels": [
+                "a2000000-0000-4000-8000-000000000006"
+              ],
+              "physicalProperties": {}
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "inheritance-cycle-process-boundary",
+      "runs": [
+        {
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-1/inheritance-cycle-process-boundary/user.cfg",
+              "-s",
+              "<TMP>/run-1/inheritance-cycle-process-boundary/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-1/inheritance-cycle-process-boundary/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-1/inheritance-cycle-process-boundary/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-1/inheritance-cycle-process-boundary/user-temp"
+            },
+            "exitCode": null,
+            "signal": 11,
+            "stderr": "",
+            "stdout": "",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "termination": "abnormal"
+            },
+            "case": "inheritance-cycle-process-boundary",
+            "expected": {
+              "termination": "abnormal"
+            },
+            "sourceBackedReason": "MaterialLoader::dereference marks completion after recursive parent traversal and has no in-progress cycle guard.",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<TMP>/run-2/inheritance-cycle-process-boundary/user.cfg",
+              "-s",
+              "<TMP>/run-2/inheritance-cycle-process-boundary/system.cfg",
+              "<CAD_CORE>/tools/collect_material_resolution_contract.py",
+              "--pass",
+              "__freecad_material_contract_args_env__"
+            ],
+            "environment": {
+              "FREECAD_USER_DATA": "<TMP>/run-2/inheritance-cycle-process-boundary/user-data",
+              "FREECAD_USER_HOME": "<TMP>/run-2/inheritance-cycle-process-boundary/user-home",
+              "FREECAD_USER_TEMP": "<TMP>/run-2/inheritance-cycle-process-boundary/user-temp"
+            },
+            "exitCode": null,
+            "signal": 11,
+            "stderr": "",
+            "stdout": "",
+            "timedOut": false
+          },
+          "result": {
+            "actual": {
+              "termination": "abnormal"
+            },
+            "case": "inheritance-cycle-process-boundary",
+            "expected": {
+              "termination": "abnormal"
+            },
+            "sourceBackedReason": "MaterialLoader::dereference marks completion after recursive parent traversal and has no in-progress cycle guard.",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "contractId": "process-contract/material-resolution",
+  "errors": [],
+  "producer": {
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "requestedPath": "/Users/li/.cargo/bin/FreeCADCmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+  },
+  "repeat": 2,
+  "repeatStatus": "passed",
+  "resources": [
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/cycle/CycleA.FCMat",
+      "sha256": "9df5cd625e693a1ece4e2f9e17e07881fb7377d6298254749b63f17c9b0f8a04"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/cycle/CycleB.FCMat",
+      "sha256": "3c5aafafbf4b9f302502b6aa1f065abf723018e1746d0fda5e2b2d797707d7ff"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/inheritance/Child.FCMat",
+      "sha256": "b4ed1ca63eb4dd7f306871ae5cd40aef258a89d15339789c34ec6a492215d148"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/inheritance/FixtureModel.yml",
+      "sha256": "ae3dff60ada8fc3e89c62234ef9fa430ccc98c4b5b78a84cb7b37aa3695dd44c"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/inheritance/Parent.FCMat",
+      "sha256": "06495e82ec5ab98888332c8841f5ea13f08046cbdddadbdab2a4a47ac0bd8502"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/invalid-property/BadType.yml",
+      "sha256": "bf29c1972fbb89be79f4eec73439b2fa532697780229826e04b7e159160c5005"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/invalid-property/InvalidProperty.FCMat",
+      "sha256": "ccde189014977adfd63641dbc7a8c0ccd4f32ea43d9120c3866e6b1be4a6fa99"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/invalid-schema/Broken.yml",
+      "sha256": "681a40876c577abffdc565b7585875f3ea5576384b7bea9e6bfa6260bb0c11cf"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/missing/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/normal/FixtureModel.yml",
+      "sha256": "cef33c521127c4153d8324ec3350fe19cb366eac42eb9dcf1d8d3b7bbed7655f"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/normal/Primary.FCMat",
+      "sha256": "ee810c5b8bbb988a79ea09329f995c3e2339164431d2eb00b10cbdfc9bc26c43"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/refresh/FixtureModel.yml",
+      "sha256": "28da889bf8fb31ee5499a7fdbff4312ea1e418a1f394333e6739c79b02d74a30"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/refresh/Refresh.FCMat",
+      "sha256": "f5f0d98ad4c1b1918019bd4ef59eb444cfea0d20d48a5ffe9e92e20ef018af93"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/refresh/Refresh.updated.template",
+      "sha256": "411dbad5de7578c47b05ba5e2a1ee7124d1e14667fe7710a03db38f7eab6c519"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/material_resolution/resources/unknown-model/UnknownModel.FCMat",
+      "sha256": "7987993e5c74203381b48abad44a8b433dc074eda5887b4779244d4bc52de8dd"
+    }
+  ],
+  "schema": "freecad-material-resolution-process-contract/v1",
+  "status": "passed",
+  "tool": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_material_resolution_contract.py",
+    "sha256": "d47ea79a9ed0661d2244d957fc2317aae0d29bf4d9b6dfccac30fae0e3c29934"
+  }
+}

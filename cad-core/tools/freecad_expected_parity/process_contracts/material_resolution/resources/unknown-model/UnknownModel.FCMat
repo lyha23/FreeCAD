@@ -1,0 +1,8 @@
+General:
+  UUID: "a2000000-0000-4000-8000-000000000401"
+  Name: "UnknownModel"
+  Description: "Card references an absent model UUID"
+Models:
+  MissingModel:
+    UUID: "a2000000-0000-4000-8000-000000009999"
+    UnknownProperty: "ignored"

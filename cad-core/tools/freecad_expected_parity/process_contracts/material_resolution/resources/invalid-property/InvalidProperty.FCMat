@@ -1,0 +1,8 @@
+General:
+  UUID: "a2000000-0000-4000-8000-000000000601"
+  Name: "InvalidProperty"
+  Description: "Card uses a model property with an unsupported type"
+Models:
+  BadType:
+    UUID: "a2000000-0000-4000-8000-000000000006"
+    InvalidValue: "ignored"

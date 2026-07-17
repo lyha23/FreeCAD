@@ -1,0 +1,81 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-defects-harmonize-normals",
+    "expectedPayloadHash": "sha256:fa14c0052557997c337455a90d735ba3841fabc5e306448e40efba9152ffced6",
+    "inputHash": "sha256:f1fb92c01acedccf8bff1188635784e9a1958f7e26edbe1c95f6d9d8259b2012",
+    "phase": "mesh-defects",
+    "topoNamingStateHash": "sha256:300440f86bce68a3e0be7926aa6765cfd9c577fef7bc6c5337717256c057f1e8"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Result": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::HarmonizeNormals"
+    },
+    "Source": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::Import"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Result": {
+        "covers": [
+          "Result"
+        ],
+        "ledgerObject": "Result",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Source": {
+        "covers": [
+          "Source"
+        ],
+        "ledgerObject": "Source",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:300440f86bce68a3e0be7926aa6765cfd9c577fef7bc6c5337717256c057f1e8",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

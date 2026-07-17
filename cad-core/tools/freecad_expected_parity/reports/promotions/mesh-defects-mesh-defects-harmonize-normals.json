@@ -1,0 +1,82 @@
+{
+  "case": "mesh-defects-harmonize-normals",
+  "phase": "mesh-defects",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "a52ab21b8bc3bcd5e12e9f5c1e692be1f5f352da5d5486173dd4ba10a3c77412",
+    "manifestBeforeSha256": "e119e6d14becb0f3cf3ae8fcc38c7bda7c13c93b384eeb2cc59ab410754e7f23",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-defects/mesh-defects-harmonize-normals/collect.json",
+      "sha256": "da215e2d2b7c8b6af9516c5c1b6267a4fd9b116cbe55f09a795bf6a1393a3da4"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/mesh-defects-harmonize-normals.json",
+      "sha256": "c95696d75650746dd195e5a40b5119e4bfe915d5b8afb8f037b6bf4eeabf48bc"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/expected/mesh-defects-harmonize-normals.freecad.ledger.json",
+      "sha256": "5f050599f92650bdc89cfa6ce9f6e7ed6326a02535ef153e35cb882ae46cfae2"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/expected/mesh-defects-harmonize-normals.freecad.json",
+      "sha256": "75e09f14727129c0042e89c25a8bf7ab0254cd78d87e42ebc117b14d5398a9dd"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-defects/mesh-defects-harmonize-normals/repeat2.json",
+      "sha256": "1ff0f53d903baa3186b3d5df250b8dbe1040c425f83e62c4e612df353df4ad95"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/mesh-defects-harmonize-normals.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-harmonize-normals.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-defects-mesh-defects-harmonize-normals.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-harmonize-normals.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

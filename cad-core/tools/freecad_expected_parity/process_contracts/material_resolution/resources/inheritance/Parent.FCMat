@@ -1,0 +1,9 @@
+General:
+  UUID: "a2000000-0000-4000-8000-000000000201"
+  Name: "Parent"
+  Description: "A2 parent card"
+Models:
+  FixturePhysical:
+    UUID: "a2000000-0000-4000-8000-000000000002"
+    Grade: "parent-grade"
+    Density: "8.25"

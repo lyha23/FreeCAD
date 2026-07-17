@@ -1,0 +1,82 @@
+{
+  "case": "mesh-setops-intersection",
+  "phase": "mesh-setops",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "633cb8afe69bac7449eebef2a2ee1a707d399503deca53c2cc506bf77568a9ca",
+    "manifestBeforeSha256": "030bcf14b673c599a2cf2e286e87f9830e24b61115d29d5a66dd51053e758327",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-setops/mesh-setops-intersection/collect.json",
+      "sha256": "f85b4fe8fe840c176b7c78203dc1284f07ff7d8080da640045c68f70f7ff788d"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-setops/mesh-setops-intersection.json",
+      "sha256": "e279f10f1458d31a3e4187fd4fb678b2327cbb3bc61a628e0a7b0e2015d1bdbf"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-setops/expected/mesh-setops-intersection.freecad.ledger.json",
+      "sha256": "47d9ea4acfbe64549e6be72ef2d4004e5a6ae04047b078c7cbabe1e3b7846887"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-setops/expected/mesh-setops-intersection.freecad.json",
+      "sha256": "848660a818eebe03fc61e11ed6e71b4dfbc1477d42698a56f3c5b67cc4f9e377"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-setops/mesh-setops-intersection/repeat2.json",
+      "sha256": "c0638b06d721d9e2efc7bac6080a4e4ba195a43c13454c4fd6f1ea2d57f013f7"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/mesh-setops-intersection.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-intersection.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-setops-mesh-setops-intersection.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-setops/expected/mesh-setops-intersection.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

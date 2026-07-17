@@ -1,0 +1,59 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-cube-zero-length",
+    "expectedPayloadHash": "sha256:36e289f74028490ac5f47054b713977a7cabee76e5a76a3deaddc10e0933044a",
+    "inputHash": "sha256:9611621aacf43e32b0eae781b6c6df744dd614be9b23b0b2ca6992960ce75b23",
+    "phase": "mesh-primitives",
+    "topoNamingStateHash": "sha256:e57fd767710299435399e7cb2d782b16e836ebc49ef9d8a9b53e1c28389e1d84"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Cube": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::Cube"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Cube": {
+        "covers": [
+          "Cube"
+        ],
+        "ledgerObject": "Cube",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:e57fd767710299435399e7cb2d782b16e836ebc49ef9d8a9b53e1c28389e1d84",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

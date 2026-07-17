@@ -1,0 +1,81 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-defects-fix-duplicated-points",
+    "expectedPayloadHash": "sha256:3ff5470eb98a770b4f2110f6d7bf685f08639c97a46407f922afbbfc8f3d42e6",
+    "inputHash": "sha256:4765a60b99fba86b45cae28084512ae59a6ac61a9b57c50b2f1b40a64fd9232c",
+    "phase": "mesh-defects",
+    "topoNamingStateHash": "sha256:f4917c2e06aee1d11ec046638d3b40379c7c8f7a22e5f04bf88672d355837f85"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Result": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::FixDuplicatedPoints"
+    },
+    "Source": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::Feature"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Result": {
+        "covers": [
+          "Result"
+        ],
+        "ledgerObject": "Result",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Source": {
+        "covers": [
+          "Source"
+        ],
+        "ledgerObject": "Source",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:f4917c2e06aee1d11ec046638d3b40379c7c8f7a22e5f04bf88672d355837f85",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

@@ -588,6 +588,135 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
             report["modules"][0]["capabilities"][0]["coverageStatus"],
         )
 
+    def test_public_api_surface_is_independent_and_capability_traceable(self) -> None:
+        authority = {
+            "cases": [{"phase": "mesh-primitives", "case": "sphere", "role": "native"}]
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            capabilities_path = root / "capabilities.json"
+            surface_path = root / "api-surface.json"
+            self.write_json(
+                capabilities_path,
+                {
+                    "schema": "freecad-retained-public-capabilities/v1",
+                    "requiredModules": ["Mesh"],
+                    "modules": [
+                        {
+                            "name": "Mesh",
+                            "capabilities": [{"id": "mesh_primitives"}],
+                        }
+                    ],
+                },
+            )
+            self.write_json(
+                surface_path,
+                {
+                    "schema": "freecad-retained-public-api-surface/v1",
+                    "retainedClosureSource": {
+                        "targetClosure": "probe_release_contract.json",
+                        "pruningPlan": "pruning-plan.md",
+                    },
+                    "requiredModules": ["Mesh"],
+                    "apis": [
+                        {
+                            "id": "mesh.sphere",
+                            "module": "Mesh",
+                            "symbol": "Mesh::Sphere::execute",
+                            "publicSurface": "Mesh::Sphere",
+                            "exposure": "DocumentObjectTypeId",
+                            "sourceEvidence": [
+                                "src/Mod/Mesh/App/FeatureMeshSolid.cpp::Sphere::execute"
+                            ],
+                            "runtimeBranches": ["execute sphere"],
+                            "nativeExpressibility": "native_fixture",
+                            "fixtureEvidence": [
+                                {
+                                    "fixture": "mesh-primitives/sphere",
+                                    "level": "target_result",
+                                    "branch": "execute sphere",
+                                }
+                            ],
+                            "disposition": "native_fixture",
+                            "capabilityIds": ["mesh_primitives"],
+                        }
+                    ],
+                },
+            )
+
+            report = retained_coverage.build_public_api_coverage_report(
+                authority,
+                api_surface_path=surface_path,
+                capability_contract_path=capabilities_path,
+                fixture_corpus_closure_status="passed",
+            )
+
+        self.assertEqual("passed", report["apiSurfaceClosure"]["status"])
+        self.assertEqual("passed", report["moduleApiCoverage"]["status"])
+        self.assertEqual("passed", report["fixtureCorpusClosure"]["status"])
+        self.assertEqual("not_evaluated", report["cadCoreRuntimeParity"]["status"])
+
+    def test_public_api_surface_fails_closed_on_unmapped_capability(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            capabilities_path = root / "capabilities.json"
+            surface_path = root / "api-surface.json"
+            self.write_json(
+                capabilities_path,
+                {
+                    "schema": "freecad-retained-public-capabilities/v1",
+                    "requiredModules": ["Mesh"],
+                    "modules": [
+                        {
+                            "name": "Mesh",
+                            "capabilities": [
+                                {"id": "mesh_primitives"},
+                                {"id": "mesh_setops"},
+                            ],
+                        }
+                    ],
+                },
+            )
+            self.write_json(
+                surface_path,
+                {
+                    "schema": "freecad-retained-public-api-surface/v1",
+                    "retainedClosureSource": {
+                        "targetClosure": "probe_release_contract.json",
+                        "pruningPlan": "pruning-plan.md",
+                    },
+                    "requiredModules": ["Mesh"],
+                    "apis": [
+                        {
+                            "id": "mesh.sphere",
+                            "module": "Mesh",
+                            "symbol": "Mesh::Sphere::execute",
+                            "publicSurface": "Mesh::Sphere",
+                            "exposure": "DocumentObjectTypeId",
+                            "sourceEvidence": ["FeatureMeshSolid.cpp::Sphere::execute"],
+                            "runtimeBranches": ["execute sphere"],
+                            "nativeExpressibility": "native_fixture",
+                            "fixtureEvidence": [],
+                            "disposition": "uncovered",
+                            "rationale": "No authority in the focused test.",
+                            "capabilityIds": ["mesh_primitives"],
+                        }
+                    ],
+                },
+            )
+
+            report = retained_coverage.build_public_api_coverage_report(
+                {"cases": []},
+                api_surface_path=surface_path,
+                capability_contract_path=capabilities_path,
+                fixture_corpus_closure_status="passed",
+            )
+
+        self.assertEqual("failed", report["apiSurfaceClosure"]["status"])
+        self.assertTrue(
+            any("Mesh/mesh_setops" in error for error in report["errors"])
+        )
+
     def test_non_cad_smoke_requires_structured_passing_evidence(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             receipt_path = Path(temp_dir) / "Help.json"
@@ -715,7 +844,7 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
             TOOLS
             / "freecad_expected_parity"
             / "reports"
-            / "all-native-check.v1.json"
+            / "producer-reproduction.v1.json"
         )
         self.assertTrue(report_path.is_file())
         checked_in = json.loads(report_path.read_text(encoding="utf-8"))
@@ -767,7 +896,7 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
         )
         self.assertEqual(checked_in, live)
         self.assertEqual("passed", live["fixtureCorpusClosure"]["status"])
-        self.assertEqual("partial", live["moduleApiCoverage"]["status"])
+        self.assertEqual("covered", live["moduleApiCoverage"]["status"])
         self.assertEqual("not_evaluated", live["cadCoreRuntimeParity"]["status"])
 
         modules = {row["name"]: row for row in live["modules"]}
@@ -787,11 +916,47 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
             mesh_capabilities["feature_mesh_transform"]["coverageStatus"],
         )
 
+    def test_checked_in_public_api_report_matches_live_source_denominator(self) -> None:
+        parity_root = TOOLS / "freecad_expected_parity"
+        report_path = parity_root / "reports" / "retained_public_api_coverage.v1.json"
+        surface_path = parity_root / "retained_public_api_surface.v1.json"
+        capabilities_path = parity_root / "retained_public_capabilities.v1.json"
+        closure_path = (
+            parity_root / "reports" / "retained_module_fixture_coverage.v1.json"
+        )
+        self.assertTrue(report_path.is_file())
+        self.assertTrue(surface_path.is_file())
+
+        checked_in = json.loads(report_path.read_text(encoding="utf-8"))
+        closure = json.loads(closure_path.read_text(encoding="utf-8"))
+        authority = audit.build_report(CAD_CORE_ROOT, audit.ROLES_PATH)
+        live = retained_coverage.build_public_api_coverage_report(
+            authority,
+            api_surface_path=surface_path,
+            capability_contract_path=capabilities_path,
+            fixture_corpus_closure_status=closure["coverageStatus"],
+        )
+        self.assertEqual(checked_in, live)
+        self.assertEqual("passed", live["apiSurfaceClosure"]["status"])
+        self.assertEqual(74, live["apiSurfaceClosure"]["apiCount"])
+        self.assertEqual(0, live["apiSurfaceClosure"]["unclassifiedApiCount"])
+        self.assertEqual("partial", live["moduleApiCoverage"]["status"])
+        self.assertEqual("passed", live["fixtureCorpusClosure"]["status"])
+        self.assertEqual("not_evaluated", live["cadCoreRuntimeParity"]["status"])
+        ondsel = next(row for row in live["modules"] if row["name"] == "OndselSolver")
+        matrix_api = next(
+            row
+            for row in ondsel["apis"]
+            if row["id"] == "ondselsolver.full_joint_type_and_degenerate_matrix"
+        )
+        self.assertEqual("covered", matrix_api["coverageStatus"])
+        self.assertEqual("passed", matrix_api["supportMatrixReceipt"]["status"])
+
     def test_checked_in_fixture_phases_are_module_capability_classifications(self) -> None:
         report = audit.build_report(CAD_CORE_ROOT, audit.ROLES_PATH)
         classification = report["phaseClassification"]
         self.assertEqual("passed", classification["status"])
-        self.assertEqual(39, classification["phaseCount"])
+        self.assertEqual(44, classification["phaseCount"])
         self.assertEqual([], classification["errors"])
 
         phases = {row["phase"] for row in classification["phases"]}
@@ -806,9 +971,9 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
         )
         legacy_map = json.loads(legacy_map_path.read_text(encoding="utf-8"))
         self.assertEqual("cad-core.fixture-legacy-phase-map.v1", legacy_map["schemaVersion"])
-        self.assertEqual(783, len(legacy_map["cases"]))
+        self.assertEqual(840, len(legacy_map["cases"]))
         targets = {(row["phase"], row["case"]) for row in legacy_map["cases"]}
-        self.assertEqual(783, len(targets))
+        self.assertEqual(840, len(targets))
         self.assertEqual(
             {(row["phase"], row["case"]) for row in report["cases"]},
             targets,

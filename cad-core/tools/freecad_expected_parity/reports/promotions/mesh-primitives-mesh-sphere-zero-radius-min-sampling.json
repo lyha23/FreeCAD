@@ -1,0 +1,82 @@
+{
+  "case": "mesh-sphere-zero-radius-min-sampling",
+  "phase": "mesh-primitives",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "c732881e6ff5fa48c0f8ed80bf59bee3406b21aba16298794025f706216a0b41",
+    "manifestBeforeSha256": "269a7d9429849a4940a84ec6156db840a7e9073d691886a203bb053308128b77",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-primitives/mesh-sphere-zero-radius-min-sampling/collect.json",
+      "sha256": "f255516464aa2a698b4e347fc93b4fcb61b9f4c6d4234aeab22e004ff9e24552"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-primitives/mesh-sphere-zero-radius-min-sampling.json",
+      "sha256": "e723bafca605f52b25aa8932f7852170f7bcaff59f542a49f215e3d68a79175b"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-primitives/expected/mesh-sphere-zero-radius-min-sampling.freecad.ledger.json",
+      "sha256": "2098c7a525d1753a3149c1915fbe526f43ff49f28d6bd8e17e16ce6d50d0fb3b"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-primitives/expected/mesh-sphere-zero-radius-min-sampling.freecad.json",
+      "sha256": "17e59219e5c49017da8a3a7c63e15f48940ae97e4266d255bbeb71200eb0fbd1"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-primitives/mesh-sphere-zero-radius-min-sampling/repeat2.json",
+      "sha256": "0182d479472e2c8c7be0d1abf4e3c0bf98b7cff3b0bd4fa1201cc8645a006ab1"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-sphere-zero-radius-min-sampling.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere-zero-radius-min-sampling.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-primitives-mesh-sphere-zero-radius-min-sampling.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere-zero-radius-min-sampling.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

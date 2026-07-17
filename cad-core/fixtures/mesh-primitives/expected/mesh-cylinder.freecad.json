@@ -1,0 +1,74 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          4.0,
+          1.5,
+          1.5
+        ],
+        "min": [
+          0.0,
+          -1.5,
+          -1.5
+        ]
+      },
+      "closed": true,
+      "mesh_defects": {
+        "component_count": 1,
+        "has_non_manifolds": false,
+        "has_non_uniform_oriented_facets": false,
+        "has_self_intersections": false,
+        "non_uniform_oriented_facet_count": 0
+      },
+      "mesh_orientation": {
+        "first_facet_normal": [
+          1.0,
+          -0.0,
+          0.0
+        ],
+        "normal_sum": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh_summary": {
+        "triangle_count": 288,
+        "vertex_count": 146
+      },
+      "object": "Cylinder",
+      "topology_counts": {
+        "edges": 432,
+        "faces": 288,
+        "vertices": 146
+      },
+      "volume": 27.553199768066406
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:6c77d4ad3c87ccb209d7702b881a6dd77c89ef02ead4c65541e6dc582cd06a7e",
+    "objects": {
+      "Cylinder": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:700195bc9f67211992cb025dfdc5d48d5b695d4c4eee4d8da66bcd87c94c2007",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "Objects": [
+    {
+      "Name": "Sphere",
+      "TypeId": "Mesh::Sphere",
+      "Properties": {
+        "Radius": 0.0,
+        "Sampling": 0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Sphere"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:feb3ef81d64fb49bd7ad938b22595e6d32e09d3dceabe0288d973ae3377f872d"
+  }
+}

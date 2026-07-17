@@ -1,0 +1,18 @@
+Model:
+  Name: "A2 Fixture Physical"
+  UUID: "a2000000-0000-4000-8000-000000000001"
+  URL: ""
+  Description: "Hermetic A2 material model"
+  DOI: ""
+  Grade:
+    DisplayName: "Grade"
+    Type: "String"
+    Units: ""
+    URL: ""
+    Description: "Fixture grade"
+  Density:
+    DisplayName: "Density"
+    Type: "Float"
+    Units: ""
+    URL: ""
+    Description: "Dimensionless fixture density"

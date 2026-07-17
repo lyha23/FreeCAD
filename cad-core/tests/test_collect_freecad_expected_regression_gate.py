@@ -1616,6 +1616,62 @@ class CollectionReportTests(unittest.TestCase):
         self.assertEqual([("A1", "3"), ("B1", "=left + 4")], sheet.set_calls)
         self.assertEqual([("A1", "left")], sheet.alias_calls)
 
+    def test_spreadsheet_layout_operations_use_public_sheet_api(self) -> None:
+        class Sheet:
+            Name = "Sheet"
+
+            def __init__(self) -> None:
+                self.calls: list[tuple] = []
+
+            def set(self, address: str, content: str) -> None:
+                pass
+
+            def setAlias(self, address: str, alias: str) -> None:
+                pass
+
+            def setStyle(self, cell_range, value, options):
+                self.calls.append(("setStyle", cell_range, value, options))
+
+            def getStyle(self, address):
+                return {"bold"}
+
+            def setColumnWidth(self, column, width):
+                self.calls.append(("setColumnWidth", column, width))
+
+            def getColumnWidth(self, column):
+                return 120
+
+            def getUsedCells(self):
+                return ["A1"]
+
+        collector.ACTIVE_SPREADSHEET_OPERATION_RECEIPTS = {}
+        sheet = Sheet()
+        value = {
+            "PropertyType": "Spreadsheet::PropertySheet",
+            "cells": [{"address": "A1", "content": "3"}],
+            "operations": [
+                {"op": "setStyle", "range": "A1", "value": "bold"},
+                {"op": "setColumnWidth", "column": "A", "width": 120},
+            ],
+        }
+
+        collector.set_spreadsheet_cells(sheet, value)
+
+        self.assertEqual(
+            [
+                ("setStyle", "A1", "bold", "replace"),
+                ("setColumnWidth", "A", 120),
+            ],
+            sheet.calls,
+        )
+        self.assertEqual(
+            ["target_result", "target_result"],
+            [
+                item["evidenceLevel"]
+                for item in collector.ACTIVE_SPREADSHEET_OPERATION_RECEIPTS["Sheet"]
+            ],
+        )
+
     def test_recompute_mutations_run_between_two_native_recomputes(self) -> None:
         class Material:
             UUID = "runtime-uuid"
@@ -1677,6 +1733,177 @@ class CollectionReportTests(unittest.TestCase):
         # FreeCAD FeatureMeshTransform.cpp::Transform::execute() has its mesh-copy and
         # Position transform body commented out and returns StdReturn without a Mesh result.
         self.assertNotIn("Mesh::Transform", collector.SUPPORTED_NATIVE_TYPES)
+
+    def test_mesh_feature_batches_use_one_public_mesh_projection(self) -> None:
+        self.assertLessEqual(
+            {
+                "Mesh::Sphere",
+                "Mesh::Cube",
+                "Mesh::Cone",
+                "Mesh::Cylinder",
+                "Mesh::Ellipsoid",
+                "Mesh::Torus",
+                "Mesh::SetOperations",
+                "Mesh::Feature",
+                "Mesh::FixDefects",
+                "Mesh::FillHoles",
+                "Mesh::FixDeformations",
+                "Mesh::FixDegenerations",
+                "Mesh::FixDuplicatedPoints",
+                "Mesh::FixIndices",
+                "Mesh::FixNonManifolds",
+                "Mesh::RemoveComponents",
+                "Mesh::HarmonizeNormals",
+                "Mesh::FlipNormals",
+                "Mesh::FixDuplicatedFaces",
+            },
+            collector.SUPPORTED_NATIVE_TYPES,
+        )
+
+        class Vector:
+            def __init__(self, x: float, y: float, z: float) -> None:
+                self.x = x
+                self.y = y
+                self.z = z
+
+        class Facet:
+            def __init__(self, normal: Vector) -> None:
+                self.Normal = normal
+
+        class Mesh:
+            CountPoints = 4
+            CountEdges = 6
+            CountFacets = 4
+            Volume = 1.0 / 6.0
+            BoundBox = SimpleNamespace(
+                XMin=0.0,
+                YMin=0.0,
+                ZMin=0.0,
+                XMax=1.0,
+                YMax=1.0,
+                ZMax=1.0,
+            )
+            Facets = [Facet(Vector(0.0, 0.0, -1.0)), Facet(Vector(1.0, 0.0, 0.0))]
+
+            def isSolid(self) -> bool:
+                return True
+
+            def countComponents(self) -> int:
+                return 1
+
+            def hasNonManifolds(self) -> bool:
+                return False
+
+            def hasNonUniformOrientedFacets(self) -> bool:
+                return True
+
+            def hasSelfIntersections(self) -> bool:
+                return False
+
+            def countNonUniformOrientedFacets(self) -> int:
+                return 1
+
+        sphere = SimpleNamespace(
+            Name="Sphere",
+            TypeId="Mesh::Sphere",
+            Mesh=Mesh(),
+            State=[],
+            PropertyList=["Mesh", "Radius", "Sampling"],
+        )
+
+        payload = collector.mesh_feature_summary(sphere)
+
+        self.assertTrue(payload["closed"])
+        self.assertEqual(4, payload["mesh_summary"]["triangle_count"])
+        self.assertEqual(1, payload["mesh_defects"]["component_count"])
+        self.assertEqual(
+            [0.0, 0.0, -1.0],
+            payload["mesh_orientation"]["first_facet_normal"],
+        )
+        self.assertNotIn("native_diagnostic", payload)
+
+    def test_mesh_kernel_property_uses_indexed_public_addfacets_contract(self) -> None:
+        class MeshValue:
+            def __init__(self) -> None:
+                self.calls = []
+
+            def addFacets(self, indexed, check) -> None:
+                self.calls.append((indexed, check))
+
+        mesh_value = MeshValue()
+        feature = SimpleNamespace(Name="Source", Mesh=None)
+        mesh_module = SimpleNamespace(Mesh=lambda: mesh_value)
+        freecad = SimpleNamespace(Vector=lambda x, y, z: (x, y, z))
+        envelope = {
+            "PropertyType": "Mesh::PropertyMeshKernel",
+            "vertices": [[0, 0, 0], [1, 0, 0], [0, 1, 0]],
+            "facets": [[0, 1, 2]],
+            "check": False,
+        }
+
+        with mock.patch.dict(sys.modules, {"Mesh": mesh_module}):
+            collector.set_property(freecad, {}, feature, "Mesh", envelope)
+
+        self.assertIs(mesh_value, feature.Mesh)
+        self.assertEqual(
+            [(([(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (0.0, 1.0, 0.0)], [(0, 1, 2)]), False)],
+            mesh_value.calls,
+        )
+
+        invalid = dict(envelope, facets=[[0, 1, 3]])
+        with self.assertRaisesRegex(collector.UnsupportedFixture, "out of range"):
+            collector.mesh_kernel_property_value(freecad, invalid)
+
+    def test_mesh_defect_projection_keeps_item_local_native_diagnostics(self) -> None:
+        class EmptyMesh:
+            CountPoints = 0
+            CountEdges = 0
+            CountFacets = 0
+            Volume = 0.0
+            BoundBox = SimpleNamespace(
+                XMin=float("inf"),
+                YMin=float("inf"),
+                ZMin=float("inf"),
+                XMax=-float("inf"),
+                YMax=-float("inf"),
+                ZMax=-float("inf"),
+            )
+            Facets = []
+
+            def isSolid(self) -> bool:
+                return False
+
+            def countComponents(self) -> int:
+                return 0
+
+            def hasNonManifolds(self) -> bool:
+                return False
+
+            def hasNonUniformOrientedFacets(self) -> bool:
+                return False
+
+            def hasSelfIntersections(self) -> bool:
+                return False
+
+            def countNonUniformOrientedFacets(self) -> int:
+                return 0
+
+        result = SimpleNamespace(
+            Name="Harmonized",
+            TypeId="Mesh::HarmonizeNormals",
+            Mesh=EmptyMesh(),
+            State=["Invalid"],
+            PropertyList=["Mesh", "Source"],
+            Source=None,
+        )
+
+        payload = collector.mesh_feature_summary(result)
+
+        self.assertEqual([0.0, 0.0, 0.0], payload["bbox"]["min"])
+        self.assertEqual(
+            "mesh_source_missing",
+            payload["native_diagnostic"]["code"],
+        )
 
     def test_stable_subshape_index_order_is_not_a_public_semantic_difference(self) -> None:
         def result_subshape(indexed: str, token: str) -> dict[str, object]:

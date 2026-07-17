@@ -1,0 +1,24 @@
+{
+  "Objects": [
+    {
+      "Name": "Result",
+      "TypeId": "Mesh::HarmonizeNormals",
+      "Properties": {}
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Result"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:8eaa98e8b02f3d8ce833796099f438d61ae1c3283d847996bb4474b1c5fc16f7"
+  }
+}

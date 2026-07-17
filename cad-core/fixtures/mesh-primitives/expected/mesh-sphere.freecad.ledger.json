@@ -1,0 +1,59 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-sphere",
+    "expectedPayloadHash": "sha256:f4fd814b5ab6502f8df3e82eebcd045bc9ef1bae45d2a5349b03d2b0276264c0",
+    "inputHash": "sha256:486e9cf8d02888b866e9b57bbd7a1bec180f37b5076f56247144f6502ebac861",
+    "phase": "mesh-primitives",
+    "topoNamingStateHash": "sha256:7a838c791a49dbb9dd71d07b646c4f98e6cd431ed2a39d46f058418758b1ad7c"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Sphere": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::Sphere"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Sphere": {
+        "covers": [
+          "Sphere"
+        ],
+        "ledgerObject": "Sphere",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:7a838c791a49dbb9dd71d07b646c4f98e6cd431ed2a39d46f058418758b1ad7c",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

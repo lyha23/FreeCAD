@@ -1,0 +1,28 @@
+{
+  "Objects": [
+    {
+      "Name": "Torus",
+      "TypeId": "Mesh::Torus",
+      "Properties": {
+        "Radius1": 4.0,
+        "Radius2": 1.0,
+        "Sampling": 16
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Torus"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:f9d68f1239951b0764e2005839cbecd80fad13a57a705c6d9ecc398abf113534"
+  }
+}

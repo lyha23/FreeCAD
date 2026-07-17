@@ -1,0 +1,131 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "closed": true,
+      "mesh_defects": {
+        "component_count": 1,
+        "has_non_manifolds": false,
+        "has_non_uniform_oriented_facets": false,
+        "has_self_intersections": false,
+        "non_uniform_oriented_facet_count": 0
+      },
+      "mesh_orientation": {
+        "first_facet_normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "normal_sum": [
+          -0.4226497411727905,
+          -0.4226497411727905,
+          -0.4226497411727905
+        ]
+      },
+      "mesh_summary": {
+        "triangle_count": 4,
+        "vertex_count": 4
+      },
+      "object": "Source",
+      "topology_counts": {
+        "edges": 6,
+        "faces": 4,
+        "vertices": 4
+      },
+      "volume": 0.1666666716337204
+    },
+    {
+      "bbox": {
+        "max": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "closed": true,
+      "mesh_defects": {
+        "component_count": 1,
+        "has_non_manifolds": false,
+        "has_non_uniform_oriented_facets": false,
+        "has_self_intersections": false,
+        "non_uniform_oriented_facet_count": 0
+      },
+      "mesh_orientation": {
+        "first_facet_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "normal_sum": [
+          0.4226497411727905,
+          0.4226497411727905,
+          0.4226497411727905
+        ]
+      },
+      "mesh_summary": {
+        "triangle_count": 4,
+        "vertex_count": 4
+      },
+      "object": "Result",
+      "topology_counts": {
+        "edges": 6,
+        "faces": 4,
+        "vertices": 4
+      },
+      "volume": 0.1666666716337204
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:7f81e2a3ea4c7fb978ab5c67831617f72d8983535555ccd85ecdf0a78d0ccf4a",
+    "objects": {
+      "Result": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:a8fdfc2ed27913da808472555d94931287e917caa7a0aba23592d2a1a4e6f0d1",
+        "subshapes": {}
+      },
+      "Source": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:443a09f17cc641a550f12d59055c02e163590fa7085b947d533f6452eb35a897",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

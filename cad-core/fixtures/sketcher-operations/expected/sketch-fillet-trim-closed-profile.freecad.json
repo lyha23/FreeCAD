@@ -1,0 +1,287 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sketch",
+      "object_fields": {
+        "external_curve_count": 0,
+        "external_geometry_count": 0,
+        "external_point_count": 0,
+        "raw_edge_count": 5,
+        "shape": "occt_sketch_shape",
+        "status": "ok"
+      },
+      "sketch_constraints": [
+        {
+          "first": 0,
+          "firstPos": 2,
+          "index": 0,
+          "second": 4,
+          "secondPos": 1,
+          "third": -2000,
+          "thirdPos": 0,
+          "type": "Tangent",
+          "value": -1.5707963267948966
+        },
+        {
+          "first": 1,
+          "firstPos": 1,
+          "index": 1,
+          "second": 4,
+          "secondPos": 2,
+          "third": -2000,
+          "thirdPos": 0,
+          "type": "Tangent",
+          "value": -1.5707963267948966
+        }
+      ],
+      "sketch_external": {
+        "construction_count": 0,
+        "flag_counts": {
+          "Defining": 0,
+          "Detached": 0,
+          "Frozen": 0,
+          "Missing": 0,
+          "Sync": 0
+        },
+        "flags": []
+      },
+      "sketch_geometry": [
+        {
+          "construction": false,
+          "index": 0,
+          "shape": {
+            "bbox": {
+              "max": [
+                9.0,
+                0.0,
+                0.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "length": 9.0,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                9.0,
+                0.0,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomLineSegment"
+        },
+        {
+          "construction": false,
+          "index": 1,
+          "shape": {
+            "bbox": {
+              "max": [
+                10.0,
+                5.0,
+                0.0
+              ],
+              "min": [
+                10.0,
+                0.9999999999999998,
+                0.0
+              ]
+            },
+            "length": 4.0,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                10.0,
+                0.9999999999999998,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomLineSegment"
+        },
+        {
+          "construction": false,
+          "index": 2,
+          "shape": {
+            "bbox": {
+              "max": [
+                10.0,
+                5.0,
+                0.0
+              ],
+              "min": [
+                0.0,
+                5.0,
+                0.0
+              ]
+            },
+            "length": 10.0,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                5.0,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomLineSegment"
+        },
+        {
+          "construction": false,
+          "index": 3,
+          "shape": {
+            "bbox": {
+              "max": [
+                0.0,
+                5.0,
+                0.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "length": 5.0,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                0.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomLineSegment"
+        },
+        {
+          "construction": false,
+          "index": 4,
+          "shape": {
+            "bbox": {
+              "max": [
+                10.0,
+                0.9999999999999998,
+                0.0
+              ],
+              "min": [
+                9.0,
+                0.0,
+                0.0
+              ]
+            },
+            "length": 1.5707963267948966,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                9.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.9999999999999998,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomArcOfCircle"
+        }
+      ],
+      "sketch_internal": {
+        "internal_counts": {
+          "edges": 5,
+          "faces": 1,
+          "vertices": 5
+        },
+        "profile_ready": true,
+        "raw_edge_count": 5,
+        "shape": "occt_internal_shape"
+      },
+      "sketch_operations": [
+        {
+          "evidenceLevel": "target_result",
+          "index": 0,
+          "operation": "fillet",
+          "result": null,
+          "stage": "initial"
+        }
+      ],
+      "sketch_solver": {
+        "conflictingConstraints": [],
+        "constraintCount": 2,
+        "degreesOfFreedom": 15,
+        "fullyConstrained": false,
+        "geometryCount": 5,
+        "malformedConstraints": [],
+        "openVertexCount": 0,
+        "partiallyRedundantConstraints": [],
+        "redundantConstraints": []
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:495f11b606bc36ae54043e612b8828f1782d2d7ab0d81d0cc978c2390bf0cec3",
+    "objects": {
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:ee23830c420b5dd8c48776e6ab5d2493c2c5d5cbe6a9430dd1a483bdd4186123",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

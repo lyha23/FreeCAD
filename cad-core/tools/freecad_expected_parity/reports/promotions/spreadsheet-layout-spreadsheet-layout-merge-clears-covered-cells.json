@@ -1,0 +1,82 @@
+{
+  "case": "spreadsheet-layout-merge-clears-covered-cells",
+  "phase": "spreadsheet-layout",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "b0e8345059de37386e3e6ac2926fe569aeeec1705ce941c4f9b6ae227fa8df33"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "ed609a8871d88eaa837ce1e5a1a5c3676bbb2be8e54699e9b937e74ca3ceeebb",
+    "manifestBeforeSha256": "b9a368237dc38d498b543c1fcfa3ab475d938ec4a2bf0c17f42731d004794aaa",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-merge-clears-covered-cells/run-a.report.json",
+      "sha256": "879ff5363a65ef683aef5f8a40c10e2172bbd1a7ac824a3a37268a54e06c4c1a"
+    },
+    "input": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-merge-clears-covered-cells/run-a/spreadsheet-layout/spreadsheet-layout-merge-clears-covered-cells.json",
+      "sha256": "755aa49c74bfe7f503a9583bf6a0295c2d87eebb46c1760df636642d001d451f"
+    },
+    "ledger": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-merge-clears-covered-cells/run-a/spreadsheet-layout/expected/spreadsheet-layout-merge-clears-covered-cells.freecad.ledger.json",
+      "sha256": "b628a8743a433469a832f69891ae4066128581966ccdcd2d26a80d452ac05f4a"
+    },
+    "publicExpected": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-merge-clears-covered-cells/run-a/spreadsheet-layout/expected/spreadsheet-layout-merge-clears-covered-cells.freecad.json",
+      "sha256": "4f25623347b93808b3728e7ab7e2b8b2dce43bb0d486b9a8db3b9e5f5d8e5b3d"
+    },
+    "repeatReport": {
+      "path": "/private/tmp/spreadsheet-layout-staging/reports/spreadsheet-layout-merge-clears-covered-cells.json",
+      "sha256": "0c37a7fab0e031a36c52ebd45877ee0a23a1852504da0b3dcdf774aebd825613"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-merge-clears-covered-cells.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-merge-clears-covered-cells.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/spreadsheet-layout-spreadsheet-layout-merge-clears-covered-cells.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-merge-clears-covered-cells.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "Objects": [
+    {
+      "Name": "Source",
+      "TypeId": "Mesh::Feature",
+      "Properties": {
+        "Mesh": {
+          "PropertyType": "Mesh::PropertyMeshKernel",
+          "vertices": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ],
+          "facets": [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              3,
+              4,
+              5
+            ]
+          ],
+          "check": false
+        }
+      }
+    },
+    {
+      "Name": "Result",
+      "TypeId": "Mesh::FixDuplicatedPoints",
+      "Properties": {
+        "Source": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Source"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Source",
+      "Result"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:761caecf084fb5ee92f00c749fda453dcbf0c2542873e35d8b136e5f0e858bfc"
+  }
+}

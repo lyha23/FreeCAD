@@ -1,0 +1,39 @@
+{
+  "Objects": [
+    {
+      "Name": "Source",
+      "TypeId": "Mesh::Import",
+      "Properties": {
+        "FileName": "fixtures/_assets/unit-tetrahedron.stl"
+      }
+    },
+    {
+      "Name": "Result",
+      "TypeId": "Mesh::FillHoles",
+      "Properties": {
+        "FillupHolesOfLength": 0,
+        "MaxArea": 2.0,
+        "Source": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Source"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Source",
+      "Result"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:c09c0713886181623bbf8e1b1367005d9e43f0dec394e0a2c7b6161bd47f1282"
+  }
+}

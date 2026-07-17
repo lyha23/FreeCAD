@@ -1,0 +1,48 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "center": [
+              0,
+              0
+            ],
+            "endAngle": 1.5707963267948966,
+            "kind": "ArcOfCircle",
+            "radius": 2,
+            "startAngle": 0
+          }
+        ],
+        "Operations": [
+          {
+            "endpoint": "end",
+            "expectedOutcome": "target_result",
+            "geometryId": 0,
+            "increment": 1.5707963267948966,
+            "op": "extend"
+          }
+        ]
+      },
+      "TypeId": "Sketcher::SketchObject"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:7fed53cdd7427241a4cb29477d4368f2abb0512d6ff2696c3ee960d9b26558b2",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

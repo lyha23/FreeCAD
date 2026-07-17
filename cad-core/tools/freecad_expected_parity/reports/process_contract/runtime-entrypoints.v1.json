@@ -1,0 +1,1165 @@
+{
+  "boundaryExceptions": [
+    {
+      "branch": "MainCmd init Base::Exception -> return 100",
+      "classification": "source_backed_exception_unless_native_exit_100_observed",
+      "receiptCase": "maincmd-init-base-exception-probe"
+    },
+    {
+      "branch": "MainCmd run Base::Exception/unknown -> return 1",
+      "classification": "source_backed_exception",
+      "reason": "The public script path catches and reports each file exception before MainCmd's top-level catch, then completes normal destruction with exit 0.",
+      "receiptCases": [
+        "maincmd-run-base-exception",
+        "maincmd-run-unknown-exception"
+      ]
+    },
+    {
+      "branch": "FreeCADMainPy host embedding, interpreter finalize/reinitialize, and forced-signal shutdown",
+      "classification": "protocol_only",
+      "reason": "Host-owned multi-interpreter/finalize and signal-forced termination are outside the deterministic FreeCADCmd product boundary."
+    }
+  ],
+  "cadCoreRuntimeParity": "not_evaluated",
+  "caseCount": 9,
+  "cases": [
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "freecadmaincmd.command_line_error_and_shutdown_modes"
+      ],
+      "group": "maincmd",
+      "id": "maincmd-unknown-option",
+      "runs": [
+        {
+          "caseId": "maincmd-unknown-option",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "--a5-unknown-program-option"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 1,
+            "signal": null,
+            "stderr": "unrecognised option '--a5-unknown-program-option'\n\nAllowed options:\n\nGeneric options:\n  -v [ --version ]          Prints version string\n  --verbose                 Prints verbose version string\n  -h [ --help ]             Prints help message\n  -c [ --console ]          Starts in console mode\n  --response-file arg       Can be specified with '@name', too\n  --dump-config             Dumps configuration\n  --get-config arg          Prints the value of the requested configuration key\n  --set-config arg          Sets the value of a configuration key\n  --keep-deprecated-paths   If set then config files are kept on the old \n                            location\n\nConfiguration:\n  -l [ --write-log ]        Writes FreeCAD.log to the user directory.\n  --log-file arg            Unlike --write-log this allows logging to an \n                            arbitrary file\n  -u [ --user-cfg ] arg     User config file to load/save user settings\n  -s [ --system-cfg ] arg   System config file to load/save system settings\n  -t [ --run-test ] arg     Run a given test case (use 0 (zero) to run all \n                            tests). If no argument is provided then return list\n                            of all available tests.\n  -r [ --run-open ] arg     Run a given test case (use 0 (zero) to run all \n                            tests). If no argument is provided then return list\n                            of all available tests.  Keeps UI open after \n                            test(s) complete.\n  -M [ --module-path ] arg  Additional module paths\n  -E [ --macro-path ] arg   Additional macro paths\n  -P [ --python-path ] arg  Additional python paths\n  --disable-addon arg       Disable a given addon.\n  --single-instance         Allow to run a single instance of the application\n  --safe-mode               Force enable safe mode\n  --pass arg                Ignores the following arguments and pass them \n                            through to be used by a script\n\n",
+            "stdout": "",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": null,
+          "status": "passed"
+        },
+        {
+          "caseId": "maincmd-unknown-option",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "--a5-unknown-program-option"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 1,
+            "signal": null,
+            "stderr": "unrecognised option '--a5-unknown-program-option'\n\nAllowed options:\n\nGeneric options:\n  -v [ --version ]          Prints version string\n  --verbose                 Prints verbose version string\n  -h [ --help ]             Prints help message\n  -c [ --console ]          Starts in console mode\n  --response-file arg       Can be specified with '@name', too\n  --dump-config             Dumps configuration\n  --get-config arg          Prints the value of the requested configuration key\n  --set-config arg          Sets the value of a configuration key\n  --keep-deprecated-paths   If set then config files are kept on the old \n                            location\n\nConfiguration:\n  -l [ --write-log ]        Writes FreeCAD.log to the user directory.\n  --log-file arg            Unlike --write-log this allows logging to an \n                            arbitrary file\n  -u [ --user-cfg ] arg     User config file to load/save user settings\n  -s [ --system-cfg ] arg   System config file to load/save system settings\n  -t [ --run-test ] arg     Run a given test case (use 0 (zero) to run all \n                            tests). If no argument is provided then return list\n                            of all available tests.\n  -r [ --run-open ] arg     Run a given test case (use 0 (zero) to run all \n                            tests). If no argument is provided then return list\n                            of all available tests.  Keeps UI open after \n                            test(s) complete.\n  -M [ --module-path ] arg  Additional module paths\n  -E [ --macro-path ] arg   Additional macro paths\n  -P [ --python-path ] arg  Additional python paths\n  --disable-addon arg       Disable a given addon.\n  --single-instance         Allow to run a single instance of the application\n  --safe-mode               Force enable safe mode\n  --pass arg                Ignores the following arguments and pass them \n                            through to be used by a script\n\n",
+            "stdout": "",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": null,
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Main/MainCmd.cpp::main init UnknownProgramOption=1, ProgramInformation=0, Base::Exception=100",
+        "src/Main/MainCmd.cpp::main run SystemExit=specified, Base/unknown=1, normal Application::destruct=0"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "freecadmaincmd.command_line_error_and_shutdown_modes"
+      ],
+      "group": "maincmd",
+      "id": "maincmd-program-information",
+      "runs": [
+        {
+          "caseId": "maincmd-program-information",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "--version"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0 Revision: 20260519 (Git shallow)\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": null,
+          "status": "passed"
+        },
+        {
+          "caseId": "maincmd-program-information",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "--version"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0 Revision: 20260519 (Git shallow)\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": null,
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Main/MainCmd.cpp::main init UnknownProgramOption=1, ProgramInformation=0, Base::Exception=100",
+        "src/Main/MainCmd.cpp::main run SystemExit=specified, Base/unknown=1, normal Application::destruct=0"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "freecadbase.console_and_exception_surfaces"
+      ],
+      "group": "base",
+      "id": "base-console-observer",
+      "runs": [
+        {
+          "caseId": "base-console-observer",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"base-console-observer\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "A5-CONSOLE-WARNING\nA5-CONSOLE-ERROR\n",
+            "stdout": "runtime process contract: case=base-console-observer status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\nA5-CONSOLE-MESSAGE\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "emitted": [
+                "A5-CONSOLE-MESSAGE",
+                "A5-CONSOLE-WARNING",
+                "A5-CONSOLE-ERROR"
+              ],
+              "observers": [
+                "Console"
+              ],
+              "originalStatus": {
+                "Err": true,
+                "Msg": true,
+                "Wrn": true
+              },
+              "restored": true,
+              "restoredStatus": {
+                "Err": true,
+                "Msg": true,
+                "Wrn": true
+              },
+              "selectedObserver": "Console"
+            },
+            "case": "base-console-observer",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "base-console-observer",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"base-console-observer\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "A5-CONSOLE-WARNING\nA5-CONSOLE-ERROR\n",
+            "stdout": "runtime process contract: case=base-console-observer status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\nA5-CONSOLE-MESSAGE\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "emitted": [
+                "A5-CONSOLE-MESSAGE",
+                "A5-CONSOLE-WARNING",
+                "A5-CONSOLE-ERROR"
+              ],
+              "observers": [
+                "Console"
+              ],
+              "originalStatus": {
+                "Err": true,
+                "Msg": true,
+                "Wrn": true
+              },
+              "restored": true,
+              "restoredStatus": {
+                "Err": true,
+                "Msg": true,
+                "Wrn": true
+              },
+              "selectedObserver": "Console"
+            },
+            "case": "base-console-observer",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Base/Console.cpp::ConsoleSingleton::{sPyMessage,sPyWarning,sPyError,sPyGetObservers,sPySetStatus,sPyGetStatus}",
+        "src/Base/PyException.cpp::pyThrowWrappedBaseException"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "freecadbase.console_and_exception_surfaces"
+      ],
+      "group": "base",
+      "id": "base-python-exception-translation",
+      "runs": [
+        {
+          "caseId": "base-python-exception-translation",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"base-python-exception-translation\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "runtime process contract: case=base-python-exception-translation status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "observerStillReadable": true,
+              "unknownObserver": {
+                "message": "Unknown logger type",
+                "type": "FreeCADError"
+              },
+              "unknownType": {
+                "message": "Unknown message type (use 'Log', 'Err', 'Wrn', 'Msg', 'Critical' or 'Notification')",
+                "type": "FreeCADError"
+              }
+            },
+            "case": "base-python-exception-translation",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "base-python-exception-translation",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"base-python-exception-translation\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "runtime process contract: case=base-python-exception-translation status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "observerStillReadable": true,
+              "unknownObserver": {
+                "message": "Unknown logger type",
+                "type": "FreeCADError"
+              },
+              "unknownType": {
+                "message": "Unknown message type (use 'Log', 'Err', 'Wrn', 'Msg', 'Critical' or 'Notification')",
+                "type": "FreeCADError"
+              }
+            },
+            "case": "base-python-exception-translation",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Base/Console.cpp::ConsoleSingleton::{sPyMessage,sPyWarning,sPyError,sPyGetObservers,sPySetStatus,sPyGetStatus}",
+        "src/Base/PyException.cpp::pyThrowWrappedBaseException"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "freecadmaincmd.command_line_error_and_shutdown_modes"
+      ],
+      "group": "maincmd",
+      "id": "maincmd-system-exit",
+      "runs": [
+        {
+          "caseId": "maincmd-system-exit",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"maincmd-system-exit\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 23,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "case": "maincmd-system-exit",
+              "triggerReady": true
+            },
+            "case": "maincmd-system-exit",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "maincmd-system-exit",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"maincmd-system-exit\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 23,
+            "signal": null,
+            "stderr": "",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "case": "maincmd-system-exit",
+              "triggerReady": true
+            },
+            "case": "maincmd-system-exit",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Main/MainCmd.cpp::main init UnknownProgramOption=1, ProgramInformation=0, Base::Exception=100",
+        "src/Main/MainCmd.cpp::main run SystemExit=specified, Base/unknown=1, normal Application::destruct=0"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "freecadmaincmd.command_line_error_and_shutdown_modes"
+      ],
+      "group": "maincmd",
+      "id": "maincmd-run-base-exception",
+      "runs": [
+        {
+          "caseId": "maincmd-run-base-exception",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"maincmd-run-base-exception\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "Exception while processing file: <CAD_CORE>/tools/collect_freecad_process_contract.py [Unknown logger type]\n",
+            "stdout": "runtime process contract: case=maincmd-run-base-exception status=passed\nruntime process contract: case=maincmd-run-base-exception status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "case": "maincmd-run-base-exception",
+              "triggerReady": true
+            },
+            "case": "maincmd-run-base-exception",
+            "processTranslation": {
+              "closeCondition": "A safe public argv or script entry bypasses the per-file exception isolation in Application::runApplication and reaches the corresponding MainCmd top-level catch.",
+              "fileBoundaryObserved": true,
+              "observedExitCode": 0,
+              "sourceEvidence": "src/Main/MainCmd.cpp::main run Base::Exception/unknown catches exit 1",
+              "topLevelMainCmdCatch": "source_backed_exception"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "maincmd-run-base-exception",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"maincmd-run-base-exception\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "Exception while processing file: <CAD_CORE>/tools/collect_freecad_process_contract.py [Unknown logger type]\n",
+            "stdout": "runtime process contract: case=maincmd-run-base-exception status=passed\nruntime process contract: case=maincmd-run-base-exception status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "case": "maincmd-run-base-exception",
+              "triggerReady": true
+            },
+            "case": "maincmd-run-base-exception",
+            "processTranslation": {
+              "closeCondition": "A safe public argv or script entry bypasses the per-file exception isolation in Application::runApplication and reaches the corresponding MainCmd top-level catch.",
+              "fileBoundaryObserved": true,
+              "observedExitCode": 0,
+              "sourceEvidence": "src/Main/MainCmd.cpp::main run Base::Exception/unknown catches exit 1",
+              "topLevelMainCmdCatch": "source_backed_exception"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Main/MainCmd.cpp::main init UnknownProgramOption=1, ProgramInformation=0, Base::Exception=100",
+        "src/Main/MainCmd.cpp::main run SystemExit=specified, Base/unknown=1, normal Application::destruct=0"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "freecadmaincmd.command_line_error_and_shutdown_modes"
+      ],
+      "group": "maincmd",
+      "id": "maincmd-run-unknown-exception",
+      "runs": [
+        {
+          "caseId": "maincmd-run-unknown-exception",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"maincmd-run-unknown-exception\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "Exception while processing file: <CAD_CORE>/tools/collect_freecad_process_contract.py [A5 controlled unknown run-phase exception]\n",
+            "stdout": "runtime process contract: case=maincmd-run-unknown-exception status=passed\nruntime process contract: case=maincmd-run-unknown-exception status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "case": "maincmd-run-unknown-exception",
+              "triggerReady": true
+            },
+            "case": "maincmd-run-unknown-exception",
+            "processTranslation": {
+              "closeCondition": "A safe public argv or script entry bypasses the per-file exception isolation in Application::runApplication and reaches the corresponding MainCmd top-level catch.",
+              "fileBoundaryObserved": true,
+              "observedExitCode": 0,
+              "sourceEvidence": "src/Main/MainCmd.cpp::main run Base::Exception/unknown catches exit 1",
+              "topLevelMainCmdCatch": "source_backed_exception"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "maincmd-run-unknown-exception",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"maincmd-run-unknown-exception\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "Exception while processing file: <CAD_CORE>/tools/collect_freecad_process_contract.py [A5 controlled unknown run-phase exception]\n",
+            "stdout": "runtime process contract: case=maincmd-run-unknown-exception status=passed\nruntime process contract: case=maincmd-run-unknown-exception status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "case": "maincmd-run-unknown-exception",
+              "triggerReady": true
+            },
+            "case": "maincmd-run-unknown-exception",
+            "processTranslation": {
+              "closeCondition": "A safe public argv or script entry bypasses the per-file exception isolation in Application::runApplication and reaches the corresponding MainCmd top-level catch.",
+              "fileBoundaryObserved": true,
+              "observedExitCode": 0,
+              "sourceEvidence": "src/Main/MainCmd.cpp::main run Base::Exception/unknown catches exit 1",
+              "topLevelMainCmdCatch": "source_backed_exception"
+            },
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Main/MainCmd.cpp::main init UnknownProgramOption=1, ProgramInformation=0, Base::Exception=100",
+        "src/Main/MainCmd.cpp::main run SystemExit=specified, Base/unknown=1, normal Application::destruct=0"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "freecadmainpy.embedded_python_entry"
+      ],
+      "group": "mainpy",
+      "id": "mainpy-import-identity-shutdown",
+      "runs": [
+        {
+          "caseId": "mainpy-import-identity-shutdown",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "normalizedLog": "Log: Exiting on purpose\nLog: FreeCAD terminating...\nLog: Saving system parameter...done\nLog: Saving user parameter...done",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "--log-file",
+              "<CASE_ROOT>/FreeCAD.log",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"mainpy-import-identity-shutdown\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "runtime process contract: case=mainpy-import-identity-shutdown status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "moduleName": "FreeCAD",
+              "sameAsSysModules": true,
+              "sameObject": true,
+              "shutdownPath": "return-to-MainCmd-normal-destruction",
+              "version": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267"
+            },
+            "case": "mainpy-import-identity-shutdown",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "mainpy-import-identity-shutdown",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "normalizedLog": "Log: Exiting on purpose\nLog: FreeCAD terminating...\nLog: Saving system parameter...done\nLog: Saving user parameter...done",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "--log-file",
+              "<CASE_ROOT>/FreeCAD.log",
+              "<CAD_CORE>/tools/collect_freecad_process_contract.py",
+              "--pass",
+              "__freecad_runtime_process_contract_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_PROCESS_CONTRACT_ARGS_JSON": "[\"--inner-case\", \"mainpy-import-identity-shutdown\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "runtime process contract: case=mainpy-import-identity-shutdown status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "moduleName": "FreeCAD",
+              "sameAsSysModules": true,
+              "sameObject": true,
+              "shutdownPath": "return-to-MainCmd-normal-destruction",
+              "version": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267"
+            },
+            "case": "mainpy-import-identity-shutdown",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Main/MainPy.cpp::PyInit_FreeCAD"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "source_backed_exception",
+      "evidenceFor": [
+        "freecadmaincmd.command_line_error_and_shutdown_modes"
+      ],
+      "group": "maincmd",
+      "id": "maincmd-init-base-exception-probe",
+      "runs": [
+        {
+          "caseId": "maincmd-init-base-exception-probe",
+          "coverageOutcome": "source_backed_exception",
+          "label": "run-1",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "PYTHONHOME": "<CASE_ROOT>/missing-python-home",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": ">>> \n",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n[FreeCAD Console mode <Use Ctrl-D (i.e. EOF) to exit.>]\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false
+            },
+            "attemptedArgv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg"
+            ],
+            "attemptedEnvironment": {
+              "PYTHONHOME": "<MISSING_PYTHON_HOME>"
+            },
+            "case": "maincmd-init-base-exception-probe",
+            "closeCondition": "A safe deterministic argv/env trigger reaches MainCmd's init Base::Exception catch and exits 100 on the release producer.",
+            "expected": {
+              "exitCode": 100
+            },
+            "sourceEvidence": "src/Main/MainCmd.cpp::main init UnknownProgramOption=1, ProgramInformation=0, Base::Exception=100",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "maincmd-init-base-exception-probe",
+          "coverageOutcome": "source_backed_exception",
+          "label": "run-2",
+          "normalizedLog": null,
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin",
+              "PYTHONHOME": "<CASE_ROOT>/missing-python-home",
+              "TMPDIR": "<CASE_ROOT>/user-temp"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": ">>> \n",
+            "stdout": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n[FreeCAD Console mode <Use Ctrl-D (i.e. EOF) to exit.>]\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false
+            },
+            "attemptedArgv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg"
+            ],
+            "attemptedEnvironment": {
+              "PYTHONHOME": "<MISSING_PYTHON_HOME>"
+            },
+            "case": "maincmd-init-base-exception-probe",
+            "closeCondition": "A safe deterministic argv/env trigger reaches MainCmd's init Base::Exception catch and exits 100 on the release producer.",
+            "expected": {
+              "exitCode": 100
+            },
+            "sourceEvidence": "src/Main/MainCmd.cpp::main init UnknownProgramOption=1, ProgramInformation=0, Base::Exception=100",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Main/MainCmd.cpp::main init UnknownProgramOption=1, ProgramInformation=0, Base::Exception=100",
+        "src/Main/MainCmd.cpp::main run SystemExit=specified, Base/unknown=1, normal Application::destruct=0"
+      ],
+      "status": "passed"
+    }
+  ],
+  "contractId": "process-contract/runtime-entrypoints",
+  "environmentPolicy": {
+    "caseLocal": [
+      "FREECAD_USER_HOME",
+      "FREECAD_USER_DATA",
+      "FREECAD_USER_TEMP",
+      "TMPDIR",
+      "FREECAD_PROCESS_CONTRACT_ARGS_JSON"
+    ],
+    "fixed": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin"
+    },
+    "inheritedAllowlist": [
+      "SYSTEMROOT"
+    ],
+    "probeOnly": [
+      "PYTHONHOME"
+    ]
+  },
+  "errors": [],
+  "manifestCaseCount": 9,
+  "normalization": {
+    "lineEndings": "CRLF to LF",
+    "replacements": {
+      "cadCoreRoot": "<CAD_CORE>",
+      "repositoryRoot": "<REPO>",
+      "temporaryRoot": "<TMP>"
+    }
+  },
+  "producer": {
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "requestedPath": "/Users/li/.cargo/bin/FreeCADCmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+  },
+  "repeat": 2,
+  "repeatStatus": "passed",
+  "resources": [
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/runtime_entrypoints/manifest.v1.json",
+      "sha256": "116307675917921fbf56bd98e62b1962efc813d496870866c8c635b9e7fa5f79"
+    }
+  ],
+  "runner": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contract.py",
+    "sha256": "659fb29f06f6b967003bc7f7c35f2eb8af41be2157ad2dde94cb1fe063b76c41"
+  },
+  "schema": "freecad-native-process-contract/v1",
+  "status": "passed",
+  "tool": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_process_contract.py",
+    "sha256": "267deff4f0d2bcbce1b6dcacbcbfcaba9f2ad9d4bac481af1286f5834f2fa69e"
+  }
+}

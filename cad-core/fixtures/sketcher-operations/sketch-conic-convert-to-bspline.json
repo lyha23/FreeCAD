@@ -1,0 +1,47 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "center": [
+              0,
+              0
+            ],
+            "endAngle": 1.5707963267948966,
+            "kind": "ArcOfEllipse",
+            "majorRadius": 5,
+            "minorRadius": 3,
+            "startAngle": 0
+          }
+        ],
+        "Operations": [
+          {
+            "expectedOutcome": "target_result",
+            "geometryId": 0,
+            "op": "convertToNURBS"
+          }
+        ]
+      },
+      "TypeId": "Sketcher::SketchObject"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:cab81b2ba100594d36a4dd18a668fca194480fed6e8196fad0e6c9492657213c",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

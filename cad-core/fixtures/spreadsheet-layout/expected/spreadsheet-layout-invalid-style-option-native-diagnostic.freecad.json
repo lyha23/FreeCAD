@@ -1,0 +1,65 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sheet",
+      "object_fields": {
+        "cell_count": 1,
+        "shape": "spreadsheet",
+        "status": "ok"
+      },
+      "spreadsheet": {
+        "cells": [
+          {
+            "address": "A1",
+            "alias": null,
+            "content": "'Still valid",
+            "value": "Still valid"
+          }
+        ],
+        "layoutOperations": [
+          {
+            "arguments": {
+              "options": "invalid-option",
+              "range": "A1",
+              "value": "bold"
+            },
+            "evidenceLevel": "native_diagnostic",
+            "index": 0,
+            "nativeDiagnostic": {
+              "code": "spreadsheet_setstyle_failed",
+              "exceptionType": "ValueError",
+              "message": "Optional parameter must be either 'replace', 'add', 'remove', or 'invert'"
+            },
+            "operation": "setStyle",
+            "stage": "initial"
+          }
+        ]
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:97c3713db53f81362cf910fe79c6bd1db558c9908652f5cb3ce30b35984ff876",
+    "objects": {
+      "Sheet": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8ab4c0da5799d366bb68ca69cbf70636dd6028b7d1a38ee03db6850519d23cc5",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

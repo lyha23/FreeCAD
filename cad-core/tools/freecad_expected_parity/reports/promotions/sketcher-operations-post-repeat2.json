@@ -1,0 +1,1935 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "52154c1aff0c64aaca09c50d1d0ac6c4a1f0f219a130218712408bb83a947a0b"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 23,
+    "entries": [
+      {
+        "case": "sketch-block-after-copy-recompute-update",
+        "fixtureSha256": "abc09eadcd61809488f09b6f727b0b4ece58b02ed8ce2a994089d380f59ecd8a",
+        "ledgerSha256": "f7ef3d033427207ab2d6172cbd9ed1b68bf250887ed45653397e2fad3bce64cc",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "020ecbee52847e4528af4dbf675edba068e9f8dcaac8519eb87e9750d5137e74"
+      },
+      {
+        "case": "sketch-bspline-degree-knot-recompute-update",
+        "fixtureSha256": "b920a08634b48aad36f9823244cdfed04db132e8f19ef43dc5e30cada070c490",
+        "ledgerSha256": "d3e9c9c61b9933afc8648ec93d0910c2b1d1c13bad232ed54ee40296d43d311b",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "8f9c31f6898d70882468199f6830123ecc6bcbd89b370722fd70fe8c0a27801d"
+      },
+      {
+        "case": "sketch-bspline-invalid-knot-native-diagnostic",
+        "fixtureSha256": "e0b36e11cb4a1d67e94423427766a6d1fdf20ab84cedd4e6e73f6e6f03b3c8d9",
+        "ledgerSha256": "41fcecbe02279cec011ea0f52ab2e87d0a41118ca2bf15a4601fbf8379f2163b",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "3719b120930deafbee12fc607df94ca1b80022fbf3ac7e907a91e5475adf49d7"
+      },
+      {
+        "case": "sketch-bspline-knot-multiplicity",
+        "fixtureSha256": "20d526f92aaf6406577e5fc8341b406830b2b4504268c1637990792e59b8c9f9",
+        "ledgerSha256": "dd8b67083888e91f3f60db87d9b077fd93d279eabad17cc6d1ee32f50db19f9e",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "07c3679637b9724a57f040f532f1214c4a8b51a88ca2db35c217d4140b238d97"
+      },
+      {
+        "case": "sketch-clone-conic-arc",
+        "fixtureSha256": "d97ec2dc5cd11f6895edddc16c4b6caec6b701ef5d55502a5ac69d93289d5177",
+        "ledgerSha256": "aa0739acf0fc016a51e5106efbeead3782900ba00f45db95ddb55fe9bae6e108",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "b00606f1d1e2c3bd067843ece48d0992e129b556e1a2976cebfa06b62d3605cf"
+      },
+      {
+        "case": "sketch-clone-line-dimensional-constraint",
+        "fixtureSha256": "1a0b7bb5d9327501c92ebc674120457cfb6f5e6df3537b56f7b83c58758f921a",
+        "ledgerSha256": "6115eba0318c37c11c936c0c8500d2d41e0366ac902827369113d532ff462981",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "f1b09b68bb86ac4fa4b67b703bb786eda8047c38ed0686d147e20723a88f5d61"
+      },
+      {
+        "case": "sketch-conic-convert-to-bspline",
+        "fixtureSha256": "e70400d3f2c83dc7465df59a1ca1f30f4e0173cb083bef536fd0265a13ac0d52",
+        "ledgerSha256": "129dafc3ce625e2f86147a1991344a1c3873b07093999840b1002cd1f5827b1e",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "f5ad98169be34ac88ac616cf39444eb246c09cf1be9f934a1e943d04fb5ec59c"
+      },
+      {
+        "case": "sketch-conic-expose-internal-geometry",
+        "fixtureSha256": "a575800838516e6112fd5f2172d7b98f6afbb0c64b89a5082703e4528961ae2a",
+        "ledgerSha256": "cbdc6385b907ff0116215874542b225db2f6423b4b8302f2189bb8ee69ea9fa8",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "bb562c2ab3d1c89424e3ce274fac40742400e526097f7d3a6fc0fd4ed7a5a0e8"
+      },
+      {
+        "case": "sketch-extend-arc",
+        "fixtureSha256": "2cce306e73b5c46b0449f92f0bf6119e3c1fa0afe9611d320088ce52db862ff0",
+        "ledgerSha256": "2317b609fc219e4191f7de2ccae38374084e1145c81b1067de672d73d1c56088",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "af2bc7a279403a34090d6e756cd5479d13cd66ab4515f1c0a61e846c132aebb7"
+      },
+      {
+        "case": "sketch-extend-conic-native-diagnostic",
+        "fixtureSha256": "67032f705e2fb1f45441b8fd25286e9cc1c8526ceb0a4e4ce8248da2307ffe17",
+        "ledgerSha256": "2b654912b6a7354df0634752e4645b7b03a1d605b3b8b9b698fd2aa36029e45b",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "1c697875efcff8ceda0b7430f5e99d3baf5286a2758a814fd577cba356efa407"
+      },
+      {
+        "case": "sketch-extend-line-recompute-update",
+        "fixtureSha256": "41185cae193ef172de8f0a8d8006fee1fb1264b6e19a4b99673375fad6bc7abb",
+        "ledgerSha256": "63f10a6fe9806eb27be99795478ad00983b17b59e72a73ec97e4924aef702f09",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "41ab090da3eb8176704b039e9af03e9e674d8666b9bb699a94f4e6c00911d77e"
+      },
+      {
+        "case": "sketch-extend-line-to-degenerate-boundary",
+        "fixtureSha256": "12eeb739752cb1140f65be7f856bd2f328d64dabb0c3280ed96c41bf4da85eba",
+        "ledgerSha256": "a8763c2433c67e470dfbf3f376955322d977a6b2e36603942f2a71ed716012cb",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "665269873de39a53b8e520fb9738b1450aef8a6e6f895ac6524ed27bf9e63817"
+      },
+      {
+        "case": "sketch-fillet-chamfer",
+        "fixtureSha256": "6678f4df2e935b2a4685ab31a3e994869860ebcb02e47ea37fb6edc92f39171a",
+        "ledgerSha256": "434aa5f68ff9d650417e54aca38c72eba33b8ddf8aa73174fec282929f30a0af",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "87f8c1bf091c18145669a1777a28fa2a2214aae461ca41841fa984c50861da07"
+      },
+      {
+        "case": "sketch-fillet-create-corner",
+        "fixtureSha256": "6cb2c8dccad93f2c1f87000d2ea74c1b06de69444d903f2ff3008424ca8aef6f",
+        "ledgerSha256": "1ca9d1f8c4b656476b31eace0432087108c950fe74e8860740ff9394b937b2e4",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "1cd7d62aeb50e874b68da9fbe49032a1380fdcdd28bef87f788f8ae669d50f8e"
+      },
+      {
+        "case": "sketch-fillet-invalid-geometry-pair",
+        "fixtureSha256": "c8c33e3e734028b1a522f0308987536e94e072e1501760a319c47f84c6836790",
+        "ledgerSha256": "bf698699eebb514c718e188c85e29363c8dbf2babcaf35c24c0296f54fbed66b",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "1b0312fb4731ca1b1db05b8fafd28c2782c7bdabdf82f10ad18828f0567eb030"
+      },
+      {
+        "case": "sketch-fillet-radius-recompute-update",
+        "fixtureSha256": "c7f08af0ad8c539d31423d5c924f8f0419b6298906413374edce4bbaade744fc",
+        "ledgerSha256": "9a718b7747343b112106c3ed46796ef76d4fa84f69106a1cb5d5fce55dc66e74",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "794592d425aed580ad5bf17baa84d2f1af8fd4a1881db41890e5211269b4f0b0"
+      },
+      {
+        "case": "sketch-fillet-trim-closed-profile",
+        "fixtureSha256": "1c77e51a43737c14419415ca7d868d938f96111d72b6f2298572771e6378f1ce",
+        "ledgerSha256": "d49654b69abe21344024453fdb0022e98cf77e958a5d81890e1d2b64c6918b35",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "5180ca698f3530d9ea0e183cf4eee8b7d406c4a778a44bb2e5c85badb4bff9a5"
+      },
+      {
+        "case": "sketch-fillet-without-trim",
+        "fixtureSha256": "a486df9de8125c99a630501bc8ef20a793dbc85bbb9df6ae8681b8951ead3544",
+        "ledgerSha256": "008b32d53b6086582ff1e365f26c675b7547b9971568a3ba1a949a7d1fe738fd",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "e97f85c4c1f1aad929005e5644b2e14171dc72d0c964c740a232cf13aadda9fd"
+      },
+      {
+        "case": "sketch-trim-arc-between-cutters",
+        "fixtureSha256": "97c31f6400cdd508849df499eff1664a7505832809ad2fbd1a3300db6e27e1d9",
+        "ledgerSha256": "34ff0e3195d92fcb4a2d359c61b99423d012c15ee6f1d49b9a5c62d9de9ec1d5",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "30aada5c883413652ba6e1b1cb7c79813c7c2407baf7610356c2c2a5ddb70a73"
+      },
+      {
+        "case": "sketch-trim-conic-between-cutters",
+        "fixtureSha256": "5814e890df758362536c76d0563586e4244757cfd01038dacc4250e55e2b9aac",
+        "ledgerSha256": "506c6721e5ce6fa08fadb149acc9557f1c9398a2b5f19056eb935757f83bd2df",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "f20149eac1536c46a308110464b1460a0701a4b7cd48d1a54ad29a80d622e0b8"
+      },
+      {
+        "case": "sketch-trim-invalid-geometry-diagnostic",
+        "fixtureSha256": "c82bcd430ede4372850f334501d131de2c70ac0d2580a1901082aaec3ea5bf55",
+        "ledgerSha256": "4fb098bdc139e340b8f8d2b0ea404770328ed2ee59ba8915a7b9ca8539cd4a8a",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "7b515f23cd41c00204f8a6f5a3ac13851aaae5671e6b941c6c0e924a91bf5aa6"
+      },
+      {
+        "case": "sketch-trim-line-between-cutters",
+        "fixtureSha256": "52ec1e9f69c7c321ca2419723ec03852fa82a0a00279a4e9cc72155b33bd75b3",
+        "ledgerSha256": "734e261fc584260dd9885d634ff72b11097f95f44e9dfb31ab58c344fe76b151",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "2bda218c28fe8abf985e28c09becdf328fc8ea0c0f05609eeb799a8be17e2ce4"
+      },
+      {
+        "case": "sketch-trim-no-intersection-deletes-geometry",
+        "fixtureSha256": "e8a0bbabee9e1ccd88d495d4f9f9eda34302d1282d1fbf44ff1caac19eebc63c",
+        "ledgerSha256": "09dadb3b61cd48951252a4e964f05a96232b8089209d3524d961c747a32ab720",
+        "phase": "sketcher-operations",
+        "producerTraceSha256": null,
+        "publicSha256": "baebe95bab42e24e9fb94900edd750187d687e2195dd6905194f906e491eebee"
+      }
+    ],
+    "phases": 1,
+    "sha256": "e257db866a0b2a58cab206f5069596aec1865e3f486f9891f5f9b7e432abbb9b"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"sketcher-operations\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a\", \"--report\", \"/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\", \"--skip-unsupported\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "f7ef3d033427207ab2d6172cbd9ed1b68bf250887ed45653397e2fad3bce64cc",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-block-after-copy-recompute-update.freecad.json",
+                "publicSha256": "020ecbee52847e4528af4dbf675edba068e9f8dcaac8519eb87e9750d5137e74",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-block-after-copy-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-block-after-copy-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-block-after-copy-recompute-update.json",
+            "fixtureSha256": "abc09eadcd61809488f09b6f727b0b4ece58b02ed8ce2a994089d380f59ecd8a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "f7ef3d033427207ab2d6172cbd9ed1b68bf250887ed45653397e2fad3bce64cc",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "020ecbee52847e4528af4dbf675edba068e9f8dcaac8519eb87e9750d5137e74",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d3e9c9c61b9933afc8648ec93d0910c2b1d1c13bad232ed54ee40296d43d311b",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-bspline-degree-knot-recompute-update.freecad.json",
+                "publicSha256": "8f9c31f6898d70882468199f6830123ecc6bcbd89b370722fd70fe8c0a27801d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-bspline-degree-knot-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-bspline-degree-knot-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-bspline-degree-knot-recompute-update.json",
+            "fixtureSha256": "b920a08634b48aad36f9823244cdfed04db132e8f19ef43dc5e30cada070c490",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d3e9c9c61b9933afc8648ec93d0910c2b1d1c13bad232ed54ee40296d43d311b",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "8f9c31f6898d70882468199f6830123ecc6bcbd89b370722fd70fe8c0a27801d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "41fcecbe02279cec011ea0f52ab2e87d0a41118ca2bf15a4601fbf8379f2163b",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-bspline-invalid-knot-native-diagnostic.freecad.json",
+                "publicSha256": "3719b120930deafbee12fc607df94ca1b80022fbf3ac7e907a91e5475adf49d7",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-bspline-invalid-knot-native-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-bspline-invalid-knot-native-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-bspline-invalid-knot-native-diagnostic.json",
+            "fixtureSha256": "e0b36e11cb4a1d67e94423427766a6d1fdf20ab84cedd4e6e73f6e6f03b3c8d9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "41fcecbe02279cec011ea0f52ab2e87d0a41118ca2bf15a4601fbf8379f2163b",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "3719b120930deafbee12fc607df94ca1b80022fbf3ac7e907a91e5475adf49d7",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "dd8b67083888e91f3f60db87d9b077fd93d279eabad17cc6d1ee32f50db19f9e",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-bspline-knot-multiplicity.freecad.json",
+                "publicSha256": "07c3679637b9724a57f040f532f1214c4a8b51a88ca2db35c217d4140b238d97",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-bspline-knot-multiplicity",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-bspline-knot-multiplicity.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-bspline-knot-multiplicity.json",
+            "fixtureSha256": "20d526f92aaf6406577e5fc8341b406830b2b4504268c1637990792e59b8c9f9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "dd8b67083888e91f3f60db87d9b077fd93d279eabad17cc6d1ee32f50db19f9e",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "07c3679637b9724a57f040f532f1214c4a8b51a88ca2db35c217d4140b238d97",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "aa0739acf0fc016a51e5106efbeead3782900ba00f45db95ddb55fe9bae6e108",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-clone-conic-arc.freecad.json",
+                "publicSha256": "b00606f1d1e2c3bd067843ece48d0992e129b556e1a2976cebfa06b62d3605cf",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-clone-conic-arc",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-clone-conic-arc.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-clone-conic-arc.json",
+            "fixtureSha256": "d97ec2dc5cd11f6895edddc16c4b6caec6b701ef5d55502a5ac69d93289d5177",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "aa0739acf0fc016a51e5106efbeead3782900ba00f45db95ddb55fe9bae6e108",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "b00606f1d1e2c3bd067843ece48d0992e129b556e1a2976cebfa06b62d3605cf",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "6115eba0318c37c11c936c0c8500d2d41e0366ac902827369113d532ff462981",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-clone-line-dimensional-constraint.freecad.json",
+                "publicSha256": "f1b09b68bb86ac4fa4b67b703bb786eda8047c38ed0686d147e20723a88f5d61",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-clone-line-dimensional-constraint",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-clone-line-dimensional-constraint.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-clone-line-dimensional-constraint.json",
+            "fixtureSha256": "1a0b7bb5d9327501c92ebc674120457cfb6f5e6df3537b56f7b83c58758f921a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "6115eba0318c37c11c936c0c8500d2d41e0366ac902827369113d532ff462981",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "f1b09b68bb86ac4fa4b67b703bb786eda8047c38ed0686d147e20723a88f5d61",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "129dafc3ce625e2f86147a1991344a1c3873b07093999840b1002cd1f5827b1e",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-conic-convert-to-bspline.freecad.json",
+                "publicSha256": "f5ad98169be34ac88ac616cf39444eb246c09cf1be9f934a1e943d04fb5ec59c",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-conic-convert-to-bspline",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-conic-convert-to-bspline.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-conic-convert-to-bspline.json",
+            "fixtureSha256": "e70400d3f2c83dc7465df59a1ca1f30f4e0173cb083bef536fd0265a13ac0d52",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "129dafc3ce625e2f86147a1991344a1c3873b07093999840b1002cd1f5827b1e",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "f5ad98169be34ac88ac616cf39444eb246c09cf1be9f934a1e943d04fb5ec59c",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "cbdc6385b907ff0116215874542b225db2f6423b4b8302f2189bb8ee69ea9fa8",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-conic-expose-internal-geometry.freecad.json",
+                "publicSha256": "bb562c2ab3d1c89424e3ce274fac40742400e526097f7d3a6fc0fd4ed7a5a0e8",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-conic-expose-internal-geometry",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-conic-expose-internal-geometry.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-conic-expose-internal-geometry.json",
+            "fixtureSha256": "a575800838516e6112fd5f2172d7b98f6afbb0c64b89a5082703e4528961ae2a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "cbdc6385b907ff0116215874542b225db2f6423b4b8302f2189bb8ee69ea9fa8",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "bb562c2ab3d1c89424e3ce274fac40742400e526097f7d3a6fc0fd4ed7a5a0e8",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2317b609fc219e4191f7de2ccae38374084e1145c81b1067de672d73d1c56088",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-extend-arc.freecad.json",
+                "publicSha256": "af2bc7a279403a34090d6e756cd5479d13cd66ab4515f1c0a61e846c132aebb7",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-extend-arc",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-arc.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-arc.json",
+            "fixtureSha256": "2cce306e73b5c46b0449f92f0bf6119e3c1fa0afe9611d320088ce52db862ff0",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2317b609fc219e4191f7de2ccae38374084e1145c81b1067de672d73d1c56088",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "af2bc7a279403a34090d6e756cd5479d13cd66ab4515f1c0a61e846c132aebb7",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2b654912b6a7354df0634752e4645b7b03a1d605b3b8b9b698fd2aa36029e45b",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-extend-conic-native-diagnostic.freecad.json",
+                "publicSha256": "1c697875efcff8ceda0b7430f5e99d3baf5286a2758a814fd577cba356efa407",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-extend-conic-native-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-conic-native-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-conic-native-diagnostic.json",
+            "fixtureSha256": "67032f705e2fb1f45441b8fd25286e9cc1c8526ceb0a4e4ce8248da2307ffe17",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2b654912b6a7354df0634752e4645b7b03a1d605b3b8b9b698fd2aa36029e45b",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "1c697875efcff8ceda0b7430f5e99d3baf5286a2758a814fd577cba356efa407",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "63f10a6fe9806eb27be99795478ad00983b17b59e72a73ec97e4924aef702f09",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-extend-line-recompute-update.freecad.json",
+                "publicSha256": "41ab090da3eb8176704b039e9af03e9e674d8666b9bb699a94f4e6c00911d77e",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-extend-line-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-line-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-line-recompute-update.json",
+            "fixtureSha256": "41185cae193ef172de8f0a8d8006fee1fb1264b6e19a4b99673375fad6bc7abb",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "63f10a6fe9806eb27be99795478ad00983b17b59e72a73ec97e4924aef702f09",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "41ab090da3eb8176704b039e9af03e9e674d8666b9bb699a94f4e6c00911d77e",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "a8763c2433c67e470dfbf3f376955322d977a6b2e36603942f2a71ed716012cb",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-extend-line-to-degenerate-boundary.freecad.json",
+                "publicSha256": "665269873de39a53b8e520fb9738b1450aef8a6e6f895ac6524ed27bf9e63817",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-extend-line-to-degenerate-boundary",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-line-to-degenerate-boundary.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-line-to-degenerate-boundary.json",
+            "fixtureSha256": "12eeb739752cb1140f65be7f856bd2f328d64dabb0c3280ed96c41bf4da85eba",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "a8763c2433c67e470dfbf3f376955322d977a6b2e36603942f2a71ed716012cb",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "665269873de39a53b8e520fb9738b1450aef8a6e6f895ac6524ed27bf9e63817",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "434aa5f68ff9d650417e54aca38c72eba33b8ddf8aa73174fec282929f30a0af",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-fillet-chamfer.freecad.json",
+                "publicSha256": "87f8c1bf091c18145669a1777a28fa2a2214aae461ca41841fa984c50861da07",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-chamfer",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-chamfer.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-chamfer.json",
+            "fixtureSha256": "6678f4df2e935b2a4685ab31a3e994869860ebcb02e47ea37fb6edc92f39171a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "434aa5f68ff9d650417e54aca38c72eba33b8ddf8aa73174fec282929f30a0af",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "87f8c1bf091c18145669a1777a28fa2a2214aae461ca41841fa984c50861da07",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "1ca9d1f8c4b656476b31eace0432087108c950fe74e8860740ff9394b937b2e4",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-fillet-create-corner.freecad.json",
+                "publicSha256": "1cd7d62aeb50e874b68da9fbe49032a1380fdcdd28bef87f788f8ae669d50f8e",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-create-corner",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-create-corner.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-create-corner.json",
+            "fixtureSha256": "6cb2c8dccad93f2c1f87000d2ea74c1b06de69444d903f2ff3008424ca8aef6f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "1ca9d1f8c4b656476b31eace0432087108c950fe74e8860740ff9394b937b2e4",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "1cd7d62aeb50e874b68da9fbe49032a1380fdcdd28bef87f788f8ae669d50f8e",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "bf698699eebb514c718e188c85e29363c8dbf2babcaf35c24c0296f54fbed66b",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-fillet-invalid-geometry-pair.freecad.json",
+                "publicSha256": "1b0312fb4731ca1b1db05b8fafd28c2782c7bdabdf82f10ad18828f0567eb030",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-invalid-geometry-pair",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-invalid-geometry-pair.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-invalid-geometry-pair.json",
+            "fixtureSha256": "c8c33e3e734028b1a522f0308987536e94e072e1501760a319c47f84c6836790",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "bf698699eebb514c718e188c85e29363c8dbf2babcaf35c24c0296f54fbed66b",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "1b0312fb4731ca1b1db05b8fafd28c2782c7bdabdf82f10ad18828f0567eb030",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "72cabc5217f924b97502c1598f7a84f2c62a1af75fdc5f342ecffa74b850f349",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-fillet-radius-recompute-update.freecad.json",
+                "publicSha256": "78094f5747c5e96135ad37825a4da20dad50db53176553b1777b4bb86d591a34",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-radius-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-radius-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-radius-recompute-update.json",
+            "fixtureSha256": "c7f08af0ad8c539d31423d5c924f8f0419b6298906413374edce4bbaade744fc",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "9a718b7747343b112106c3ed46796ef76d4fa84f69106a1cb5d5fce55dc66e74",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "794592d425aed580ad5bf17baa84d2f1af8fd4a1881db41890e5211269b4f0b0",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d49654b69abe21344024453fdb0022e98cf77e958a5d81890e1d2b64c6918b35",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-fillet-trim-closed-profile.freecad.json",
+                "publicSha256": "5180ca698f3530d9ea0e183cf4eee8b7d406c4a778a44bb2e5c85badb4bff9a5",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-trim-closed-profile",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-trim-closed-profile.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-trim-closed-profile.json",
+            "fixtureSha256": "1c77e51a43737c14419415ca7d868d938f96111d72b6f2298572771e6378f1ce",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d49654b69abe21344024453fdb0022e98cf77e958a5d81890e1d2b64c6918b35",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "5180ca698f3530d9ea0e183cf4eee8b7d406c4a778a44bb2e5c85badb4bff9a5",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "008b32d53b6086582ff1e365f26c675b7547b9971568a3ba1a949a7d1fe738fd",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-fillet-without-trim.freecad.json",
+                "publicSha256": "e97f85c4c1f1aad929005e5644b2e14171dc72d0c964c740a232cf13aadda9fd",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-without-trim",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-without-trim.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-without-trim.json",
+            "fixtureSha256": "a486df9de8125c99a630501bc8ef20a793dbc85bbb9df6ae8681b8951ead3544",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "008b32d53b6086582ff1e365f26c675b7547b9971568a3ba1a949a7d1fe738fd",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "e97f85c4c1f1aad929005e5644b2e14171dc72d0c964c740a232cf13aadda9fd",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "34ff0e3195d92fcb4a2d359c61b99423d012c15ee6f1d49b9a5c62d9de9ec1d5",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-trim-arc-between-cutters.freecad.json",
+                "publicSha256": "30aada5c883413652ba6e1b1cb7c79813c7c2407baf7610356c2c2a5ddb70a73",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-arc-between-cutters",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-arc-between-cutters.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-arc-between-cutters.json",
+            "fixtureSha256": "97c31f6400cdd508849df499eff1664a7505832809ad2fbd1a3300db6e27e1d9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "34ff0e3195d92fcb4a2d359c61b99423d012c15ee6f1d49b9a5c62d9de9ec1d5",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "30aada5c883413652ba6e1b1cb7c79813c7c2407baf7610356c2c2a5ddb70a73",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "506c6721e5ce6fa08fadb149acc9557f1c9398a2b5f19056eb935757f83bd2df",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-trim-conic-between-cutters.freecad.json",
+                "publicSha256": "f20149eac1536c46a308110464b1460a0701a4b7cd48d1a54ad29a80d622e0b8",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-conic-between-cutters",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-conic-between-cutters.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-conic-between-cutters.json",
+            "fixtureSha256": "5814e890df758362536c76d0563586e4244757cfd01038dacc4250e55e2b9aac",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "506c6721e5ce6fa08fadb149acc9557f1c9398a2b5f19056eb935757f83bd2df",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "f20149eac1536c46a308110464b1460a0701a4b7cd48d1a54ad29a80d622e0b8",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "4fb098bdc139e340b8f8d2b0ea404770328ed2ee59ba8915a7b9ca8539cd4a8a",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-trim-invalid-geometry-diagnostic.freecad.json",
+                "publicSha256": "7b515f23cd41c00204f8a6f5a3ac13851aaae5671e6b941c6c0e924a91bf5aa6",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-invalid-geometry-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-invalid-geometry-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-invalid-geometry-diagnostic.json",
+            "fixtureSha256": "c82bcd430ede4372850f334501d131de2c70ac0d2580a1901082aaec3ea5bf55",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "4fb098bdc139e340b8f8d2b0ea404770328ed2ee59ba8915a7b9ca8539cd4a8a",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "7b515f23cd41c00204f8a6f5a3ac13851aaae5671e6b941c6c0e924a91bf5aa6",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "734e261fc584260dd9885d634ff72b11097f95f44e9dfb31ab58c344fe76b151",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-trim-line-between-cutters.freecad.json",
+                "publicSha256": "2bda218c28fe8abf985e28c09becdf328fc8ea0c0f05609eeb799a8be17e2ce4",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-line-between-cutters",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-line-between-cutters.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-line-between-cutters.json",
+            "fixtureSha256": "52ec1e9f69c7c321ca2419723ec03852fa82a0a00279a4e9cc72155b33bd75b3",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "734e261fc584260dd9885d634ff72b11097f95f44e9dfb31ab58c344fe76b151",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "2bda218c28fe8abf985e28c09becdf328fc8ea0c0f05609eeb799a8be17e2ce4",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "09dadb3b61cd48951252a4e964f05a96232b8089209d3524d961c747a32ab720",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a/sketcher-operations/expected/sketch-trim-no-intersection-deletes-geometry.freecad.json",
+                "publicSha256": "baebe95bab42e24e9fb94900edd750187d687e2195dd6905194f906e491eebee",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-no-intersection-deletes-geometry",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-no-intersection-deletes-geometry.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-no-intersection-deletes-geometry.json",
+            "fixtureSha256": "e8a0bbabee9e1ccd88d495d4f9f9eda34302d1282d1fbf44ff1caac19eebc63c",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "09dadb3b61cd48951252a4e964f05a96232b8089209d3524d961c747a32ab720",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "baebe95bab42e24e9fb94900edd750187d687e2195dd6905194f906e491eebee",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "52154c1aff0c64aaca09c50d1d0ac6c4a1f0f219a130218712408bb83a947a0b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"sketcher-operations\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a\", \"--report\", \"/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\", \"--skip-unsupported\"]"
+          }
+        },
+        "discovered": 23,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 23,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"sketcher-operations\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b\", \"--report\", \"/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\", \"--skip-unsupported\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "f7ef3d033427207ab2d6172cbd9ed1b68bf250887ed45653397e2fad3bce64cc",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-block-after-copy-recompute-update.freecad.json",
+                "publicSha256": "020ecbee52847e4528af4dbf675edba068e9f8dcaac8519eb87e9750d5137e74",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-block-after-copy-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-block-after-copy-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-block-after-copy-recompute-update.json",
+            "fixtureSha256": "abc09eadcd61809488f09b6f727b0b4ece58b02ed8ce2a994089d380f59ecd8a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "f7ef3d033427207ab2d6172cbd9ed1b68bf250887ed45653397e2fad3bce64cc",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "020ecbee52847e4528af4dbf675edba068e9f8dcaac8519eb87e9750d5137e74",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d3e9c9c61b9933afc8648ec93d0910c2b1d1c13bad232ed54ee40296d43d311b",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-bspline-degree-knot-recompute-update.freecad.json",
+                "publicSha256": "8f9c31f6898d70882468199f6830123ecc6bcbd89b370722fd70fe8c0a27801d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-bspline-degree-knot-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-bspline-degree-knot-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-bspline-degree-knot-recompute-update.json",
+            "fixtureSha256": "b920a08634b48aad36f9823244cdfed04db132e8f19ef43dc5e30cada070c490",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d3e9c9c61b9933afc8648ec93d0910c2b1d1c13bad232ed54ee40296d43d311b",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "8f9c31f6898d70882468199f6830123ecc6bcbd89b370722fd70fe8c0a27801d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "41fcecbe02279cec011ea0f52ab2e87d0a41118ca2bf15a4601fbf8379f2163b",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-bspline-invalid-knot-native-diagnostic.freecad.json",
+                "publicSha256": "3719b120930deafbee12fc607df94ca1b80022fbf3ac7e907a91e5475adf49d7",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-bspline-invalid-knot-native-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-bspline-invalid-knot-native-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-bspline-invalid-knot-native-diagnostic.json",
+            "fixtureSha256": "e0b36e11cb4a1d67e94423427766a6d1fdf20ab84cedd4e6e73f6e6f03b3c8d9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "41fcecbe02279cec011ea0f52ab2e87d0a41118ca2bf15a4601fbf8379f2163b",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "3719b120930deafbee12fc607df94ca1b80022fbf3ac7e907a91e5475adf49d7",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "dd8b67083888e91f3f60db87d9b077fd93d279eabad17cc6d1ee32f50db19f9e",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-bspline-knot-multiplicity.freecad.json",
+                "publicSha256": "07c3679637b9724a57f040f532f1214c4a8b51a88ca2db35c217d4140b238d97",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-bspline-knot-multiplicity",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-bspline-knot-multiplicity.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-bspline-knot-multiplicity.json",
+            "fixtureSha256": "20d526f92aaf6406577e5fc8341b406830b2b4504268c1637990792e59b8c9f9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "dd8b67083888e91f3f60db87d9b077fd93d279eabad17cc6d1ee32f50db19f9e",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "07c3679637b9724a57f040f532f1214c4a8b51a88ca2db35c217d4140b238d97",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "aa0739acf0fc016a51e5106efbeead3782900ba00f45db95ddb55fe9bae6e108",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-clone-conic-arc.freecad.json",
+                "publicSha256": "b00606f1d1e2c3bd067843ece48d0992e129b556e1a2976cebfa06b62d3605cf",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-clone-conic-arc",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-clone-conic-arc.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-clone-conic-arc.json",
+            "fixtureSha256": "d97ec2dc5cd11f6895edddc16c4b6caec6b701ef5d55502a5ac69d93289d5177",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "aa0739acf0fc016a51e5106efbeead3782900ba00f45db95ddb55fe9bae6e108",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "b00606f1d1e2c3bd067843ece48d0992e129b556e1a2976cebfa06b62d3605cf",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "6115eba0318c37c11c936c0c8500d2d41e0366ac902827369113d532ff462981",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-clone-line-dimensional-constraint.freecad.json",
+                "publicSha256": "f1b09b68bb86ac4fa4b67b703bb786eda8047c38ed0686d147e20723a88f5d61",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-clone-line-dimensional-constraint",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-clone-line-dimensional-constraint.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-clone-line-dimensional-constraint.json",
+            "fixtureSha256": "1a0b7bb5d9327501c92ebc674120457cfb6f5e6df3537b56f7b83c58758f921a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "6115eba0318c37c11c936c0c8500d2d41e0366ac902827369113d532ff462981",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "f1b09b68bb86ac4fa4b67b703bb786eda8047c38ed0686d147e20723a88f5d61",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "129dafc3ce625e2f86147a1991344a1c3873b07093999840b1002cd1f5827b1e",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-conic-convert-to-bspline.freecad.json",
+                "publicSha256": "f5ad98169be34ac88ac616cf39444eb246c09cf1be9f934a1e943d04fb5ec59c",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-conic-convert-to-bspline",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-conic-convert-to-bspline.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-conic-convert-to-bspline.json",
+            "fixtureSha256": "e70400d3f2c83dc7465df59a1ca1f30f4e0173cb083bef536fd0265a13ac0d52",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "129dafc3ce625e2f86147a1991344a1c3873b07093999840b1002cd1f5827b1e",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "f5ad98169be34ac88ac616cf39444eb246c09cf1be9f934a1e943d04fb5ec59c",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "cbdc6385b907ff0116215874542b225db2f6423b4b8302f2189bb8ee69ea9fa8",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-conic-expose-internal-geometry.freecad.json",
+                "publicSha256": "bb562c2ab3d1c89424e3ce274fac40742400e526097f7d3a6fc0fd4ed7a5a0e8",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-conic-expose-internal-geometry",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-conic-expose-internal-geometry.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-conic-expose-internal-geometry.json",
+            "fixtureSha256": "a575800838516e6112fd5f2172d7b98f6afbb0c64b89a5082703e4528961ae2a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "cbdc6385b907ff0116215874542b225db2f6423b4b8302f2189bb8ee69ea9fa8",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "bb562c2ab3d1c89424e3ce274fac40742400e526097f7d3a6fc0fd4ed7a5a0e8",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2317b609fc219e4191f7de2ccae38374084e1145c81b1067de672d73d1c56088",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-extend-arc.freecad.json",
+                "publicSha256": "af2bc7a279403a34090d6e756cd5479d13cd66ab4515f1c0a61e846c132aebb7",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-extend-arc",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-arc.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-arc.json",
+            "fixtureSha256": "2cce306e73b5c46b0449f92f0bf6119e3c1fa0afe9611d320088ce52db862ff0",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2317b609fc219e4191f7de2ccae38374084e1145c81b1067de672d73d1c56088",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "af2bc7a279403a34090d6e756cd5479d13cd66ab4515f1c0a61e846c132aebb7",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2b654912b6a7354df0634752e4645b7b03a1d605b3b8b9b698fd2aa36029e45b",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-extend-conic-native-diagnostic.freecad.json",
+                "publicSha256": "1c697875efcff8ceda0b7430f5e99d3baf5286a2758a814fd577cba356efa407",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-extend-conic-native-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-conic-native-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-conic-native-diagnostic.json",
+            "fixtureSha256": "67032f705e2fb1f45441b8fd25286e9cc1c8526ceb0a4e4ce8248da2307ffe17",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2b654912b6a7354df0634752e4645b7b03a1d605b3b8b9b698fd2aa36029e45b",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "1c697875efcff8ceda0b7430f5e99d3baf5286a2758a814fd577cba356efa407",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "63f10a6fe9806eb27be99795478ad00983b17b59e72a73ec97e4924aef702f09",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-extend-line-recompute-update.freecad.json",
+                "publicSha256": "41ab090da3eb8176704b039e9af03e9e674d8666b9bb699a94f4e6c00911d77e",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-extend-line-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-line-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-line-recompute-update.json",
+            "fixtureSha256": "41185cae193ef172de8f0a8d8006fee1fb1264b6e19a4b99673375fad6bc7abb",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "63f10a6fe9806eb27be99795478ad00983b17b59e72a73ec97e4924aef702f09",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "41ab090da3eb8176704b039e9af03e9e674d8666b9bb699a94f4e6c00911d77e",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "a8763c2433c67e470dfbf3f376955322d977a6b2e36603942f2a71ed716012cb",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-extend-line-to-degenerate-boundary.freecad.json",
+                "publicSha256": "665269873de39a53b8e520fb9738b1450aef8a6e6f895ac6524ed27bf9e63817",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-extend-line-to-degenerate-boundary",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-extend-line-to-degenerate-boundary.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-extend-line-to-degenerate-boundary.json",
+            "fixtureSha256": "12eeb739752cb1140f65be7f856bd2f328d64dabb0c3280ed96c41bf4da85eba",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "a8763c2433c67e470dfbf3f376955322d977a6b2e36603942f2a71ed716012cb",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "665269873de39a53b8e520fb9738b1450aef8a6e6f895ac6524ed27bf9e63817",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "434aa5f68ff9d650417e54aca38c72eba33b8ddf8aa73174fec282929f30a0af",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-fillet-chamfer.freecad.json",
+                "publicSha256": "87f8c1bf091c18145669a1777a28fa2a2214aae461ca41841fa984c50861da07",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-chamfer",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-chamfer.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-chamfer.json",
+            "fixtureSha256": "6678f4df2e935b2a4685ab31a3e994869860ebcb02e47ea37fb6edc92f39171a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "434aa5f68ff9d650417e54aca38c72eba33b8ddf8aa73174fec282929f30a0af",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "87f8c1bf091c18145669a1777a28fa2a2214aae461ca41841fa984c50861da07",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "1ca9d1f8c4b656476b31eace0432087108c950fe74e8860740ff9394b937b2e4",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-fillet-create-corner.freecad.json",
+                "publicSha256": "1cd7d62aeb50e874b68da9fbe49032a1380fdcdd28bef87f788f8ae669d50f8e",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-create-corner",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-create-corner.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-create-corner.json",
+            "fixtureSha256": "6cb2c8dccad93f2c1f87000d2ea74c1b06de69444d903f2ff3008424ca8aef6f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "1ca9d1f8c4b656476b31eace0432087108c950fe74e8860740ff9394b937b2e4",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "1cd7d62aeb50e874b68da9fbe49032a1380fdcdd28bef87f788f8ae669d50f8e",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "bf698699eebb514c718e188c85e29363c8dbf2babcaf35c24c0296f54fbed66b",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-fillet-invalid-geometry-pair.freecad.json",
+                "publicSha256": "1b0312fb4731ca1b1db05b8fafd28c2782c7bdabdf82f10ad18828f0567eb030",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-invalid-geometry-pair",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-invalid-geometry-pair.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-invalid-geometry-pair.json",
+            "fixtureSha256": "c8c33e3e734028b1a522f0308987536e94e072e1501760a319c47f84c6836790",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "bf698699eebb514c718e188c85e29363c8dbf2babcaf35c24c0296f54fbed66b",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "1b0312fb4731ca1b1db05b8fafd28c2782c7bdabdf82f10ad18828f0567eb030",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "ab2cd78cfe0a3ff1e6fc9fee4db0dd76854c2488daa2eb9ffeb405d6880548fe",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-fillet-radius-recompute-update.freecad.json",
+                "publicSha256": "7ee8176478575dbe37fa96c7d125c0799dd2740db5397997f01ca5a744bf8bdc",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-radius-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-radius-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-radius-recompute-update.json",
+            "fixtureSha256": "c7f08af0ad8c539d31423d5c924f8f0419b6298906413374edce4bbaade744fc",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "9a718b7747343b112106c3ed46796ef76d4fa84f69106a1cb5d5fce55dc66e74",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "794592d425aed580ad5bf17baa84d2f1af8fd4a1881db41890e5211269b4f0b0",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d49654b69abe21344024453fdb0022e98cf77e958a5d81890e1d2b64c6918b35",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-fillet-trim-closed-profile.freecad.json",
+                "publicSha256": "5180ca698f3530d9ea0e183cf4eee8b7d406c4a778a44bb2e5c85badb4bff9a5",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-trim-closed-profile",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-trim-closed-profile.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-trim-closed-profile.json",
+            "fixtureSha256": "1c77e51a43737c14419415ca7d868d938f96111d72b6f2298572771e6378f1ce",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d49654b69abe21344024453fdb0022e98cf77e958a5d81890e1d2b64c6918b35",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "5180ca698f3530d9ea0e183cf4eee8b7d406c4a778a44bb2e5c85badb4bff9a5",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "008b32d53b6086582ff1e365f26c675b7547b9971568a3ba1a949a7d1fe738fd",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-fillet-without-trim.freecad.json",
+                "publicSha256": "e97f85c4c1f1aad929005e5644b2e14171dc72d0c964c740a232cf13aadda9fd",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-fillet-without-trim",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-fillet-without-trim.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-fillet-without-trim.json",
+            "fixtureSha256": "a486df9de8125c99a630501bc8ef20a793dbc85bbb9df6ae8681b8951ead3544",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "008b32d53b6086582ff1e365f26c675b7547b9971568a3ba1a949a7d1fe738fd",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "e97f85c4c1f1aad929005e5644b2e14171dc72d0c964c740a232cf13aadda9fd",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "34ff0e3195d92fcb4a2d359c61b99423d012c15ee6f1d49b9a5c62d9de9ec1d5",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-trim-arc-between-cutters.freecad.json",
+                "publicSha256": "30aada5c883413652ba6e1b1cb7c79813c7c2407baf7610356c2c2a5ddb70a73",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-arc-between-cutters",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-arc-between-cutters.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-arc-between-cutters.json",
+            "fixtureSha256": "97c31f6400cdd508849df499eff1664a7505832809ad2fbd1a3300db6e27e1d9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "34ff0e3195d92fcb4a2d359c61b99423d012c15ee6f1d49b9a5c62d9de9ec1d5",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "30aada5c883413652ba6e1b1cb7c79813c7c2407baf7610356c2c2a5ddb70a73",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "506c6721e5ce6fa08fadb149acc9557f1c9398a2b5f19056eb935757f83bd2df",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-trim-conic-between-cutters.freecad.json",
+                "publicSha256": "f20149eac1536c46a308110464b1460a0701a4b7cd48d1a54ad29a80d622e0b8",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-conic-between-cutters",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-conic-between-cutters.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-conic-between-cutters.json",
+            "fixtureSha256": "5814e890df758362536c76d0563586e4244757cfd01038dacc4250e55e2b9aac",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "506c6721e5ce6fa08fadb149acc9557f1c9398a2b5f19056eb935757f83bd2df",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "f20149eac1536c46a308110464b1460a0701a4b7cd48d1a54ad29a80d622e0b8",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "4fb098bdc139e340b8f8d2b0ea404770328ed2ee59ba8915a7b9ca8539cd4a8a",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-trim-invalid-geometry-diagnostic.freecad.json",
+                "publicSha256": "7b515f23cd41c00204f8a6f5a3ac13851aaae5671e6b941c6c0e924a91bf5aa6",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-invalid-geometry-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-invalid-geometry-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-invalid-geometry-diagnostic.json",
+            "fixtureSha256": "c82bcd430ede4372850f334501d131de2c70ac0d2580a1901082aaec3ea5bf55",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "4fb098bdc139e340b8f8d2b0ea404770328ed2ee59ba8915a7b9ca8539cd4a8a",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "7b515f23cd41c00204f8a6f5a3ac13851aaae5671e6b941c6c0e924a91bf5aa6",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "734e261fc584260dd9885d634ff72b11097f95f44e9dfb31ab58c344fe76b151",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-trim-line-between-cutters.freecad.json",
+                "publicSha256": "2bda218c28fe8abf985e28c09becdf328fc8ea0c0f05609eeb799a8be17e2ce4",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-line-between-cutters",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-line-between-cutters.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-line-between-cutters.json",
+            "fixtureSha256": "52ec1e9f69c7c321ca2419723ec03852fa82a0a00279a4e9cc72155b33bd75b3",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "734e261fc584260dd9885d634ff72b11097f95f44e9dfb31ab58c344fe76b151",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "2bda218c28fe8abf985e28c09becdf328fc8ea0c0f05609eeb799a8be17e2ce4",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "09dadb3b61cd48951252a4e964f05a96232b8089209d3524d961c747a32ab720",
+                "path": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b/sketcher-operations/expected/sketch-trim-no-intersection-deletes-geometry.freecad.json",
+                "publicSha256": "baebe95bab42e24e9fb94900edd750187d687e2195dd6905194f906e491eebee",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-trim-no-intersection-deletes-geometry",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/expected/sketch-trim-no-intersection-deletes-geometry.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/sketcher-operations/sketch-trim-no-intersection-deletes-geometry.json",
+            "fixtureSha256": "e8a0bbabee9e1ccd88d495d4f9f9eda34302d1282d1fbf44ff1caac19eebc63c",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "09dadb3b61cd48951252a4e964f05a96232b8089209d3524d961c747a32ab720",
+            "phase": "sketcher-operations",
+            "publicExpectedSha256": "baebe95bab42e24e9fb94900edd750187d687e2195dd6905194f906e491eebee",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "52154c1aff0c64aaca09c50d1d0ac6c4a1f0f219a130218712408bb83a947a0b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"sketcher-operations\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b\", \"--report\", \"/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\", \"--skip-unsupported\"]"
+          }
+        },
+        "discovered": 23,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 23,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/sketcher-operations-repeat2-final.4t9ayv/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

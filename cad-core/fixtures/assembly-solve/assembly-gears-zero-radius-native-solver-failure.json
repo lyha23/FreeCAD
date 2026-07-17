@@ -1,0 +1,221 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Box",
+      "Properties": {
+        "Height": 2,
+        "Length": 2,
+        "Width": 2
+      },
+      "TypeId": "Part::Box"
+    },
+    {
+      "ID": 2,
+      "Name": "Ground",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Rigid": true
+      },
+      "TypeId": "Assembly::AssemblyLink"
+    },
+    {
+      "ID": 3,
+      "Name": "ShaftA",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Placement": {
+          "Base": [
+            4,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Rigid": true
+      },
+      "TypeId": "Assembly::AssemblyLink"
+    },
+    {
+      "ID": 4,
+      "Name": "ShaftB",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Placement": {
+          "Base": [
+            -4,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Rigid": true
+      },
+      "TypeId": "Assembly::AssemblyLink"
+    },
+    {
+      "ID": 5,
+      "Name": "GroundedJoint",
+      "Properties": {
+        "ObjectToGround": {
+          "PropertyType": "App::PropertyLinkGlobal",
+          "value": "Ground"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 6,
+      "Name": "RevoluteA",
+      "Properties": {
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Revolute"
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "Ground"
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "ShaftA"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 7,
+      "Name": "RevoluteB",
+      "Properties": {
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Revolute"
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "Ground"
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "ShaftB"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 8,
+      "Name": "GearsJoint",
+      "Properties": {
+        "Distance": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0
+        },
+        "Distance2": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 1
+        },
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Gears"
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "ShaftA"
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "ShaftB"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 9,
+      "Name": "Joints",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "GroundedJoint",
+            "RevoluteA",
+            "RevoluteB",
+            "GearsJoint"
+          ]
+        }
+      },
+      "TypeId": "Assembly::JointGroup"
+    },
+    {
+      "ID": 10,
+      "Name": "Assembly",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "Ground",
+            "ShaftA",
+            "ShaftB",
+            "Joints"
+          ]
+        }
+      },
+      "TypeId": "Assembly::AssemblyObject"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Assembly"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:481f46bce48b5e575131db348550b184bde6da59f4fafe4a856234600d053166",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

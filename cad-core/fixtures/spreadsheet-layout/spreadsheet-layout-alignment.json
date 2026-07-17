@@ -1,0 +1,27 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sheet",
+      "TypeId": "Spreadsheet::Sheet",
+      "Properties": {
+        "Cells": {
+          "PropertyType": "Spreadsheet::PropertySheet",
+          "cells": [
+            {"address": "A1", "content": "Alignment"}
+          ],
+          "operations": [
+            {"op": "setAlignment", "range": "A1", "value": "right|bottom"}
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sheet"]},
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {"cadCoreVersion": "fixture-contract-v1", "freecadVersion": "1.2.0 revision 20260519", "occtVersion": "fixture-occt-unspecified"},
+    "objects": {},
+    "documentHash": "sha256:0b3c187702a7a20f226b9def03220ab45afc279d5dd6effbc5f99329366a6034"
+  }
+}

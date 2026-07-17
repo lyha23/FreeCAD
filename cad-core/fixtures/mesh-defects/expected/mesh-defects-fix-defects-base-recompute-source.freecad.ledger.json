@@ -1,0 +1,84 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-defects-fix-defects-base-recompute-source",
+    "expectedPayloadHash": "sha256:c215b48a2589664b787c232f9523c0df66ebbc7ae98770a63b9598a8b0a6bef2",
+    "inputHash": "sha256:ed7893ff21fa5800144c7614856380ba0e977d1f3b1276ec48c4358aa9ceda38",
+    "phase": "mesh-defects",
+    "topoNamingStateHash": "sha256:3a31e14c25b20fb8cd080d0d76f0c4fd7e5615f4917fd6eab96db2b424b29af1"
+  },
+  "inputReferences": [],
+  "objects": {
+    "First": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Mesh::Feature"
+    },
+    "Result": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::FixDefects"
+    },
+    "Second": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Mesh::Feature"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {
+      "First": {
+        "coveredBy": "Result",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "Second": {
+        "coveredBy": "Result",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      }
+    },
+    "publishedObjects": {
+      "Result": {
+        "covers": [
+          "Result"
+        ],
+        "ledgerObject": "Result",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:3a31e14c25b20fb8cd080d0d76f0c4fd7e5615f4917fd6eab96db2b424b29af1",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

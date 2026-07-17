@@ -1,0 +1,28 @@
+{
+  "Objects": [
+    {
+      "Name": "Cube",
+      "TypeId": "Mesh::Cube",
+      "Properties": {
+        "Length": 1.0,
+        "Width": 2.0,
+        "Height": 3.0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Cube"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:c68ac5808723fe60fc7d430c91434bd71041ebbc644746fa58f8058931c9e963"
+  }
+}

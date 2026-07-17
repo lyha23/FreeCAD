@@ -1,0 +1,38 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 1.0,
+        "Width": 1.0,
+        "Height": 1.0
+      }
+    },
+    {
+      "Name": "Result",
+      "TypeId": "Mesh::HarmonizeNormals",
+      "Properties": {
+        "Source": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Box"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Result"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:63a9fd020a27d18cbb28dd1185677a48288a458719a1e35d2a55befa5533015d"
+  }
+}

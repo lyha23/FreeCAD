@@ -1,0 +1,82 @@
+{
+  "case": "mesh-ellipsoid-recompute-properties",
+  "phase": "mesh-primitives",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "5ac4756447d42d7996616aec0b7c0d87a3b379e5b1d8474f93a1c124d039faf8"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "83440e986bcb42fd9d3b5a813b84631eff72c6a1cdd7c395b9e045208fa25b53",
+    "manifestBeforeSha256": "e220b8168f7f3938b1afde2d0cda2f722c11f80ca5333b549e714f0ee171dc9b",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/private/tmp/freecad-mesh-api-collect-reports/mesh-ellipsoid-recompute-properties.json",
+      "sha256": "7a8dd96cd93068946e1af9b0e430da0556544494d247e54e7afb3ec749e91189"
+    },
+    "input": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-primitives/mesh-ellipsoid-recompute-properties.json",
+      "sha256": "bfb108fc90cd7caa0a9b39b22e585316143912d865ddae8e81727bff3df1e31e"
+    },
+    "ledger": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-primitives/expected/mesh-ellipsoid-recompute-properties.freecad.ledger.json",
+      "sha256": "15b622984db6bec322b6ab421a26b895bc1ae4913d701be1d2f79141d17233ab"
+    },
+    "publicExpected": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-primitives/expected/mesh-ellipsoid-recompute-properties.freecad.json",
+      "sha256": "a688bc549224ff9393c21149b87d7ae46d1e793053cdbc157415b1adc6b78532"
+    },
+    "repeatReport": {
+      "path": "/private/tmp/freecad-mesh-api-staging-reports/mesh-ellipsoid-recompute-properties.json",
+      "sha256": "113d660bc51690b8f97f1a994f8ec6153c0cf023e3c990fcaf41ae9a0411b986"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-ellipsoid-recompute-properties.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-ellipsoid-recompute-properties.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-primitives-mesh-ellipsoid-recompute-properties.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-ellipsoid-recompute-properties.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

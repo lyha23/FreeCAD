@@ -1,0 +1,82 @@
+{
+  "case": "spreadsheet-layout-row-column-size",
+  "phase": "spreadsheet-layout",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "b0e8345059de37386e3e6ac2926fe569aeeec1705ce941c4f9b6ae227fa8df33"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "52a787d05f4a83b0fa1eb86fcbd3c0c09a63514b31abb20565dac5b05b833917",
+    "manifestBeforeSha256": "ca8759bfb063269dde32462e1d4bb53605a2858dc1648c890bc7b916ab07c011",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-row-column-size/run-a.report.json",
+      "sha256": "a93d6335da5da3629a53a78ffab1921a28d74580c1b9a19cfb45187a65069672"
+    },
+    "input": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-row-column-size/run-a/spreadsheet-layout/spreadsheet-layout-row-column-size.json",
+      "sha256": "c284be1100a65d5836eacce3038e0b7bb3914492e25b64dd556bd2086bbf5462"
+    },
+    "ledger": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-row-column-size/run-a/spreadsheet-layout/expected/spreadsheet-layout-row-column-size.freecad.ledger.json",
+      "sha256": "6100e51d1ee955bdfe54d7be562d32ee42751bfc96691ba02c1e2a1082823cce"
+    },
+    "publicExpected": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-row-column-size/run-a/spreadsheet-layout/expected/spreadsheet-layout-row-column-size.freecad.json",
+      "sha256": "a64d857b6cb212064ec7d2744642af5b0030098f02fa19529d978a0ce7f7cf7a"
+    },
+    "repeatReport": {
+      "path": "/private/tmp/spreadsheet-layout-staging/reports/spreadsheet-layout-row-column-size.json",
+      "sha256": "507aeb6091fe3b7a7dc0adeac823e2af12eac5fbfec808451cff0b5651f40439"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-row-column-size.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-row-column-size.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/spreadsheet-layout-spreadsheet-layout-row-column-size.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-row-column-size.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

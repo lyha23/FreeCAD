@@ -1,0 +1,12 @@
+Model:
+  Name: "A2 Invalid Property Model"
+  UUID: "a2000000-0000-4000-8000-000000000006"
+  URL: ""
+  Description: "Model has one unsupported property type"
+  DOI: ""
+  InvalidValue:
+    DisplayName: "Invalid value"
+    Type: "DefinitelyNotAFreeCADMaterialType"
+    Units: ""
+    URL: ""
+    Description: "Must be ignored"

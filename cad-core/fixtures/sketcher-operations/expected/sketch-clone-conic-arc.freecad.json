@@ -1,0 +1,234 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sketch",
+      "object_fields": {
+        "external_curve_count": 0,
+        "external_geometry_count": 0,
+        "external_point_count": 0,
+        "raw_edge_count": 2,
+        "shape": "occt_sketch_shape",
+        "status": "ok"
+      },
+      "sketch_constraints": [
+        {
+          "first": 0,
+          "firstPos": 1,
+          "index": 0,
+          "second": 2,
+          "secondPos": 1,
+          "third": -2000,
+          "thirdPos": 0,
+          "type": "Coincident",
+          "value": 0.0
+        },
+        {
+          "first": 1,
+          "firstPos": 1,
+          "index": 1,
+          "second": 2,
+          "secondPos": 2,
+          "third": -2000,
+          "thirdPos": 0,
+          "type": "Coincident",
+          "value": 0.0
+        },
+        {
+          "first": 2,
+          "firstPos": 0,
+          "index": 2,
+          "second": -2000,
+          "secondPos": 0,
+          "third": -2000,
+          "thirdPos": 0,
+          "type": "Distance",
+          "value": 4.0
+        },
+        {
+          "first": 2,
+          "firstPos": 0,
+          "index": 3,
+          "second": -2000,
+          "secondPos": 0,
+          "third": -2000,
+          "thirdPos": 0,
+          "type": "Angle",
+          "value": 1.5707963267948966
+        }
+      ],
+      "sketch_external": {
+        "construction_count": 0,
+        "flag_counts": {
+          "Defining": 0,
+          "Detached": 0,
+          "Frozen": 0,
+          "Missing": 0,
+          "Sync": 0
+        },
+        "flags": []
+      },
+      "sketch_geometry": [
+        {
+          "construction": false,
+          "index": 0,
+          "shape": {
+            "bbox": {
+              "max": [
+                4.510503860825523,
+                1.0421906109874948,
+                0.0
+              ],
+              "min": [
+                4.0,
+                -1.0421906109874948,
+                0.0
+              ]
+            },
+            "length": 2.3763376074756937,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                4.510503860825523,
+                -1.0421906109874948,
+                0.0
+              ],
+              [
+                4.510503860825523,
+                1.0421906109874948,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomArcOfHyperbola"
+        },
+        {
+          "construction": false,
+          "index": 1,
+          "shape": {
+            "bbox": {
+              "max": [
+                4.510503860825523,
+                5.042190610987495,
+                0.0
+              ],
+              "min": [
+                4.0,
+                2.957809389012505,
+                0.0
+              ]
+            },
+            "length": 2.3763376074756937,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                4.510503860825523,
+                2.957809389012505,
+                0.0
+              ],
+              [
+                4.510503860825523,
+                5.042190610987495,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomArcOfHyperbola"
+        },
+        {
+          "construction": true,
+          "index": 2,
+          "shape": {
+            "bbox": {
+              "max": [
+                4.510503860825523,
+                2.957809389012505,
+                0.0
+              ],
+              "min": [
+                4.510503860825523,
+                -1.0421906109874948,
+                0.0
+              ]
+            },
+            "length": 4.0,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                4.510503860825523,
+                -1.0421906109874948,
+                0.0
+              ],
+              [
+                4.510503860825523,
+                2.957809389012505,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomLineSegment"
+        }
+      ],
+      "sketch_internal": {
+        "profile_ready": false,
+        "raw_edge_count": 2,
+        "shape": "empty"
+      },
+      "sketch_operations": [
+        {
+          "evidenceLevel": "target_result",
+          "index": 0,
+          "operation": "addCopy",
+          "result": [
+            2
+          ],
+          "stage": "initial"
+        }
+      ],
+      "sketch_solver": {
+        "conflictingConstraints": [],
+        "constraintCount": 4,
+        "degreesOfFreedom": 12,
+        "fullyConstrained": false,
+        "geometryCount": 3,
+        "malformedConstraints": [],
+        "openVertexCount": 4,
+        "partiallyRedundantConstraints": [],
+        "redundantConstraints": []
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:8ce1a7b61dff8f68a5766ec0b92a1c56b217e3169c3ac115203a7d7af25c43b6",
+    "objects": {
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:6d9a86787dc6007e293555e7121f9b5030d794ff87d7736b34cf5ae88aad3e3a",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

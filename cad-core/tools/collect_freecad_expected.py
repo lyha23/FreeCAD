@@ -63,6 +63,8 @@ TOPO_CHILD_INDEX_PATH_RE = re.compile(
 TOPO_DISPLAY_PATH_STABLE_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*\.(Face|Edge|Vertex)\d+$")
 ACTIVE_TOPO_NAMING_STATE: dict[str, Any] | None = None
 ACTIVE_RESOLVED_REFERENCE_BINDINGS: list[dict[str, str]] = []
+ACTIVE_SKETCH_OPERATION_RECEIPTS: dict[str, list[dict[str, Any]]] = {}
+ACTIVE_SPREADSHEET_OPERATION_RECEIPTS: dict[str, list[dict[str, Any]]] = {}
 LAST_FREECAD_LEDGER_CAPTURE: dict[str, Any] | None = None
 LAST_FREECAD_PRODUCER_TRACE: dict[str, Any] | None = None
 COLLECT_PRODUCER_TRACE = False
@@ -80,7 +82,26 @@ SUPPORTED_NATIVE_TYPES = {
     "Assembly::AssemblyLink",
     "Assembly::AssemblyObject",
     "Assembly::JointGroup",
+    "Mesh::Cone",
+    "Mesh::Cube",
+    "Mesh::Cylinder",
+    "Mesh::Ellipsoid",
+    "Mesh::FillHoles",
+    "Mesh::Feature",
+    "Mesh::FixDefects",
+    "Mesh::FixDeformations",
+    "Mesh::FixDegenerations",
+    "Mesh::FixDuplicatedFaces",
+    "Mesh::FixDuplicatedPoints",
+    "Mesh::FixIndices",
+    "Mesh::FixNonManifolds",
+    "Mesh::FlipNormals",
+    "Mesh::HarmonizeNormals",
     "Mesh::Import",
+    "Mesh::RemoveComponents",
+    "Mesh::SetOperations",
+    "Mesh::Sphere",
+    "Mesh::Torus",
     "PartDesign::Body",
     "PartDesign::AdditiveLoft",
     "PartDesign::AdditivePipe",
@@ -2993,6 +3014,267 @@ def set_sketch_constraints(obj: Any, value: Any) -> None:
         obj.addConstraint(constraint)
 
 
+SKETCH_OPERATION_COMMON_FIELDS = {"op", "expectedOutcome"}
+SKETCH_OPERATION_FIELDS = {
+    "trim": {"geometryId", "point"},
+    "extend": {"geometryId", "increment", "endpoint"},
+    "fillet": {
+        "geometryIds",
+        "referencePoints",
+        "radius",
+        "trim",
+        "createCorner",
+        "chamfer",
+    },
+    "addCopy": {"geometryIds", "displacement", "clone"},
+    "block": {"geometryId"},
+    "addConstraint": {"constraint"},
+    "setDatum": {"constraintId", "value"},
+    "convertToNURBS": {"geometryId"},
+    "increaseBSplineDegree": {"geometryId", "increment"},
+    "modifyBSplineKnotMultiplicity": {"geometryId", "knotIndex", "increment"},
+    "insertBSplineKnot": {"geometryId", "parameter", "multiplicity"},
+    "exposeInternalGeometry": {"geometryId"},
+}
+
+
+def sketch_operation_int(action: dict[str, Any], name: str, operation_index: int) -> int:
+    value = action.get(name)
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise UnsupportedFixture(
+            f"Sketch Operations[{operation_index}].{name} must be an integer"
+        )
+    return value
+
+
+def sketch_operation_number(action: dict[str, Any], name: str, operation_index: int) -> float:
+    value = action.get(name)
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise UnsupportedFixture(
+            f"Sketch Operations[{operation_index}].{name} must be a number"
+        )
+    return float(value)
+
+
+def sketch_operation_geometry_ids(
+    action: dict[str, Any],
+    operation_index: int,
+) -> list[int]:
+    value = action.get("geometryIds")
+    if (
+        not isinstance(value, list)
+        or not value
+        or not all(isinstance(item, int) and not isinstance(item, bool) for item in value)
+    ):
+        raise UnsupportedFixture(
+            f"Sketch Operations[{operation_index}].geometryIds must be a non-empty integer list"
+        )
+    return list(value)
+
+
+def sketch_operation_result(value: Any) -> Any:
+    if value is None or isinstance(value, (bool, int, float, str)):
+        return value
+    if isinstance(value, (list, tuple)):
+        return [sketch_operation_result(item) for item in value]
+    return str(value)
+
+
+def execute_sketch_operation(
+    FreeCAD: Any,
+    obj: Any,
+    action: dict[str, Any],
+    operation_index: int,
+) -> Any:
+    operation = action["op"]
+    if operation == "trim":
+        return obj.trim(
+            sketch_operation_int(action, "geometryId", operation_index),
+            vector_value(FreeCAD, action.get("point"), "Sketch Operations.trim.point"),
+        )
+    if operation == "extend":
+        raw_endpoint = action.get("endpoint")
+        endpoint = (
+            SKETCH_POINT_POSITIONS.get(raw_endpoint.lower())
+            if isinstance(raw_endpoint, str)
+            else raw_endpoint
+        )
+        if endpoint not in {SKETCH_POINT_POSITIONS["start"], SKETCH_POINT_POSITIONS["end"]}:
+            raise UnsupportedFixture(
+                f"Sketch Operations[{operation_index}].endpoint must be start/end or 1/2"
+            )
+        return obj.extend(
+            sketch_operation_int(action, "geometryId", operation_index),
+            sketch_operation_number(action, "increment", operation_index),
+            endpoint,
+        )
+    if operation == "fillet":
+        geometry_ids = sketch_operation_geometry_ids(action, operation_index)
+        reference_points = action.get("referencePoints")
+        if (
+            len(geometry_ids) != 2
+            or not isinstance(reference_points, list)
+            or len(reference_points) != 2
+        ):
+            raise UnsupportedFixture(
+                f"Sketch Operations[{operation_index}] fillet requires two geometryIds and two referencePoints"
+            )
+        return obj.fillet(
+            geometry_ids[0],
+            geometry_ids[1],
+            vector_value(
+                FreeCAD,
+                reference_points[0],
+                "Sketch Operations.fillet.referencePoints[0]",
+            ),
+            vector_value(
+                FreeCAD,
+                reference_points[1],
+                "Sketch Operations.fillet.referencePoints[1]",
+            ),
+            sketch_operation_number(action, "radius", operation_index),
+            bool(action.get("trim", True)),
+            bool(action.get("createCorner", False)),
+            bool(action.get("chamfer", False)),
+        )
+    if operation == "addCopy":
+        return obj.addCopy(
+            sketch_operation_geometry_ids(action, operation_index),
+            vector_value(
+                FreeCAD,
+                action.get("displacement"),
+                "Sketch Operations.addCopy.displacement",
+            ),
+            bool(action.get("clone", False)),
+        )
+    if operation in {"block", "addConstraint"}:
+        import Sketcher  # type: ignore
+
+        if operation == "block":
+            constraint = Sketcher.Constraint(
+                "Block",
+                sketch_operation_int(action, "geometryId", operation_index),
+            )
+        else:
+            raw_constraint = action.get("constraint")
+            if not isinstance(raw_constraint, dict):
+                raise UnsupportedFixture(
+                    f"Sketch Operations[{operation_index}].constraint must be an object"
+                )
+            constraint = Sketcher.Constraint(
+                *sketch_constraint_constructor_args(raw_constraint, operation_index)
+            )
+        return obj.addConstraint(constraint)
+    if operation == "setDatum":
+        return obj.setDatum(
+            sketch_operation_int(action, "constraintId", operation_index),
+            sketch_operation_number(action, "value", operation_index),
+        )
+    if operation == "convertToNURBS":
+        return obj.convertToNURBS(sketch_operation_int(action, "geometryId", operation_index))
+    if operation == "increaseBSplineDegree":
+        return obj.increaseBSplineDegree(
+            sketch_operation_int(action, "geometryId", operation_index),
+            sketch_operation_int(action, "increment", operation_index),
+        )
+    if operation == "modifyBSplineKnotMultiplicity":
+        return obj.modifyBSplineKnotMultiplicity(
+            sketch_operation_int(action, "geometryId", operation_index),
+            sketch_operation_int(action, "knotIndex", operation_index),
+            sketch_operation_int(action, "increment", operation_index),
+        )
+    if operation == "insertBSplineKnot":
+        return obj.insertBSplineKnot(
+            sketch_operation_int(action, "geometryId", operation_index),
+            sketch_operation_number(action, "parameter", operation_index),
+            sketch_operation_int(action, "multiplicity", operation_index),
+        )
+    if operation == "exposeInternalGeometry":
+        return obj.exposeInternalGeometry(
+            sketch_operation_int(action, "geometryId", operation_index)
+        )
+    raise UnsupportedFixture(f"unsupported Sketch operation {operation}")
+
+
+def apply_sketch_operations(
+    FreeCAD: Any,
+    obj: Any,
+    value: Any,
+    *,
+    stage: str,
+) -> None:
+    if not isinstance(value, list) or not value:
+        raise UnsupportedFixture("Sketch Operations must be a non-empty list")
+    object_name = str(getattr(obj, "Name", ""))
+    receipts = ACTIVE_SKETCH_OPERATION_RECEIPTS.setdefault(object_name, [])
+    for index, action in enumerate(value):
+        if not isinstance(action, dict):
+            raise UnsupportedFixture(f"Sketch Operations[{index}] must be an object")
+        operation = action.get("op")
+        if not isinstance(operation, str) or operation not in SKETCH_OPERATION_FIELDS:
+            raise UnsupportedFixture(f"Sketch Operations[{index}].op is unsupported: {operation!r}")
+        unknown = sorted(
+            set(action) - SKETCH_OPERATION_COMMON_FIELDS - SKETCH_OPERATION_FIELDS[operation]
+        )
+        if unknown:
+            raise UnsupportedFixture(
+                f"Sketch Operations[{index}] {operation} has unsupported fields: {unknown}"
+            )
+        expected_outcome = action.get("expectedOutcome", "target_result")
+        if expected_outcome not in {"target_result", "native_diagnostic"}:
+            raise UnsupportedFixture(
+                f"Sketch Operations[{index}].expectedOutcome must be target_result/native_diagnostic"
+            )
+
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObjectPyImp.cpp
+        # ::SketchObjectPy::{trim,extend,fillet,addCopy,setDatum,convertToNURBS,
+        # increaseBSplineDegree,modifyBSplineKnotMultiplicity,insertBSplineKnot} expose the
+        # public Python operation boundary and translate non-zero C++ results to Python errors.
+        # The collector invokes only that public boundary, then projects the resulting
+        # Geometry/Constraints/DoF state below; fixture names and geometry combinations never
+        # select implementation behavior.
+        try:
+            result = execute_sketch_operation(FreeCAD, obj, action, index)
+        except UnsupportedFixture:
+            # A malformed collector envelope is not a FreeCAD native diagnostic.  Keep schema
+            # and argument validation fail-closed so expectedOutcome cannot relabel collector
+            # input errors as source-backed operation evidence.
+            raise
+        except Exception as exc:
+            if expected_outcome != "native_diagnostic":
+                raise UnsupportedFixture(
+                    f"Sketch operation {operation} failed unexpectedly: {type(exc).__name__}: {exc}"
+                ) from exc
+            receipts.append(
+                {
+                    "index": len(receipts),
+                    "stage": stage,
+                    "operation": operation,
+                    "evidenceLevel": "native_diagnostic",
+                    "nativeDiagnostic": {
+                        "code": f"sketch_{operation.lower()}_failed",
+                        "exceptionType": type(exc).__name__,
+                        "message": str(exc),
+                    },
+                }
+            )
+            continue
+
+        if expected_outcome == "native_diagnostic":
+            raise UnsupportedFixture(
+                f"Sketch operation {operation} unexpectedly succeeded; native diagnostic was required"
+            )
+        receipts.append(
+            {
+                "index": len(receipts),
+                "stage": stage,
+                "operation": operation,
+                "evidenceLevel": "target_result",
+                "result": sketch_operation_result(result),
+            }
+        )
+
+
 def external_geometry_facade(geometry: Any) -> Any:
     import Sketcher  # type: ignore
 
@@ -3045,7 +3327,15 @@ def set_sketch_external_geo(FreeCAD: Any, obj: Any, value: Any) -> None:
     obj.ExternalGeo = existing[:2] + geos
 
 
-def set_sketch_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, value: Any) -> None:
+def set_sketch_property(
+    FreeCAD: Any,
+    created: dict[str, Any],
+    obj: Any,
+    name: str,
+    value: Any,
+    *,
+    operation_stage: str = "initial",
+) -> None:
     if name == "Geometry":
         set_sketch_geometry(FreeCAD, obj, value)
         return
@@ -3057,6 +3347,9 @@ def set_sketch_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: s
         return
     if name == "ExternalGeometry":
         set_sketch_external_geometry(created, obj, value)
+        return
+    if name == "Operations":
+        apply_sketch_operations(FreeCAD, obj, value, stage=operation_stage)
         return
     set_property(FreeCAD, created, obj, name, value)
 
@@ -3179,14 +3472,176 @@ def set_material_property(obj: Any, name: str, value: dict[str, Any]) -> None:
     safe_setattr(obj, name, material)
 
 
-def set_spreadsheet_cells(obj: Any, value: dict[str, Any]) -> None:
+SPREADSHEET_OPERATION_COMMON_FIELDS = {"op", "expectedOutcome"}
+SPREADSHEET_OPERATION_FIELDS = {
+    "setStyle": {"range", "value", "options"},
+    "setAlignment": {"range", "value", "options"},
+    "setColumnWidth": {"column", "width"},
+    "setRowHeight": {"row", "height"},
+    "mergeCells": {"range"},
+    "splitCell": {"address"},
+}
+
+
+def spreadsheet_operation_arguments(action: dict[str, Any]) -> dict[str, Any]:
+    return {
+        name: value
+        for name, value in action.items()
+        if name not in SPREADSHEET_OPERATION_COMMON_FIELDS
+    }
+
+
+def execute_spreadsheet_operation(obj: Any, action: dict[str, Any]) -> dict[str, Any]:
+    operation = action["op"]
+    if operation in {"setStyle", "setAlignment"}:
+        cell_range = action.get("range")
+        value = action.get("value")
+        options = action.get("options", "replace")
+        if not isinstance(cell_range, str) or not cell_range:
+            raise UnsupportedFixture(f"Spreadsheet {operation}.range must be a non-empty string")
+        if not isinstance(value, (str, list)) or isinstance(value, list) and not all(
+            isinstance(item, str) for item in value
+        ):
+            raise UnsupportedFixture(f"Spreadsheet {operation}.value must be a string or string list")
+        if not isinstance(options, str) or not options:
+            raise UnsupportedFixture(f"Spreadsheet {operation}.options must be a non-empty string")
+        native_value = set(value) if isinstance(value, list) else value
+        getattr(obj, operation)(cell_range, native_value, options)
+        observed: dict[str, Any] = {}
+        if ":" not in cell_range:
+            getter = obj.getStyle if operation == "setStyle" else obj.getAlignment
+            observed["value"] = sorted(str(item) for item in (getter(cell_range) or []))
+        return observed
+    if operation == "setColumnWidth":
+        column = action.get("column")
+        width = action.get("width")
+        if not isinstance(column, str) or not column:
+            raise UnsupportedFixture("Spreadsheet setColumnWidth.column must be a non-empty string")
+        if isinstance(width, bool) or not isinstance(width, int):
+            raise UnsupportedFixture("Spreadsheet setColumnWidth.width must be an integer")
+        obj.setColumnWidth(column, width)
+        return {"width": int(obj.getColumnWidth(column))}
+    if operation == "setRowHeight":
+        row = action.get("row")
+        height = action.get("height")
+        if not isinstance(row, str) or not row:
+            raise UnsupportedFixture("Spreadsheet setRowHeight.row must be a non-empty string")
+        if isinstance(height, bool) or not isinstance(height, int):
+            raise UnsupportedFixture("Spreadsheet setRowHeight.height must be an integer")
+        obj.setRowHeight(row, height)
+        return {"height": int(obj.getRowHeight(row))}
+    if operation == "mergeCells":
+        cell_range = action.get("range")
+        if not isinstance(cell_range, str) or not cell_range:
+            raise UnsupportedFixture("Spreadsheet mergeCells.range must be a non-empty string")
+        obj.mergeCells(cell_range)
+        return {"usedCells": sorted(str(item) for item in obj.getUsedCells())}
+    if operation == "splitCell":
+        address = action.get("address")
+        if not isinstance(address, str) or not address:
+            raise UnsupportedFixture("Spreadsheet splitCell.address must be a non-empty string")
+        obj.splitCell(address)
+        return {"usedCells": sorted(str(item) for item in obj.getUsedCells())}
+    raise UnsupportedFixture(f"unsupported Spreadsheet operation {operation}")
+
+
+def apply_spreadsheet_operations(obj: Any, value: Any, *, stage: str) -> None:
+    if not isinstance(value, list) or not value:
+        raise UnsupportedFixture("Spreadsheet operations must be a non-empty list")
+    receipts = ACTIVE_SPREADSHEET_OPERATION_RECEIPTS.setdefault(
+        str(getattr(obj, "Name", "")), []
+    )
+    for action_index, action in enumerate(value):
+        if not isinstance(action, dict):
+            raise UnsupportedFixture(f"Spreadsheet operations[{action_index}] must be an object")
+        operation = action.get("op")
+        if not isinstance(operation, str) or operation not in SPREADSHEET_OPERATION_FIELDS:
+            raise UnsupportedFixture(
+                f"Spreadsheet operations[{action_index}].op is unsupported: {operation!r}"
+            )
+        unknown = sorted(
+            set(action)
+            - SPREADSHEET_OPERATION_COMMON_FIELDS
+            - SPREADSHEET_OPERATION_FIELDS[operation]
+        )
+        if unknown:
+            raise UnsupportedFixture(
+                f"Spreadsheet operations[{action_index}] {operation} has unsupported fields: {unknown}"
+            )
+        expected_outcome = action.get("expectedOutcome", "target_result")
+        if expected_outcome not in {"target_result", "native_diagnostic"}:
+            raise UnsupportedFixture(
+                "Spreadsheet operations"
+                f"[{action_index}].expectedOutcome must be target_result/native_diagnostic"
+            )
+
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp
+        # ::SheetPy::{setStyle,setAlignment,setColumnWidth,setRowHeight,mergeCells,splitCell}
+        # validates the public Python arguments and forwards them to Sheet.cpp.  Invoke this
+        # public API boundary directly; fixture names and phases never select behavior.
+        try:
+            observed = execute_spreadsheet_operation(obj, action)
+        except UnsupportedFixture:
+            raise
+        except Exception as exc:
+            if expected_outcome != "native_diagnostic":
+                raise UnsupportedFixture(
+                    f"Spreadsheet operation {operation} failed unexpectedly: "
+                    f"{type(exc).__name__}: {exc}"
+                ) from exc
+            receipts.append({
+                "index": len(receipts),
+                "stage": stage,
+                "operation": operation,
+                "arguments": spreadsheet_operation_arguments(action),
+                "evidenceLevel": "native_diagnostic",
+                "nativeDiagnostic": {
+                    "code": f"spreadsheet_{operation.lower()}_failed",
+                    "exceptionType": type(exc).__name__,
+                    "message": str(exc),
+                },
+            })
+            continue
+        if expected_outcome == "native_diagnostic":
+            raise UnsupportedFixture(
+                f"Spreadsheet operation {operation} unexpectedly succeeded; "
+                "native diagnostic was required"
+            )
+        receipts.append({
+            "index": len(receipts),
+            "stage": stage,
+            "operation": operation,
+            "arguments": spreadsheet_operation_arguments(action),
+            "evidenceLevel": "target_result",
+            "observed": observed,
+        })
+
+
+def set_spreadsheet_cells(
+    obj: Any,
+    value: dict[str, Any],
+    *,
+    operation_stage: str = "initial",
+) -> None:
     # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp
     # ::SheetPy::set() forwards cell text to Sheet::setCell(), and ::setAlias()
     # forwards aliases to Sheet::setAlias(). These are the native public mutation APIs;
     # the hidden Spreadsheet::PropertySheet slot is not assigned directly.
+    unknown_property_fields = sorted(set(value) - {"PropertyType", "cells", "operations"})
+    if unknown_property_fields:
+        raise UnsupportedFixture(
+            "Spreadsheet::PropertySheet has unsupported fields: "
+            f"{unknown_property_fields}"
+        )
     cells = value.get("cells")
-    if not isinstance(cells, list):
+    operations = value.get("operations")
+    if cells is None and operations is None:
+        raise UnsupportedFixture(
+            "Spreadsheet::PropertySheet requires cells and/or operations"
+        )
+    if cells is not None and not isinstance(cells, list):
         raise UnsupportedFixture("Spreadsheet::PropertySheet cells must be a list")
+    cells = [] if cells is None else cells
     for index, cell in enumerate(cells):
         if not isinstance(cell, dict):
             raise UnsupportedFixture(f"Spreadsheet::PropertySheet cells[{index}] must be an object")
@@ -3220,6 +3675,72 @@ def set_spreadsheet_cells(obj: Any, value: dict[str, Any]) -> None:
             raise UnsupportedFixture(
                 f"Spreadsheet::PropertySheet cannot set {address}: {exc}"
             ) from exc
+    if operations is not None:
+        apply_spreadsheet_operations(obj, operations, stage=operation_stage)
+
+
+def mesh_kernel_property_value(FreeCAD: Any, value: dict[str, Any]) -> Any:
+    """Build a public Mesh::Mesh value from an indexed triangle envelope."""
+
+    unknown = sorted(set(value) - {"PropertyType", "vertices", "facets", "check"})
+    if unknown:
+        raise UnsupportedFixture(
+            f"Mesh::PropertyMeshKernel has unsupported fields: {unknown}"
+        )
+    vertices = value.get("vertices")
+    facets = value.get("facets")
+    check = value.get("check", True)
+    if not isinstance(vertices, list) or not vertices:
+        raise UnsupportedFixture(
+            "Mesh::PropertyMeshKernel.vertices must be a non-empty list"
+        )
+    if not isinstance(facets, list) or not facets:
+        raise UnsupportedFixture(
+            "Mesh::PropertyMeshKernel.facets must be a non-empty list"
+        )
+    if not isinstance(check, bool):
+        raise UnsupportedFixture("Mesh::PropertyMeshKernel.check must be a boolean")
+
+    native_vertices = []
+    for index, vertex in enumerate(vertices):
+        if (
+            not isinstance(vertex, list)
+            or len(vertex) != 3
+            or not all(isinstance(component, (int, float)) for component in vertex)
+        ):
+            raise UnsupportedFixture(
+                f"Mesh::PropertyMeshKernel.vertices[{index}] must be a numeric 3D point"
+            )
+        native_vertices.append(
+            FreeCAD.Vector(float(vertex[0]), float(vertex[1]), float(vertex[2]))
+        )
+
+    native_facets = []
+    for index, facet in enumerate(facets):
+        if (
+            not isinstance(facet, list)
+            or len(facet) != 3
+            or not all(isinstance(point_index, int) for point_index in facet)
+        ):
+            raise UnsupportedFixture(
+                f"Mesh::PropertyMeshKernel.facets[{index}] must contain three integer indices"
+            )
+        if any(point_index < 0 or point_index >= len(native_vertices) for point_index in facet):
+            raise UnsupportedFixture(
+                f"Mesh::PropertyMeshKernel.facets[{index}] references a vertex out of range"
+            )
+        native_facets.append(tuple(facet))
+
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/MeshPyImp.cpp
+    # ::MeshPy::addFacets() accepts the public ``([Vector], [(i,j,k)]), check`` form and
+    # forwards it to MeshObject::addFacets(facets, points, checkManifolds).  Keeping indexed
+    # vertices lets authority fixtures express duplicated points, degenerations, non-manifold
+    # edges and disconnected components without relying on an importer to normalize them first.
+    import Mesh  # type: ignore
+
+    mesh = Mesh.Mesh()
+    mesh.addFacets((native_vertices, native_facets), check)
+    return mesh
 
 
 def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, value: Any) -> None:
@@ -3255,6 +3776,9 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             return
         if property_type == "Spreadsheet::PropertySheet":
             set_spreadsheet_cells(obj, value)
+            return
+        if property_type == "Mesh::PropertyMeshKernel":
+            safe_setattr(obj, name, mesh_kernel_property_value(FreeCAD, value))
             return
         if property_type in {
             "App::PropertyBool",
@@ -3376,6 +3900,21 @@ def ordered_native_property_items(
     properties: dict[str, Any],
 ) -> list[tuple[str, Any]]:
     items = list(properties.items())
+    if type_id == "Sketcher::SketchObject":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App
+        # /SketchObjectGeometry.cpp::SketchObject::addGeometry() and
+        # /SketchObjectConstraints.cpp::SketchObject::addConstraint() establish the managed
+        # Geometry/Constraints state consumed by SketchObjectOperations.cpp.  The collector's
+        # public operation envelope is therefore always applied after those native properties,
+        # independent of JSON member order.
+        ordered_names = ("Geometry", "Constraints")
+        ordered = [(name, properties[name]) for name in ordered_names if name in properties]
+        ordered.extend(
+            item for item in items if item[0] not in {*ordered_names, "Operations"}
+        )
+        if "Operations" in properties:
+            ordered.append(("Operations", properties["Operations"]))
+        return ordered
     if type_id != "PartDesign::SubShapeBinder":
         return items
 
@@ -11012,14 +11551,31 @@ def spreadsheet_payload(obj: Any, fixture: dict | None) -> dict[str, Any]:
     properties = spec.get("Properties") if isinstance(spec, dict) else None
     cells_property = properties.get("Cells") if isinstance(properties, dict) else None
     cells = cells_property.get("cells") if isinstance(cells_property, dict) else None
+    operations = cells_property.get("operations") if isinstance(cells_property, dict) else None
     if not isinstance(cells, list):
-        raise UnsupportedFixture(f"Spreadsheet target {obj.Name} has no Cells fixture contract")
+        if operations is None:
+            raise UnsupportedFixture(f"Spreadsheet target {obj.Name} has no Cells fixture contract")
+        cells = []
 
     rows: list[dict[str, Any]] = []
+    used_cells = {str(item) for item in obj.getUsedCells()} if operations is not None else None
     for index, cell in enumerate(cells):
         if not isinstance(cell, dict) or not isinstance(cell.get("address"), str):
             raise UnsupportedFixture(f"Spreadsheet target {obj.Name} has invalid cell {index}")
         address = str(cell["address"])
+        if used_cells is not None and address not in used_cells:
+            # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App
+            # /PropertySheet.cpp::PropertySheet::mergeCells() calls clear() for covered cells.
+            # SheetPy::getUsedCells() is the public observation that the declared cell was
+            # removed; get/getContents intentionally reject that now-invalid address.
+            rows.append({
+                "address": address,
+                "alias": None,
+                "content": "",
+                "value": None,
+                "clearedByLayoutOperation": True,
+            })
+            continue
         try:
             alias = obj.getAlias(address)
             rows.append({
@@ -11032,7 +11588,7 @@ def spreadsheet_payload(obj: Any, fixture: dict | None) -> dict[str, Any]:
             raise UnsupportedFixture(
                 f"Spreadsheet target {obj.Name} cannot read {address}: {exc}"
             ) from exc
-    return {
+    payload = {
         "object_fields": {
             "status": "ok",
             "shape": "spreadsheet",
@@ -11042,6 +11598,12 @@ def spreadsheet_payload(obj: Any, fixture: dict | None) -> dict[str, Any]:
             "cells": rows,
         },
     }
+    operation_receipts = ACTIVE_SPREADSHEET_OPERATION_RECEIPTS.get(
+        str(getattr(obj, "Name", "")), []
+    )
+    if operation_receipts:
+        payload["spreadsheet"]["layoutOperations"] = operation_receipts
+    return payload
 
 
 def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
@@ -11081,8 +11643,8 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
         return datum_payload(obj)
 
     shape = getattr(obj, "Shape", None)
-    if type_id == "Mesh::Import":
-        return mesh_import_summary(obj)
+    if type_id.startswith("Mesh::"):
+        return mesh_feature_summary(obj)
     if shape is None or shape.isNull():
         raise UnsupportedFixture(f"target object {obj.Name} has no shape")
     if type_id == "Sketcher::SketchObject":
@@ -11100,23 +11662,53 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
     return payload
 
 
-def mesh_import_summary(obj: Any) -> dict:
-    # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Mesh/App
-    # /FeatureMeshImport.cpp::Mesh::Import::execute(), reads PropertyFile "FileName",
-    # calls "apcKernel->load(...)" and stores the result with "Mesh.setValuePtr(...)".
-    # Mesh objects publish Mesh.CountPoints / CountEdges / CountFacets / Volume and
-    # BoundBox rather than a Part "Shape".
+def mesh_feature_summary(obj: Any) -> dict:
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMesh.cpp
+    # ::Mesh::Feature owns PropertyMeshKernel "Mesh". FeatureMeshImport.cpp::Import::execute(),
+    # FeatureMeshSolid.cpp::{Sphere,Ellipsoid,Cylinder,Cone,Torus,Cube}::execute(),
+    # FeatureMeshSetOperations.cpp::SetOperations::execute(), and the concrete
+    # FeatureMeshDefects.cpp::*::execute() implementations all publish their result through
+    # that same property. Mesh.cpp::MeshObject exposes "isSolid()", CountPoints,
+    # CountEdges, CountFacets, Volume and the defect queries used below. Keep this projection
+    # TypeId-driven and public-property-driven; it must not depend on fixture or case names.
     mesh = getattr(obj, "Mesh", None)
     if mesh is None:
         raise UnsupportedFixture(f"target object {obj.Name} has no Mesh")
     bbox = mesh.BoundBox
     vertex_count = int(mesh.CountPoints)
     triangle_count = int(mesh.CountFacets)
-    return {
+    state = sorted(str(item) for item in getattr(obj, "State", []))
+    if vertex_count:
+        bbox_min = [float(bbox.XMin), float(bbox.YMin), float(bbox.ZMin)]
+        bbox_max = [float(bbox.XMax), float(bbox.YMax), float(bbox.ZMax)]
+    else:
+        # Base::BoundBox3 is void for an empty PropertyMeshKernel and exposes sentinel
+        # extrema. Public protocol output must stay finite, especially for native diagnostic
+        # branches that intentionally produce no result mesh.
+        bbox_min = [0.0, 0.0, 0.0]
+        bbox_max = [0.0, 0.0, 0.0]
+
+    facets = list(getattr(mesh, "Facets", []))
+    normal_sum = [0.0, 0.0, 0.0]
+    first_normal = [0.0, 0.0, 0.0]
+    for index, facet in enumerate(facets):
+        normal = getattr(facet, "Normal", None)
+        values = [
+            float(getattr(normal, "x", 0.0)),
+            float(getattr(normal, "y", 0.0)),
+            float(getattr(normal, "z", 0.0)),
+        ]
+        if index == 0:
+            first_normal = values
+        for axis, component in enumerate(values):
+            normal_sum[axis] += component
+
+    payload = {
         "bbox": {
-            "min": [float(bbox.XMin), float(bbox.YMin), float(bbox.ZMin)],
-            "max": [float(bbox.XMax), float(bbox.YMax), float(bbox.ZMax)],
+            "min": bbox_min,
+            "max": bbox_max,
         },
+        "closed": bool(mesh.isSolid()),
         "volume": float(mesh.Volume),
         "topology_counts": {
             "faces": triangle_count,
@@ -11127,7 +11719,48 @@ def mesh_import_summary(obj: Any) -> dict:
             "vertex_count": vertex_count,
             "triangle_count": triangle_count,
         },
+        "mesh_defects": {
+            "component_count": int(mesh.countComponents()),
+            "has_non_manifolds": bool(mesh.hasNonManifolds()),
+            "has_non_uniform_oriented_facets": bool(
+                mesh.hasNonUniformOrientedFacets()
+            ),
+            "has_self_intersections": bool(mesh.hasSelfIntersections()),
+            "non_uniform_oriented_facet_count": int(
+                mesh.countNonUniformOrientedFacets()
+            ),
+        },
+        "mesh_orientation": {
+            "first_facet_normal": first_normal,
+            "normal_sum": normal_sum,
+        },
     }
+    type_id = str(getattr(obj, "TypeId", ""))
+    diagnostic_code = None
+    object_properties = list(
+        getattr(obj, "PropertiesList", getattr(obj, "PropertyList", []))
+    )
+    if type_id == "Mesh::SetOperations":
+        if getattr(obj, "Source1", None) is None:
+            diagnostic_code = "mesh_source1_missing"
+        elif getattr(obj, "Source2", None) is None:
+            diagnostic_code = "mesh_source2_missing"
+    elif "Source" in object_properties:
+        source = getattr(obj, "Source", None)
+        if source is None:
+            diagnostic_code = "mesh_source_missing"
+        elif "Mesh" not in list(
+            getattr(source, "PropertiesList", getattr(source, "PropertyList", []))
+        ):
+            diagnostic_code = "mesh_source_has_no_mesh_property"
+    if diagnostic_code is None and ("Invalid" in state or "Error" in state):
+        diagnostic_code = "mesh_execute_error"
+    if diagnostic_code is not None:
+        payload["native_diagnostic"] = {
+            "code": diagnostic_code,
+            "object_state": state,
+        }
+    return payload
 
 
 def sketch_external_geometry(obj: Any) -> list[Any]:
@@ -11203,6 +11836,119 @@ def sketch_external_geometry_flag_payload(obj: Any) -> dict[str, Any]:
     }
 
 
+def vector_payload(value: Any) -> list[float]:
+    return [
+        float(getattr(value, "x", 0.0)),
+        float(getattr(value, "y", 0.0)),
+        float(getattr(value, "z", 0.0)),
+    ]
+
+
+def sketch_geometry_summary(obj: Any) -> list[dict[str, Any]]:
+    summaries: list[dict[str, Any]] = []
+    for index, geometry in enumerate(list(getattr(obj, "Geometry", []))):
+        entry: dict[str, Any] = {
+            "index": index,
+            "type": str(getattr(geometry, "TypeId", type(geometry).__name__)),
+            "construction": bool(obj.getConstruction(index)),
+        }
+        try:
+            shape = geometry.toShape()
+            bbox = shape.BoundBox
+            entry["shape"] = {
+                "bbox": {
+                    "min": [float(bbox.XMin), float(bbox.YMin), float(bbox.ZMin)],
+                    "max": [float(bbox.XMax), float(bbox.YMax), float(bbox.ZMax)],
+                },
+                "length": float(getattr(shape, "Length", 0.0)),
+                "topologyCounts": {
+                    "edges": len(getattr(shape, "Edges", [])),
+                    "vertices": len(getattr(shape, "Vertexes", [])),
+                },
+                "vertices": [
+                    vector_payload(vertex.Point)
+                    for vertex in getattr(shape, "Vertexes", [])
+                ],
+            }
+        except Exception as exc:
+            entry["shapeDiagnostic"] = {
+                "exceptionType": type(exc).__name__,
+                "message": str(exc),
+            }
+        if "BSpline" in entry["type"]:
+            degree = getattr(geometry, "Degree", None)
+            if degree is None:
+                getter = getattr(geometry, "getDegree", None)
+                degree = getter() if callable(getter) else None
+            if degree is not None:
+                entry["degree"] = int(degree)
+            for name, getter_name in (
+                ("poles", "getPoles"),
+                ("knots", "getKnots"),
+                ("multiplicities", "getMultiplicities"),
+            ):
+                getter = getattr(geometry, getter_name, None)
+                if not callable(getter):
+                    continue
+                values = list(getter())
+                entry[name] = (
+                    [vector_payload(item) for item in values]
+                    if name == "poles"
+                    else [float(item) if name == "knots" else int(item) for item in values]
+                )
+        summaries.append(entry)
+    return summaries
+
+
+def sketch_constraint_summary(obj: Any) -> list[dict[str, Any]]:
+    summaries: list[dict[str, Any]] = []
+    for index, constraint in enumerate(list(getattr(obj, "Constraints", []))):
+        entry: dict[str, Any] = {"index": index}
+        for public_name, output_name in (
+            ("Type", "type"),
+            ("First", "first"),
+            ("FirstPos", "firstPos"),
+            ("Second", "second"),
+            ("SecondPos", "secondPos"),
+            ("Third", "third"),
+            ("ThirdPos", "thirdPos"),
+            ("Value", "value"),
+            ("isDriving", "driving"),
+            ("isActive", "active"),
+        ):
+            if not hasattr(constraint, public_name):
+                continue
+            value = getattr(constraint, public_name)
+            if isinstance(value, (bool, int, float, str)):
+                entry[output_name] = value
+        summaries.append(entry)
+    return summaries
+
+
+def sketch_solver_summary(obj: Any) -> dict[str, Any]:
+    return {
+        "geometryCount": int(
+            getattr(obj, "GeometryCount", len(getattr(obj, "Geometry", [])))
+        ),
+        "constraintCount": int(
+            getattr(obj, "ConstraintCount", len(getattr(obj, "Constraints", [])))
+        ),
+        "degreesOfFreedom": int(getattr(obj, "DoF", -1)),
+        "fullyConstrained": bool(getattr(obj, "FullyConstrained", False)),
+        "conflictingConstraints": [
+            int(item) for item in getattr(obj, "ConflictingConstraints", [])
+        ],
+        "redundantConstraints": [
+            int(item) for item in getattr(obj, "RedundantConstraints", [])
+        ],
+        "partiallyRedundantConstraints": [
+            int(item) for item in getattr(obj, "PartiallyRedundantConstraints", [])
+        ],
+        "malformedConstraints": [int(item) for item in getattr(obj, "MalformedConstraints", [])],
+        "openVertexCount": len(getattr(obj, "OpenVertices", [])),
+    }
+
+
 def sketch_summary(obj: Any) -> dict:
     shape = getattr(obj, "Shape", None)
     internal_shape = getattr(obj, "InternalShape", None)
@@ -11235,6 +11981,20 @@ def sketch_summary(obj: Any) -> dict:
             "raw_edge_count": len(getattr(shape, "Edges", [])),
         }
     payload["sketch_external"] = sketch_external_geometry_flag_payload(obj)
+    operation_receipts = ACTIVE_SKETCH_OPERATION_RECEIPTS.get(
+        str(getattr(obj, "Name", "")), []
+    )
+    if operation_receipts:
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App
+        # /SketchObjectOperations.cpp mutates Geometry/Constraints, then
+        # /SketchObjectConstraints.cpp::SketchObject::solve() refreshes DoF/diagnostics and
+        # extracts solved Geometry; /SketchObject.cpp::execute()/buildShape() publishes Shape and
+        # InternalShape.  Keep all four public evidence layers together for operation-authority
+        # fixtures without changing legacy fixtures that never request an operation.
+        payload["sketch_operations"] = operation_receipts
+        payload["sketch_geometry"] = sketch_geometry_summary(obj)
+        payload["sketch_constraints"] = sketch_constraint_summary(obj)
+        payload["sketch_solver"] = sketch_solver_summary(obj)
     return payload
 
 
@@ -11340,7 +12100,23 @@ def apply_recompute_mutations(
         type_id = str(getattr(obj, "TypeId", ""))
         for property_name, property_value in properties.items():
             if type_id == "Sketcher::SketchObject":
-                set_sketch_property(FreeCAD, created, obj, property_name, property_value)
+                set_sketch_property(
+                    FreeCAD,
+                    created,
+                    obj,
+                    property_name,
+                    property_value,
+                    operation_stage="recompute_mutation",
+                )
+            elif type_id == "Spreadsheet::Sheet" and (
+                isinstance(property_value, dict)
+                and property_value.get("PropertyType") == "Spreadsheet::PropertySheet"
+            ):
+                set_spreadsheet_cells(
+                    obj,
+                    property_value,
+                    operation_stage="recompute_mutation",
+                )
             else:
                 set_property(FreeCAD, created, obj, property_name, property_value)
 
@@ -11622,10 +12398,12 @@ def distance_type_gap_metadata(payload: dict) -> dict[str, Any] | None:
 def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = None) -> dict:
     import FreeCAD  # type: ignore
 
-    global ACTIVE_TOPO_NAMING_STATE, ACTIVE_RESOLVED_REFERENCE_BINDINGS, LAST_FREECAD_LEDGER_CAPTURE, LAST_FREECAD_PRODUCER_TRACE
+    global ACTIVE_TOPO_NAMING_STATE, ACTIVE_RESOLVED_REFERENCE_BINDINGS, ACTIVE_SKETCH_OPERATION_RECEIPTS, ACTIVE_SPREADSHEET_OPERATION_RECEIPTS, LAST_FREECAD_LEDGER_CAPTURE, LAST_FREECAD_PRODUCER_TRACE
     LAST_FREECAD_LEDGER_CAPTURE = None
     LAST_FREECAD_PRODUCER_TRACE = None
     ACTIVE_RESOLVED_REFERENCE_BINDINGS = []
+    ACTIVE_SKETCH_OPERATION_RECEIPTS = {}
+    ACTIVE_SPREADSHEET_OPERATION_RECEIPTS = {}
     fixture = load_fixture(fixture_path)
     topo_state_error = topo_state_request_error_response(fixture)
     if topo_state_error is not None:

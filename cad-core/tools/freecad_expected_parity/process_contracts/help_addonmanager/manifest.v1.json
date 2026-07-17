@@ -1,0 +1,55 @@
+{
+  "cases": [
+    {
+      "evidenceFor": [
+        "help.module_import_and_pure_page_path",
+        "help.gui_and_network_help_display"
+      ],
+      "group": "help",
+      "id": "help-local-page-headless"
+    },
+    {
+      "evidenceFor": [
+        "help.gui_and_network_help_display"
+      ],
+      "group": "help",
+      "id": "help-browser-fallback-mocked"
+    },
+    {
+      "coveragePolicy": "source_backed_exception",
+      "evidenceFor": [],
+      "group": "help",
+      "id": "help-gui-webengine-boundary-probe"
+    },
+    {
+      "evidenceFor": [
+        "addonmanager.metadata_and_spdx_data"
+      ],
+      "group": "addonmanager",
+      "id": "addon-metadata-spdx-local"
+    },
+    {
+      "evidenceFor": [
+        "addonmanager.network_install_update_remove"
+      ],
+      "group": "addonmanager",
+      "id": "addon-copy-install-update-remove"
+    },
+    {
+      "evidenceFor": [
+        "addonmanager.network_install_update_remove"
+      ],
+      "group": "addonmanager",
+      "id": "addon-zip-and-network-manager-mocked"
+    },
+    {
+      "evidenceFor": [
+        "addonmanager.network_install_update_remove"
+      ],
+      "group": "addonmanager",
+      "id": "addon-invalid-boundaries"
+    }
+  ],
+  "contractId": "process-contract/help-addonmanager",
+  "schema": "freecad-help-addonmanager-process-manifest/v1"
+}

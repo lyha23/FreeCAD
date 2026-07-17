@@ -1,0 +1,11 @@
+General:
+  UUID: "a2000000-0000-4000-8000-000000000101"
+  Author: "CAD Core fixture"
+  License: "CC0-1.0"
+  Name: "Ignored in favor of filename"
+  Description: "Hermetic A2 material card"
+Models:
+  FixturePhysical:
+    UUID: "a2000000-0000-4000-8000-000000000001"
+    Grade: "A2-normal"
+    Density: "7.5"

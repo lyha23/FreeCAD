@@ -32,10 +32,28 @@
       "phase": "material-properties"
     },
     {
+      "capability": "defects",
+      "description": "Mesh defect normalization, repair, source update, and native diagnostics.",
+      "module": "Mesh",
+      "phase": "mesh-defects"
+    },
+    {
       "capability": "import",
       "description": "Mesh file import and file-property recompute.",
       "module": "Mesh",
       "phase": "mesh-import"
+    },
+    {
+      "capability": "primitives",
+      "description": "Mesh solid primitive execution, property recompute, and constrained boundaries.",
+      "module": "Mesh",
+      "phase": "mesh-primitives"
+    },
+    {
+      "capability": "setops",
+      "description": "Mesh set-operation execution, source/operation recompute, and native diagnostics.",
+      "module": "Mesh",
+      "phase": "mesh-setops"
     },
     {
       "capability": "boolean",
@@ -206,6 +224,12 @@
       "phase": "sketcher-internal-shape"
     },
     {
+      "capability": "operations",
+      "description": "Native trim, extend, fillet, clone, block, conic and B-spline editing operations.",
+      "module": "Sketcher",
+      "phase": "sketcher-operations"
+    },
+    {
       "capability": "solve",
       "description": "Solver-facing constraints, diagnostics and geometry updates.",
       "module": "Sketcher",
@@ -216,6 +240,12 @@
       "description": "Sheet expressions, mutation and recompute.",
       "module": "Spreadsheet",
       "phase": "spreadsheet-recompute"
+    },
+    {
+      "capability": "layout",
+      "description": "SheetPy style, alignment, width, height, merge and split public API authority.",
+      "module": "Spreadsheet",
+      "phase": "spreadsheet-layout"
     },
     {
       "capability": "element-map",

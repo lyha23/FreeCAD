@@ -1,0 +1,82 @@
+{
+  "case": "spreadsheet-layout-overlap-replaces-prior-merge",
+  "phase": "spreadsheet-layout",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "b0e8345059de37386e3e6ac2926fe569aeeec1705ce941c4f9b6ae227fa8df33"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "5a721a7f208fd5c36f9a0e94a8725db128eab3ba51e8b79a75f14b4060a903d5",
+    "manifestBeforeSha256": "c2ca6328b18a5afe6f83a52c2840c9446ea2f86be71213844ef0526d95a4ad54",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-overlap-replaces-prior-merge/run-a.report.json",
+      "sha256": "2eddc53d5a1a8d492dfed9f4d1041573302fadff2fb6453de0f58bb0961f9c89"
+    },
+    "input": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-overlap-replaces-prior-merge/run-a/spreadsheet-layout/spreadsheet-layout-overlap-replaces-prior-merge.json",
+      "sha256": "fa4702ad7e1e0f8a815b96c35dccf25e8e07751568b1de4ef64a3f4e28e1ecdf"
+    },
+    "ledger": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-overlap-replaces-prior-merge/run-a/spreadsheet-layout/expected/spreadsheet-layout-overlap-replaces-prior-merge.freecad.ledger.json",
+      "sha256": "3baf01dd4b62425f775e5489b6ece7733a11acb0bfd5b01e12117154bc09d529"
+    },
+    "publicExpected": {
+      "path": "/private/tmp/spreadsheet-layout-staging-redo/spreadsheet-layout-overlap-replaces-prior-merge/run-a/spreadsheet-layout/expected/spreadsheet-layout-overlap-replaces-prior-merge.freecad.json",
+      "sha256": "63f91d7c19b7ccb68cdaa924caf7e4e4bb5986cd4d74b600c5f093f9981b9819"
+    },
+    "repeatReport": {
+      "path": "/private/tmp/spreadsheet-layout-staging/reports/spreadsheet-layout-overlap-replaces-prior-merge.json",
+      "sha256": "b5ec4d0b8e0e7f4eeda5d840ecdb36a185c9928e9347d0f6b3a25a40317f713d"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-overlap-replaces-prior-merge.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-overlap-replaces-prior-merge.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/spreadsheet-layout-spreadsheet-layout-overlap-replaces-prior-merge.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-overlap-replaces-prior-merge.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

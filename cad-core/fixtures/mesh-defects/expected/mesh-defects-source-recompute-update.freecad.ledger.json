@@ -1,0 +1,84 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-defects-source-recompute-update",
+    "expectedPayloadHash": "sha256:fb20401979a926a45254d010b1f7d43bc485cb11d0d7677759bb8cb0c625fb8a",
+    "inputHash": "sha256:e72a314022ee6052777f83ffbb473bcab78382225547b6489730a57a1d3d6882",
+    "phase": "mesh-defects",
+    "topoNamingStateHash": "sha256:02132371818c9a8687d40c963c12e9814eafecff07a454f634b0a7cc7bbaf9d4"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Clean": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Mesh::Import"
+    },
+    "Inconsistent": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Mesh::Import"
+    },
+    "Result": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::HarmonizeNormals"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {
+      "Clean": {
+        "coveredBy": "Result",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      },
+      "Inconsistent": {
+        "coveredBy": "Result",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      }
+    },
+    "publishedObjects": {
+      "Result": {
+        "covers": [
+          "Result"
+        ],
+        "ledgerObject": "Result",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:02132371818c9a8687d40c963c12e9814eafecff07a454f634b0a7cc7bbaf9d4",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

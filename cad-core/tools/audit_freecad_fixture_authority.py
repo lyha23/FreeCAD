@@ -20,6 +20,7 @@ from freecad_expected_parity.catalog import load_catalog
 from freecad_expected_parity.retained_coverage import (
     annotate_fixture_row,
     build_module_coverage_report,
+    build_public_api_coverage_report,
     build_public_capability_coverage_report,
     build_work_queues,
 )
@@ -39,6 +40,10 @@ DEFAULT_PRUNING_PLAN = (
 DEFAULT_PUBLIC_CAPABILITY_CONTRACT = (
     Path(__file__).with_name("freecad_expected_parity")
     / "retained_public_capabilities.v1.json"
+)
+DEFAULT_PUBLIC_API_SURFACE = (
+    Path(__file__).with_name("freecad_expected_parity")
+    / "retained_public_api_surface.v1.json"
 )
 SCHEMA = "freecad-fixture-authority-inventory/v1"
 PHASE_CLASSIFICATION_SCHEMA = "cad-core.fixture-capability-phases.v1"
@@ -796,6 +801,15 @@ def main(argv: list[str] | None = None) -> int:
         help="write the explicit public-capability-to-fixture reverse coverage report",
     )
     parser.add_argument(
+        "--api-coverage-report",
+        help="write the source-side retained public API denominator coverage report",
+    )
+    parser.add_argument(
+        "--api-surface",
+        default=str(DEFAULT_PUBLIC_API_SURFACE),
+        help="source-side retained public API and major-branch denominator",
+    )
+    parser.add_argument(
         "--capability-contract",
         default=str(DEFAULT_PUBLIC_CAPABILITY_CONTRACT),
         help="explicit retained public capability and major-branch inventory",
@@ -832,6 +846,9 @@ def main(argv: list[str] | None = None) -> int:
     capability_path = (
         Path(args.capability_report).resolve() if args.capability_report else None
     )
+    api_coverage_path = (
+        Path(args.api_coverage_report).resolve() if args.api_coverage_report else None
+    )
     if report_path is not None and report_path.is_relative_to((root / "fixtures").resolve()):
         parser.error("--report must be outside the checked-in fixture tree")
     if coverage_path is not None and coverage_path.is_relative_to(
@@ -842,6 +859,10 @@ def main(argv: list[str] | None = None) -> int:
         (root / "fixtures").resolve()
     ):
         parser.error("--capability-report must be outside the checked-in fixture tree")
+    if api_coverage_path is not None and api_coverage_path.is_relative_to(
+        (root / "fixtures").resolve()
+    ):
+        parser.error("--api-coverage-report must be outside the checked-in fixture tree")
     if capability_path is not None and coverage_path is None:
         parser.error("--capability-report requires --coverage-report")
     if args.require_coverage_passed and coverage_path is None:
@@ -879,6 +900,19 @@ def main(argv: list[str] | None = None) -> int:
             ),
         )
         write_json(capability_path, capability)
+    api_coverage: dict[str, Any] | None = None
+    if api_coverage_path is not None:
+        api_coverage = build_public_api_coverage_report(
+            report,
+            api_surface_path=Path(args.api_surface),
+            capability_contract_path=Path(args.capability_contract),
+            fixture_corpus_closure_status=(
+                str(coverage.get("coverageStatus"))
+                if isinstance(coverage, dict)
+                else "not_evaluated"
+            ),
+        )
+        write_json(api_coverage_path, api_coverage)
     if args.pretty:
         print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     else:
@@ -895,6 +929,8 @@ def main(argv: list[str] | None = None) -> int:
     ):
         return 1
     if capability is not None and capability.get("status") != "passed":
+        return 1
+    if api_coverage is not None and api_coverage.get("status") != "passed":
         return 1
     return 0
 

@@ -1,0 +1,5 @@
+{
+  "baseReport": "all-native-check.v1.json",
+  "incrementalReports": [],
+  "schema": "freecad-producer-reproduction-bundle/v1"
+}

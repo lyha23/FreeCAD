@@ -1,0 +1,77 @@
+{
+  "schema": "freecad-runtime-entrypoint-process-manifest/v1",
+  "contractId": "process-contract/runtime-entrypoints",
+  "cases": [
+    {
+      "id": "maincmd-unknown-option",
+      "group": "maincmd",
+      "mode": "direct",
+      "argv": ["--a5-unknown-program-option"],
+      "expectedExitCode": 1,
+      "evidenceFor": ["freecadmaincmd.command_line_error_and_shutdown_modes"]
+    },
+    {
+      "id": "maincmd-program-information",
+      "group": "maincmd",
+      "mode": "direct",
+      "argv": ["--version"],
+      "expectedExitCode": 0,
+      "evidenceFor": ["freecadmaincmd.command_line_error_and_shutdown_modes"]
+    },
+    {
+      "id": "base-console-observer",
+      "group": "base",
+      "mode": "script",
+      "expectedExitCode": 0,
+      "evidenceFor": ["freecadbase.console_and_exception_surfaces"]
+    },
+    {
+      "id": "base-python-exception-translation",
+      "group": "base",
+      "mode": "script",
+      "expectedExitCode": 0,
+      "evidenceFor": ["freecadbase.console_and_exception_surfaces"]
+    },
+    {
+      "id": "maincmd-system-exit",
+      "group": "maincmd",
+      "mode": "script_system_exit",
+      "expectedExitCode": 23,
+      "evidenceFor": ["freecadmaincmd.command_line_error_and_shutdown_modes"]
+    },
+    {
+      "id": "maincmd-run-base-exception",
+      "group": "maincmd",
+      "mode": "script_unhandled_base_exception",
+      "expectedExitCode": 0,
+      "coveragePolicy": "script_exception_translation_with_source_backed_top_level_catch",
+      "evidenceFor": ["freecadmaincmd.command_line_error_and_shutdown_modes"]
+    },
+    {
+      "id": "maincmd-run-unknown-exception",
+      "group": "maincmd",
+      "mode": "script_unhandled_unknown_exception",
+      "expectedExitCode": 0,
+      "coveragePolicy": "script_exception_translation_with_source_backed_top_level_catch",
+      "evidenceFor": ["freecadmaincmd.command_line_error_and_shutdown_modes"]
+    },
+    {
+      "id": "mainpy-import-identity-shutdown",
+      "group": "mainpy",
+      "mode": "script",
+      "captureLog": true,
+      "expectedExitCode": 0,
+      "evidenceFor": ["freecadmainpy.embedded_python_entry"]
+    },
+    {
+      "id": "maincmd-init-base-exception-probe",
+      "group": "maincmd",
+      "mode": "direct_init_probe",
+      "argv": [],
+      "environment": {"PYTHONHOME": "<MISSING_PYTHON_HOME>"},
+      "expectedExitCode": 100,
+      "coveragePolicy": "source_backed_exception_unless_exit_100_observed",
+      "evidenceFor": ["freecadmaincmd.command_line_error_and_shutdown_modes"]
+    }
+  ]
+}

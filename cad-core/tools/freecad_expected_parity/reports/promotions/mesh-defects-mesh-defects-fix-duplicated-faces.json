@@ -1,0 +1,82 @@
+{
+  "case": "mesh-defects-fix-duplicated-faces",
+  "phase": "mesh-defects",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "857fab2bb7ac6d25f3f3418c5c17ef68eea48692515206df7fb6151ea663888a",
+    "manifestBeforeSha256": "148a2320800db36e219be3f1c890a2350e3248dc85340741ac44aacfe1f512d0",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-defects/mesh-defects-fix-duplicated-faces/collect.json",
+      "sha256": "3c14382743017845d96996e067a9a93bb75127a2beabd60531d85847f4c5e4f8"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/mesh-defects-fix-duplicated-faces.json",
+      "sha256": "6f5d16987849e56148babcf3a6d094bf56583ab9d352b97012dc717757d32880"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/expected/mesh-defects-fix-duplicated-faces.freecad.ledger.json",
+      "sha256": "d7d948d7ea50f81c616df4c9715aea5dce6354ea70b08f9ded772172498de31f"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/expected/mesh-defects-fix-duplicated-faces.freecad.json",
+      "sha256": "f184b5e903a7b2d21266350131ffac04b816edc9b9a36688d3cb9390ba93b956"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-defects/mesh-defects-fix-duplicated-faces/repeat2.json",
+      "sha256": "11054a69dccac0086694700b681e4e257d6f677740e1cee188a6b228abacad59"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/mesh-defects-fix-duplicated-faces.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-fix-duplicated-faces.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-defects-mesh-defects-fix-duplicated-faces.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-fix-duplicated-faces.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

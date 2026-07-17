@@ -1,0 +1,12 @@
+Model:
+  Name: "A2 Refresh Model"
+  UUID: "a2000000-0000-4000-8000-000000000003"
+  URL: ""
+  Description: "Hermetic A2 refresh model"
+  DOI: ""
+  Revision:
+    DisplayName: "Revision"
+    Type: "String"
+    Units: ""
+    URL: ""
+    Description: "Card revision"

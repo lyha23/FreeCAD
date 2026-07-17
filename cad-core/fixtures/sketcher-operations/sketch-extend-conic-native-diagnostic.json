@@ -1,0 +1,49 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "center": [
+              0,
+              0
+            ],
+            "endAngle": 1.5707963267948966,
+            "kind": "ArcOfEllipse",
+            "majorRadius": 5,
+            "minorRadius": 3,
+            "startAngle": 0
+          }
+        ],
+        "Operations": [
+          {
+            "endpoint": "end",
+            "expectedOutcome": "native_diagnostic",
+            "geometryId": 0,
+            "increment": 0.5,
+            "op": "extend"
+          }
+        ]
+      },
+      "TypeId": "Sketcher::SketchObject"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:892163deaaec9f5178cca113c4212a8ac65d4e88e2b981195358efe08abe2905",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

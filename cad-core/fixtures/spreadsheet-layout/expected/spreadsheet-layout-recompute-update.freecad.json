@@ -1,0 +1,148 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sheet",
+      "object_fields": {
+        "cell_count": 1,
+        "shape": "spreadsheet",
+        "status": "ok"
+      },
+      "spreadsheet": {
+        "cells": [
+          {
+            "address": "A1",
+            "alias": null,
+            "content": "'Update",
+            "value": "Update"
+          }
+        ],
+        "layoutOperations": [
+          {
+            "arguments": {
+              "range": "A1",
+              "value": "bold"
+            },
+            "evidenceLevel": "target_result",
+            "index": 0,
+            "observed": {
+              "value": [
+                "bold"
+              ]
+            },
+            "operation": "setStyle",
+            "stage": "initial"
+          },
+          {
+            "arguments": {
+              "column": "A",
+              "width": 90
+            },
+            "evidenceLevel": "target_result",
+            "index": 1,
+            "observed": {
+              "width": 90
+            },
+            "operation": "setColumnWidth",
+            "stage": "initial"
+          },
+          {
+            "arguments": {
+              "height": 30,
+              "row": "1"
+            },
+            "evidenceLevel": "target_result",
+            "index": 2,
+            "observed": {
+              "height": 30
+            },
+            "operation": "setRowHeight",
+            "stage": "initial"
+          },
+          {
+            "arguments": {
+              "options": "replace",
+              "range": "A1",
+              "value": "italic"
+            },
+            "evidenceLevel": "target_result",
+            "index": 3,
+            "observed": {
+              "value": [
+                "italic"
+              ]
+            },
+            "operation": "setStyle",
+            "stage": "recompute_mutation"
+          },
+          {
+            "arguments": {
+              "range": "A1",
+              "value": "center|vcenter"
+            },
+            "evidenceLevel": "target_result",
+            "index": 4,
+            "observed": {
+              "value": [
+                "center",
+                "vcenter"
+              ]
+            },
+            "operation": "setAlignment",
+            "stage": "recompute_mutation"
+          },
+          {
+            "arguments": {
+              "column": "A",
+              "width": 144
+            },
+            "evidenceLevel": "target_result",
+            "index": 5,
+            "observed": {
+              "width": 144
+            },
+            "operation": "setColumnWidth",
+            "stage": "recompute_mutation"
+          },
+          {
+            "arguments": {
+              "height": 48,
+              "row": "1"
+            },
+            "evidenceLevel": "target_result",
+            "index": 6,
+            "observed": {
+              "height": 48
+            },
+            "operation": "setRowHeight",
+            "stage": "recompute_mutation"
+          }
+        ]
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:93bb654438b0a9e1de857c97192eb6d014121cba1ff713809227e8375474d409",
+    "objects": {
+      "Sheet": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:dce815ff5cacda23564aee55ebc1db589425091eac5f677e1f7e0eb1ceea10a5",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

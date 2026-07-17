@@ -1,0 +1,2783 @@
+{
+  "apiSurfaceClosure": {
+    "apiCount": 74,
+    "classifiedApiCount": 74,
+    "meaning": "source-side retained public API denominator has a disposition",
+    "status": "passed",
+    "unclassifiedApiCount": 0
+  },
+  "cadCoreRuntimeParity": {
+    "meaning": "native fixture authority does not prove CAD Core runtime parity",
+    "status": "not_evaluated"
+  },
+  "capabilityContract": {
+    "exists": true,
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/retained_public_capabilities.v1.json",
+    "sha256": "32a59495cbb0a9e48e3ebfc66c16260cc662ee8d061476d7eaf55d6291967530"
+  },
+  "contract": {
+    "exists": true,
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/retained_public_api_surface.v1.json",
+    "sha256": "ec75eb42b2c3eb936bf59ae9b5ab524f87e4b1bdca8def55a258ecc0736ff072"
+  },
+  "errors": [],
+  "fixtureCorpusClosure": {
+    "meaning": "registered fixture roles and native authority artifacts are closed",
+    "status": "passed"
+  },
+  "moduleApiCoverage": {
+    "counts": {
+      "covered": 65,
+      "non_native_exception": 9
+    },
+    "meaning": "API items and major runtime branches have item-local execution evidence",
+    "status": "passed"
+  },
+  "modules": [
+    {
+      "apiCount": 2,
+      "apis": [
+        {
+          "capabilityIds": [
+            "console_and_exception_surfaces"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_process_test",
+          "exposure": "PythonWrapper",
+          "fixtureEvidence": [
+            {
+              "branch": "Print message/warning/error, enumerate observers, enable and restore Msg/Wrn/Err status, and isolate unknown observer/type FreeCADError translation.",
+              "fixture": "process-contract/runtime-entrypoints",
+              "level": "native_process_test",
+              "processCases": [
+                "base-console-observer",
+                "base-python-exception-translation"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/runtime-entrypoints.v1.json",
+                "sha256": "cf1cafa01300df3d79473bae610a231bae5ef716322b2af7ed0e1fa9fab3d53f"
+              },
+              "role": "native_process_test"
+            }
+          ],
+          "id": "freecadbase.console_and_exception_surfaces",
+          "module": "FreeCADBase",
+          "nativeExpressibility": "native_process_test",
+          "publicSurface": "Base::Console and Base exception translation",
+          "rationale": "Console formatting, observer status mutation/restoration, and Base exception translation are process/Python-module contracts. The hermetic repeat-2 receipt asserts message/warning/error streams plus unknown observer/type isolation without treating them as document geometry.",
+          "runtimeBranches": [
+            "Print message/warning/error, enumerate observers, enable and restore Msg/Wrn/Err status, and isolate unknown observer/type FreeCADError translation."
+          ],
+          "sourceEvidence": [
+            "src/Base/Console.cpp::Base::ConsoleSingleton",
+            "src/Base/Exception.cpp::Base::Exception",
+            "src/Base/PyException.cpp::pyThrowWrappedBaseException"
+          ],
+          "symbol": "src/Base/Console.cpp::Base::ConsoleSingleton"
+        },
+        {
+          "capabilityIds": [
+            "placement_and_value_transport"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "PythonWrapper",
+          "fixtureEvidence": [
+            {
+              "branch": "Python values are converted into document properties and collected back into public expected output.",
+              "fixture": "app-links/app-link-box-placement-alias",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "freecadbase.placement_and_value_transport",
+          "module": "FreeCADBase",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Base::Placement and core value types",
+          "runtimeBranches": [
+            "Python values are converted into document properties and collected back into public expected output."
+          ],
+          "sourceEvidence": [
+            "src/Base/Placement.cpp::Base::Placement",
+            "src/Base/Vector3D.cpp::Base::Vector3d"
+          ],
+          "symbol": "src/Base/Placement.cpp::Base::Placement"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "FreeCADBase"
+    },
+    {
+      "apiCount": 3,
+      "apis": [
+        {
+          "capabilityIds": [
+            "document_graph_recompute"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Create objects, assign properties, resolve dependencies, and recompute a target result.",
+              "fixture": "part-primitives/part-box",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "freecadapp.document_graph_recompute",
+          "module": "FreeCADApp",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "App::Document object graph and recompute",
+          "runtimeBranches": [
+            "Create objects, assign properties, resolve dependencies, and recompute a target result."
+          ],
+          "sourceEvidence": [
+            "src/App/Document.cpp::App::Document::recompute",
+            "src/App/DocumentObject.cpp::App::DocumentObject::recompute"
+          ],
+          "symbol": "src/App/Document.cpp::App::Document::recompute"
+        },
+        {
+          "capabilityIds": [
+            "link_copy_on_change"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Touched source state propagates through link ownership and copy-on-change tracking.",
+              "fixture": "app-links/app-link-copy-on-change-touched-tracking",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "freecadapp.link_copy_on_change",
+          "module": "FreeCADApp",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "App link properties and copy-on-change",
+          "runtimeBranches": [
+            "Touched source state propagates through link ownership and copy-on-change tracking."
+          ],
+          "sourceEvidence": [
+            "src/App/PropertyLinks.cpp::App::PropertyLinkBase",
+            "src/App/Link.cpp::App::LinkBaseExtension"
+          ],
+          "symbol": "src/App/PropertyLinks.cpp::App::PropertyLinkBase"
+        },
+        {
+          "capabilityIds": [
+            "persisted_restore_transactions"
+          ],
+          "coverageStatus": "non_native_exception",
+          "disposition": "protocol_only",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [],
+          "id": "freecadapp.persisted_restore_transactions",
+          "module": "FreeCADApp",
+          "nativeExpressibility": "protocol_only",
+          "publicSurface": "App::Document restore, transaction, and undo/redo APIs",
+          "rationale": "The request fixture protocol currently creates a fresh request-local document and has no persisted restore or transaction envelope.",
+          "runtimeBranches": [
+            "Restore-time object identity repair and transaction replay require a persisted document lifecycle."
+          ],
+          "sourceEvidence": [
+            "src/App/Document.cpp::App::Document::restore",
+            "src/App/Document.cpp::App::Document::undo"
+          ],
+          "symbol": "src/App/Document.cpp::App::Document::restore"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "FreeCADApp"
+    },
+    {
+      "apiCount": 2,
+      "apis": [
+        {
+          "capabilityIds": [
+            "command_line_error_and_shutdown_modes"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_process_test",
+          "exposure": "ProcessEntry",
+          "fixtureEvidence": [
+            {
+              "branch": "Unknown option and program information exits, specified SystemExit, script exception translation, and normal Application::destruct shutdown.",
+              "fixture": "process-contract/runtime-entrypoints",
+              "level": "native_process_test",
+              "processCases": [
+                "maincmd-unknown-option",
+                "maincmd-program-information",
+                "maincmd-system-exit",
+                "maincmd-run-base-exception",
+                "maincmd-run-unknown-exception",
+                "mainpy-import-identity-shutdown"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/runtime-entrypoints.v1.json",
+                "sha256": "cf1cafa01300df3d79473bae610a231bae5ef716322b2af7ed0e1fa9fab3d53f"
+              },
+              "role": "native_process_test"
+            }
+          ],
+          "id": "freecadmaincmd.command_line_error_and_shutdown_modes",
+          "module": "FreeCADMainCmd",
+          "nativeExpressibility": "native_process_test",
+          "publicSurface": "FreeCADCmd option parsing, process exit, and shutdown",
+          "rationale": "The hermetic process receipt covers UnknownProgramOption=1, ProgramInformation=0, SystemExit's specified code, per-file Base/unknown exception translation, and the normal destruction log. MainCmd's init Base::Exception=100 and top-level run Base/unknown=1 catches remain explicit source-backed exceptions because safe public probes are intercepted or do not trigger them; forced signals are outside this contract.",
+          "runtimeBranches": [
+            "Unknown option and program information exits, specified SystemExit, script exception translation, and normal Application::destruct shutdown."
+          ],
+          "sourceEvidence": [
+            "src/Main/MainCmd.cpp::main"
+          ],
+          "symbol": "src/Main/MainCmd.cpp::main"
+        },
+        {
+          "capabilityIds": [
+            "headless_command_startup"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "ProcessEntry",
+          "fixtureEvidence": [
+            {
+              "branch": "Initialize the application, modules, and Python command execution used by the native collector.",
+              "fixture": "part-primitives/part-box",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "freecadmaincmd.headless_command_startup",
+          "module": "FreeCADMainCmd",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "FreeCADCmd headless application entrypoint",
+          "runtimeBranches": [
+            "Initialize the application, modules, and Python command execution used by the native collector."
+          ],
+          "sourceEvidence": [
+            "src/Main/MainCmd.cpp::main"
+          ],
+          "symbol": "src/Main/MainCmd.cpp::main"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "FreeCADMainCmd"
+    },
+    {
+      "apiCount": 2,
+      "apis": [
+        {
+          "capabilityIds": [
+            "embedded_application_lifecycle"
+          ],
+          "coverageStatus": "non_native_exception",
+          "disposition": "protocol_only",
+          "exposure": "PythonModule",
+          "fixtureEvidence": [],
+          "id": "freecadmainpy.embedded_application_lifecycle",
+          "module": "FreeCADMainPy",
+          "nativeExpressibility": "protocol_only",
+          "publicSurface": "FreeCAD embedding and external Python lifecycle",
+          "rationale": "The native fixture collector owns a single FreeCADCmd process and does not exercise host embedding or repeated interpreter lifecycles.",
+          "runtimeBranches": [
+            "Repeated initialize/finalize and host-embedded interpreter behavior."
+          ],
+          "sourceEvidence": [
+            "src/Main/MainPy.cpp::PyInit_FreeCAD"
+          ],
+          "symbol": "src/Main/MainPy.cpp::PyInit_FreeCAD"
+        },
+        {
+          "capabilityIds": [
+            "embedded_python_entry"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_process_test",
+          "exposure": "PythonModule",
+          "fixtureEvidence": [
+            {
+              "branch": "Initialize FreeCAD, repeat import in one process with stable module identity, and return through normal shutdown.",
+              "fixture": "process-contract/runtime-entrypoints",
+              "level": "native_process_test",
+              "processCases": [
+                "mainpy-import-identity-shutdown"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/runtime-entrypoints.v1.json",
+                "sha256": "cf1cafa01300df3d79473bae610a231bae5ef716322b2af7ed0e1fa9fab3d53f"
+              },
+              "role": "native_process_test"
+            }
+          ],
+          "id": "freecadmainpy.embedded_python_entry",
+          "module": "FreeCADMainPy",
+          "nativeExpressibility": "native_process_test",
+          "publicSurface": "FreeCAD Python module initialization",
+          "rationale": "A hermetic FreeCADCmd process asserts repeated import identity in one initialized module and returns through MainCmd's normal destruction path. Host-owned interpreter finalize/reinitialize remains a separate protocol-only capability.",
+          "runtimeBranches": [
+            "Initialize FreeCAD, repeat import in one process with stable module identity, and return through normal shutdown."
+          ],
+          "sourceEvidence": [
+            "src/Main/MainPy.cpp::PyInit_FreeCAD"
+          ],
+          "symbol": "src/Main/MainPy.cpp::PyInit_FreeCAD"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "FreeCADMainPy"
+    },
+    {
+      "apiCount": 4,
+      "apis": [
+        {
+          "capabilityIds": [
+            "material_library_and_card_resolution"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_process_test",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Discover the isolated Custom library and resolve a card by UUID, path, and model filter.",
+              "fixture": "process-contract/material-resolution",
+              "level": "native_process_test",
+              "processCases": [],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/material-resolution.v1.json",
+                "sha256": "20085c10a8fa4c9004f27b3baa25dc48a074258db5a80ac0092653ef5cb4fe67"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Resolve a parent card, preserve a child override, and inherit an unset model property.",
+              "fixture": "process-contract/material-resolution",
+              "level": "native_process_test",
+              "processCases": [],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/material-resolution.v1.json",
+                "sha256": "20085c10a8fa4c9004f27b3baa25dc48a074258db5a80ac0092653ef5cb4fe67"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Refresh the manager after a card file changes and resolve the updated value under the same UUID.",
+              "fixture": "process-contract/material-resolution",
+              "level": "native_process_test",
+              "processCases": [],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/material-resolution.v1.json",
+                "sha256": "20085c10a8fa4c9004f27b3baa25dc48a074258db5a80ac0092653ef5cb4fe67"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Reject a missing card path through the public Python lookup boundary.",
+              "fixture": "process-contract/material-resolution",
+              "level": "native_process_test",
+              "processCases": [],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/material-resolution.v1.json",
+                "sha256": "20085c10a8fa4c9004f27b3baa25dc48a074258db5a80ac0092653ef5cb4fe67"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Load a card whose model UUID is absent while omitting unresolved model properties.",
+              "fixture": "process-contract/material-resolution",
+              "level": "native_process_test",
+              "processCases": [],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/material-resolution.v1.json",
+                "sha256": "20085c10a8fa4c9004f27b3baa25dc48a074258db5a80ac0092653ef5cb4fe67"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Reject an invalid model schema without publishing a model or material entry.",
+              "fixture": "process-contract/material-resolution",
+              "level": "native_process_test",
+              "processCases": [],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/material-resolution.v1.json",
+                "sha256": "20085c10a8fa4c9004f27b3baa25dc48a074258db5a80ac0092653ef5cb4fe67"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Ignore a model property with an unknown value type while preserving the resolved model identity.",
+              "fixture": "process-contract/material-resolution",
+              "level": "native_process_test",
+              "processCases": [],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/material-resolution.v1.json",
+                "sha256": "20085c10a8fa4c9004f27b3baa25dc48a074258db5a80ac0092653ef5cb4fe67"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Bound cyclic material inheritance in an isolated process and record the abnormal native termination.",
+              "fixture": "process-contract/material-resolution",
+              "level": "native_process_test",
+              "processCases": [],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/material-resolution.v1.json",
+                "sha256": "20085c10a8fa4c9004f27b3baa25dc48a074258db5a80ac0092653ef5cb4fe67"
+              },
+              "role": "native_process_test"
+            }
+          ],
+          "id": "material.material_library_and_card_resolution",
+          "module": "Material",
+          "nativeExpressibility": "native_process_test",
+          "publicSurface": "Material host libraries, cards, inheritance, refresh, and model schema validation",
+          "rationale": "Library selection, card paths, model files, manager caches, and refresh are FreeCAD host-resource semantics. The CAD request graph keeps only the resolved Materials::PropertyMaterial map, so these branches use a hermetic FreeCADCmd process contract and add no graph DTO fields.",
+          "runtimeBranches": [
+            "Discover the isolated Custom library and resolve a card by UUID, path, and model filter.",
+            "Resolve a parent card, preserve a child override, and inherit an unset model property.",
+            "Refresh the manager after a card file changes and resolve the updated value under the same UUID.",
+            "Reject a missing card path through the public Python lookup boundary.",
+            "Load a card whose model UUID is absent while omitting unresolved model properties.",
+            "Reject an invalid model schema without publishing a model or material entry.",
+            "Ignore a model property with an unknown value type while preserving the resolved model identity.",
+            "Bound cyclic material inheritance in an isolated process and record the abnormal native termination."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Material/App/AppMaterial.cpp::initModule",
+            "src/Mod/Material/App/MaterialManager.cpp::Materials::MaterialManager",
+            "src/Mod/Material/App/MaterialManagerLocal.cpp::Materials::MaterialManagerLocal::getConfiguredLibraries",
+            "src/Mod/Material/App/MaterialLoader.cpp::Materials::MaterialLoader",
+            "src/Mod/Material/App/ModelLoader.cpp::Materials::ModelLoader",
+            "src/Mod/Material/App/Materials.cpp::Materials::Material",
+            "src/Mod/Material/App/PropertyMaterial.cpp::Materials::PropertyMaterial::setPyObject",
+            "src/Mod/Part/App/PartFeature.cpp::Part::Feature::getMaterialAppearance"
+          ],
+          "symbol": "src/Mod/Material/App/Materials.cpp::Materials::Material"
+        },
+        {
+          "capabilityIds": [
+            "material_recompute_update"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Mutate the material after one native recompute and collect the second recompute result.",
+              "fixture": "material-properties/material-part-feature-material-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "material.material_recompute_update",
+          "module": "Material",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Materials::PropertyMaterial mutation",
+          "runtimeBranches": [
+            "Mutate the material after one native recompute and collect the second recompute result."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Material/App/PropertyMaterial.cpp::Materials::PropertyMaterial::setPyObject",
+            "src/Mod/Material/App/Materials.cpp::Materials::Material::setName"
+          ],
+          "symbol": "src/Mod/Material/App/PropertyMaterial.cpp::Materials::PropertyMaterial::setPyObject"
+        },
+        {
+          "capabilityIds": [
+            "minimal_material_boundary"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Accept the minimal material name while other public metadata remains empty.",
+              "fixture": "material-properties/material-part-feature-minimal-material",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "material.minimal_material_boundary",
+          "module": "Material",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Materials::Material optional metadata",
+          "runtimeBranches": [
+            "Accept the minimal material name while other public metadata remains empty."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Material/App/Materials.cpp::Materials::Material"
+          ],
+          "symbol": "src/Mod/Material/App/Materials.cpp::Materials::Material"
+        },
+        {
+          "capabilityIds": [
+            "part_feature_shape_material_assignment"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Assign a populated material map and publish its public material fields.",
+              "fixture": "material-properties/material-part-feature-shape-material",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "material.part_feature_shape_material_assignment",
+          "module": "Material",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Part::Feature.ShapeMaterial using Materials::PropertyMaterial",
+          "runtimeBranches": [
+            "Assign a populated material map and publish its public material fields."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Part/App/PartFeature.cpp::Part::Feature::Feature",
+            "src/Mod/Material/App/PropertyMaterial.cpp::Materials::PropertyMaterial::setPyObject"
+          ],
+          "symbol": "src/Mod/Part/App/PartFeature.cpp::Part::Feature::Feature"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "Material"
+    },
+    {
+      "apiCount": 7,
+      "apis": [
+        {
+          "capabilityIds": [
+            "boolean_execute"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Resolve linked operands and execute a boolean cut.",
+              "fixture": "part-primitives/part-cut",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "part.boolean_execute",
+          "module": "Part",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Part boolean features",
+          "runtimeBranches": [
+            "Resolve linked operands and execute a boolean cut."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeaturePartBoolean.cpp::Part::Cut::execute"
+          ],
+          "symbol": "src/Mod/Part/App/FeaturePartBoolean.cpp::Part::Cut::execute"
+        },
+        {
+          "capabilityIds": [
+            "data_exchange_import"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Read a STEP shape through the native import execution path.",
+              "fixture": "part-import/part-import-step",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "part.data_exchange_import",
+          "module": "Part",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Part import features",
+          "runtimeBranches": [
+            "Read a STEP shape through the native import execution path."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeaturePartImportStep.cpp::Part::ImportStep::execute"
+          ],
+          "symbol": "src/Mod/Part/App/FeaturePartImportStep.cpp::Part::ImportStep::execute"
+        },
+        {
+          "capabilityIds": [
+            "direct_export_side_effects"
+          ],
+          "coverageStatus": "non_native_exception",
+          "disposition": "protocol_only",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [],
+          "id": "part.direct_export_side_effects",
+          "module": "Part",
+          "nativeExpressibility": "protocol_only",
+          "publicSurface": "Part shape export APIs",
+          "rationale": "Native geometry fixtures intentionally consume controlled input assets and do not make arbitrary output filesystem side effects part of the request protocol.",
+          "runtimeBranches": [
+            "Write BREP, STEP, IGES, or other exchange files as a public side effect."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Part/App/TopoShapePyImp.cpp::TopoShapePy::exportStep"
+          ],
+          "symbol": "src/Mod/Part/App/TopoShapePyImp.cpp::TopoShapePy::exportStep"
+        },
+        {
+          "capabilityIds": [
+            "extrusion_options"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Build an extrusion using taper and feature option branches.",
+              "fixture": "part-extrude/part-extrusion-taper",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "part.extrusion_options",
+          "module": "Part",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Part::Extrusion",
+          "runtimeBranches": [
+            "Build an extrusion using taper and feature option branches."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeatureExtrusion.cpp::Part::Extrusion::execute"
+          ],
+          "symbol": "src/Mod/Part/App/FeatureExtrusion.cpp::Part::Extrusion::execute"
+        },
+        {
+          "capabilityIds": [
+            "geomplate_build"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Build a surface from curve and point constraints.",
+              "fixture": "part-geomplate/part-geomplate-curve-point-default",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "part.geomplate_build",
+          "module": "Part",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Part GeomPlate surface construction",
+          "runtimeBranches": [
+            "Build a surface from curve and point constraints."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Part/App/Tools.cpp::Part::Tools::makeSurface"
+          ],
+          "symbol": "src/Mod/Part/App/Tools.cpp::Part::Tools::makeSurface"
+        },
+        {
+          "capabilityIds": [
+            "offset_loft_sweep_builders"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Execute representative offset, solid loft, and solid sweep builder paths.",
+              "fixture": "part-offset/part-offset-face",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Execute representative offset, solid loft, and solid sweep builder paths.",
+              "fixture": "part-loft/part-loft-solid",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Execute representative offset, solid loft, and solid sweep builder paths.",
+              "fixture": "part-sweep/part-sweep-solid",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "part.offset_loft_sweep_builders",
+          "module": "Part",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Part offset, loft, and sweep features",
+          "runtimeBranches": [
+            "Execute representative offset, solid loft, and solid sweep builder paths."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeatureOffset.cpp::Part::Offset::execute",
+            "src/Mod/Part/App/PartFeatures.cpp::Part::Loft::execute",
+            "src/Mod/Part/App/PartFeatures.cpp::Part::Sweep::execute"
+          ],
+          "symbol": "src/Mod/Part/App/FeatureOffset.cpp::Part::Offset::execute"
+        },
+        {
+          "capabilityIds": [
+            "primitive_execute"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Execute a primitive and collect its shape, placement, bounds, and topology.",
+              "fixture": "part-primitives/part-box",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "part.primitive_execute",
+          "module": "Part",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Part primitive features",
+          "runtimeBranches": [
+            "Execute a primitive and collect its shape, placement, bounds, and topology."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Part/App/FeaturePartBox.cpp::Part::Box::execute"
+          ],
+          "symbol": "src/Mod/Part/App/FeaturePartBox.cpp::Part::Box::execute"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "Part"
+    },
+    {
+      "apiCount": 6,
+      "apis": [
+        {
+          "capabilityIds": [
+            "advanced_geometry_and_operation_matrix"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+              "fixture": "sketcher-operations/sketch-trim-line-between-cutters",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+              "fixture": "sketcher-operations/sketch-trim-arc-between-cutters",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+              "fixture": "sketcher-operations/sketch-trim-conic-between-cutters",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+              "fixture": "sketcher-operations/sketch-trim-no-intersection-deletes-geometry",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+              "fixture": "sketcher-operations/sketch-trim-invalid-geometry-diagnostic",
+              "level": "native_diagnostic",
+              "role": "native"
+            },
+            {
+              "branch": "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+              "fixture": "sketcher-operations/sketch-extend-line-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+              "fixture": "sketcher-operations/sketch-extend-arc",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+              "fixture": "sketcher-operations/sketch-extend-conic-native-diagnostic",
+              "level": "native_diagnostic",
+              "role": "native"
+            },
+            {
+              "branch": "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+              "fixture": "sketcher-operations/sketch-extend-line-to-degenerate-boundary",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Fillet trim, create-corner, chamfer, no-trim, radius update, and invalid-pair boundaries.",
+              "fixture": "sketcher-operations/sketch-fillet-trim-closed-profile",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Fillet trim, create-corner, chamfer, no-trim, radius update, and invalid-pair boundaries.",
+              "fixture": "sketcher-operations/sketch-fillet-create-corner",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Fillet trim, create-corner, chamfer, no-trim, radius update, and invalid-pair boundaries.",
+              "fixture": "sketcher-operations/sketch-fillet-chamfer",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Fillet trim, create-corner, chamfer, no-trim, radius update, and invalid-pair boundaries.",
+              "fixture": "sketcher-operations/sketch-fillet-without-trim",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Fillet trim, create-corner, chamfer, no-trim, radius update, and invalid-pair boundaries.",
+              "fixture": "sketcher-operations/sketch-fillet-radius-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Fillet trim, create-corner, chamfer, no-trim, radius update, and invalid-pair boundaries.",
+              "fixture": "sketcher-operations/sketch-fillet-invalid-geometry-pair",
+              "level": "native_diagnostic",
+              "role": "native"
+            },
+            {
+              "branch": "Clone, block, conic internal/exact conversion, and B-spline degree/knot editing state updates.",
+              "fixture": "sketcher-operations/sketch-clone-line-dimensional-constraint",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Clone, block, conic internal/exact conversion, and B-spline degree/knot editing state updates.",
+              "fixture": "sketcher-operations/sketch-block-after-copy-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Clone, block, conic internal/exact conversion, and B-spline degree/knot editing state updates.",
+              "fixture": "sketcher-operations/sketch-clone-conic-arc",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Clone, block, conic internal/exact conversion, and B-spline degree/knot editing state updates.",
+              "fixture": "sketcher-operations/sketch-conic-expose-internal-geometry",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Clone, block, conic internal/exact conversion, and B-spline degree/knot editing state updates.",
+              "fixture": "sketcher-operations/sketch-conic-convert-to-bspline",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Clone, block, conic internal/exact conversion, and B-spline degree/knot editing state updates.",
+              "fixture": "sketcher-operations/sketch-bspline-degree-knot-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Clone, block, conic internal/exact conversion, and B-spline degree/knot editing state updates.",
+              "fixture": "sketcher-operations/sketch-bspline-knot-multiplicity",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Clone, block, conic internal/exact conversion, and B-spline degree/knot editing state updates.",
+              "fixture": "sketcher-operations/sketch-bspline-invalid-knot-native-diagnostic",
+              "level": "native_diagnostic",
+              "role": "native"
+            }
+          ],
+          "id": "sketcher.advanced_geometry_and_operation_matrix",
+          "module": "Sketcher",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Remaining Sketch geometry types and editing operations",
+          "runtimeBranches": [
+            "Trim and extend line, arc/conic, no-intersection, degenerate, and native-diagnostic boundaries.",
+            "Fillet trim, create-corner, chamfer, no-trim, radius update, and invalid-pair boundaries.",
+            "Clone, block, conic internal/exact conversion, and B-spline degree/knot editing state updates."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObjectGeometry.cpp::Sketcher::SketchObject",
+            "src/Mod/Sketcher/App/SketchObjectOperations.cpp::Sketcher::SketchObject"
+          ],
+          "symbol": "src/Mod/Sketcher/App/SketchObjectGeometry.cpp::Sketcher::SketchObject"
+        },
+        {
+          "capabilityIds": [
+            "conflicting_constraint_native_boundary"
+          ],
+          "coverageStatus": "non_native_exception",
+          "disposition": "unsupported",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "The requested conflict contract cannot currently be reproduced as stable native public expected output.",
+              "fixture": "sketcher-solve/sketch-conflicting-constraints",
+              "level": "unsupported_contract",
+              "role": "unsupported"
+            }
+          ],
+          "id": "sketcher.conflicting_constraint_native_boundary",
+          "module": "Sketcher",
+          "nativeExpressibility": "unsupported",
+          "publicSurface": "Sketch conflicting constraint status",
+          "rationale": "The fixture role registry records this case as unsupported rather than native authority; it must not be counted as an executed native diagnostic.",
+          "runtimeBranches": [
+            "The requested conflict contract cannot currently be reproduced as stable native public expected output."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::solve"
+          ],
+          "symbol": "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::solve"
+        },
+        {
+          "capabilityIds": [
+            "external_geometry_projection"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Project linked face and whole-object geometry into the sketch.",
+              "fixture": "sketcher-external-geometry/sketch-external-face-both",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Project linked face and whole-object geometry into the sketch.",
+              "fixture": "sketcher-external-geometry/sketch-external-whole-box",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "sketcher.external_geometry_projection",
+          "module": "Sketcher",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Sketch external geometry links",
+          "runtimeBranches": [
+            "Project linked face and whole-object geometry into the sketch."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObjectExternal.cpp::Sketcher::SketchObject::addExternal"
+          ],
+          "symbol": "src/Mod/Sketcher/App/SketchObjectExternal.cpp::Sketcher::SketchObject::addExternal"
+        },
+        {
+          "capabilityIds": [
+            "geometry_and_internal_shape"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Build a constrained profile and its public sketch geometry result.",
+              "fixture": "sketcher-solve/sketch-coincident-profile",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "sketcher.geometry_and_internal_shape",
+          "module": "Sketcher",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Sketcher::SketchObject geometry and InternalShape",
+          "runtimeBranches": [
+            "Build a constrained profile and its public sketch geometry result."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::execute",
+            "src/Mod/Sketcher/App/SketchObjectGeometry.cpp::Sketcher::SketchObject"
+          ],
+          "symbol": "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::execute"
+        },
+        {
+          "capabilityIds": [
+            "solver_facing_geometry_update"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Apply a dimensional constraint and observe the solved geometry update.",
+              "fixture": "sketcher-solve/sketch-circle-radius-solver-geometry-update",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "sketcher.solver_facing_geometry_update",
+          "module": "Sketcher",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Sketch constraints and solver-facing state",
+          "runtimeBranches": [
+            "Apply a dimensional constraint and observe the solved geometry update."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObjectConstraints.cpp::Sketcher::SketchObject::solve"
+          ],
+          "symbol": "src/Mod/Sketcher/App/SketchObjectConstraints.cpp::Sketcher::SketchObject::solve"
+        },
+        {
+          "capabilityIds": [
+            "underconstrained_diagnostics"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Publish a valid underconstrained state without treating it as an execution failure.",
+              "fixture": "sketcher-solve/sketch-underconstrained-no-constraints",
+              "level": "native_diagnostic",
+              "role": "native"
+            }
+          ],
+          "id": "sketcher.underconstrained_diagnostics",
+          "module": "Sketcher",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Sketch solver-facing diagnostics",
+          "runtimeBranches": [
+            "Publish a valid underconstrained state without treating it as an execution failure."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::solve"
+          ],
+          "symbol": "src/Mod/Sketcher/App/SketchObject.cpp::Sketcher::SketchObject::solve"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "Sketcher"
+    },
+    {
+      "apiCount": 9,
+      "apis": [
+        {
+          "capabilityIds": [
+            "binder_support"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Resolve selected subshapes, placement, make-face, offset, fuse, and refine options.",
+              "fixture": "partdesign-binder/shape-binder-face-edge-vertex-multi-subshape",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Resolve selected subshapes, placement, make-face, offset, fuse, and refine options.",
+              "fixture": "partdesign-binder/subshape-binder-makeface-offset-fuse-refine",
+              "level": "dependency_result",
+              "role": "native"
+            }
+          ],
+          "id": "partdesign.binder_support",
+          "module": "PartDesign",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "ShapeBinder and SubShapeBinder",
+          "runtimeBranches": [
+            "Resolve selected subshapes, placement, make-face, offset, fuse, and refine options."
+          ],
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/ShapeBinder.cpp::PartDesign::ShapeBinder::execute",
+            "src/Mod/PartDesign/App/ShapeBinder.cpp::PartDesign::SubShapeBinder::execute"
+          ],
+          "symbol": "src/Mod/PartDesign/App/ShapeBinder.cpp::PartDesign::ShapeBinder::execute"
+        },
+        {
+          "capabilityIds": [
+            "body_pad_pocket_chain"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Execute additive and subtractive features through the Body dependency chain.",
+              "fixture": "partdesign-body/body-curved-face-pad-profile-normal",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Execute additive and subtractive features through the Body dependency chain.",
+              "fixture": "partdesign-extrude/pocket-custom-vector",
+              "level": "dependency_result",
+              "role": "native"
+            }
+          ],
+          "id": "partdesign.body_pad_pocket_chain",
+          "module": "PartDesign",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "PartDesign Body, Pad, and Pocket",
+          "runtimeBranches": [
+            "Execute additive and subtractive features through the Body dependency chain."
+          ],
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/Body.cpp::PartDesign::Body::execute",
+            "src/Mod/PartDesign/App/FeaturePad.cpp::PartDesign::Pad::execute",
+            "src/Mod/PartDesign/App/FeaturePocket.cpp::PartDesign::Pocket::execute"
+          ],
+          "symbol": "src/Mod/PartDesign/App/Body.cpp::PartDesign::Body::execute"
+        },
+        {
+          "capabilityIds": [
+            "datum_attachment_modes"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Recompute datum objects through selected MapMode and AttachmentSupport branches.",
+              "fixture": "partdesign-datum/partdesign-datum-selected-mapmodes",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "partdesign.datum_attachment_modes",
+          "module": "PartDesign",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "PartDesign datum plane, line, point, and coordinate-system attachment",
+          "runtimeBranches": [
+            "Recompute datum objects through selected MapMode and AttachmentSupport branches."
+          ],
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/DatumPlane.cpp::PartDesign::Plane",
+            "src/Mod/PartDesign/App/DatumLine.cpp::PartDesign::Line",
+            "src/Mod/PartDesign/App/DatumPoint.cpp::PartDesign::Point",
+            "src/Mod/PartDesign/App/DatumCS.cpp::PartDesign::CoordinateSystem",
+            "src/Mod/Part/App/AttachExtension.cpp::Part::AttachExtension::positionBySupport"
+          ],
+          "symbol": "src/Mod/PartDesign/App/DatumPlane.cpp::PartDesign::Plane"
+        },
+        {
+          "capabilityIds": [
+            "dressup_features"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Execute representative dress-up features against selected subshapes.",
+              "fixture": "partdesign-dressup/chamfer-distance-angle-edge",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Execute representative dress-up features against selected subshapes.",
+              "fixture": "partdesign-dressup/draft-face-auto-neutral-plane",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Execute representative dress-up features against selected subshapes.",
+              "fixture": "partdesign-dressup/thickness-face-skin-arc",
+              "level": "dependency_result",
+              "role": "native"
+            }
+          ],
+          "id": "partdesign.dressup_features",
+          "module": "PartDesign",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "PartDesign Chamfer, Draft, and Thickness",
+          "runtimeBranches": [
+            "Execute representative dress-up features against selected subshapes."
+          ],
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureChamfer.cpp::PartDesign::Chamfer::execute",
+            "src/Mod/PartDesign/App/FeatureDraft.cpp::PartDesign::Draft::execute",
+            "src/Mod/PartDesign/App/FeatureThickness.cpp::PartDesign::Thickness::execute"
+          ],
+          "symbol": "src/Mod/PartDesign/App/FeatureChamfer.cpp::PartDesign::Chamfer::execute"
+        },
+        {
+          "capabilityIds": [
+            "hole_modes"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Execute representative blind-depth, through-all, and counterbore cut branches.",
+              "fixture": "partdesign-hole/hole-supported-blind-depth",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Execute representative blind-depth, through-all, and counterbore cut branches.",
+              "fixture": "partdesign-hole/hole-supported-through-all",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Execute representative blind-depth, through-all, and counterbore cut branches.",
+              "fixture": "partdesign-hole/hole-supported-counterbore",
+              "level": "dependency_result",
+              "role": "native"
+            }
+          ],
+          "id": "partdesign.hole_modes",
+          "module": "PartDesign",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "PartDesign Hole",
+          "runtimeBranches": [
+            "Execute representative blind-depth, through-all, and counterbore cut branches."
+          ],
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureHole.cpp::PartDesign::Hole::execute"
+          ],
+          "symbol": "src/Mod/PartDesign/App/FeatureHole.cpp::PartDesign::Hole::execute"
+        },
+        {
+          "capabilityIds": [
+            "loft_pipe_boolean"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Execute profile lifecycle, path sweep, and Body-tool boolean branches.",
+              "fixture": "partdesign-loft/partdesign-loft-additive-body",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Execute profile lifecycle, path sweep, and Body-tool boolean branches.",
+              "fixture": "partdesign-pipe/partdesign-pipe-additive-lifecycle",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Execute profile lifecycle, path sweep, and Body-tool boolean branches.",
+              "fixture": "partdesign-boolean/partdesign-boolean-fuse-body-tool",
+              "level": "dependency_result",
+              "role": "native"
+            }
+          ],
+          "id": "partdesign.loft_pipe_boolean",
+          "module": "PartDesign",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "PartDesign loft, pipe, and boolean features",
+          "runtimeBranches": [
+            "Execute profile lifecycle, path sweep, and Body-tool boolean branches."
+          ],
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureLoft.cpp::PartDesign::Loft::execute",
+            "src/Mod/PartDesign/App/FeaturePipe.cpp::PartDesign::Pipe::execute",
+            "src/Mod/PartDesign/App/FeatureBoolean.cpp::PartDesign::Boolean::execute"
+          ],
+          "symbol": "src/Mod/PartDesign/App/FeatureLoft.cpp::PartDesign::Loft::execute"
+        },
+        {
+          "capabilityIds": [
+            "pattern_transform_history"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Execute a multi-original linear pattern and preserve linked history evidence.",
+              "fixture": "partdesign-pattern/linear-pattern-multi-original-link-retag",
+              "level": "dependency_result",
+              "role": "native"
+            }
+          ],
+          "id": "partdesign.pattern_transform_history",
+          "module": "PartDesign",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "PartDesign transformed features and pattern history",
+          "runtimeBranches": [
+            "Execute a multi-original linear pattern and preserve linked history evidence."
+          ],
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureLinearPattern.cpp::PartDesign::LinearPattern::getTransformations",
+            "src/Mod/PartDesign/App/FeatureTransformed.cpp::PartDesign::Transformed::execute"
+          ],
+          "symbol": "src/Mod/PartDesign/App/FeatureLinearPattern.cpp::PartDesign::LinearPattern::getTransformations"
+        },
+        {
+          "capabilityIds": [
+            "persisted_body_group_restore"
+          ],
+          "coverageStatus": "non_native_exception",
+          "disposition": "protocol_only",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [],
+          "id": "partdesign.persisted_body_group_restore",
+          "module": "PartDesign",
+          "nativeExpressibility": "protocol_only",
+          "publicSurface": "Body group restore and version migration",
+          "rationale": "Fresh graph fixtures cover live execution but do not currently express persisted document restore or version migration.",
+          "runtimeBranches": [
+            "Restore legacy group membership, Tip, and persisted feature ordering."
+          ],
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/Body.cpp::PartDesign::Body::onDocumentRestored"
+          ],
+          "symbol": "src/Mod/PartDesign/App/Body.cpp::PartDesign::Body::onDocumentRestored"
+        },
+        {
+          "capabilityIds": [
+            "revolution_and_groove"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Resolve profile and axis, then execute additive and subtractive revolved features in a Body.",
+              "fixture": "partdesign-revolve/partdesign-revolution-axis-angle-body",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Resolve profile and axis, then execute additive and subtractive revolved features in a Body.",
+              "fixture": "partdesign-revolve/partdesign-groove-axis-angle-body",
+              "level": "dependency_result",
+              "role": "native"
+            }
+          ],
+          "id": "partdesign.revolution_and_groove",
+          "module": "PartDesign",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "PartDesign Revolution and Groove",
+          "runtimeBranches": [
+            "Resolve profile and axis, then execute additive and subtractive revolved features in a Body."
+          ],
+          "sourceEvidence": [
+            "src/Mod/PartDesign/App/FeatureRevolution.cpp::PartDesign::Revolution::execute",
+            "src/Mod/PartDesign/App/FeatureGroove.cpp::PartDesign::Groove::execute"
+          ],
+          "symbol": "src/Mod/PartDesign/App/FeatureRevolution.cpp::PartDesign::Revolution::execute"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "PartDesign"
+    },
+    {
+      "apiCount": 23,
+      "apis": [
+        {
+          "capabilityIds": [
+            "closed_mesh_boundary"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Load a closed tetrahedron and publish closedness, bounds, facet count, and volume.",
+              "fixture": "mesh-import/mesh-import-closed-tetrahedron",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.closed_mesh_boundary",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::Import closed solid metadata",
+          "runtimeBranches": [
+            "Load a closed tetrahedron and publish closedness, bounds, facet count, and volume."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
+          ],
+          "symbol": "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "execute Cone through MeshObject::createCone",
+              "fixture": "mesh-primitives/mesh-cone",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "mustExecute when Radius1/Radius2/Length/EdgeLength/Closed/Sampling is touched",
+              "fixture": "mesh-primitives/mesh-cone-recompute-properties",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.cone",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::Cone",
+          "runtimeBranches": [
+            "execute Cone through MeshObject::createCone",
+            "mustExecute when Radius1/Radius2/Length/EdgeLength/Closed/Sampling is touched"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Cone::mustExecute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Cone::execute"
+          ],
+          "symbol": "Mesh::Cone::execute/mustExecute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "execute Cube through MeshObject::createCube",
+              "fixture": "mesh-primitives/mesh-cube",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "mustExecute when Length/Width/Height is touched",
+              "fixture": "mesh-primitives/mesh-cube-recompute-dimensions",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.cube",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::Cube",
+          "runtimeBranches": [
+            "execute Cube through MeshObject::createCube",
+            "mustExecute when Length/Width/Height is touched"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Cube::mustExecute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Cube::execute"
+          ],
+          "symbol": "Mesh::Cube::execute/mustExecute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "execute Cylinder through MeshObject::createCylinder",
+              "fixture": "mesh-primitives/mesh-cylinder",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "mustExecute when Radius/Length/EdgeLength/Closed/Sampling is touched",
+              "fixture": "mesh-primitives/mesh-cylinder-recompute-properties",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.cylinder",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::Cylinder",
+          "runtimeBranches": [
+            "execute Cylinder through MeshObject::createCylinder",
+            "mustExecute when Radius/Length/EdgeLength/Closed/Sampling is touched"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Cylinder::mustExecute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Cylinder::execute"
+          ],
+          "symbol": "Mesh::Cylinder::execute/mustExecute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "execute Ellipsoid through MeshObject::createEllipsoid",
+              "fixture": "mesh-primitives/mesh-ellipsoid",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "mustExecute when Radius1/Radius2/Sampling is touched",
+              "fixture": "mesh-primitives/mesh-ellipsoid-recompute-properties",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.ellipsoid",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::Ellipsoid",
+          "runtimeBranches": [
+            "execute Ellipsoid through MeshObject::createEllipsoid",
+            "mustExecute when Radius1/Radius2/Sampling is touched"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Ellipsoid::mustExecute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Ellipsoid::execute"
+          ],
+          "symbol": "Mesh::Ellipsoid::execute/mustExecute"
+        },
+        {
+          "capabilityIds": [
+            "feature_mesh_transform"
+          ],
+          "coverageStatus": "non_native_exception",
+          "disposition": "unsupported",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [],
+          "id": "mesh.feature_mesh_transform",
+          "module": "Mesh",
+          "nativeExpressibility": "unsupported",
+          "publicSurface": "Mesh::Transform",
+          "rationale": "The authoritative FreeCAD source contains no active geometry transform branch, so a native geometry fixture would falsely invent behavior from the registered TypeId.",
+          "runtimeBranches": [
+            "FreeCAD registers the feature, but its execute implementation currently returns success with the transform body commented out."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/FeatureMeshTransform.cpp::Mesh::Transform::execute"
+          ],
+          "symbol": "src/Mod/Mesh/App/FeatureMeshTransform.cpp::Mesh::Transform::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then fillupHoles",
+              "fixture": "mesh-defects/mesh-defects-fill-holes",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "copy Source.Mesh then fillupHoles",
+              "fixture": "mesh-defects/mesh-defects-fill-holes-closed-boundary",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.fillholes",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::FillHoles",
+          "runtimeBranches": [
+            "copy Source.Mesh then fillupHoles"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::FillHoles::execute"
+          ],
+          "symbol": "Mesh::FillHoles::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "base execute returns StdReturn and Source touch drives mustExecute",
+              "fixture": "mesh-defects/mesh-defects-fix-defects-base-recompute-source",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.fixdefects",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::FixDefects",
+          "runtimeBranches": [
+            "base execute returns StdReturn and Source touch drives mustExecute"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::FixDefects::execute"
+          ],
+          "symbol": "Mesh::FixDefects::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then validateDeformations",
+              "fixture": "mesh-defects/mesh-defects-fix-deformations",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.fixdeformations",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::FixDeformations",
+          "runtimeBranches": [
+            "copy Source.Mesh then validateDeformations"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::FixDeformations::execute"
+          ],
+          "symbol": "Mesh::FixDeformations::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then validateDegenerations",
+              "fixture": "mesh-defects/mesh-defects-fix-degenerations",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.fixdegenerations",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::FixDegenerations",
+          "runtimeBranches": [
+            "copy Source.Mesh then validateDegenerations"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::FixDegenerations::execute"
+          ],
+          "symbol": "Mesh::FixDegenerations::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then removeDuplicatedFacets",
+              "fixture": "mesh-defects/mesh-defects-fix-duplicated-faces",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "no duplicated faces leaves the mesh unchanged",
+              "fixture": "mesh-defects/mesh-defects-no-duplicated-faces",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.fixduplicatedfaces",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::FixDuplicatedFaces",
+          "runtimeBranches": [
+            "copy Source.Mesh then removeDuplicatedFacets",
+            "no duplicated faces leaves the mesh unchanged"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::FixDuplicatedFaces::execute"
+          ],
+          "symbol": "Mesh::FixDuplicatedFaces::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then removeDuplicatedPoints",
+              "fixture": "mesh-defects/mesh-defects-fix-duplicated-points",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.fixduplicatedpoints",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::FixDuplicatedPoints",
+          "runtimeBranches": [
+            "copy Source.Mesh then removeDuplicatedPoints"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::FixDuplicatedPoints::execute"
+          ],
+          "symbol": "Mesh::FixDuplicatedPoints::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then validateIndices",
+              "fixture": "mesh-defects/mesh-defects-fix-indices",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.fixindices",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::FixIndices",
+          "runtimeBranches": [
+            "copy Source.Mesh then validateIndices"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::FixIndices::execute"
+          ],
+          "symbol": "Mesh::FixIndices::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then removeNonManifolds",
+              "fixture": "mesh-defects/mesh-defects-fix-non-manifolds",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.fixnonmanifolds",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::FixNonManifolds",
+          "runtimeBranches": [
+            "copy Source.Mesh then removeNonManifolds"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::FixNonManifolds::execute"
+          ],
+          "symbol": "Mesh::FixNonManifolds::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then flipNormals",
+              "fixture": "mesh-defects/mesh-defects-flip-normals",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.flipnormals",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::FlipNormals",
+          "runtimeBranches": [
+            "copy Source.Mesh then flipNormals"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::FlipNormals::execute"
+          ],
+          "symbol": "Mesh::FlipNormals::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then harmonizeNormals",
+              "fixture": "mesh-defects/mesh-defects-harmonize-normals",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Source touched recompute",
+              "fixture": "mesh-defects/mesh-defects-source-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "missing or non-Mesh Source boundary",
+              "fixture": "mesh-defects/mesh-defects-missing-source",
+              "level": "native_diagnostic",
+              "role": "native"
+            },
+            {
+              "branch": "missing or non-Mesh Source boundary",
+              "fixture": "mesh-defects/mesh-defects-source-without-mesh-property",
+              "level": "native_diagnostic",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.harmonizenormals",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::HarmonizeNormals",
+          "runtimeBranches": [
+            "copy Source.Mesh then harmonizeNormals",
+            "Source touched recompute",
+            "missing or non-Mesh Source boundary"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::HarmonizeNormals::execute"
+          ],
+          "symbol": "Mesh::HarmonizeNormals::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_export_side_effects"
+          ],
+          "coverageStatus": "non_native_exception",
+          "disposition": "protocol_only",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [],
+          "id": "mesh.mesh_export_side_effects",
+          "module": "Mesh",
+          "nativeExpressibility": "protocol_only",
+          "publicSurface": "Mesh export and save APIs",
+          "rationale": "The request fixture protocol treats checked-in assets as inputs and does not expose arbitrary output filesystem writes.",
+          "runtimeBranches": [
+            "Write mesh formats to arbitrary filesystem destinations."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/MeshPyImp.cpp::MeshPy::write"
+          ],
+          "symbol": "src/Mod/Mesh/App/MeshPyImp.cpp::MeshPy::write"
+        },
+        {
+          "capabilityIds": [
+            "mesh_filename_recompute_update"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Recompute once, change FileName, then reload a different mesh on the second native recompute.",
+              "fixture": "mesh-import/mesh-import-file-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.mesh_filename_recompute_update",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::Import.FileName touched execution",
+          "runtimeBranches": [
+            "Recompute once, change FileName, then reload a different mesh on the second native recompute."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::mustExecute",
+            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
+          ],
+          "symbol": "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::mustExecute"
+        },
+        {
+          "capabilityIds": [
+            "open_mesh_import"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Load an open STL mesh and publish facet, vertex, and bound evidence.",
+              "fixture": "mesh-import/mesh-import-stl",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.open_mesh_import",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::Import",
+          "runtimeBranches": [
+            "Load an open STL mesh and publish facet, vertex, and bound evidence."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
+          ],
+          "symbol": "src/Mod/Mesh/App/FeatureMeshImport.cpp::Mesh::Import::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "copy Source.Mesh then removeComponents",
+              "fixture": "mesh-defects/mesh-defects-remove-components",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "copy Source.Mesh then removeComponents",
+              "fixture": "mesh-defects/mesh-defects-remove-components-zero-threshold",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.removecomponents",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::RemoveComponents",
+          "runtimeBranches": [
+            "copy Source.Mesh then removeComponents"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshDefects.cpp::RemoveComponents::execute"
+          ],
+          "symbol": "Mesh::RemoveComponents::execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "union",
+              "fixture": "mesh-setops/mesh-setops-union",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "intersection",
+              "fixture": "mesh-setops/mesh-setops-intersection",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "difference",
+              "fixture": "mesh-setops/mesh-setops-difference",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "OperationType or Source1/Source2 touched recompute",
+              "fixture": "mesh-setops/mesh-setops-switch-operation",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "OperationType or Source1/Source2 touched recompute",
+              "fixture": "mesh-setops/mesh-setops-switch-source",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "missing source native diagnostic",
+              "fixture": "mesh-setops/mesh-setops-missing-source",
+              "level": "native_diagnostic",
+              "role": "native"
+            },
+            {
+              "branch": "invalid operation native diagnostic",
+              "fixture": "mesh-setops/mesh-setops-invalid-operation",
+              "level": "native_diagnostic",
+              "role": "native"
+            },
+            {
+              "branch": "disjoint operands",
+              "fixture": "mesh-setops/mesh-setops-disjoint-intersection",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.set_operations",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::SetOperations",
+          "runtimeBranches": [
+            "union",
+            "intersection",
+            "difference",
+            "OperationType or Source1/Source2 touched recompute",
+            "missing source native diagnostic",
+            "invalid operation native diagnostic",
+            "disjoint operands"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSetOperations.cpp::SetOperations::mustExecute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSetOperations.cpp::SetOperations::execute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/Core/SetOperations.cpp::MeshCore::SetOperations::Do"
+          ],
+          "symbol": "Mesh::SetOperations::mustExecute/execute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "execute Sphere through MeshObject::createSphere",
+              "fixture": "mesh-primitives/mesh-sphere",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "mustExecute when Radius/Sampling is touched",
+              "fixture": "mesh-primitives/mesh-sphere-recompute-radius-sampling",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.sphere",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::Sphere",
+          "runtimeBranches": [
+            "execute Sphere through MeshObject::createSphere",
+            "mustExecute when Radius/Sampling is touched"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Sphere::mustExecute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Sphere::execute"
+          ],
+          "symbol": "Mesh::Sphere::execute/mustExecute"
+        },
+        {
+          "capabilityIds": [
+            "mesh_primitives_setops_and_defects"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "execute Torus through MeshObject::createTorus",
+              "fixture": "mesh-primitives/mesh-torus",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "mustExecute when Radius1/Radius2/Sampling is touched",
+              "fixture": "mesh-primitives/mesh-torus-recompute-properties",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "mesh.torus",
+          "module": "Mesh",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Mesh::Torus",
+          "runtimeBranches": [
+            "execute Torus through MeshObject::createTorus",
+            "mustExecute when Radius1/Radius2/Sampling is touched"
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Torus::mustExecute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Mesh/App/FeatureMeshSolid.cpp::Torus::execute"
+          ],
+          "symbol": "Mesh::Torus::execute/mustExecute"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "Mesh"
+    },
+    {
+      "apiCount": 5,
+      "apis": [
+        {
+          "capabilityIds": [
+            "cell_recompute_update"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Recompute once, mutate source cells, and collect the updated formula value while preserving alias state.",
+              "fixture": "spreadsheet-recompute/spreadsheet-sheet-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "spreadsheet.cell_recompute_update",
+          "module": "Spreadsheet",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Spreadsheet::Sheet set and alias mutation",
+          "runtimeBranches": [
+            "Recompute once, mutate source cells, and collect the updated formula value while preserving alias state."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::set",
+            "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
+          ],
+          "symbol": "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::set"
+        },
+        {
+          "capabilityIds": [
+            "empty_sheet_boundary"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Execute a sheet with no cells and publish an empty cell result without manufacturing content.",
+              "fixture": "spreadsheet-recompute/spreadsheet-sheet-empty",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "spreadsheet.empty_sheet_boundary",
+          "module": "Spreadsheet",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Spreadsheet::Sheet empty state",
+          "runtimeBranches": [
+            "Execute a sheet with no cells and publish an empty cell result without manufacturing content."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
+          ],
+          "symbol": "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
+        },
+        {
+          "capabilityIds": [
+            "expression_dependency_recompute"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Build the dirty dependency graph, topologically recompute formulas, and publish evaluated cell values.",
+              "fixture": "spreadsheet-recompute/spreadsheet-sheet-expression-dependency",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "spreadsheet.expression_dependency_recompute",
+          "module": "Spreadsheet",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Spreadsheet::Sheet cell expressions",
+          "runtimeBranches": [
+            "Build the dirty dependency graph, topologically recompute formulas, and publish evaluated cell values."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
+          ],
+          "symbol": "src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute"
+        },
+        {
+          "capabilityIds": [
+            "spreadsheet_import_export"
+          ],
+          "coverageStatus": "non_native_exception",
+          "disposition": "protocol_only",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [],
+          "id": "spreadsheet.spreadsheet_import_export",
+          "module": "Spreadsheet",
+          "nativeExpressibility": "protocol_only",
+          "publicSurface": "Spreadsheet importFile and exportFile",
+          "rationale": "The current document graph protocol has no spreadsheet file-import or file-export operation envelope, so these side effects are not native fixture claims.",
+          "runtimeBranches": [
+            "Read or write external spreadsheet files through user-facing file APIs."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::importFile",
+            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::exportFile"
+          ],
+          "symbol": "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::importFile"
+        },
+        {
+          "capabilityIds": [
+            "styles_layout_and_merge"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
+              "fixture": "spreadsheet-layout/spreadsheet-layout-style",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
+              "fixture": "spreadsheet-layout/spreadsheet-layout-alignment",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
+              "fixture": "spreadsheet-layout/spreadsheet-layout-row-column-size",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
+              "fixture": "spreadsheet-layout/spreadsheet-layout-merge-clears-covered-cells",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
+              "fixture": "spreadsheet-layout/spreadsheet-layout-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
+              "fixture": "spreadsheet-layout/spreadsheet-layout-unmerge-recompute-update",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
+              "fixture": "spreadsheet-layout/spreadsheet-layout-overlap-replaces-prior-merge",
+              "level": "target_result",
+              "role": "native"
+            },
+            {
+              "branch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
+              "fixture": "spreadsheet-layout/spreadsheet-layout-invalid-range-native-diagnostic",
+              "level": "native_diagnostic",
+              "role": "native"
+            },
+            {
+              "branch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
+              "fixture": "spreadsheet-layout/spreadsheet-layout-invalid-style-option-native-diagnostic",
+              "level": "native_diagnostic",
+              "role": "native"
+            }
+          ],
+          "id": "spreadsheet.styles_layout_and_merge",
+          "module": "Spreadsheet",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Spreadsheet cell style, width, height, merge, and alignment APIs",
+          "runtimeBranches": [
+            "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption."
+          ],
+          "sourceEvidence": [
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setStyle",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setAlignment",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setColumnWidth",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setRowHeight",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::mergeCells",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/PropertySheet.cpp::Spreadsheet::PropertySheet::Save",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/Cell.cpp::Spreadsheet::Cell::save"
+          ],
+          "symbol": "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setStyle"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "Spreadsheet"
+    },
+    {
+      "apiCount": 4,
+      "apis": [
+        {
+          "capabilityIds": [
+            "assembly_object_graph"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "DocumentObjectTypeId",
+          "fixtureEvidence": [
+            {
+              "branch": "Build an assembly graph with components, grounded parts, and joints.",
+              "fixture": "assembly-solve/assembly-angle-zero-and-signed-current-real-solver",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "assembly.assembly_object_graph",
+          "module": "Assembly",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Assembly::AssemblyObject and joint groups",
+          "runtimeBranches": [
+            "Build an assembly graph with components, grounded parts, and joints."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject",
+            "src/Mod/Assembly/App/JointGroup.cpp::Assembly::JointGroup"
+          ],
+          "symbol": "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject"
+        },
+        {
+          "capabilityIds": [
+            "assembly_persistence_and_extension_lifecycle"
+          ],
+          "coverageStatus": "non_native_exception",
+          "disposition": "protocol_only",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [],
+          "id": "assembly.assembly_persistence_and_extension_lifecycle",
+          "module": "Assembly",
+          "nativeExpressibility": "protocol_only",
+          "publicSurface": "Assembly persisted extension and document restore lifecycle",
+          "rationale": "Current fixtures exercise fresh request-local assembly execution, not persisted restore and extension migration.",
+          "runtimeBranches": [
+            "Restore component groups, joint groups, and extension state from saved documents."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::onDocumentRestored"
+          ],
+          "symbol": "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::onDocumentRestored"
+        },
+        {
+          "capabilityIds": [
+            "invalid_joint_diagnostics"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Reject an invalid grounded distance constraint with structured native diagnostics.",
+              "fixture": "assembly-solve/assembly-invalid-grounded-distance-real-solver",
+              "level": "native_diagnostic",
+              "role": "native"
+            }
+          ],
+          "id": "assembly.invalid_joint_diagnostics",
+          "module": "Assembly",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Assembly solve diagnostics",
+          "runtimeBranches": [
+            "Reject an invalid grounded distance constraint with structured native diagnostics."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+          ],
+          "symbol": "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+        },
+        {
+          "capabilityIds": [
+            "joint_marker_and_writeback"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "CxxPublicApi",
+          "fixtureEvidence": [
+            {
+              "branch": "Resolve joint geometry markers, solve, and publish component placement changes.",
+              "fixture": "assembly-solve/assembly-angle-zero-and-signed-current-real-solver",
+              "level": "target_result",
+              "role": "native"
+            }
+          ],
+          "id": "assembly.joint_marker_and_writeback",
+          "module": "Assembly",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Assembly joint marker extraction and placement writeback",
+          "runtimeBranches": [
+            "Resolve joint geometry markers, solve, and publish component placement changes."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Assembly/JointObject.py::Joint",
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+          ],
+          "symbol": "src/Mod/Assembly/JointObject.py::Joint"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "Assembly"
+    },
+    {
+      "apiCount": 3,
+      "apis": [
+        {
+          "capabilityIds": [
+            "full_joint_type_and_degenerate_matrix"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "RetainedTargetDependency",
+          "fixtureEvidence": [
+            {
+              "branch": "Cover all 13 joint types, 10 marker families, 37 DistanceType classes, placement writeback, the RackPinion missing-slider boundary, and a real solver failure without claiming a Cartesian runtime matrix.",
+              "fixture": "assembly-solve/assembly-orientation-joints-placement-writeback",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Cover all 13 joint types, 10 marker families, 37 DistanceType classes, placement writeback, the RackPinion missing-slider boundary, and a real solver failure without claiming a Cartesian runtime matrix.",
+              "fixture": "assembly-solve/assembly-gears-belt-placement-writeback",
+              "level": "dependency_result",
+              "role": "native"
+            },
+            {
+              "branch": "Cover all 13 joint types, 10 marker families, 37 DistanceType classes, placement writeback, the RackPinion missing-slider boundary, and a real solver failure without claiming a Cartesian runtime matrix.",
+              "fixture": "assembly-solve/assembly-gears-zero-radius-native-solver-failure",
+              "level": "native_diagnostic",
+              "role": "native"
+            }
+          ],
+          "id": "ondselsolver.full_joint_type_and_degenerate_matrix",
+          "module": "OndselSolver",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Source-derived Ondsel joint, marker, distance, writeback, and failure equivalence classes",
+          "runtimeBranches": [
+            "Cover all 13 joint types, 10 marker families, 37 DistanceType classes, placement writeback, the RackPinion missing-slider boundary, and a real solver failure without claiming a Cartesian runtime matrix."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::makeMbdAssembly"
+          ],
+          "supportMatrixReceipt": {
+            "id": "assembly-solver-support-matrix/v1",
+            "matrix": {
+              "exists": true,
+              "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/assembly_solver_support_matrix.v1.json",
+              "sha256": "e66acacf2738df1d1d94590f51bc73765a605cc89a30eb84055357fae11fae22"
+            },
+            "report": {
+              "exists": true,
+              "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/assembly_solver_support_matrix.v1.json",
+              "sha256": "605bda95ce7358ca1223e109a62bff24e088f3b1198ae8b130c22538d79913e1"
+            },
+            "status": "passed"
+          },
+          "symbol": "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::makeMbdAssembly"
+        },
+        {
+          "capabilityIds": [
+            "real_solver_failure"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "RetainedTargetDependency",
+          "fixtureEvidence": [
+            {
+              "branch": "Return the native solver failure boundary for an invalid zero-radius gear solve.",
+              "fixture": "assembly-solve/assembly-gears-zero-radius-native-solver-failure",
+              "level": "native_diagnostic",
+              "role": "native"
+            }
+          ],
+          "id": "ondselsolver.real_solver_failure",
+          "module": "OndselSolver",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Ondsel solver failure diagnostics",
+          "runtimeBranches": [
+            "Return the native solver failure boundary for an invalid zero-radius gear solve."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+          ],
+          "symbol": "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+        },
+        {
+          "capabilityIds": [
+            "real_solver_success"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_fixture",
+          "exposure": "RetainedTargetDependency",
+          "fixtureEvidence": [
+            {
+              "branch": "Create solver markers and constraints, solve, and write placements back to the assembly graph.",
+              "fixture": "assembly-solve/assembly-angle-zero-and-signed-current-real-solver",
+              "level": "dependency_result",
+              "role": "native"
+            }
+          ],
+          "id": "ondselsolver.real_solver_success",
+          "module": "OndselSolver",
+          "nativeExpressibility": "native_fixture",
+          "publicSurface": "Ondsel assembly solver adapter",
+          "runtimeBranches": [
+            "Create solver markers and constraints, solve, and write placements back to the assembly graph."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+          ],
+          "symbol": "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "OndselSolver"
+    },
+    {
+      "apiCount": 2,
+      "apis": [
+        {
+          "capabilityIds": [
+            "gui_and_network_help_display"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_process_test",
+          "exposure": "PythonModule",
+          "fixtureEvidence": [
+            {
+              "branch": "Dispatch Help.show to the headless local-page path without GUI or network effects.",
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "help-local-page-headless"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/help-addonmanager.v1.json",
+                "sha256": "6ce374448c7e0deba06e86dddf828159dbaacb38eefc83753d794640e8fd772a"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Dispatch Help.show_browser through Qt desktop services and the system-browser fallback using injected adapters.",
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "help-browser-fallback-mocked"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/help-addonmanager.v1.json",
+                "sha256": "6ce374448c7e0deba06e86dddf828159dbaacb38eefc83753d794640e8fd772a"
+              },
+              "role": "native_process_test"
+            }
+          ],
+          "id": "help.gui_and_network_help_display",
+          "module": "Help",
+          "nativeExpressibility": "native_process_test",
+          "publicSurface": "Help.show and WebEngine/browser display",
+          "rationale": "Repeat-2 FreeCADCmd process cases execute the headless Help.show path and the Qt-to-browser dispatch path with local pages and injected adapters. A separate item-local process receipt proves release FreeCADCmd has GuiUp=false for the visible WebEngine branch and records its close condition.",
+          "runtimeBranches": [
+            "Dispatch Help.show to the headless local-page path without GUI or network effects.",
+            "Dispatch Help.show_browser through Qt desktop services and the system-browser fallback using injected adapters."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Help/Help.py::show"
+          ],
+          "symbol": "src/Mod/Help/Help.py::show"
+        },
+        {
+          "capabilityIds": [
+            "module_import_and_pure_page_path"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_process_test",
+          "exposure": "PythonModule",
+          "fixtureEvidence": [
+            {
+              "branch": "Resolve a local custom page, read and convert its contents, and print it in FreeCADCmd headless mode.",
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "help-local-page-headless"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/help-addonmanager.v1.json",
+                "sha256": "6ce374448c7e0deba06e86dddf828159dbaacb38eefc83753d794640e8fd772a"
+              },
+              "role": "native_process_test"
+            }
+          ],
+          "id": "help.module_import_and_pure_page_path",
+          "module": "Help",
+          "nativeExpressibility": "native_process_test",
+          "publicSurface": "Help module import and underscore-page normalization",
+          "rationale": "A repeat-2 FreeCADCmd process contract imports the installed Help module and executes page normalization, local resolution, content loading, conversion, and headless rendering without GUI or network effects.",
+          "runtimeBranches": [
+            "Resolve a local custom page, read and convert its contents, and print it in FreeCADCmd headless mode."
+          ],
+          "sourceEvidence": [
+            "src/Mod/Help/Help.py::underscore_page"
+          ],
+          "symbol": "src/Mod/Help/Help.py::underscore_page"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "Help"
+    },
+    {
+      "apiCount": 2,
+      "apis": [
+        {
+          "capabilityIds": [
+            "metadata_and_spdx_data"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_process_test",
+          "exposure": "PythonModule",
+          "fixtureEvidence": [
+            {
+              "branch": "Parse local package metadata and validate packaged SPDX data, including invalid metadata.",
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "addon-metadata-spdx-local"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/help-addonmanager.v1.json",
+                "sha256": "6ce374448c7e0deba06e86dddf828159dbaacb38eefc83753d794640e8fd772a"
+              },
+              "role": "native_process_test"
+            }
+          ],
+          "id": "addonmanager.metadata_and_spdx_data",
+          "module": "AddonManager",
+          "nativeExpressibility": "native_process_test",
+          "publicSurface": "AddonManager metadata version and SPDX license data",
+          "rationale": "A repeat-2 FreeCADCmd process contract parses local metadata, rejects invalid metadata, and validates packaged SPDX data without network or user-directory effects.",
+          "runtimeBranches": [
+            "Parse local package metadata and validate packaged SPDX data, including invalid metadata."
+          ],
+          "sourceEvidence": [
+            "src/Mod/AddonManager/addonmanager_metadata.py::Version",
+            "src/Mod/AddonManager/addonmanager_licenses.py"
+          ],
+          "symbol": "src/Mod/AddonManager/addonmanager_metadata.py::Version"
+        },
+        {
+          "capabilityIds": [
+            "network_install_update_remove"
+          ],
+          "coverageStatus": "covered",
+          "disposition": "native_process_test",
+          "exposure": "PythonModule",
+          "fixtureEvidence": [
+            {
+              "branch": "Install, update, and remove a local COPY addon in isolated temporary user directories.",
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "addon-copy-install-update-remove"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/help-addonmanager.v1.json",
+                "sha256": "6ce374448c7e0deba06e86dddf828159dbaacb38eefc83753d794640e8fd772a"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Install mocked ZIP bytes and execute the NetworkManager queue/request/reply path with a fake QNAM.",
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "addon-zip-and-network-manager-mocked"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/help-addonmanager.v1.json",
+                "sha256": "6ce374448c7e0deba06e86dddf828159dbaacb38eefc83753d794640e8fd772a"
+              },
+              "role": "native_process_test"
+            },
+            {
+              "branch": "Reject invalid installer input and dangerous removal targets without altering the sentinel.",
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "addon-invalid-boundaries"
+              ],
+              "processContractReceipt": {
+                "exists": true,
+                "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/process_contract/help-addonmanager.v1.json",
+                "sha256": "6ce374448c7e0deba06e86dddf828159dbaacb38eefc83753d794640e8fd772a"
+              },
+              "role": "native_process_test"
+            }
+          ],
+          "id": "addonmanager.network_install_update_remove",
+          "module": "AddonManager",
+          "nativeExpressibility": "native_process_test",
+          "publicSurface": "Addon discovery, download, install, update, and removal workflows",
+          "rationale": "Repeat-2 FreeCADCmd process cases execute installer, updater, uninstaller, ZIP, and NetworkManager paths against fake repositories, mocked transport, and isolated temporary user directories; real network and real user Addon directories remain prohibited effects, not uncovered API branches.",
+          "runtimeBranches": [
+            "Install, update, and remove a local COPY addon in isolated temporary user directories.",
+            "Install mocked ZIP bytes and execute the NetworkManager queue/request/reply path with a fake QNAM.",
+            "Reject invalid installer input and dangerous removal targets without altering the sentinel."
+          ],
+          "sourceEvidence": [
+            "src/Mod/AddonManager/addonmanager_installer.py::AddonInstaller",
+            "src/Mod/AddonManager/addonmanager_uninstaller.py::AddonUninstaller",
+            "src/Mod/AddonManager/NetworkManager.py"
+          ],
+          "symbol": "src/Mod/AddonManager/addonmanager_installer.py::AddonInstaller"
+        }
+      ],
+      "coverageStatus": "covered",
+      "name": "AddonManager"
+    }
+  ],
+  "schema": "freecad-retained-public-api-coverage/v1",
+  "status": "passed"
+}

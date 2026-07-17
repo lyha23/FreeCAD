@@ -1,0 +1,47 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sheet",
+      "TypeId": "Spreadsheet::Sheet",
+      "Properties": {
+        "Cells": {
+          "PropertyType": "Spreadsheet::PropertySheet",
+          "cells": [
+            {"address": "A1", "content": "Update"}
+          ],
+          "operations": [
+            {"op": "setStyle", "range": "A1", "value": "bold"},
+            {"op": "setColumnWidth", "column": "A", "width": 90},
+            {"op": "setRowHeight", "row": "1", "height": 30}
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sheet"],
+    "mutations": [
+      {
+        "object": "Sheet",
+        "properties": {
+          "Cells": {
+            "PropertyType": "Spreadsheet::PropertySheet",
+            "operations": [
+              {"op": "setStyle", "range": "A1", "value": "italic", "options": "replace"},
+              {"op": "setAlignment", "range": "A1", "value": "center|vcenter"},
+              {"op": "setColumnWidth", "column": "A", "width": 144},
+              {"op": "setRowHeight", "row": "1", "height": 48}
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {"cadCoreVersion": "fixture-contract-v1", "freecadVersion": "1.2.0 revision 20260519", "occtVersion": "fixture-occt-unspecified"},
+    "objects": {},
+    "documentHash": "sha256:93bb654438b0a9e1de857c97192eb6d014121cba1ff713809227e8375474d409"
+  }
+}

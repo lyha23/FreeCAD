@@ -1,0 +1,82 @@
+{
+  "case": "mesh-defects-flip-normals",
+  "phase": "mesh-defects",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "6fd7f50b359a4128d39ce3553cf764af4abeeecf843fcf1c362adb2d81583d2f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "9e3f39bc32cf99658677dce915432601a87649f2cf6a993bc06d527e8144837b",
+    "manifestBeforeSha256": "3896c6e49c882631b7f00bfd860b38354525e2b530d66b6fe386cb91557956d6",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-defects/mesh-defects-flip-normals/collect.json",
+      "sha256": "0cf40bfc2cb931b73997109961b95a1171b5a584dab90f8fc790d50b4d18490f"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/mesh-defects-flip-normals.json",
+      "sha256": "075006967fa744d5e08506f275832c22384096be877526aa02559e81fea29cfd"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/expected/mesh-defects-flip-normals.freecad.ledger.json",
+      "sha256": "9600957ebbbd47cae926e02bfc545f1030bcc66ddc49eb1bb721c466dc1e1ec3"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/mesh-defects/expected/mesh-defects-flip-normals.freecad.json",
+      "sha256": "f7a6f911f6a266f84abfa9dcce3bccf3c1d4d3f3ae0d18e61d38e23e0443cb8d"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/mesh-defects/mesh-defects-flip-normals/repeat2.json",
+      "sha256": "3ce5dcb8d1c0144ef6e224b767d98a6dcfcd34b4169614475fb36d90fdbc45e3"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/mesh-defects-flip-normals.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-flip-normals.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-defects-mesh-defects-flip-normals.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-flip-normals.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

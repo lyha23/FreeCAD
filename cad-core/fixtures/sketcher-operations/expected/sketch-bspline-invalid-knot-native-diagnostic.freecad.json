@@ -1,0 +1,152 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sketch",
+      "object_fields": {
+        "external_curve_count": 0,
+        "external_geometry_count": 0,
+        "external_point_count": 0,
+        "raw_edge_count": 1,
+        "shape": "occt_sketch_shape",
+        "status": "ok"
+      },
+      "sketch_constraints": [],
+      "sketch_external": {
+        "construction_count": 0,
+        "flag_counts": {
+          "Defining": 0,
+          "Detached": 0,
+          "Frozen": 0,
+          "Missing": 0,
+          "Sync": 0
+        },
+        "flags": []
+      },
+      "sketch_geometry": [
+        {
+          "construction": false,
+          "degree": 2,
+          "index": 0,
+          "knots": [
+            0.0,
+            0.5,
+            1.0
+          ],
+          "multiplicities": [
+            3,
+            1,
+            3
+          ],
+          "poles": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.0,
+              3.0,
+              0.0
+            ],
+            [
+              4.0,
+              3.0,
+              0.0
+            ],
+            [
+              6.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "shape": {
+            "bbox": {
+              "max": [
+                6.0,
+                3.0,
+                0.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "length": 8.690236933743067,
+            "topologyCounts": {
+              "edges": 1,
+              "vertices": 2
+            },
+            "vertices": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                6.0,
+                0.0,
+                0.0
+              ]
+            ]
+          },
+          "type": "Part::GeomBSplineCurve"
+        }
+      ],
+      "sketch_internal": {
+        "profile_ready": false,
+        "raw_edge_count": 1,
+        "shape": "empty"
+      },
+      "sketch_operations": [
+        {
+          "evidenceLevel": "native_diagnostic",
+          "index": 0,
+          "nativeDiagnostic": {
+            "code": "sketch_insertbsplineknot_failed",
+            "exceptionType": "ValueError",
+            "message": "Knot cannot be inserted outside the B-spline parameter range."
+          },
+          "operation": "insertBSplineKnot",
+          "stage": "initial"
+        }
+      ],
+      "sketch_solver": {
+        "conflictingConstraints": [],
+        "constraintCount": 0,
+        "degreesOfFreedom": 12,
+        "fullyConstrained": false,
+        "geometryCount": 1,
+        "malformedConstraints": [],
+        "openVertexCount": 2,
+        "partiallyRedundantConstraints": [],
+        "redundantConstraints": []
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:07dda2f5882d80b563a6488da8d4ecd02e9148a7d1b48d759fe4c59a5a7148e8",
+    "objects": {
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:2cbe5827253a9ba3cfbda260d09e7bf1e6e63c985b849709c0eb536fe96f24e1",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

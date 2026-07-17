@@ -1,0 +1,59 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "mesh-cone",
+    "expectedPayloadHash": "sha256:dfb53f86ba77de3add060b43ead032d46766b6c00f2306230dcd729d661cf6b4",
+    "inputHash": "sha256:91e2e7269a73ba7e83b22b04a3ab0d6534a3482a000ac25c98483a07847d0f8b",
+    "phase": "mesh-primitives",
+    "topoNamingStateHash": "sha256:5d1c963008a4b3a7e6cdf3aacbecbb56312c41755471dc1d067022d179bc023c"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Cone": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Mesh::Cone"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Cone": {
+        "covers": [
+          "Cone"
+        ],
+        "ledgerObject": "Cone",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:5d1c963008a4b3a7e6cdf3aacbecbb56312c41755471dc1d067022d179bc023c",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

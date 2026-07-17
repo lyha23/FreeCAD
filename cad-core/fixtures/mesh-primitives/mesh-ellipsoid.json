@@ -1,0 +1,28 @@
+{
+  "Objects": [
+    {
+      "Name": "Ellipsoid",
+      "TypeId": "Mesh::Ellipsoid",
+      "Properties": {
+        "Radius1": 1.5,
+        "Radius2": 3.0,
+        "Sampling": 16
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Ellipsoid"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:226e557d62822759bb6d5dd9169b71534791a7bb22f72bdb58f3a66cdbdc3049"
+  }
+}

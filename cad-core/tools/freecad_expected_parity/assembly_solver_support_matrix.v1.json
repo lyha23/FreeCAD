@@ -1,0 +1,1534 @@
+{
+  "distanceTypes": [
+    "PointPoint",
+    "LineLine",
+    "LineCircle",
+    "CircleCircle",
+    "PlanePlane",
+    "PlaneCylinder",
+    "PlaneSphere",
+    "PlaneCone",
+    "PlaneTorus",
+    "CylinderCylinder",
+    "CylinderSphere",
+    "CylinderCone",
+    "CylinderTorus",
+    "ConeCone",
+    "ConeTorus",
+    "ConeSphere",
+    "TorusTorus",
+    "TorusSphere",
+    "SphereSphere",
+    "PointPlane",
+    "PointCylinder",
+    "PointSphere",
+    "PointCone",
+    "PointTorus",
+    "LinePlane",
+    "LineCylinder",
+    "LineSphere",
+    "LineCone",
+    "LineTorus",
+    "CurvePlane",
+    "CurveCylinder",
+    "CurveSphere",
+    "CurveCone",
+    "CurveTorus",
+    "PointLine",
+    "PointCurve",
+    "Other"
+  ],
+  "evidenceClasses": [
+    {
+      "checks": {
+        "distanceTypes": [
+          "CircleCircle"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-circle-circle-real-solver",
+      "id": "distance.CircleCircle.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "ConeCone"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-cone-cone-default-boundary",
+      "id": "distance.ConeCone.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "ConeSphere"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-cone-sphere-default-boundary",
+      "id": "distance.ConeSphere.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "ConeTorus"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-cone-torus-default-boundary",
+      "id": "distance.ConeTorus.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "CurveCone"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-curve-cone-default-boundary",
+      "id": "distance.CurveCone.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "CurveCylinder"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-curve-cylinder-default-boundary",
+      "id": "distance.CurveCylinder.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "CurvePlane"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-curve-plane-default-boundary",
+      "id": "distance.CurvePlane.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "CurveSphere"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-curve-sphere-default-boundary",
+      "id": "distance.CurveSphere.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "CurveTorus"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-curve-torus-default-boundary",
+      "id": "distance.CurveTorus.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "CylinderCone"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-cylinder-cone-default-boundary",
+      "id": "distance.CylinderCone.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "CylinderCylinder"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-cylinder-cylinder-real-solver",
+      "id": "distance.CylinderCylinder.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "CylinderSphere"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-cylinder-sphere-real-solver",
+      "id": "distance.CylinderSphere.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "CylinderTorus"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-cylinder-torus-real-solver",
+      "id": "distance.CylinderTorus.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "LineCircle"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-line-circle-real-solver",
+      "id": "distance.LineCircle.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "LineCone"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-line-cone-default-boundary",
+      "id": "distance.LineCone.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "LineCylinder"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-line-cylinder-default-boundary",
+      "id": "distance.LineCylinder.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "LineLine"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-line-line-real-solver",
+      "id": "distance.LineLine.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "LinePlane"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-line-plane-real-solver",
+      "id": "distance.LinePlane.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "LineSphere"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-line-sphere-default-boundary",
+      "id": "distance.LineSphere.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "LineTorus"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-line-torus-default-boundary",
+      "id": "distance.LineTorus.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "Other"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-other-default-boundary",
+      "id": "distance.Other.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PlaneCone"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-plane-cone-default-boundary",
+      "id": "distance.PlaneCone.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PlaneCylinder"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-plane-cylinder-real-solver",
+      "id": "distance.PlaneCylinder.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PlanePlane"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-plane-plane-real-solver",
+      "id": "distance.PlanePlane.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PlaneSphere"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-plane-sphere-real-solver",
+      "id": "distance.PlaneSphere.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PlaneTorus"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-plane-torus-real-solver",
+      "id": "distance.PlaneTorus.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PointCone"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-point-cone-default-boundary",
+      "id": "distance.PointCone.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PointCurve"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-point-curve-real-solver",
+      "id": "distance.PointCurve.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PointCylinder"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-point-cylinder-real-solver",
+      "id": "distance.PointCylinder.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PointLine"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-point-line-real-solver",
+      "id": "distance.PointLine.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PointPlane"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-point-plane-real-solver",
+      "id": "distance.PointPlane.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PointPoint"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-point-point-nonzero-real-solver",
+      "id": "distance.PointPoint.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PointSphere"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-point-sphere-real-solver",
+      "id": "distance.PointSphere.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "PointTorus"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-point-torus-default-boundary",
+      "id": "distance.PointTorus.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "SphereSphere"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-sphere-sphere-real-solver",
+      "id": "distance.SphereSphere.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "TorusSphere"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-torus-sphere-real-solver",
+      "id": "distance.TorusSphere.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "distanceTypes": [
+          "TorusTorus"
+        ],
+        "jointTypes": [
+          "Distance"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-distance-torus-torus-real-solver",
+      "id": "distance.TorusTorus.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Angle"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "placementUpdateObjects": [
+          "AnglePart"
+        ],
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-orientation-joints-placement-writeback",
+      "id": "joint.Angle.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Ball"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-marker-ball-vertex-real-solver",
+      "id": "joint.Ball.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Belt"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "placementUpdateObjects": [
+          "BeltA",
+          "BeltB"
+        ],
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-gears-belt-placement-writeback",
+      "id": "joint.Belt.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Cylindrical"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-marker-cylindrical-edge-real-solver",
+      "id": "joint.Cylindrical.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Fixed"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-marker-fixed-face-real-solver",
+      "id": "joint.Fixed.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Gears"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "placementUpdateObjects": [
+          "GearA",
+          "GearB"
+        ],
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-gears-belt-placement-writeback",
+      "id": "joint.Gears.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Parallel"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "placementUpdateObjects": [
+          "ParallelPart"
+        ],
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-orientation-joints-placement-writeback",
+      "id": "joint.Parallel.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Perpendicular"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "placementUpdateObjects": [
+          "PerpendicularPart"
+        ],
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-orientation-joints-placement-writeback",
+      "id": "joint.Perpendicular.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "RackPinion"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-rackpinion-marker-rewrite-real-solver",
+      "id": "joint.RackPinion.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Revolute"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-marker-revolute-edge-real-solver",
+      "id": "joint.Revolute.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Screw"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-grounded-screw-joint-real-solver",
+      "id": "joint.Screw.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "Slider"
+        ],
+        "minimumPlacementUpdates": 1,
+        "nativeSolverReturn": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-marker-slider-edge-real-solver",
+      "id": "joint.Slider.supported_solve_writeback",
+      "level": "dependency_result"
+    },
+    {
+      "checks": {
+        "jointTypes": [
+          "RackPinion"
+        ],
+        "maximumPlacementUpdates": 0,
+        "nativeSolverReturn": 0,
+        "slidingPartIndex": 0,
+        "solverStatus": "solved"
+      },
+      "fixture": "assembly-solve/assembly-unsupported-joint-diagnostic",
+      "id": "marker.rackpinion_missing_slider_boundary",
+      "level": "native_diagnostic"
+    },
+    {
+      "checks": {
+        "nativeSolverReturn": -1,
+        "solverReason": "native_solver_failed",
+        "solverStatus": "error"
+      },
+      "fixture": "assembly-solve/assembly-gears-zero-radius-native-solver-failure",
+      "id": "solver.failure.shared",
+      "level": "native_diagnostic"
+    }
+  ],
+  "jointTypes": [
+    "Fixed",
+    "Revolute",
+    "Cylindrical",
+    "Slider",
+    "Ball",
+    "Distance",
+    "Parallel",
+    "Perpendicular",
+    "Angle",
+    "RackPinion",
+    "Screw",
+    "Gears",
+    "Belt"
+  ],
+  "markerGeometryFamilies": [
+    "whole_object",
+    "point",
+    "line",
+    "curve",
+    "circle",
+    "plane",
+    "cylinder",
+    "sphere",
+    "cone",
+    "torus"
+  ],
+  "rows": [
+    {
+      "evidenceClassIds": [
+        "joint.Angle.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Angle.generic_marker_pair",
+      "jointType": "Angle",
+      "markerGeometryFamilies": [
+        "plane"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Ball.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Ball.generic_marker_pair",
+      "jointType": "Ball",
+      "markerGeometryFamilies": [
+        "point"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Belt.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Belt.generic_marker_pair",
+      "jointType": "Belt",
+      "markerGeometryFamilies": [
+        "whole_object"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Cylindrical.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Cylindrical.generic_marker_pair",
+      "jointType": "Cylindrical",
+      "markerGeometryFamilies": [
+        "line"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "CircleCircle",
+      "evidenceClassIds": [
+        "distance.CircleCircle.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CircleCircle",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "circle"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "ConeCone",
+      "evidenceClassIds": [
+        "distance.ConeCone.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.ConeCone",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "cone"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "ConeSphere",
+      "evidenceClassIds": [
+        "distance.ConeSphere.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.ConeSphere",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "sphere",
+        "cone"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "ConeTorus",
+      "evidenceClassIds": [
+        "distance.ConeTorus.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.ConeTorus",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "cone",
+        "torus"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "CurveCone",
+      "evidenceClassIds": [
+        "distance.CurveCone.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CurveCone",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "curve",
+        "cone"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "CurveCylinder",
+      "evidenceClassIds": [
+        "distance.CurveCylinder.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CurveCylinder",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "curve",
+        "cylinder"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "CurvePlane",
+      "evidenceClassIds": [
+        "distance.CurvePlane.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CurvePlane",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "curve",
+        "plane"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "CurveSphere",
+      "evidenceClassIds": [
+        "distance.CurveSphere.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CurveSphere",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "curve",
+        "sphere"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "CurveTorus",
+      "evidenceClassIds": [
+        "distance.CurveTorus.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CurveTorus",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "curve",
+        "torus"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "CylinderCone",
+      "evidenceClassIds": [
+        "distance.CylinderCone.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CylinderCone",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "cylinder",
+        "cone"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "CylinderCylinder",
+      "evidenceClassIds": [
+        "distance.CylinderCylinder.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CylinderCylinder",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "cylinder"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "CylinderSphere",
+      "evidenceClassIds": [
+        "distance.CylinderSphere.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CylinderSphere",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "cylinder",
+        "sphere"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "CylinderTorus",
+      "evidenceClassIds": [
+        "distance.CylinderTorus.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.CylinderTorus",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "cylinder",
+        "torus"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "LineCircle",
+      "evidenceClassIds": [
+        "distance.LineCircle.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.LineCircle",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "line",
+        "circle"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "LineCone",
+      "evidenceClassIds": [
+        "distance.LineCone.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.LineCone",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "line",
+        "cone"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "LineCylinder",
+      "evidenceClassIds": [
+        "distance.LineCylinder.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.LineCylinder",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "line",
+        "cylinder"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "LineLine",
+      "evidenceClassIds": [
+        "distance.LineLine.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.LineLine",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "line"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "LinePlane",
+      "evidenceClassIds": [
+        "distance.LinePlane.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.LinePlane",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "line",
+        "plane"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "LineSphere",
+      "evidenceClassIds": [
+        "distance.LineSphere.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.LineSphere",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "line",
+        "sphere"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "LineTorus",
+      "evidenceClassIds": [
+        "distance.LineTorus.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.LineTorus",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "line",
+        "torus"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "Other",
+      "evidenceClassIds": [
+        "distance.Other.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.Other",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "curve"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "PlaneCone",
+      "evidenceClassIds": [
+        "distance.PlaneCone.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PlaneCone",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "plane",
+        "cone"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "PlaneCylinder",
+      "evidenceClassIds": [
+        "distance.PlaneCylinder.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PlaneCylinder",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "plane",
+        "cylinder"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PlanePlane",
+      "evidenceClassIds": [
+        "distance.PlanePlane.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PlanePlane",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "plane"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PlaneSphere",
+      "evidenceClassIds": [
+        "distance.PlaneSphere.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PlaneSphere",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "plane",
+        "sphere"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PlaneTorus",
+      "evidenceClassIds": [
+        "distance.PlaneTorus.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PlaneTorus",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "plane",
+        "torus"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PointCone",
+      "evidenceClassIds": [
+        "distance.PointCone.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PointCone",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "point",
+        "cone"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "PointCurve",
+      "evidenceClassIds": [
+        "distance.PointCurve.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PointCurve",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "point",
+        "curve"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PointCylinder",
+      "evidenceClassIds": [
+        "distance.PointCylinder.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PointCylinder",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "point",
+        "cylinder"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PointLine",
+      "evidenceClassIds": [
+        "distance.PointLine.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PointLine",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "point",
+        "line"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PointPlane",
+      "evidenceClassIds": [
+        "distance.PointPlane.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PointPlane",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "point",
+        "plane"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PointPoint",
+      "evidenceClassIds": [
+        "distance.PointPoint.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PointPoint",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "point"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PointSphere",
+      "evidenceClassIds": [
+        "distance.PointSphere.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PointSphere",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "point",
+        "sphere"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "PointTorus",
+      "evidenceClassIds": [
+        "distance.PointTorus.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.PointTorus",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "point",
+        "torus"
+      ],
+      "supportStatus": "source_default_planar_boundary"
+    },
+    {
+      "distanceType": "SphereSphere",
+      "evidenceClassIds": [
+        "distance.SphereSphere.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.SphereSphere",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "sphere"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "TorusSphere",
+      "evidenceClassIds": [
+        "distance.TorusSphere.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.TorusSphere",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "sphere",
+        "torus"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "distanceType": "TorusTorus",
+      "evidenceClassIds": [
+        "distance.TorusTorus.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Distance.TorusTorus",
+      "jointType": "Distance",
+      "markerGeometryFamilies": [
+        "torus"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Fixed.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Fixed.generic_marker_pair",
+      "jointType": "Fixed",
+      "markerGeometryFamilies": [
+        "plane"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Gears.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Gears.generic_marker_pair",
+      "jointType": "Gears",
+      "markerGeometryFamilies": [
+        "whole_object"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Parallel.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Parallel.generic_marker_pair",
+      "jointType": "Parallel",
+      "markerGeometryFamilies": [
+        "plane"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Perpendicular.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Perpendicular.generic_marker_pair",
+      "jointType": "Perpendicular",
+      "markerGeometryFamilies": [
+        "plane"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.RackPinion.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.RackPinion.generic_marker_pair",
+      "jointType": "RackPinion",
+      "markerGeometryFamilies": [
+        "whole_object"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "marker.rackpinion_missing_slider_boundary",
+        "solver.failure.shared"
+      ],
+      "id": "joint.RackPinion.missing_slider_degenerate",
+      "jointType": "RackPinion",
+      "markerGeometryFamilies": [
+        "whole_object"
+      ],
+      "supportStatus": "source_degenerate_unsupported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Revolute.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Revolute.generic_marker_pair",
+      "jointType": "Revolute",
+      "markerGeometryFamilies": [
+        "line"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Screw.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Screw.generic_marker_pair",
+      "jointType": "Screw",
+      "markerGeometryFamilies": [
+        "whole_object"
+      ],
+      "supportStatus": "source_supported"
+    },
+    {
+      "evidenceClassIds": [
+        "joint.Slider.supported_solve_writeback",
+        "solver.failure.shared"
+      ],
+      "id": "joint.Slider.generic_marker_pair",
+      "jointType": "Slider",
+      "markerGeometryFamilies": [
+        "line"
+      ],
+      "supportStatus": "source_supported"
+    }
+  ],
+  "schema": "freecad-assembly-solver-support-matrix/v1",
+  "scope": "A4 source-derived retained Assembly/OndselSolver support equivalence classes",
+  "sourceAuthority": [
+    "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/JointObject.py::JointTypes",
+    "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.h::GeometryType/DistanceType",
+    "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::solve/makeMbdAssembly/makeMbdJointOfType/makeMbdJointDistance/handleOneSideOfJoint/setNewPlacements",
+    "/Users/li/Chili3DProject/FreeCAD/src/3rdParty/OndselSolver/OndselSolver/ASMT*Joint.cpp::createMbD"
+  ]
+}

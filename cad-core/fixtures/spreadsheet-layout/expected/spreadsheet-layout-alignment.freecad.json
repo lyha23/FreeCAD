@@ -1,0 +1,65 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sheet",
+      "object_fields": {
+        "cell_count": 1,
+        "shape": "spreadsheet",
+        "status": "ok"
+      },
+      "spreadsheet": {
+        "cells": [
+          {
+            "address": "A1",
+            "alias": null,
+            "content": "'Alignment",
+            "value": "Alignment"
+          }
+        ],
+        "layoutOperations": [
+          {
+            "arguments": {
+              "range": "A1",
+              "value": "right|bottom"
+            },
+            "evidenceLevel": "target_result",
+            "index": 0,
+            "observed": {
+              "value": [
+                "bottom",
+                "right"
+              ]
+            },
+            "operation": "setAlignment",
+            "stage": "initial"
+          }
+        ]
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:0b3c187702a7a20f226b9def03220ab45afc279d5dd6effbc5f99329366a6034",
+    "objects": {
+      "Sheet": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:9047fbc526a7136ad459c545bd3263bc06b1c39b11b90899adc389918377a67c",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

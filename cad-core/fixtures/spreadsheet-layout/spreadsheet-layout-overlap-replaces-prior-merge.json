@@ -1,0 +1,30 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sheet",
+      "TypeId": "Spreadsheet::Sheet",
+      "Properties": {
+        "Cells": {
+          "PropertyType": "Spreadsheet::PropertySheet",
+          "cells": [
+            {"address": "A1", "content": "First anchor"},
+            {"address": "B2", "content": "Second anchor"},
+            {"address": "C3", "content": "Covered"}
+          ],
+          "operations": [
+            {"op": "mergeCells", "range": "A1:B2"},
+            {"op": "mergeCells", "range": "B2:C3"}
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sheet"]},
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {"cadCoreVersion": "fixture-contract-v1", "freecadVersion": "1.2.0 revision 20260519", "occtVersion": "fixture-occt-unspecified"},
+    "objects": {},
+    "documentHash": "sha256:b423e4328ace09a6e01e93a43865084158df80cf1729df0f6b400017de66b860"
+  }
+}

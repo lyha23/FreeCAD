@@ -1,0 +1,28 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sheet",
+      "TypeId": "Spreadsheet::Sheet",
+      "Properties": {
+        "Cells": {
+          "PropertyType": "Spreadsheet::PropertySheet",
+          "cells": [
+            {"address": "B3", "content": "Sized"}
+          ],
+          "operations": [
+            {"op": "setColumnWidth", "column": "B", "width": 120},
+            {"op": "setRowHeight", "row": "3", "height": 42}
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sheet"]},
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {"cadCoreVersion": "fixture-contract-v1", "freecadVersion": "1.2.0 revision 20260519", "occtVersion": "fixture-occt-unspecified"},
+    "objects": {},
+    "documentHash": "sha256:a15ada8c3712d15cb0e887e7cf10176db6c83c5c75fcdf171a600589b9236cb2"
+  }
+}

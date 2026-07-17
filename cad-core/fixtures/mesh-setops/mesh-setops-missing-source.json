@@ -1,0 +1,53 @@
+{
+  "Objects": [
+    {
+      "Name": "Left",
+      "TypeId": "Mesh::Cube",
+      "Properties": {
+        "Length": 2.0,
+        "Width": 2.0,
+        "Height": 2.0,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "Name": "Result",
+      "TypeId": "Mesh::SetOperations",
+      "Properties": {
+        "Source1": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Left"
+        },
+        "OperationType": "union"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Result"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:bc4f4ffe82c8f1a39aefb784ad076588965cb3caf18c7e44b11752972916ff02"
+  }
+}

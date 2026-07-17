@@ -1,0 +1,365 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Box",
+      "Properties": {
+        "Height": 2,
+        "Length": 2,
+        "Width": 2
+      },
+      "TypeId": "Part::Box"
+    },
+    {
+      "ID": 2,
+      "Name": "Ground",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Rigid": true
+      },
+      "TypeId": "Assembly::AssemblyLink"
+    },
+    {
+      "ID": 3,
+      "Name": "GearA",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Placement": {
+          "Base": [
+            4,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.08715574274765817,
+            0.0,
+            0.0,
+            0.9961946980917455
+          ]
+        },
+        "Rigid": true
+      },
+      "TypeId": "Assembly::AssemblyLink"
+    },
+    {
+      "ID": 4,
+      "Name": "GearB",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Placement": {
+          "Base": [
+            -4,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Rigid": true
+      },
+      "TypeId": "Assembly::AssemblyLink"
+    },
+    {
+      "ID": 5,
+      "Name": "BeltA",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Placement": {
+          "Base": [
+            0,
+            4,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.08715574274765817,
+            0.0,
+            0.0,
+            0.9961946980917455
+          ]
+        },
+        "Rigid": true
+      },
+      "TypeId": "Assembly::AssemblyLink"
+    },
+    {
+      "ID": 6,
+      "Name": "BeltB",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Placement": {
+          "Base": [
+            0,
+            -4,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Rigid": true
+      },
+      "TypeId": "Assembly::AssemblyLink"
+    },
+    {
+      "ID": 7,
+      "Name": "GroundedJoint",
+      "Properties": {
+        "ObjectToGround": {
+          "PropertyType": "App::PropertyLinkGlobal",
+          "value": "Ground"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 9,
+      "Name": "GearRevoluteB",
+      "Properties": {
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Revolute"
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "Ground"
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "GearB"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 10,
+      "Name": "GearDriverAngle",
+      "Properties": {
+        "Angle": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 30
+        },
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Angle"
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [
+            "Face1"
+          ],
+          "value": "Ground"
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [
+            "Face1"
+          ],
+          "value": "GearA"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 11,
+      "Name": "GearsJoint",
+      "Properties": {
+        "Distance": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 2
+        },
+        "Distance2": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 1
+        },
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Gears"
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "GearA"
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "GearB"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 13,
+      "Name": "BeltRevoluteB",
+      "Properties": {
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Revolute"
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "Ground"
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "BeltB"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 14,
+      "Name": "BeltDriverAngle",
+      "Properties": {
+        "Angle": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 30
+        },
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Angle"
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [
+            "Face1"
+          ],
+          "value": "Ground"
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [
+            "Face1"
+          ],
+          "value": "BeltA"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 15,
+      "Name": "BeltJoint",
+      "Properties": {
+        "Distance": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 2
+        },
+        "Distance2": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 1
+        },
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Belt"
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "BeltA"
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "SubList": [],
+          "value": "BeltB"
+        }
+      },
+      "TypeId": "App::FeaturePython"
+    },
+    {
+      "ID": 16,
+      "Name": "Joints",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "GroundedJoint",
+            "GearRevoluteB",
+            "GearDriverAngle",
+            "GearsJoint",
+            "BeltRevoluteB",
+            "BeltDriverAngle",
+            "BeltJoint"
+          ]
+        }
+      },
+      "TypeId": "Assembly::JointGroup"
+    },
+    {
+      "ID": 17,
+      "Name": "Assembly",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "Ground",
+            "GearA",
+            "GearB",
+            "BeltA",
+            "BeltB",
+            "Joints"
+          ]
+        }
+      },
+      "TypeId": "Assembly::AssemblyObject"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Assembly"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:3a053680289801f00e1834019e27ce7d7cef4d59c4cbdea7f11465fba3176ee4",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

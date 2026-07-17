@@ -454,6 +454,16 @@
       "role": "native"
     },
     {
+      "case": "assembly-gears-belt-placement-writeback",
+      "phase": "assembly-solve",
+      "role": "native"
+    },
+    {
+      "case": "assembly-gears-zero-radius-native-solver-failure",
+      "phase": "assembly-solve",
+      "role": "native"
+    },
+    {
       "case": "assembly-grounded-angle-joint-real-solver",
       "phase": "assembly-solve",
       "role": "native"
@@ -579,6 +589,11 @@
       "role": "native"
     },
     {
+      "case": "assembly-orientation-joints-placement-writeback",
+      "phase": "assembly-solve",
+      "role": "native"
+    },
+    {
       "case": "assembly-rackpinion-marker-rewrite-real-solver",
       "phase": "assembly-solve",
       "role": "native"
@@ -629,6 +644,91 @@
       "role": "native"
     },
     {
+      "case": "mesh-defects-fill-holes",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-fill-holes-closed-boundary",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-fix-defects-base-recompute-source",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-fix-deformations",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-fix-degenerations",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-fix-duplicated-faces",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-fix-duplicated-points",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-fix-indices",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-fix-non-manifolds",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-flip-normals",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-harmonize-normals",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-missing-source",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-no-duplicated-faces",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-remove-components",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-remove-components-zero-threshold",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-source-recompute-update",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
+      "case": "mesh-defects-source-without-mesh-property",
+      "phase": "mesh-defects",
+      "role": "native"
+    },
+    {
       "case": "mesh-import-closed-tetrahedron",
       "phase": "mesh-import",
       "role": "native"
@@ -641,6 +741,121 @@
     {
       "case": "mesh-import-stl",
       "phase": "mesh-import",
+      "role": "native"
+    },
+    {
+      "case": "mesh-cone",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-cone-recompute-properties",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-cube",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-cube-recompute-dimensions",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-cube-zero-length",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-cylinder",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-cylinder-recompute-properties",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-ellipsoid",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-ellipsoid-recompute-properties",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-sphere",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-sphere-negative-radius",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-sphere-recompute-radius-sampling",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-sphere-zero-radius-min-sampling",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-torus",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-torus-recompute-properties",
+      "phase": "mesh-primitives",
+      "role": "native"
+    },
+    {
+      "case": "mesh-setops-difference",
+      "phase": "mesh-setops",
+      "role": "native"
+    },
+    {
+      "case": "mesh-setops-disjoint-intersection",
+      "phase": "mesh-setops",
+      "role": "native"
+    },
+    {
+      "case": "mesh-setops-intersection",
+      "phase": "mesh-setops",
+      "role": "native"
+    },
+    {
+      "case": "mesh-setops-invalid-operation",
+      "phase": "mesh-setops",
+      "role": "native"
+    },
+    {
+      "case": "mesh-setops-missing-source",
+      "phase": "mesh-setops",
+      "role": "native"
+    },
+    {
+      "case": "mesh-setops-switch-operation",
+      "phase": "mesh-setops",
+      "role": "native"
+    },
+    {
+      "case": "mesh-setops-switch-source",
+      "phase": "mesh-setops",
+      "role": "native"
+    },
+    {
+      "case": "mesh-setops-union",
+      "phase": "mesh-setops",
       "role": "native"
     },
     {
@@ -4088,6 +4303,121 @@
       "role": "native"
     },
     {
+      "case": "sketch-block-after-copy-recompute-update",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-bspline-degree-knot-recompute-update",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-bspline-invalid-knot-native-diagnostic",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-bspline-knot-multiplicity",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-clone-conic-arc",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-clone-line-dimensional-constraint",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-conic-convert-to-bspline",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-conic-expose-internal-geometry",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-extend-arc",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-extend-conic-native-diagnostic",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-extend-line-recompute-update",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-extend-line-to-degenerate-boundary",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-fillet-chamfer",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-fillet-create-corner",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-fillet-invalid-geometry-pair",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-fillet-radius-recompute-update",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-fillet-trim-closed-profile",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-fillet-without-trim",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-trim-arc-between-cutters",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-trim-conic-between-cutters",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-trim-invalid-geometry-diagnostic",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-trim-line-between-cutters",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
+      "case": "sketch-trim-no-intersection-deletes-geometry",
+      "phase": "sketcher-operations",
+      "role": "native"
+    },
+    {
       "case": "sketch-angle-constraints-profile",
       "phase": "sketcher-solve",
       "role": "native"
@@ -4369,6 +4699,51 @@
     {
       "case": "sketch-underconstrained-no-constraints",
       "phase": "sketcher-solve",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-layout-alignment",
+      "phase": "spreadsheet-layout",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-layout-invalid-range-native-diagnostic",
+      "phase": "spreadsheet-layout",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-layout-invalid-style-option-native-diagnostic",
+      "phase": "spreadsheet-layout",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-layout-merge-clears-covered-cells",
+      "phase": "spreadsheet-layout",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-layout-overlap-replaces-prior-merge",
+      "phase": "spreadsheet-layout",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-layout-recompute-update",
+      "phase": "spreadsheet-layout",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-layout-row-column-size",
+      "phase": "spreadsheet-layout",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-layout-style",
+      "phase": "spreadsheet-layout",
+      "role": "native"
+    },
+    {
+      "case": "spreadsheet-layout-unmerge-recompute-update",
+      "phase": "spreadsheet-layout",
       "role": "native"
     },
     {

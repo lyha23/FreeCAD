@@ -1,0 +1,82 @@
+{
+  "case": "mesh-defects-fix-non-manifolds",
+  "phase": "mesh-defects",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "5ac4756447d42d7996616aec0b7c0d87a3b379e5b1d8474f93a1c124d039faf8"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "absent",
+    "manifestAfterSha256": "45793336ee69ea5b3beb1e164773d3de2245dda043800384d89a39a56fcc57fe",
+    "manifestBeforeSha256": "73cf49e33d5abc47f01a6f0dad8543eff06546a7807fb2443958365aa47d0257",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/private/tmp/freecad-mesh-api-collect-reports/mesh-defects-fix-non-manifolds.json",
+      "sha256": "6167443df14c53f197b794b724db6159411c31eff0e023b6c0f5141b00331ade"
+    },
+    "input": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-defects/mesh-defects-fix-non-manifolds.json",
+      "sha256": "c5c76200eb84986bd5d0ac32e704f776b5146a4174dda71a19e896e1e4b99a48"
+    },
+    "ledger": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-defects/expected/mesh-defects-fix-non-manifolds.freecad.ledger.json",
+      "sha256": "67d012df4eb826d1d5ac5e97e896a3252f18b16317c2122a94bf17d486609d68"
+    },
+    "publicExpected": {
+      "path": "/private/tmp/freecad-mesh-api-staging-candidate/mesh-defects/expected/mesh-defects-fix-non-manifolds.freecad.json",
+      "sha256": "04d7853aef690dd84971cf32b3600ba7a8d320a5554d81d8a90ea5e89482322e"
+    },
+    "repeatReport": {
+      "path": "/private/tmp/freecad-mesh-api-staging-reports/mesh-defects-fix-non-manifolds.json",
+      "sha256": "f27a6ae1f3d77935bb6811e72c8da23b7802cf9398aebb647b8ca859f061de7e"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/mesh-defects-fix-non-manifolds.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-fix-non-manifolds.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/mesh-defects-mesh-defects-fix-non-manifolds.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-defects/expected/mesh-defects-fix-non-manifolds.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

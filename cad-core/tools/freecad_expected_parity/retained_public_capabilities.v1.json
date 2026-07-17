@@ -19,19 +19,25 @@
           ]
         },
         {
-          "disposition": "native_fixture",
+          "disposition": "native_process_test",
           "fixtureEvidence": [
             {
-              "fixture": "part-primitives/part-box",
-              "level": "entrypoint_smoke_only"
+              "fixture": "process-contract/runtime-entrypoints",
+              "level": "native_process_test",
+              "processCases": [
+                "base-console-observer",
+                "base-python-exception-translation"
+              ]
             }
           ],
           "id": "console_and_exception_surfaces",
           "publicSurface": "Base::Console and Base exception translation",
-          "runtimeBranch": "The native command process initializes these services, but fixtures do not assert their public formatting and handler branches.",
+          "rationale": "Console formatting, observer status mutation/restoration, and Base exception translation are process/Python-module contracts. The hermetic repeat-2 receipt asserts message/warning/error streams plus unknown observer/type isolation without treating them as document geometry.",
+          "runtimeBranch": "Print message/warning/error, enumerate observers, enable and restore Msg/Wrn/Err status, and isolate unknown observer/type FreeCADError translation.",
           "sourceEvidence": [
             "src/Base/Console.cpp::Base::ConsoleSingleton",
-            "src/Base/Exception.cpp::Base::Exception"
+            "src/Base/Exception.cpp::Base::Exception",
+            "src/Base/PyException.cpp::pyThrowWrappedBaseException"
           ]
         }
       ],
@@ -104,12 +110,25 @@
           ]
         },
         {
-          "disposition": "uncovered",
-          "fixtureEvidence": [],
+          "disposition": "native_process_test",
+          "fixtureEvidence": [
+            {
+              "fixture": "process-contract/runtime-entrypoints",
+              "level": "native_process_test",
+              "processCases": [
+                "maincmd-unknown-option",
+                "maincmd-program-information",
+                "maincmd-system-exit",
+                "maincmd-run-base-exception",
+                "maincmd-run-unknown-exception",
+                "mainpy-import-identity-shutdown"
+              ]
+            }
+          ],
           "id": "command_line_error_and_shutdown_modes",
           "publicSurface": "FreeCADCmd option parsing, process exit, and shutdown",
-          "rationale": "Geometry fixtures run one successful collector command shape and do not assert the general command-line program contract.",
-          "runtimeBranch": "Invalid options, startup failures, signal handling, and non-collector shutdown modes.",
+          "rationale": "The hermetic process receipt covers UnknownProgramOption=1, ProgramInformation=0, SystemExit's specified code, per-file Base/unknown exception translation, and the normal destruction log. MainCmd's init Base::Exception=100 and top-level run Base/unknown=1 catches remain explicit source-backed exceptions because safe public probes are intercepted or do not trigger them; forced signals are outside this contract.",
+          "runtimeBranch": "Unknown option and program information exits, specified SystemExit, script exception translation, and normal Application::destruct shutdown.",
           "sourceEvidence": [
             "src/Main/MainCmd.cpp::main"
           ]
@@ -120,16 +139,20 @@
     {
       "capabilities": [
         {
-          "disposition": "native_fixture",
+          "disposition": "native_process_test",
           "fixtureEvidence": [
             {
-              "fixture": "part-primitives/part-box",
-              "level": "entrypoint_smoke_only"
+              "fixture": "process-contract/runtime-entrypoints",
+              "level": "native_process_test",
+              "processCases": [
+                "mainpy-import-identity-shutdown"
+              ]
             }
           ],
           "id": "embedded_python_entry",
           "publicSurface": "FreeCAD Python module initialization",
-          "runtimeBranch": "The collector imports FreeCAD and retained modules in the command process.",
+          "rationale": "A hermetic FreeCADCmd process asserts repeated import identity in one initialized module and returns through MainCmd's normal destruction path. Host-owned interpreter finalize/reinitialize remains a separate protocol-only capability.",
+          "runtimeBranch": "Initialize FreeCAD, repeat import in one process with stable module identity, and return through normal shutdown.",
           "sourceEvidence": [
             "src/Main/MainPy.cpp::PyInit_FreeCAD"
           ]
@@ -198,15 +221,25 @@
           ]
         },
         {
-          "disposition": "uncovered",
-          "fixtureEvidence": [],
+          "disposition": "native_process_test",
+          "fixtureEvidence": [
+            {
+              "fixture": "process-contract/material-resolution",
+              "level": "native_process_test"
+            }
+          ],
           "id": "material_library_and_card_resolution",
           "publicSurface": "Material cards, libraries, inheritance, and schema validation",
-          "rationale": "The current request protocol exposes a material property map but no library URI, inheritance, or model-resolution contract.",
-          "runtimeBranch": "Resolve cards from libraries, inheritance chains, and schema-backed physical or appearance models.",
+          "rationale": "Library selection, card paths, model files, manager caches, refresh, and inheritance are host-resource semantics. They are closed by a hermetic FreeCADCmd process contract; the stateless CAD graph continues to carry only the resolved material property map.",
+          "runtimeBranch": "Resolve custom-library cards and model schemas across normal, inheritance, refresh, missing, malformed, unknown, and cyclic branches in an isolated process.",
           "sourceEvidence": [
-            "src/Mod/Material/App/Materials.cpp::Materials::Material",
-            "src/Mod/Material/App/MaterialManager.cpp::Materials::MaterialManager"
+            "src/Mod/Material/App/AppMaterial.cpp::initModule",
+            "src/Mod/Material/App/MaterialManager.cpp::Materials::MaterialManager",
+            "src/Mod/Material/App/MaterialManagerLocal.cpp::Materials::MaterialManagerLocal::getConfiguredLibraries",
+            "src/Mod/Material/App/MaterialLoader.cpp::Materials::MaterialLoader",
+            "src/Mod/Material/App/ModelLoader.cpp::Materials::ModelLoader",
+            "src/Mod/Material/App/PropertyMaterial.cpp::Materials::PropertyMaterial::setPyObject",
+            "src/Mod/Part/App/PartFeature.cpp::Part::Feature::getMaterialAppearance"
           ]
         }
       ],
@@ -412,11 +445,103 @@
           ]
         },
         {
-          "disposition": "uncovered",
-          "fixtureEvidence": [],
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "sketcher-operations/sketch-trim-line-between-cutters",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-trim-arc-between-cutters",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-trim-conic-between-cutters",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-trim-no-intersection-deletes-geometry",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-trim-invalid-geometry-diagnostic",
+              "level": "native_diagnostic"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-extend-line-recompute-update",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-extend-arc",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-extend-conic-native-diagnostic",
+              "level": "native_diagnostic"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-extend-line-to-degenerate-boundary",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-fillet-trim-closed-profile",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-fillet-create-corner",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-fillet-chamfer",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-fillet-without-trim",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-fillet-radius-recompute-update",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-fillet-invalid-geometry-pair",
+              "level": "native_diagnostic"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-clone-line-dimensional-constraint",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-block-after-copy-recompute-update",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-clone-conic-arc",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-conic-expose-internal-geometry",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-conic-convert-to-bspline",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-bspline-degree-knot-recompute-update",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-bspline-knot-multiplicity",
+              "level": "target_result"
+            },
+            {
+              "fixture": "sketcher-operations/sketch-bspline-invalid-knot-native-diagnostic",
+              "level": "native_diagnostic"
+            }
+          ],
           "id": "advanced_geometry_and_operation_matrix",
           "publicSurface": "Remaining Sketch geometry types and editing operations",
-          "rationale": "The corpus contains representative profiles and solver updates, but this maintained inventory has not established branch-complete native evidence for every editing operation and geometry family.",
           "runtimeBranch": "The full conic, B-spline, trim, extend, fillet, clone, and block operation matrix.",
           "sourceEvidence": [
             "src/Mod/Sketcher/App/SketchObjectGeometry.cpp::Sketcher::SketchObject",
@@ -671,15 +796,117 @@
           ]
         },
         {
-          "disposition": "uncovered",
-          "fixtureEvidence": [],
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "mesh-primitives/mesh-sphere",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-primitives/mesh-cube-recompute-dimensions",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-setops/mesh-setops-union",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-setops/mesh-setops-invalid-operation",
+              "level": "native_diagnostic"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-harmonize-normals",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-fix-duplicated-faces",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-missing-source",
+              "level": "native_diagnostic"
+            },
+            {
+              "fixture": "mesh-primitives/mesh-cone",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-primitives/mesh-cone-recompute-properties",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-primitives/mesh-cylinder",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-primitives/mesh-cylinder-recompute-properties",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-primitives/mesh-ellipsoid",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-primitives/mesh-ellipsoid-recompute-properties",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-primitives/mesh-torus",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-primitives/mesh-torus-recompute-properties",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-fix-defects-base-recompute-source",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-fix-duplicated-points",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-fix-degenerations",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-fix-deformations",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-fix-indices",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-fix-non-manifolds",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-fill-holes",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-fill-holes-closed-boundary",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-remove-components",
+              "level": "target_result"
+            },
+            {
+              "fixture": "mesh-defects/mesh-defects-remove-components-zero-threshold",
+              "level": "target_result"
+            }
+          ],
           "id": "mesh_primitives_setops_and_defects",
           "publicSurface": "Mesh primitives, set operations, and defect analysis",
-          "rationale": "The current native request corpus only has executable Mesh::Import evidence; registered primitive, set-operation, and defect feature branches need a later source-backed batch.",
           "runtimeBranch": "Execute the retained Mesh feature families beyond file import.",
           "sourceEvidence": [
             "src/Mod/Mesh/App/AppMesh.cpp::CreateMeshAppModule",
-            "src/Mod/Mesh/App/FeatureMeshSetOperations.cpp"
+            "src/Mod/Mesh/App/FeatureMeshSolid.cpp",
+            "src/Mod/Mesh/App/FeatureMeshSetOperations.cpp",
+            "src/Mod/Mesh/App/FeatureMeshDefects.cpp"
           ]
         },
         {
@@ -745,15 +972,57 @@
           ]
         },
         {
-          "disposition": "uncovered",
-          "fixtureEvidence": [],
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "spreadsheet-layout/spreadsheet-layout-style",
+              "level": "target_result"
+            },
+            {
+              "fixture": "spreadsheet-layout/spreadsheet-layout-alignment",
+              "level": "target_result"
+            },
+            {
+              "fixture": "spreadsheet-layout/spreadsheet-layout-row-column-size",
+              "level": "target_result"
+            },
+            {
+              "fixture": "spreadsheet-layout/spreadsheet-layout-merge-clears-covered-cells",
+              "level": "target_result"
+            },
+            {
+              "fixture": "spreadsheet-layout/spreadsheet-layout-recompute-update",
+              "level": "target_result"
+            },
+            {
+              "fixture": "spreadsheet-layout/spreadsheet-layout-unmerge-recompute-update",
+              "level": "target_result"
+            },
+            {
+              "fixture": "spreadsheet-layout/spreadsheet-layout-overlap-replaces-prior-merge",
+              "level": "target_result"
+            },
+            {
+              "fixture": "spreadsheet-layout/spreadsheet-layout-invalid-range-native-diagnostic",
+              "level": "native_diagnostic"
+            },
+            {
+              "fixture": "spreadsheet-layout/spreadsheet-layout-invalid-style-option-native-diagnostic",
+              "level": "native_diagnostic"
+            }
+          ],
           "id": "styles_layout_and_merge",
           "publicSurface": "Spreadsheet cell style, width, height, merge, and alignment APIs",
-          "rationale": "Current public expected output collects semantic cells and expressions, not the Spreadsheet visual layout model.",
-          "runtimeBranch": "Mutate visual cell formatting and merged ranges.",
+          "runtimeBranch": "Invoke the retained SheetPy layout APIs and publish native result/diagnostic receipts independently of CAD Core consumption.",
           "sourceEvidence": [
-            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setStyle",
-            "src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::mergeCells"
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setStyle",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setAlignment",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setColumnWidth",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::setRowHeight",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp::Spreadsheet::SheetPy::mergeCells",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/Sheet.cpp::Spreadsheet::Sheet::execute",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/PropertySheet.cpp::Spreadsheet::PropertySheet::Save",
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/Cell.cpp::Spreadsheet::Cell::save"
           ]
         },
         {
@@ -855,27 +1124,40 @@
           "disposition": "native_fixture",
           "fixtureEvidence": [
             {
-              "fixture": "assembly-solve/assembly-invalid-grounded-distance-real-solver",
+              "fixture": "assembly-solve/assembly-gears-zero-radius-native-solver-failure",
               "level": "native_diagnostic"
             }
           ],
           "id": "real_solver_failure",
           "publicSurface": "Ondsel solver failure diagnostics",
-          "runtimeBranch": "Return deterministic diagnostics for an invalid grounded distance solve.",
+          "runtimeBranch": "Return the native solver failure boundary for an invalid zero-radius gear solve.",
           "sourceEvidence": [
             "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::solve"
           ]
         },
         {
-          "disposition": "uncovered",
-          "fixtureEvidence": [],
+          "disposition": "native_fixture",
+          "fixtureEvidence": [
+            {
+              "fixture": "assembly-solve/assembly-orientation-joints-placement-writeback",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "assembly-solve/assembly-gears-belt-placement-writeback",
+              "level": "dependency_result"
+            },
+            {
+              "fixture": "assembly-solve/assembly-gears-zero-radius-native-solver-failure",
+              "level": "native_diagnostic"
+            }
+          ],
           "id": "full_joint_type_and_degenerate_matrix",
-          "publicSurface": "All Ondsel joint types, geometry pairs, and degenerate solves",
-          "rationale": "The corpus has broad real-solver fixtures, but this inventory has not proven an exhaustive cross-product of every joint type and degenerate marker combination.",
-          "runtimeBranch": "Exhaustively combine every joint type with supported and degenerate geometry marker pairs.",
+          "publicSurface": "Source-derived Ondsel joint, marker, distance, writeback, and failure equivalence classes",
+          "runtimeBranch": "Cover all 13 joint types, 10 marker families, 37 DistanceType classes, placement writeback, the RackPinion missing-slider boundary, and a real solver failure without claiming a Cartesian runtime matrix.",
           "sourceEvidence": [
             "src/Mod/Assembly/App/AssemblyObject.cpp::Assembly::AssemblyObject::makeMbdAssembly"
-          ]
+          ],
+          "supportMatrixReceipt": "assembly-solver-support-matrix/v1"
         }
       ],
       "name": "OndselSolver"
@@ -883,23 +1165,40 @@
     {
       "capabilities": [
         {
-          "disposition": "non_cad_smoke",
-          "fixtureEvidence": [],
+          "disposition": "native_process_test",
+          "fixtureEvidence": [
+            {
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "help-local-page-headless"
+              ]
+            }
+          ],
           "id": "module_import_and_pure_page_path",
           "publicSurface": "Help module import and underscore-page normalization",
-          "rationale": "This retained non-CAD entry has a dedicated FreeCADCmd smoke receipt rather than a document graph fixture.",
-          "runtimeBranch": "Import retained Help Python code and evaluate its pure path helper without GUI or network state.",
+          "rationale": "A repeat-2 FreeCADCmd process contract imports the installed Help module and executes page normalization, local resolution, content loading, conversion, and headless rendering without GUI or network effects.",
+          "runtimeBranch": "Resolve a local custom page, read and convert its contents, and print it in FreeCADCmd headless mode.",
           "sourceEvidence": [
             "src/Mod/Help/Help.py::underscore_page"
           ]
         },
         {
-          "disposition": "unsupported",
-          "fixtureEvidence": [],
+          "disposition": "native_process_test",
+          "fixtureEvidence": [
+            {
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "help-local-page-headless",
+                "help-browser-fallback-mocked"
+              ]
+            }
+          ],
           "id": "gui_and_network_help_display",
           "publicSurface": "Help.show and WebEngine/browser display",
-          "rationale": "The retained coverage target is deterministic headless import/data behavior; GUI, WebEngine, browser, and network effects are outside native document fixture scope.",
-          "runtimeBranch": "Choose GUI-up branches, access remote documentation, and display pages in GUI or external browsers.",
+          "rationale": "Repeat-2 FreeCADCmd process cases execute the headless Help.show path and the Qt-to-browser dispatch path with local pages and injected adapters. A separate item-local process receipt proves release FreeCADCmd has GuiUp=false for the visible WebEngine branch and records its close condition.",
+          "runtimeBranch": "Dispatch headless Help.show and Qt-to-browser fallback branches without real GUI, browser, or network effects.",
           "sourceEvidence": [
             "src/Mod/Help/Help.py::show"
           ]
@@ -910,26 +1209,45 @@
     {
       "capabilities": [
         {
-          "disposition": "non_cad_smoke",
-          "fixtureEvidence": [],
+          "disposition": "native_process_test",
+          "fixtureEvidence": [
+            {
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "addon-metadata-spdx-local"
+              ]
+            }
+          ],
           "id": "metadata_and_spdx_data",
           "publicSurface": "AddonManager metadata version and SPDX license data",
-          "rationale": "This retained non-CAD entry has a dedicated FreeCADCmd data smoke receipt rather than a document graph fixture.",
-          "runtimeBranch": "Import retained metadata/data modules and validate stable packaged values.",
+          "rationale": "A repeat-2 FreeCADCmd process contract parses local metadata, rejects invalid metadata, and validates packaged SPDX data without network or user-directory effects.",
+          "runtimeBranch": "Parse local package metadata and validate packaged SPDX data, including invalid metadata.",
           "sourceEvidence": [
             "src/Mod/AddonManager/addonmanager_metadata.py::Version",
             "src/Mod/AddonManager/addonmanager_licenses.py"
           ]
         },
         {
-          "disposition": "unsupported",
-          "fixtureEvidence": [],
+          "disposition": "native_process_test",
+          "fixtureEvidence": [
+            {
+              "fixture": "process-contract/help-addonmanager",
+              "level": "native_process_test",
+              "processCases": [
+                "addon-copy-install-update-remove",
+                "addon-zip-and-network-manager-mocked",
+                "addon-invalid-boundaries"
+              ]
+            }
+          ],
           "id": "network_install_update_remove",
           "publicSurface": "Addon discovery, download, install, update, and removal workflows",
-          "rationale": "Authenticated or network-dependent discovery and destructive user-directory mutations are outside deterministic headless fixture scope and are not implied by metadata smoke.",
-          "runtimeBranch": "Use Qt/network services and mutate user addon directories.",
+          "rationale": "Repeat-2 FreeCADCmd process cases execute installer, updater, uninstaller, ZIP, and NetworkManager paths against fake repositories, mocked transport, and isolated temporary user directories; real network and real user Addon directories remain prohibited effects, not uncovered API branches.",
+          "runtimeBranch": "Install, update, and remove local COPY/ZIP addons, drive mocked NetworkManager request completion, and reject invalid or dangerous paths.",
           "sourceEvidence": [
             "src/Mod/AddonManager/addonmanager_installer.py::AddonInstaller",
+            "src/Mod/AddonManager/addonmanager_uninstaller.py::AddonUninstaller",
             "src/Mod/AddonManager/NetworkManager.py"
           ]
         }

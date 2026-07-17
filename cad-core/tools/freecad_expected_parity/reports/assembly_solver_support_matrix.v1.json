@@ -1,0 +1,486 @@
+{
+  "cadCoreRuntimeParity": "not_evaluated",
+  "errors": [],
+  "evidenceReceipts": [
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-circle-circle-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-circle-circle-real-solver",
+      "id": "distance.CircleCircle.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-circle-circle-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-circle-circle-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cone-cone-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-cone-cone-default-boundary",
+      "id": "distance.ConeCone.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-cone-cone-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cone-cone-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cone-sphere-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-cone-sphere-default-boundary",
+      "id": "distance.ConeSphere.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-cone-sphere-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cone-sphere-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cone-torus-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-cone-torus-default-boundary",
+      "id": "distance.ConeTorus.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-cone-torus-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cone-torus-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-cone-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-curve-cone-default-boundary",
+      "id": "distance.CurveCone.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-curve-cone-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-cone-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-cylinder-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-curve-cylinder-default-boundary",
+      "id": "distance.CurveCylinder.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-curve-cylinder-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-cylinder-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-plane-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-curve-plane-default-boundary",
+      "id": "distance.CurvePlane.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-curve-plane-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-plane-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-sphere-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-curve-sphere-default-boundary",
+      "id": "distance.CurveSphere.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-curve-sphere-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-sphere-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-torus-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-curve-torus-default-boundary",
+      "id": "distance.CurveTorus.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-curve-torus-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-curve-torus-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cylinder-cone-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-cylinder-cone-default-boundary",
+      "id": "distance.CylinderCone.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-cylinder-cone-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cylinder-cone-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cylinder-cylinder-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-cylinder-cylinder-real-solver",
+      "id": "distance.CylinderCylinder.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-cylinder-cylinder-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cylinder-cylinder-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cylinder-sphere-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-cylinder-sphere-real-solver",
+      "id": "distance.CylinderSphere.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-cylinder-sphere-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cylinder-sphere-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cylinder-torus-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-cylinder-torus-real-solver",
+      "id": "distance.CylinderTorus.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-cylinder-torus-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-cylinder-torus-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-circle-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-line-circle-real-solver",
+      "id": "distance.LineCircle.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-line-circle-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-circle-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-cone-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-line-cone-default-boundary",
+      "id": "distance.LineCone.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-line-cone-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-cone-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-cylinder-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-line-cylinder-default-boundary",
+      "id": "distance.LineCylinder.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-line-cylinder-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-cylinder-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-line-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-line-line-real-solver",
+      "id": "distance.LineLine.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-line-line-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-line-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-plane-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-line-plane-real-solver",
+      "id": "distance.LinePlane.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-line-plane-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-plane-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-sphere-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-line-sphere-default-boundary",
+      "id": "distance.LineSphere.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-line-sphere-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-sphere-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-torus-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-line-torus-default-boundary",
+      "id": "distance.LineTorus.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-line-torus-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-line-torus-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-other-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-other-default-boundary",
+      "id": "distance.Other.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-other-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-other-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-cone-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-plane-cone-default-boundary",
+      "id": "distance.PlaneCone.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-plane-cone-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-cone-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-cylinder-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-plane-cylinder-real-solver",
+      "id": "distance.PlaneCylinder.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-plane-cylinder-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-cylinder-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-plane-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-plane-plane-real-solver",
+      "id": "distance.PlanePlane.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-plane-plane-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-plane-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-sphere-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-plane-sphere-real-solver",
+      "id": "distance.PlaneSphere.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-plane-sphere-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-sphere-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-torus-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-plane-torus-real-solver",
+      "id": "distance.PlaneTorus.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-plane-torus-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-plane-torus-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-cone-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-point-cone-default-boundary",
+      "id": "distance.PointCone.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-point-cone-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-cone-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-curve-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-point-curve-real-solver",
+      "id": "distance.PointCurve.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-point-curve-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-curve-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-cylinder-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-point-cylinder-real-solver",
+      "id": "distance.PointCylinder.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-point-cylinder-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-cylinder-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-line-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-point-line-real-solver",
+      "id": "distance.PointLine.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-point-line-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-line-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-plane-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-point-plane-real-solver",
+      "id": "distance.PointPlane.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-point-plane-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-plane-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-point-nonzero-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-point-point-nonzero-real-solver",
+      "id": "distance.PointPoint.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-point-point-nonzero-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-point-nonzero-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-sphere-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-point-sphere-real-solver",
+      "id": "distance.PointSphere.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-point-sphere-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-sphere-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-torus-default-boundary.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-point-torus-default-boundary",
+      "id": "distance.PointTorus.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-point-torus-default-boundary.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-point-torus-default-boundary.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-sphere-sphere-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-sphere-sphere-real-solver",
+      "id": "distance.SphereSphere.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-sphere-sphere-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-sphere-sphere-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-torus-sphere-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-torus-sphere-real-solver",
+      "id": "distance.TorusSphere.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-torus-sphere-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-torus-sphere-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-torus-torus-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-distance-torus-torus-real-solver",
+      "id": "distance.TorusTorus.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-distance-torus-torus-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-distance-torus-torus-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-orientation-joints-placement-writeback.freecad.json",
+      "fixture": "assembly-solve/assembly-orientation-joints-placement-writeback",
+      "id": "joint.Angle.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-orientation-joints-placement-writeback.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-orientation-joints-placement-writeback.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-ball-vertex-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-marker-ball-vertex-real-solver",
+      "id": "joint.Ball.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-marker-ball-vertex-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-ball-vertex-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-gears-belt-placement-writeback.freecad.json",
+      "fixture": "assembly-solve/assembly-gears-belt-placement-writeback",
+      "id": "joint.Belt.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-gears-belt-placement-writeback.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-gears-belt-placement-writeback.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-cylindrical-edge-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-marker-cylindrical-edge-real-solver",
+      "id": "joint.Cylindrical.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-marker-cylindrical-edge-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-cylindrical-edge-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-fixed-face-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-marker-fixed-face-real-solver",
+      "id": "joint.Fixed.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-marker-fixed-face-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-fixed-face-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-gears-belt-placement-writeback.freecad.json",
+      "fixture": "assembly-solve/assembly-gears-belt-placement-writeback",
+      "id": "joint.Gears.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-gears-belt-placement-writeback.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-gears-belt-placement-writeback.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-orientation-joints-placement-writeback.freecad.json",
+      "fixture": "assembly-solve/assembly-orientation-joints-placement-writeback",
+      "id": "joint.Parallel.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-orientation-joints-placement-writeback.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-orientation-joints-placement-writeback.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-orientation-joints-placement-writeback.freecad.json",
+      "fixture": "assembly-solve/assembly-orientation-joints-placement-writeback",
+      "id": "joint.Perpendicular.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-orientation-joints-placement-writeback.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-orientation-joints-placement-writeback.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-rackpinion-marker-rewrite-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-rackpinion-marker-rewrite-real-solver",
+      "id": "joint.RackPinion.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-rackpinion-marker-rewrite-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-rackpinion-marker-rewrite-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-revolute-edge-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-marker-revolute-edge-real-solver",
+      "id": "joint.Revolute.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-marker-revolute-edge-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-revolute-edge-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-grounded-screw-joint-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-grounded-screw-joint-real-solver",
+      "id": "joint.Screw.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-grounded-screw-joint-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-grounded-screw-joint-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-slider-edge-real-solver.freecad.json",
+      "fixture": "assembly-solve/assembly-marker-slider-edge-real-solver",
+      "id": "joint.Slider.supported_solve_writeback",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-marker-slider-edge-real-solver.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-marker-slider-edge-real-solver.freecad.ledger.json",
+      "level": "dependency_result",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-unsupported-joint-diagnostic.freecad.json",
+      "fixture": "assembly-solve/assembly-unsupported-joint-diagnostic",
+      "id": "marker.rackpinion_missing_slider_boundary",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-unsupported-joint-diagnostic.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-unsupported-joint-diagnostic.freecad.ledger.json",
+      "level": "native_diagnostic",
+      "status": "passed"
+    },
+    {
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-gears-zero-radius-native-solver-failure.freecad.json",
+      "fixture": "assembly-solve/assembly-gears-zero-radius-native-solver-failure",
+      "id": "solver.failure.shared",
+      "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/assembly-gears-zero-radius-native-solver-failure.json",
+      "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/assembly-solve/expected/assembly-gears-zero-radius-native-solver-failure.freecad.ledger.json",
+      "level": "native_diagnostic",
+      "status": "passed"
+    }
+  ],
+  "fixtureCorpusClosure": "authority_artifacts_and_roles_only",
+  "invalidEvidenceClasses": [],
+  "matrix": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/assembly_solver_support_matrix.v1.json",
+    "sha256": "e66acacf2738df1d1d94590f51bc73765a605cc89a30eb84055357fae11fae22"
+  },
+  "missingEquivalenceClasses": [],
+  "schema": "freecad-assembly-solver-support-matrix-report/v1",
+  "status": "passed",
+  "summary": {
+    "distanceTypeCount": 37,
+    "evidenceClassCount": 51,
+    "evidenceStatusCounts": {
+      "passed": 51
+    },
+    "invalidEvidenceClassCount": 0,
+    "jointTypeCount": 13,
+    "markerGeometryFamilyCount": 10,
+    "missingEquivalenceClassCount": 0,
+    "rowCount": 50
+  }
+}

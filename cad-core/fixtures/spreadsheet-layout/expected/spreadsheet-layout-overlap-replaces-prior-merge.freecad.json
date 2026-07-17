@@ -1,0 +1,92 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sheet",
+      "object_fields": {
+        "cell_count": 3,
+        "shape": "spreadsheet",
+        "status": "ok"
+      },
+      "spreadsheet": {
+        "cells": [
+          {
+            "address": "A1",
+            "alias": null,
+            "content": "'First anchor",
+            "value": "First anchor"
+          },
+          {
+            "address": "B2",
+            "alias": null,
+            "clearedByLayoutOperation": true,
+            "content": "",
+            "value": null
+          },
+          {
+            "address": "C3",
+            "alias": null,
+            "content": "'Covered",
+            "value": "Covered"
+          }
+        ],
+        "layoutOperations": [
+          {
+            "arguments": {
+              "range": "A1:B2"
+            },
+            "evidenceLevel": "target_result",
+            "index": 0,
+            "observed": {
+              "usedCells": [
+                "A1",
+                "C3"
+              ]
+            },
+            "operation": "mergeCells",
+            "stage": "initial"
+          },
+          {
+            "arguments": {
+              "range": "B2:C3"
+            },
+            "evidenceLevel": "target_result",
+            "index": 1,
+            "observed": {
+              "usedCells": [
+                "A1",
+                "C3"
+              ]
+            },
+            "operation": "mergeCells",
+            "stage": "initial"
+          }
+        ]
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:b423e4328ace09a6e01e93a43865084158df80cf1729df0f6b400017de66b860",
+    "objects": {
+      "Sheet": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:91165dfd39f5f7d29c27b010c38391a159344fedcbb4fe30335e4902300e1294",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

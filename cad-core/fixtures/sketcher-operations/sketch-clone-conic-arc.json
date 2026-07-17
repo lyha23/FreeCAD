@@ -1,0 +1,54 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "center": [
+              0,
+              0
+            ],
+            "endAngle": 0.5,
+            "kind": "ArcOfHyperbola",
+            "majorRadius": 4,
+            "minorRadius": 2,
+            "startAngle": -0.5
+          }
+        ],
+        "Operations": [
+          {
+            "clone": true,
+            "displacement": [
+              0,
+              4
+            ],
+            "expectedOutcome": "target_result",
+            "geometryIds": [
+              0
+            ],
+            "op": "addCopy"
+          }
+        ]
+      },
+      "TypeId": "Sketcher::SketchObject"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:8ce1a7b61dff8f68a5766ec0b92a1c56b217e3169c3ac115203a7d7af25c43b6",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

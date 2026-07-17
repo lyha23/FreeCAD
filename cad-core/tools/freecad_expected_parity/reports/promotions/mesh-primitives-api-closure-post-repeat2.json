@@ -1,0 +1,1343 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "5ac4756447d42d7996616aec0b7c0d87a3b379e5b1d8474f93a1c124d039faf8"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 15,
+    "entries": [
+      {
+        "case": "mesh-cone",
+        "fixtureSha256": "0fc77bdf0edbbb2a3700a484feb38bfde482e8792c8a3adb9f549b6017e607d2",
+        "ledgerSha256": "fe3b98dbc842f3a27a95bc78b27cb8f44ce3341bb5acb28c28c39b600c26fe47",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "ae556eb3af17822bba564de2c41ae42f07c866f84590b1fc97d2b11b0a658614"
+      },
+      {
+        "case": "mesh-cone-recompute-properties",
+        "fixtureSha256": "2eb24e245e38440efda39609f24a46867c402c0e820f6b13452b4784238ad7ec",
+        "ledgerSha256": "48cce34c334c02cf22a55c855b185783188be81fd25683c6feff657d525da0d5",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "0ce2485bf3fc2d7342f06fc26e4c4887a398d30906258e2709a5f41003cf10e7"
+      },
+      {
+        "case": "mesh-cube",
+        "fixtureSha256": "a8cc653fc82746bb0fb376df67c675e494e4e996bc786055f44c0c0022f6fc6a",
+        "ledgerSha256": "102ff8b6a87c252b1090dc8a1ad3cbe8198c15b943eff9376a836321d787ce87",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "4a4f21e05e460df124b00f92e1157ed153c9047aa3147bcd02413368be9c1484"
+      },
+      {
+        "case": "mesh-cube-recompute-dimensions",
+        "fixtureSha256": "7632f280e8014814728abf3c99e49e3028ffddf75acd175a425ae95202a3c20a",
+        "ledgerSha256": "343cc560a5c997167506eb734eaadb55c8da1b4e960084d3ea3844d1ec819f85",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "e878dab2c4c8c368890626b679e9e23d54c76d6f77db541aab658c0d6906b8fb"
+      },
+      {
+        "case": "mesh-cube-zero-length",
+        "fixtureSha256": "2e0ce76af80925cbf1802105a424d00f50c21ac8bce499e89df3dddb77999c3a",
+        "ledgerSha256": "b1fe26e99636c4f9b5dc17ebb74bdca269dd389b19d316163f59f9ca323480e6",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "c0f6de4f70a8a65f58831bf0b2bb85118f969205196779d240da937ca0d15205"
+      },
+      {
+        "case": "mesh-cylinder",
+        "fixtureSha256": "f8b2d410d17d28237269a47a6c785f44d06cdffd6bd9211bd66a7da0598165b2",
+        "ledgerSha256": "acab4c81b3bb1367234d0397ca55236f0a2b5f5c6d800d9cc5adc0d6fa46fa68",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "cdc0b0e06f6c66d1b0f0fd2b3649c6ad0e333eccc5071d2677fce2507d079f38"
+      },
+      {
+        "case": "mesh-cylinder-recompute-properties",
+        "fixtureSha256": "dc0fe3cf3464c42a7153c4ea7ee2f9d613c70ca7481e08e7d98e4942ae43afa9",
+        "ledgerSha256": "35d106ab309e7e9f6f5e40221cc75b4700a0804de832c92545e352d6d47613b0",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "60e9cf702e765ffa6cce6464f889c5a3c2e8e9495da0a9fe29107a7edcdd20f3"
+      },
+      {
+        "case": "mesh-ellipsoid",
+        "fixtureSha256": "05ea804cda27d4584e426f8ab322a4c055cb9e6c904e199a8d920000b0a0cc56",
+        "ledgerSha256": "05bf956b507fce2a32e34ab6039e83418901ef0a28a7e91d40883d6f73fcc535",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "40885478736c81e56f9d3129a7991f668275d4b408ece40fb996e58fcfb41cd6"
+      },
+      {
+        "case": "mesh-ellipsoid-recompute-properties",
+        "fixtureSha256": "bfb108fc90cd7caa0a9b39b22e585316143912d865ddae8e81727bff3df1e31e",
+        "ledgerSha256": "15b622984db6bec322b6ab421a26b895bc1ae4913d701be1d2f79141d17233ab",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "a688bc549224ff9393c21149b87d7ae46d1e793053cdbc157415b1adc6b78532"
+      },
+      {
+        "case": "mesh-sphere",
+        "fixtureSha256": "96d590be343d35dd5ccf4476d1a9581ee0d950f57408c8f2355fe6fdf6661398",
+        "ledgerSha256": "a57c57f40177933c95ad4704f73ed5b44ec7c0df051104e48fdb17809e63a036",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "01b7a6a1dc6beff5a5966b9e58dcb112ac3e893ca172f7b7f56a2c48504f0d89"
+      },
+      {
+        "case": "mesh-sphere-negative-radius",
+        "fixtureSha256": "7ecfc8232a12b54d2a4ca78d1f82477ce200af5e9a1b45020b7e9912a7936870",
+        "ledgerSha256": "23854f01a526c740a93adb8b08ee6b5b6bc1e98cdf775b8f6106971c156ebe9b",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "a5a2661e4f9fc06194c6da34868a14bfc7597a1e6ff43658fe4b95fa8799ef8d"
+      },
+      {
+        "case": "mesh-sphere-recompute-radius-sampling",
+        "fixtureSha256": "3104934500fcc3763c0a8b998307d237538556aea53ef2493712816bf431209f",
+        "ledgerSha256": "e1535cdc7f6c3f45e350218c655a9b8fd74aedee6a501892503237b803899539",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "dbaaffbe595da1c83f2cc813371e0dcadfcc7dad607d8143e4f325d94c845c83"
+      },
+      {
+        "case": "mesh-sphere-zero-radius-min-sampling",
+        "fixtureSha256": "e723bafca605f52b25aa8932f7852170f7bcaff59f542a49f215e3d68a79175b",
+        "ledgerSha256": "2098c7a525d1753a3149c1915fbe526f43ff49f28d6bd8e17e16ce6d50d0fb3b",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "17e59219e5c49017da8a3a7c63e15f48940ae97e4266d255bbeb71200eb0fbd1"
+      },
+      {
+        "case": "mesh-torus",
+        "fixtureSha256": "9f1713f681b48925deee81ff471aeb9d3fa7ac54b9495365564cc89350e7ed32",
+        "ledgerSha256": "aca87bda7216f569776b6711a7137abea9c24939ce4c7dc6e54d8968fcd2004b",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "9e123e1cbe45a6603eafd32cb15eedf0bd7ff65ffbc79ffac725bcf0e2e2bf8d"
+      },
+      {
+        "case": "mesh-torus-recompute-properties",
+        "fixtureSha256": "9048c5ed0d097b9c2cc5f94b155b8ccaf29f4f8b9200558267f8054786b5086d",
+        "ledgerSha256": "69c725b4091f83eb4389866def75cc228079b131b71b80bd4b9eb6211080270e",
+        "phase": "mesh-primitives",
+        "producerTraceSha256": null,
+        "publicSha256": "21ef379ba10fbd19cd1625734191205508e56e1cd51afa17fb449046d8590269"
+      }
+    ],
+    "phases": 1,
+    "sha256": "d7c8636ac81dd574e79e8ffed040d968bb3316c6f83871476be0fb20ae9a2136"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-primitives\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a\", \"--report\", \"/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "fe3b98dbc842f3a27a95bc78b27cb8f44ce3341bb5acb28c28c39b600c26fe47",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-cone.freecad.json",
+                "publicSha256": "ae556eb3af17822bba564de2c41ae42f07c866f84590b1fc97d2b11b0a658614",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cone",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cone.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cone.json",
+            "fixtureSha256": "0fc77bdf0edbbb2a3700a484feb38bfde482e8792c8a3adb9f549b6017e607d2",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "fe3b98dbc842f3a27a95bc78b27cb8f44ce3341bb5acb28c28c39b600c26fe47",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "ae556eb3af17822bba564de2c41ae42f07c866f84590b1fc97d2b11b0a658614",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "48cce34c334c02cf22a55c855b185783188be81fd25683c6feff657d525da0d5",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-cone-recompute-properties.freecad.json",
+                "publicSha256": "0ce2485bf3fc2d7342f06fc26e4c4887a398d30906258e2709a5f41003cf10e7",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cone-recompute-properties",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cone-recompute-properties.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cone-recompute-properties.json",
+            "fixtureSha256": "2eb24e245e38440efda39609f24a46867c402c0e820f6b13452b4784238ad7ec",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "48cce34c334c02cf22a55c855b185783188be81fd25683c6feff657d525da0d5",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "0ce2485bf3fc2d7342f06fc26e4c4887a398d30906258e2709a5f41003cf10e7",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "102ff8b6a87c252b1090dc8a1ad3cbe8198c15b943eff9376a836321d787ce87",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-cube.freecad.json",
+                "publicSha256": "4a4f21e05e460df124b00f92e1157ed153c9047aa3147bcd02413368be9c1484",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cube",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cube.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cube.json",
+            "fixtureSha256": "a8cc653fc82746bb0fb376df67c675e494e4e996bc786055f44c0c0022f6fc6a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "102ff8b6a87c252b1090dc8a1ad3cbe8198c15b943eff9376a836321d787ce87",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "4a4f21e05e460df124b00f92e1157ed153c9047aa3147bcd02413368be9c1484",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "343cc560a5c997167506eb734eaadb55c8da1b4e960084d3ea3844d1ec819f85",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-cube-recompute-dimensions.freecad.json",
+                "publicSha256": "e878dab2c4c8c368890626b679e9e23d54c76d6f77db541aab658c0d6906b8fb",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cube-recompute-dimensions",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cube-recompute-dimensions.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cube-recompute-dimensions.json",
+            "fixtureSha256": "7632f280e8014814728abf3c99e49e3028ffddf75acd175a425ae95202a3c20a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "343cc560a5c997167506eb734eaadb55c8da1b4e960084d3ea3844d1ec819f85",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "e878dab2c4c8c368890626b679e9e23d54c76d6f77db541aab658c0d6906b8fb",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "b1fe26e99636c4f9b5dc17ebb74bdca269dd389b19d316163f59f9ca323480e6",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-cube-zero-length.freecad.json",
+                "publicSha256": "c0f6de4f70a8a65f58831bf0b2bb85118f969205196779d240da937ca0d15205",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cube-zero-length",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cube-zero-length.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cube-zero-length.json",
+            "fixtureSha256": "2e0ce76af80925cbf1802105a424d00f50c21ac8bce499e89df3dddb77999c3a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "b1fe26e99636c4f9b5dc17ebb74bdca269dd389b19d316163f59f9ca323480e6",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "c0f6de4f70a8a65f58831bf0b2bb85118f969205196779d240da937ca0d15205",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "acab4c81b3bb1367234d0397ca55236f0a2b5f5c6d800d9cc5adc0d6fa46fa68",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-cylinder.freecad.json",
+                "publicSha256": "cdc0b0e06f6c66d1b0f0fd2b3649c6ad0e333eccc5071d2677fce2507d079f38",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cylinder",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cylinder.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cylinder.json",
+            "fixtureSha256": "f8b2d410d17d28237269a47a6c785f44d06cdffd6bd9211bd66a7da0598165b2",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "acab4c81b3bb1367234d0397ca55236f0a2b5f5c6d800d9cc5adc0d6fa46fa68",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "cdc0b0e06f6c66d1b0f0fd2b3649c6ad0e333eccc5071d2677fce2507d079f38",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "35d106ab309e7e9f6f5e40221cc75b4700a0804de832c92545e352d6d47613b0",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-cylinder-recompute-properties.freecad.json",
+                "publicSha256": "60e9cf702e765ffa6cce6464f889c5a3c2e8e9495da0a9fe29107a7edcdd20f3",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cylinder-recompute-properties",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cylinder-recompute-properties.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cylinder-recompute-properties.json",
+            "fixtureSha256": "dc0fe3cf3464c42a7153c4ea7ee2f9d613c70ca7481e08e7d98e4942ae43afa9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "35d106ab309e7e9f6f5e40221cc75b4700a0804de832c92545e352d6d47613b0",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "60e9cf702e765ffa6cce6464f889c5a3c2e8e9495da0a9fe29107a7edcdd20f3",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "05bf956b507fce2a32e34ab6039e83418901ef0a28a7e91d40883d6f73fcc535",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-ellipsoid.freecad.json",
+                "publicSha256": "40885478736c81e56f9d3129a7991f668275d4b408ece40fb996e58fcfb41cd6",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-ellipsoid",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-ellipsoid.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-ellipsoid.json",
+            "fixtureSha256": "05ea804cda27d4584e426f8ab322a4c055cb9e6c904e199a8d920000b0a0cc56",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "05bf956b507fce2a32e34ab6039e83418901ef0a28a7e91d40883d6f73fcc535",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "40885478736c81e56f9d3129a7991f668275d4b408ece40fb996e58fcfb41cd6",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "15b622984db6bec322b6ab421a26b895bc1ae4913d701be1d2f79141d17233ab",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-ellipsoid-recompute-properties.freecad.json",
+                "publicSha256": "a688bc549224ff9393c21149b87d7ae46d1e793053cdbc157415b1adc6b78532",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-ellipsoid-recompute-properties",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-ellipsoid-recompute-properties.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-ellipsoid-recompute-properties.json",
+            "fixtureSha256": "bfb108fc90cd7caa0a9b39b22e585316143912d865ddae8e81727bff3df1e31e",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "15b622984db6bec322b6ab421a26b895bc1ae4913d701be1d2f79141d17233ab",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "a688bc549224ff9393c21149b87d7ae46d1e793053cdbc157415b1adc6b78532",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "a57c57f40177933c95ad4704f73ed5b44ec7c0df051104e48fdb17809e63a036",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-sphere.freecad.json",
+                "publicSha256": "01b7a6a1dc6beff5a5966b9e58dcb112ac3e893ca172f7b7f56a2c48504f0d89",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-sphere",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-sphere.json",
+            "fixtureSha256": "96d590be343d35dd5ccf4476d1a9581ee0d950f57408c8f2355fe6fdf6661398",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "a57c57f40177933c95ad4704f73ed5b44ec7c0df051104e48fdb17809e63a036",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "01b7a6a1dc6beff5a5966b9e58dcb112ac3e893ca172f7b7f56a2c48504f0d89",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "23854f01a526c740a93adb8b08ee6b5b6bc1e98cdf775b8f6106971c156ebe9b",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-sphere-negative-radius.freecad.json",
+                "publicSha256": "a5a2661e4f9fc06194c6da34868a14bfc7597a1e6ff43658fe4b95fa8799ef8d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-sphere-negative-radius",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere-negative-radius.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-sphere-negative-radius.json",
+            "fixtureSha256": "7ecfc8232a12b54d2a4ca78d1f82477ce200af5e9a1b45020b7e9912a7936870",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "23854f01a526c740a93adb8b08ee6b5b6bc1e98cdf775b8f6106971c156ebe9b",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "a5a2661e4f9fc06194c6da34868a14bfc7597a1e6ff43658fe4b95fa8799ef8d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "e1535cdc7f6c3f45e350218c655a9b8fd74aedee6a501892503237b803899539",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-sphere-recompute-radius-sampling.freecad.json",
+                "publicSha256": "dbaaffbe595da1c83f2cc813371e0dcadfcc7dad607d8143e4f325d94c845c83",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-sphere-recompute-radius-sampling",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere-recompute-radius-sampling.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-sphere-recompute-radius-sampling.json",
+            "fixtureSha256": "3104934500fcc3763c0a8b998307d237538556aea53ef2493712816bf431209f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "e1535cdc7f6c3f45e350218c655a9b8fd74aedee6a501892503237b803899539",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "dbaaffbe595da1c83f2cc813371e0dcadfcc7dad607d8143e4f325d94c845c83",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2098c7a525d1753a3149c1915fbe526f43ff49f28d6bd8e17e16ce6d50d0fb3b",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-sphere-zero-radius-min-sampling.freecad.json",
+                "publicSha256": "17e59219e5c49017da8a3a7c63e15f48940ae97e4266d255bbeb71200eb0fbd1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-sphere-zero-radius-min-sampling",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere-zero-radius-min-sampling.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-sphere-zero-radius-min-sampling.json",
+            "fixtureSha256": "e723bafca605f52b25aa8932f7852170f7bcaff59f542a49f215e3d68a79175b",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2098c7a525d1753a3149c1915fbe526f43ff49f28d6bd8e17e16ce6d50d0fb3b",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "17e59219e5c49017da8a3a7c63e15f48940ae97e4266d255bbeb71200eb0fbd1",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "aca87bda7216f569776b6711a7137abea9c24939ce4c7dc6e54d8968fcd2004b",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-torus.freecad.json",
+                "publicSha256": "9e123e1cbe45a6603eafd32cb15eedf0bd7ff65ffbc79ffac725bcf0e2e2bf8d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-torus",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-torus.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-torus.json",
+            "fixtureSha256": "9f1713f681b48925deee81ff471aeb9d3fa7ac54b9495365564cc89350e7ed32",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "aca87bda7216f569776b6711a7137abea9c24939ce4c7dc6e54d8968fcd2004b",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "9e123e1cbe45a6603eafd32cb15eedf0bd7ff65ffbc79ffac725bcf0e2e2bf8d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "69c725b4091f83eb4389866def75cc228079b131b71b80bd4b9eb6211080270e",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a/mesh-primitives/expected/mesh-torus-recompute-properties.freecad.json",
+                "publicSha256": "21ef379ba10fbd19cd1625734191205508e56e1cd51afa17fb449046d8590269",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-torus-recompute-properties",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-torus-recompute-properties.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-torus-recompute-properties.json",
+            "fixtureSha256": "9048c5ed0d097b9c2cc5f94b155b8ccaf29f4f8b9200558267f8054786b5086d",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "69c725b4091f83eb4389866def75cc228079b131b71b80bd4b9eb6211080270e",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "21ef379ba10fbd19cd1625734191205508e56e1cd51afa17fb449046d8590269",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "5ac4756447d42d7996616aec0b7c0d87a3b379e5b1d8474f93a1c124d039faf8"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-primitives\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a\", \"--report\", \"/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 15,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 15,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-primitives\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b\", \"--report\", \"/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "fe3b98dbc842f3a27a95bc78b27cb8f44ce3341bb5acb28c28c39b600c26fe47",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-cone.freecad.json",
+                "publicSha256": "ae556eb3af17822bba564de2c41ae42f07c866f84590b1fc97d2b11b0a658614",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cone",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cone.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cone.json",
+            "fixtureSha256": "0fc77bdf0edbbb2a3700a484feb38bfde482e8792c8a3adb9f549b6017e607d2",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "fe3b98dbc842f3a27a95bc78b27cb8f44ce3341bb5acb28c28c39b600c26fe47",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "ae556eb3af17822bba564de2c41ae42f07c866f84590b1fc97d2b11b0a658614",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "48cce34c334c02cf22a55c855b185783188be81fd25683c6feff657d525da0d5",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-cone-recompute-properties.freecad.json",
+                "publicSha256": "0ce2485bf3fc2d7342f06fc26e4c4887a398d30906258e2709a5f41003cf10e7",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cone-recompute-properties",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cone-recompute-properties.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cone-recompute-properties.json",
+            "fixtureSha256": "2eb24e245e38440efda39609f24a46867c402c0e820f6b13452b4784238ad7ec",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "48cce34c334c02cf22a55c855b185783188be81fd25683c6feff657d525da0d5",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "0ce2485bf3fc2d7342f06fc26e4c4887a398d30906258e2709a5f41003cf10e7",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "102ff8b6a87c252b1090dc8a1ad3cbe8198c15b943eff9376a836321d787ce87",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-cube.freecad.json",
+                "publicSha256": "4a4f21e05e460df124b00f92e1157ed153c9047aa3147bcd02413368be9c1484",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cube",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cube.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cube.json",
+            "fixtureSha256": "a8cc653fc82746bb0fb376df67c675e494e4e996bc786055f44c0c0022f6fc6a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "102ff8b6a87c252b1090dc8a1ad3cbe8198c15b943eff9376a836321d787ce87",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "4a4f21e05e460df124b00f92e1157ed153c9047aa3147bcd02413368be9c1484",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "343cc560a5c997167506eb734eaadb55c8da1b4e960084d3ea3844d1ec819f85",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-cube-recompute-dimensions.freecad.json",
+                "publicSha256": "e878dab2c4c8c368890626b679e9e23d54c76d6f77db541aab658c0d6906b8fb",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cube-recompute-dimensions",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cube-recompute-dimensions.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cube-recompute-dimensions.json",
+            "fixtureSha256": "7632f280e8014814728abf3c99e49e3028ffddf75acd175a425ae95202a3c20a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "343cc560a5c997167506eb734eaadb55c8da1b4e960084d3ea3844d1ec819f85",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "e878dab2c4c8c368890626b679e9e23d54c76d6f77db541aab658c0d6906b8fb",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "b1fe26e99636c4f9b5dc17ebb74bdca269dd389b19d316163f59f9ca323480e6",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-cube-zero-length.freecad.json",
+                "publicSha256": "c0f6de4f70a8a65f58831bf0b2bb85118f969205196779d240da937ca0d15205",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cube-zero-length",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cube-zero-length.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cube-zero-length.json",
+            "fixtureSha256": "2e0ce76af80925cbf1802105a424d00f50c21ac8bce499e89df3dddb77999c3a",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "b1fe26e99636c4f9b5dc17ebb74bdca269dd389b19d316163f59f9ca323480e6",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "c0f6de4f70a8a65f58831bf0b2bb85118f969205196779d240da937ca0d15205",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "acab4c81b3bb1367234d0397ca55236f0a2b5f5c6d800d9cc5adc0d6fa46fa68",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-cylinder.freecad.json",
+                "publicSha256": "cdc0b0e06f6c66d1b0f0fd2b3649c6ad0e333eccc5071d2677fce2507d079f38",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cylinder",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cylinder.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cylinder.json",
+            "fixtureSha256": "f8b2d410d17d28237269a47a6c785f44d06cdffd6bd9211bd66a7da0598165b2",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "acab4c81b3bb1367234d0397ca55236f0a2b5f5c6d800d9cc5adc0d6fa46fa68",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "cdc0b0e06f6c66d1b0f0fd2b3649c6ad0e333eccc5071d2677fce2507d079f38",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "35d106ab309e7e9f6f5e40221cc75b4700a0804de832c92545e352d6d47613b0",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-cylinder-recompute-properties.freecad.json",
+                "publicSha256": "60e9cf702e765ffa6cce6464f889c5a3c2e8e9495da0a9fe29107a7edcdd20f3",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-cylinder-recompute-properties",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-cylinder-recompute-properties.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-cylinder-recompute-properties.json",
+            "fixtureSha256": "dc0fe3cf3464c42a7153c4ea7ee2f9d613c70ca7481e08e7d98e4942ae43afa9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "35d106ab309e7e9f6f5e40221cc75b4700a0804de832c92545e352d6d47613b0",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "60e9cf702e765ffa6cce6464f889c5a3c2e8e9495da0a9fe29107a7edcdd20f3",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "05bf956b507fce2a32e34ab6039e83418901ef0a28a7e91d40883d6f73fcc535",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-ellipsoid.freecad.json",
+                "publicSha256": "40885478736c81e56f9d3129a7991f668275d4b408ece40fb996e58fcfb41cd6",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-ellipsoid",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-ellipsoid.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-ellipsoid.json",
+            "fixtureSha256": "05ea804cda27d4584e426f8ab322a4c055cb9e6c904e199a8d920000b0a0cc56",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "05bf956b507fce2a32e34ab6039e83418901ef0a28a7e91d40883d6f73fcc535",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "40885478736c81e56f9d3129a7991f668275d4b408ece40fb996e58fcfb41cd6",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "15b622984db6bec322b6ab421a26b895bc1ae4913d701be1d2f79141d17233ab",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-ellipsoid-recompute-properties.freecad.json",
+                "publicSha256": "a688bc549224ff9393c21149b87d7ae46d1e793053cdbc157415b1adc6b78532",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-ellipsoid-recompute-properties",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-ellipsoid-recompute-properties.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-ellipsoid-recompute-properties.json",
+            "fixtureSha256": "bfb108fc90cd7caa0a9b39b22e585316143912d865ddae8e81727bff3df1e31e",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "15b622984db6bec322b6ab421a26b895bc1ae4913d701be1d2f79141d17233ab",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "a688bc549224ff9393c21149b87d7ae46d1e793053cdbc157415b1adc6b78532",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "a57c57f40177933c95ad4704f73ed5b44ec7c0df051104e48fdb17809e63a036",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-sphere.freecad.json",
+                "publicSha256": "01b7a6a1dc6beff5a5966b9e58dcb112ac3e893ca172f7b7f56a2c48504f0d89",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-sphere",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-sphere.json",
+            "fixtureSha256": "96d590be343d35dd5ccf4476d1a9581ee0d950f57408c8f2355fe6fdf6661398",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "a57c57f40177933c95ad4704f73ed5b44ec7c0df051104e48fdb17809e63a036",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "01b7a6a1dc6beff5a5966b9e58dcb112ac3e893ca172f7b7f56a2c48504f0d89",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "23854f01a526c740a93adb8b08ee6b5b6bc1e98cdf775b8f6106971c156ebe9b",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-sphere-negative-radius.freecad.json",
+                "publicSha256": "a5a2661e4f9fc06194c6da34868a14bfc7597a1e6ff43658fe4b95fa8799ef8d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-sphere-negative-radius",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere-negative-radius.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-sphere-negative-radius.json",
+            "fixtureSha256": "7ecfc8232a12b54d2a4ca78d1f82477ce200af5e9a1b45020b7e9912a7936870",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "23854f01a526c740a93adb8b08ee6b5b6bc1e98cdf775b8f6106971c156ebe9b",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "a5a2661e4f9fc06194c6da34868a14bfc7597a1e6ff43658fe4b95fa8799ef8d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "e1535cdc7f6c3f45e350218c655a9b8fd74aedee6a501892503237b803899539",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-sphere-recompute-radius-sampling.freecad.json",
+                "publicSha256": "dbaaffbe595da1c83f2cc813371e0dcadfcc7dad607d8143e4f325d94c845c83",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-sphere-recompute-radius-sampling",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere-recompute-radius-sampling.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-sphere-recompute-radius-sampling.json",
+            "fixtureSha256": "3104934500fcc3763c0a8b998307d237538556aea53ef2493712816bf431209f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "e1535cdc7f6c3f45e350218c655a9b8fd74aedee6a501892503237b803899539",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "dbaaffbe595da1c83f2cc813371e0dcadfcc7dad607d8143e4f325d94c845c83",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2098c7a525d1753a3149c1915fbe526f43ff49f28d6bd8e17e16ce6d50d0fb3b",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-sphere-zero-radius-min-sampling.freecad.json",
+                "publicSha256": "17e59219e5c49017da8a3a7c63e15f48940ae97e4266d255bbeb71200eb0fbd1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-sphere-zero-radius-min-sampling",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-sphere-zero-radius-min-sampling.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-sphere-zero-radius-min-sampling.json",
+            "fixtureSha256": "e723bafca605f52b25aa8932f7852170f7bcaff59f542a49f215e3d68a79175b",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2098c7a525d1753a3149c1915fbe526f43ff49f28d6bd8e17e16ce6d50d0fb3b",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "17e59219e5c49017da8a3a7c63e15f48940ae97e4266d255bbeb71200eb0fbd1",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "aca87bda7216f569776b6711a7137abea9c24939ce4c7dc6e54d8968fcd2004b",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-torus.freecad.json",
+                "publicSha256": "9e123e1cbe45a6603eafd32cb15eedf0bd7ff65ffbc79ffac725bcf0e2e2bf8d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-torus",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-torus.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-torus.json",
+            "fixtureSha256": "9f1713f681b48925deee81ff471aeb9d3fa7ac54b9495365564cc89350e7ed32",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "aca87bda7216f569776b6711a7137abea9c24939ce4c7dc6e54d8968fcd2004b",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "9e123e1cbe45a6603eafd32cb15eedf0bd7ff65ffbc79ffac725bcf0e2e2bf8d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "69c725b4091f83eb4389866def75cc228079b131b71b80bd4b9eb6211080270e",
+                "path": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b/mesh-primitives/expected/mesh-torus-recompute-properties.freecad.json",
+                "publicSha256": "21ef379ba10fbd19cd1625734191205508e56e1cd51afa17fb449046d8590269",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "mesh-torus-recompute-properties",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/expected/mesh-torus-recompute-properties.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/mesh-primitives/mesh-torus-recompute-properties.json",
+            "fixtureSha256": "9048c5ed0d097b9c2cc5f94b155b8ccaf29f4f8b9200558267f8054786b5086d",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "69c725b4091f83eb4389866def75cc228079b131b71b80bd4b9eb6211080270e",
+            "phase": "mesh-primitives",
+            "publicExpectedSha256": "21ef379ba10fbd19cd1625734191205508e56e1cd51afa17fb449046d8590269",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "5ac4756447d42d7996616aec0b7c0d87a3b379e5b1d8474f93a1c124d039faf8"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"mesh-primitives\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b\", \"--report\", \"/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 15,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 15,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-mesh-primitives-checked-in-repeat2/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              5,
+              0
+            ],
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ]
+          }
+        ],
+        "Operations": [
+          {
+            "clone": false,
+            "displacement": [
+              0,
+              3
+            ],
+            "expectedOutcome": "target_result",
+            "geometryIds": [
+              0
+            ],
+            "op": "addCopy"
+          }
+        ]
+      },
+      "TypeId": "Sketcher::SketchObject"
+    }
+  ],
+  "recompute": {
+    "mutations": [
+      {
+        "object": "Sketch",
+        "properties": {
+          "Operations": [
+            {
+              "expectedOutcome": "target_result",
+              "geometryId": 1,
+              "op": "block"
+            }
+          ]
+        }
+      }
+    ],
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:554a3b6ecf1746621e5c1b7ce0703b2299395b07914aade8d6b55940e5b7a412",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

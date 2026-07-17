@@ -1,0 +1,899 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/private/tmp/spreadsheet-layout-checked-in-repeat2",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "b0e8345059de37386e3e6ac2926fe569aeeec1705ce941c4f9b6ae227fa8df33"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 9,
+    "entries": [
+      {
+        "case": "spreadsheet-layout-alignment",
+        "fixtureSha256": "ab39e278ec8a64baf43060680859ad1d72219830b05d04c6795ce9996833c48b",
+        "ledgerSha256": "2e7c684a818e422c060cc629d295c787b50268ae3ab668996a06a09d51cc6342",
+        "phase": "spreadsheet-layout",
+        "producerTraceSha256": null,
+        "publicSha256": "36d44d64220c3c5de1a67b7291aca1681d293a0404690ff71361ecae576ecd68"
+      },
+      {
+        "case": "spreadsheet-layout-invalid-range-native-diagnostic",
+        "fixtureSha256": "0775eb0f6e3622d62550415485147d611615383633d09cc63ecc98302a70714c",
+        "ledgerSha256": "7fec6e7b59b89f133e4eae6ab4371ca89e9cf5aeecca75f9ee32fad411b8abac",
+        "phase": "spreadsheet-layout",
+        "producerTraceSha256": null,
+        "publicSha256": "fd33fea9a7fd4067f57880257be292455afe9de0b06b8dadce0dc46190db73b2"
+      },
+      {
+        "case": "spreadsheet-layout-invalid-style-option-native-diagnostic",
+        "fixtureSha256": "06675e3995907919b7a47d016ce09aec4eafd1dd51eecee4924f61eb58441faf",
+        "ledgerSha256": "1438b55970efa80f78359dbdc1b7a123ec8f94a291b342c0fc40822d35283a51",
+        "phase": "spreadsheet-layout",
+        "producerTraceSha256": null,
+        "publicSha256": "747c9aaa8efe83bacd94de43e655afcd7a28d3b332c45507e83cafdfccc521d5"
+      },
+      {
+        "case": "spreadsheet-layout-merge-clears-covered-cells",
+        "fixtureSha256": "755aa49c74bfe7f503a9583bf6a0295c2d87eebb46c1760df636642d001d451f",
+        "ledgerSha256": "b628a8743a433469a832f69891ae4066128581966ccdcd2d26a80d452ac05f4a",
+        "phase": "spreadsheet-layout",
+        "producerTraceSha256": null,
+        "publicSha256": "4f25623347b93808b3728e7ab7e2b8b2dce43bb0d486b9a8db3b9e5f5d8e5b3d"
+      },
+      {
+        "case": "spreadsheet-layout-overlap-replaces-prior-merge",
+        "fixtureSha256": "fa4702ad7e1e0f8a815b96c35dccf25e8e07751568b1de4ef64a3f4e28e1ecdf",
+        "ledgerSha256": "3baf01dd4b62425f775e5489b6ece7733a11acb0bfd5b01e12117154bc09d529",
+        "phase": "spreadsheet-layout",
+        "producerTraceSha256": null,
+        "publicSha256": "63f91d7c19b7ccb68cdaa924caf7e4e4bb5986cd4d74b600c5f093f9981b9819"
+      },
+      {
+        "case": "spreadsheet-layout-recompute-update",
+        "fixtureSha256": "cdbfdbaf6def93bed6e7b3e0860418473c2470faab740ce56519ea857c1608e4",
+        "ledgerSha256": "bc2dd7ea5b407ad167677506c1bafa1e443bbd8d6f4ec15bd40871e4040d4ae9",
+        "phase": "spreadsheet-layout",
+        "producerTraceSha256": null,
+        "publicSha256": "5b7e325eda229c0e11d6452b99c4f8332270820ef944ea931f7d621d1c377e76"
+      },
+      {
+        "case": "spreadsheet-layout-row-column-size",
+        "fixtureSha256": "c284be1100a65d5836eacce3038e0b7bb3914492e25b64dd556bd2086bbf5462",
+        "ledgerSha256": "6100e51d1ee955bdfe54d7be562d32ee42751bfc96691ba02c1e2a1082823cce",
+        "phase": "spreadsheet-layout",
+        "producerTraceSha256": null,
+        "publicSha256": "a64d857b6cb212064ec7d2744642af5b0030098f02fa19529d978a0ce7f7cf7a"
+      },
+      {
+        "case": "spreadsheet-layout-style",
+        "fixtureSha256": "e26e52007410f631da431acad4f21f0635ac569808d2531e726cdeee7a0cd12f",
+        "ledgerSha256": "d8b8972da60bd36038e5a68b2482472dd9d9fe51a999f5d9e79c2643eb365422",
+        "phase": "spreadsheet-layout",
+        "producerTraceSha256": null,
+        "publicSha256": "b2a949215384e15f5c578de7c9d4bd51ec9b98c0f6292c045b1b46e9f52ab701"
+      },
+      {
+        "case": "spreadsheet-layout-unmerge-recompute-update",
+        "fixtureSha256": "05caf50093ddb6db42b835e6a56c457077685b975132cc6aa9804598e63844e6",
+        "ledgerSha256": "76c1300eda7f5555e1fde9ece4633c289e9dc2c8ac1c334e3b0de5627048dc87",
+        "phase": "spreadsheet-layout",
+        "producerTraceSha256": null,
+        "publicSha256": "a085de54a41328e090c00dd4df36d91afc05c2cea3661fcbad3b5db2822a8c96"
+      }
+    ],
+    "phases": 1,
+    "sha256": "0670ee0e2b3603a354ddb5f2f018051bef15e971e2f2a7ffd716f6e43e290c4c"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"spreadsheet-layout\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/spreadsheet-layout-checked-in-repeat2/run-a\", \"--report\", \"/tmp/spreadsheet-layout-checked-in-repeat2/run-a.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\", \"--skip-unsupported\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2e7c684a818e422c060cc629d295c787b50268ae3ab668996a06a09d51cc6342",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a/spreadsheet-layout/expected/spreadsheet-layout-alignment.freecad.json",
+                "publicSha256": "36d44d64220c3c5de1a67b7291aca1681d293a0404690ff71361ecae576ecd68",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-alignment",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-alignment.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-alignment.json",
+            "fixtureSha256": "ab39e278ec8a64baf43060680859ad1d72219830b05d04c6795ce9996833c48b",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2e7c684a818e422c060cc629d295c787b50268ae3ab668996a06a09d51cc6342",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "36d44d64220c3c5de1a67b7291aca1681d293a0404690ff71361ecae576ecd68",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "7fec6e7b59b89f133e4eae6ab4371ca89e9cf5aeecca75f9ee32fad411b8abac",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a/spreadsheet-layout/expected/spreadsheet-layout-invalid-range-native-diagnostic.freecad.json",
+                "publicSha256": "fd33fea9a7fd4067f57880257be292455afe9de0b06b8dadce0dc46190db73b2",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-invalid-range-native-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-invalid-range-native-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-invalid-range-native-diagnostic.json",
+            "fixtureSha256": "0775eb0f6e3622d62550415485147d611615383633d09cc63ecc98302a70714c",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "7fec6e7b59b89f133e4eae6ab4371ca89e9cf5aeecca75f9ee32fad411b8abac",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "fd33fea9a7fd4067f57880257be292455afe9de0b06b8dadce0dc46190db73b2",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "1438b55970efa80f78359dbdc1b7a123ec8f94a291b342c0fc40822d35283a51",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a/spreadsheet-layout/expected/spreadsheet-layout-invalid-style-option-native-diagnostic.freecad.json",
+                "publicSha256": "747c9aaa8efe83bacd94de43e655afcd7a28d3b332c45507e83cafdfccc521d5",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-invalid-style-option-native-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-invalid-style-option-native-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-invalid-style-option-native-diagnostic.json",
+            "fixtureSha256": "06675e3995907919b7a47d016ce09aec4eafd1dd51eecee4924f61eb58441faf",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "1438b55970efa80f78359dbdc1b7a123ec8f94a291b342c0fc40822d35283a51",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "747c9aaa8efe83bacd94de43e655afcd7a28d3b332c45507e83cafdfccc521d5",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "b628a8743a433469a832f69891ae4066128581966ccdcd2d26a80d452ac05f4a",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a/spreadsheet-layout/expected/spreadsheet-layout-merge-clears-covered-cells.freecad.json",
+                "publicSha256": "4f25623347b93808b3728e7ab7e2b8b2dce43bb0d486b9a8db3b9e5f5d8e5b3d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-merge-clears-covered-cells",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-merge-clears-covered-cells.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-merge-clears-covered-cells.json",
+            "fixtureSha256": "755aa49c74bfe7f503a9583bf6a0295c2d87eebb46c1760df636642d001d451f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "b628a8743a433469a832f69891ae4066128581966ccdcd2d26a80d452ac05f4a",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "4f25623347b93808b3728e7ab7e2b8b2dce43bb0d486b9a8db3b9e5f5d8e5b3d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "3baf01dd4b62425f775e5489b6ece7733a11acb0bfd5b01e12117154bc09d529",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a/spreadsheet-layout/expected/spreadsheet-layout-overlap-replaces-prior-merge.freecad.json",
+                "publicSha256": "63f91d7c19b7ccb68cdaa924caf7e4e4bb5986cd4d74b600c5f093f9981b9819",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-overlap-replaces-prior-merge",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-overlap-replaces-prior-merge.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-overlap-replaces-prior-merge.json",
+            "fixtureSha256": "fa4702ad7e1e0f8a815b96c35dccf25e8e07751568b1de4ef64a3f4e28e1ecdf",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "3baf01dd4b62425f775e5489b6ece7733a11acb0bfd5b01e12117154bc09d529",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "63f91d7c19b7ccb68cdaa924caf7e4e4bb5986cd4d74b600c5f093f9981b9819",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "bc2dd7ea5b407ad167677506c1bafa1e443bbd8d6f4ec15bd40871e4040d4ae9",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a/spreadsheet-layout/expected/spreadsheet-layout-recompute-update.freecad.json",
+                "publicSha256": "5b7e325eda229c0e11d6452b99c4f8332270820ef944ea931f7d621d1c377e76",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-recompute-update.json",
+            "fixtureSha256": "cdbfdbaf6def93bed6e7b3e0860418473c2470faab740ce56519ea857c1608e4",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "bc2dd7ea5b407ad167677506c1bafa1e443bbd8d6f4ec15bd40871e4040d4ae9",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "5b7e325eda229c0e11d6452b99c4f8332270820ef944ea931f7d621d1c377e76",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "6100e51d1ee955bdfe54d7be562d32ee42751bfc96691ba02c1e2a1082823cce",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a/spreadsheet-layout/expected/spreadsheet-layout-row-column-size.freecad.json",
+                "publicSha256": "a64d857b6cb212064ec7d2744642af5b0030098f02fa19529d978a0ce7f7cf7a",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-row-column-size",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-row-column-size.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-row-column-size.json",
+            "fixtureSha256": "c284be1100a65d5836eacce3038e0b7bb3914492e25b64dd556bd2086bbf5462",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "6100e51d1ee955bdfe54d7be562d32ee42751bfc96691ba02c1e2a1082823cce",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "a64d857b6cb212064ec7d2744642af5b0030098f02fa19529d978a0ce7f7cf7a",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d8b8972da60bd36038e5a68b2482472dd9d9fe51a999f5d9e79c2643eb365422",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a/spreadsheet-layout/expected/spreadsheet-layout-style.freecad.json",
+                "publicSha256": "b2a949215384e15f5c578de7c9d4bd51ec9b98c0f6292c045b1b46e9f52ab701",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-style",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-style.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-style.json",
+            "fixtureSha256": "e26e52007410f631da431acad4f21f0635ac569808d2531e726cdeee7a0cd12f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d8b8972da60bd36038e5a68b2482472dd9d9fe51a999f5d9e79c2643eb365422",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "b2a949215384e15f5c578de7c9d4bd51ec9b98c0f6292c045b1b46e9f52ab701",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "76c1300eda7f5555e1fde9ece4633c289e9dc2c8ac1c334e3b0de5627048dc87",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a/spreadsheet-layout/expected/spreadsheet-layout-unmerge-recompute-update.freecad.json",
+                "publicSha256": "a085de54a41328e090c00dd4df36d91afc05c2cea3661fcbad3b5db2822a8c96",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-unmerge-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-unmerge-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-unmerge-recompute-update.json",
+            "fixtureSha256": "05caf50093ddb6db42b835e6a56c457077685b975132cc6aa9804598e63844e6",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "76c1300eda7f5555e1fde9ece4633c289e9dc2c8ac1c334e3b0de5627048dc87",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "a085de54a41328e090c00dd4df36d91afc05c2cea3661fcbad3b5db2822a8c96",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "b0e8345059de37386e3e6ac2926fe569aeeec1705ce941c4f9b6ae227fa8df33"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"spreadsheet-layout\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/spreadsheet-layout-checked-in-repeat2/run-a\", \"--report\", \"/tmp/spreadsheet-layout-checked-in-repeat2/run-a.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\", \"--skip-unsupported\"]"
+          }
+        },
+        "discovered": 9,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 9,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"spreadsheet-layout\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/spreadsheet-layout-checked-in-repeat2/run-b\", \"--report\", \"/tmp/spreadsheet-layout-checked-in-repeat2/run-b.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\", \"--skip-unsupported\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2e7c684a818e422c060cc629d295c787b50268ae3ab668996a06a09d51cc6342",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b/spreadsheet-layout/expected/spreadsheet-layout-alignment.freecad.json",
+                "publicSha256": "36d44d64220c3c5de1a67b7291aca1681d293a0404690ff71361ecae576ecd68",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-alignment",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-alignment.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-alignment.json",
+            "fixtureSha256": "ab39e278ec8a64baf43060680859ad1d72219830b05d04c6795ce9996833c48b",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2e7c684a818e422c060cc629d295c787b50268ae3ab668996a06a09d51cc6342",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "36d44d64220c3c5de1a67b7291aca1681d293a0404690ff71361ecae576ecd68",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "7fec6e7b59b89f133e4eae6ab4371ca89e9cf5aeecca75f9ee32fad411b8abac",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b/spreadsheet-layout/expected/spreadsheet-layout-invalid-range-native-diagnostic.freecad.json",
+                "publicSha256": "fd33fea9a7fd4067f57880257be292455afe9de0b06b8dadce0dc46190db73b2",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-invalid-range-native-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-invalid-range-native-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-invalid-range-native-diagnostic.json",
+            "fixtureSha256": "0775eb0f6e3622d62550415485147d611615383633d09cc63ecc98302a70714c",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "7fec6e7b59b89f133e4eae6ab4371ca89e9cf5aeecca75f9ee32fad411b8abac",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "fd33fea9a7fd4067f57880257be292455afe9de0b06b8dadce0dc46190db73b2",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "1438b55970efa80f78359dbdc1b7a123ec8f94a291b342c0fc40822d35283a51",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b/spreadsheet-layout/expected/spreadsheet-layout-invalid-style-option-native-diagnostic.freecad.json",
+                "publicSha256": "747c9aaa8efe83bacd94de43e655afcd7a28d3b332c45507e83cafdfccc521d5",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-invalid-style-option-native-diagnostic",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-invalid-style-option-native-diagnostic.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-invalid-style-option-native-diagnostic.json",
+            "fixtureSha256": "06675e3995907919b7a47d016ce09aec4eafd1dd51eecee4924f61eb58441faf",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "1438b55970efa80f78359dbdc1b7a123ec8f94a291b342c0fc40822d35283a51",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "747c9aaa8efe83bacd94de43e655afcd7a28d3b332c45507e83cafdfccc521d5",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "b628a8743a433469a832f69891ae4066128581966ccdcd2d26a80d452ac05f4a",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b/spreadsheet-layout/expected/spreadsheet-layout-merge-clears-covered-cells.freecad.json",
+                "publicSha256": "4f25623347b93808b3728e7ab7e2b8b2dce43bb0d486b9a8db3b9e5f5d8e5b3d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-merge-clears-covered-cells",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-merge-clears-covered-cells.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-merge-clears-covered-cells.json",
+            "fixtureSha256": "755aa49c74bfe7f503a9583bf6a0295c2d87eebb46c1760df636642d001d451f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "b628a8743a433469a832f69891ae4066128581966ccdcd2d26a80d452ac05f4a",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "4f25623347b93808b3728e7ab7e2b8b2dce43bb0d486b9a8db3b9e5f5d8e5b3d",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "3baf01dd4b62425f775e5489b6ece7733a11acb0bfd5b01e12117154bc09d529",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b/spreadsheet-layout/expected/spreadsheet-layout-overlap-replaces-prior-merge.freecad.json",
+                "publicSha256": "63f91d7c19b7ccb68cdaa924caf7e4e4bb5986cd4d74b600c5f093f9981b9819",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-overlap-replaces-prior-merge",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-overlap-replaces-prior-merge.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-overlap-replaces-prior-merge.json",
+            "fixtureSha256": "fa4702ad7e1e0f8a815b96c35dccf25e8e07751568b1de4ef64a3f4e28e1ecdf",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "3baf01dd4b62425f775e5489b6ece7733a11acb0bfd5b01e12117154bc09d529",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "63f91d7c19b7ccb68cdaa924caf7e4e4bb5986cd4d74b600c5f093f9981b9819",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "bc2dd7ea5b407ad167677506c1bafa1e443bbd8d6f4ec15bd40871e4040d4ae9",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b/spreadsheet-layout/expected/spreadsheet-layout-recompute-update.freecad.json",
+                "publicSha256": "5b7e325eda229c0e11d6452b99c4f8332270820ef944ea931f7d621d1c377e76",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-recompute-update.json",
+            "fixtureSha256": "cdbfdbaf6def93bed6e7b3e0860418473c2470faab740ce56519ea857c1608e4",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "bc2dd7ea5b407ad167677506c1bafa1e443bbd8d6f4ec15bd40871e4040d4ae9",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "5b7e325eda229c0e11d6452b99c4f8332270820ef944ea931f7d621d1c377e76",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "6100e51d1ee955bdfe54d7be562d32ee42751bfc96691ba02c1e2a1082823cce",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b/spreadsheet-layout/expected/spreadsheet-layout-row-column-size.freecad.json",
+                "publicSha256": "a64d857b6cb212064ec7d2744642af5b0030098f02fa19529d978a0ce7f7cf7a",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-row-column-size",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-row-column-size.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-row-column-size.json",
+            "fixtureSha256": "c284be1100a65d5836eacce3038e0b7bb3914492e25b64dd556bd2086bbf5462",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "6100e51d1ee955bdfe54d7be562d32ee42751bfc96691ba02c1e2a1082823cce",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "a64d857b6cb212064ec7d2744642af5b0030098f02fa19529d978a0ce7f7cf7a",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d8b8972da60bd36038e5a68b2482472dd9d9fe51a999f5d9e79c2643eb365422",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b/spreadsheet-layout/expected/spreadsheet-layout-style.freecad.json",
+                "publicSha256": "b2a949215384e15f5c578de7c9d4bd51ec9b98c0f6292c045b1b46e9f52ab701",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-style",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-style.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-style.json",
+            "fixtureSha256": "e26e52007410f631da431acad4f21f0635ac569808d2531e726cdeee7a0cd12f",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "d8b8972da60bd36038e5a68b2482472dd9d9fe51a999f5d9e79c2643eb365422",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "b2a949215384e15f5c578de7c9d4bd51ec9b98c0f6292c045b1b46e9f52ab701",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "76c1300eda7f5555e1fde9ece4633c289e9dc2c8ac1c334e3b0de5627048dc87",
+                "path": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b/spreadsheet-layout/expected/spreadsheet-layout-unmerge-recompute-update.freecad.json",
+                "publicSha256": "a085de54a41328e090c00dd4df36d91afc05c2cea3661fcbad3b5db2822a8c96",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "spreadsheet-layout-unmerge-recompute-update",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/expected/spreadsheet-layout-unmerge-recompute-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/spreadsheet-layout/spreadsheet-layout-unmerge-recompute-update.json",
+            "fixtureSha256": "05caf50093ddb6db42b835e6a56c457077685b975132cc6aa9804598e63844e6",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "76c1300eda7f5555e1fde9ece4633c289e9dc2c8ac1c334e3b0de5627048dc87",
+            "phase": "spreadsheet-layout",
+            "publicExpectedSha256": "a085de54a41328e090c00dd4df36d91afc05c2cea3661fcbad3b5db2822a8c96",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "b0e8345059de37386e3e6ac2926fe569aeeec1705ce941c4f9b6ae227fa8df33"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"spreadsheet-layout\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/spreadsheet-layout-checked-in-repeat2/run-b\", \"--report\", \"/tmp/spreadsheet-layout-checked-in-repeat2/run-b.report.json\", \"--fixtures-root\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\", \"--skip-unsupported\"]"
+          }
+        },
+        "discovered": 9,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 9,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/spreadsheet-layout-checked-in-repeat2/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

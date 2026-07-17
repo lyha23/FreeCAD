@@ -1,0 +1,1151 @@
+{
+  "boundaryExceptions": [
+    {
+      "branch": "Help WebEngine tab/dialog creation under GuiUp=true",
+      "classification": "source_backed_exception",
+      "closeCondition": "A hermetic GUI-capable FreeCAD harness can exercise WebEngine tab/dialog creation without visible user effects.",
+      "reason": "The release FreeCADCmd process reports GuiUp=false and the task prohibits visible GUI effects.",
+      "receiptCase": "help-gui-webengine-boundary-probe"
+    },
+    {
+      "branch": "Real remote Help and Addon downloads",
+      "classification": "prohibited_external_effect",
+      "closeCondition": "Not required for deterministic API authority; network transport is represented by the mocked request/response contract.",
+      "reason": "The authority contract deliberately uses local pages, fake repositories, proxy-denied urllib, and mocked QNAM/blocking_get."
+    }
+  ],
+  "cadCoreRuntimeParity": "not_evaluated",
+  "caseCount": 7,
+  "cases": [
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "help.module_import_and_pure_page_path",
+        "help.gui_and_network_help_display"
+      ],
+      "group": "help",
+      "id": "help-local-page-headless",
+      "runs": [
+        {
+          "caseId": "help-local-page-headless",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"help-local-page-headless\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "# A7-LOCAL-HELP-CONTENT\n\n**offline**\n\nHelp/AddonManager process contract: case=help-local-page-headless status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "contentsMarker": true,
+              "guiUp": false,
+              "locationIsLocalFixture": true,
+              "missingReturnsErrorText": true,
+              "moduleFile": "/Applications/FreeCAD.app/Contents/Resources/Mod/Help/Help.py",
+              "normalizedPage": "Workbench/Draft_Line",
+              "pageName": "",
+              "renderedHeading": true,
+              "renderedHtmlEnvelope": true,
+              "uriIsFile": true
+            },
+            "case": "help-local-page-headless",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "help-local-page-headless",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"help-local-page-headless\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "# A7-LOCAL-HELP-CONTENT\n\n**offline**\n\nHelp/AddonManager process contract: case=help-local-page-headless status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "contentsMarker": true,
+              "guiUp": false,
+              "locationIsLocalFixture": true,
+              "missingReturnsErrorText": true,
+              "moduleFile": "/Applications/FreeCAD.app/Contents/Resources/Mod/Help/Help.py",
+              "normalizedPage": "Workbench/Draft_Line",
+              "pageName": "",
+              "renderedHeading": true,
+              "renderedHtmlEnvelope": true,
+              "uriIsFile": true
+            },
+            "case": "help-local-page-headless",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Mod/Help/Help.py::show/get_location/get_contents/convert/show_browser"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "help.gui_and_network_help_display"
+      ],
+      "group": "help",
+      "id": "help-browser-fallback-mocked",
+      "runs": [
+        {
+          "caseId": "help-browser-fallback-mocked",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"help-browser-fallback-mocked\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=help-browser-fallback-mocked status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "dispatch": [
+                "qt:file:///A7/local-help.html",
+                "browser:file:///A7/local-help.html"
+              ],
+              "moduleFile": "/Applications/FreeCAD.app/Contents/Resources/Mod/Help/Help.py",
+              "realBrowserCalled": false
+            },
+            "case": "help-browser-fallback-mocked",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "help-browser-fallback-mocked",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"help-browser-fallback-mocked\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=help-browser-fallback-mocked status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "dispatch": [
+                "qt:file:///A7/local-help.html",
+                "browser:file:///A7/local-help.html"
+              ],
+              "moduleFile": "/Applications/FreeCAD.app/Contents/Resources/Mod/Help/Help.py",
+              "realBrowserCalled": false
+            },
+            "case": "help-browser-fallback-mocked",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Mod/Help/Help.py::show/get_location/get_contents/convert/show_browser"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "source_backed_exception",
+      "evidenceFor": [],
+      "group": "help",
+      "id": "help-gui-webengine-boundary-probe",
+      "runs": [
+        {
+          "caseId": "help-gui-webengine-boundary-probe",
+          "coverageOutcome": "source_backed_exception",
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"help-gui-webengine-boundary-probe\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=help-gui-webengine-boundary-probe status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "attemptedEntry": "Help.show_tab/show_dialog/openBrowserHTML",
+              "closeCondition": "A hermetic GUI-capable FreeCAD harness can exercise WebEngine tab/dialog creation without visible user effects.",
+              "executed": false,
+              "freeCADGuiImport": {
+                "message": "importable",
+                "type": "none"
+              },
+              "guiUp": false,
+              "moduleFile": "/Applications/FreeCAD.app/Contents/Resources/Mod/Help/Help.py",
+              "reason": "FreeCADCmd reports GuiUp=false; invoking visible Qt/WebEngine UI is prohibited."
+            },
+            "case": "help-gui-webengine-boundary-probe",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "help-gui-webengine-boundary-probe",
+          "coverageOutcome": "source_backed_exception",
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"help-gui-webengine-boundary-probe\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=help-gui-webengine-boundary-probe status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "attemptedEntry": "Help.show_tab/show_dialog/openBrowserHTML",
+              "closeCondition": "A hermetic GUI-capable FreeCAD harness can exercise WebEngine tab/dialog creation without visible user effects.",
+              "executed": false,
+              "freeCADGuiImport": {
+                "message": "importable",
+                "type": "none"
+              },
+              "guiUp": false,
+              "moduleFile": "/Applications/FreeCAD.app/Contents/Resources/Mod/Help/Help.py",
+              "reason": "FreeCADCmd reports GuiUp=false; invoking visible Qt/WebEngine UI is prohibited."
+            },
+            "case": "help-gui-webengine-boundary-probe",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Mod/Help/Help.py::show/get_location/get_contents/convert/show_browser"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "addonmanager.metadata_and_spdx_data"
+      ],
+      "group": "addonmanager",
+      "id": "addon-metadata-spdx-local",
+      "runs": [
+        {
+          "caseId": "addon-metadata-spdx-local",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"addon-metadata-spdx-local\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=addon-metadata-spdx-local status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "branch": "stable",
+              "invalidMetadata": {
+                "message": "No 'package' element found in metadata file",
+                "type": "RuntimeError"
+              },
+              "mitName": "MIT License",
+              "mitOsiApproved": true,
+              "moduleFiles": [
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_metadata.py",
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_licenses.py"
+              ],
+              "name": "A7 Local Addon",
+              "normalizedGpl": "GPL-3.0-or-later",
+              "repo": "https://invalid.example/A7.git",
+              "version": "2.4.1 beta"
+            },
+            "case": "addon-metadata-spdx-local",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "addon-metadata-spdx-local",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"addon-metadata-spdx-local\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=addon-metadata-spdx-local status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "branch": "stable",
+              "invalidMetadata": {
+                "message": "No 'package' element found in metadata file",
+                "type": "RuntimeError"
+              },
+              "mitName": "MIT License",
+              "mitOsiApproved": true,
+              "moduleFiles": [
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_metadata.py",
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_licenses.py"
+              ],
+              "name": "A7 Local Addon",
+              "normalizedGpl": "GPL-3.0-or-later",
+              "repo": "https://invalid.example/A7.git",
+              "version": "2.4.1 beta"
+            },
+            "case": "addon-metadata-spdx-local",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Mod/AddonManager/addonmanager_installer.py::AddonInstaller",
+        "src/Mod/AddonManager/addonmanager_uninstaller.py::AddonUninstaller",
+        "src/Mod/AddonManager/NetworkManager.py::NetworkManager",
+        "src/Mod/AddonManager/addonmanager_metadata.py::MetadataReader/Version",
+        "src/Mod/AddonManager/addonmanager_licenses.py::SPDXLicenseManager"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "addonmanager.network_install_update_remove"
+      ],
+      "group": "addonmanager",
+      "id": "addon-copy-install-update-remove",
+      "runs": [
+        {
+          "caseId": "addon-copy-install-update-remove",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"addon-copy-install-update-remove\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=addon-copy-install-update-remove status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\nInstalling addon A7LocalAddon using Copy\nInstalling addon A7LocalAddon using Copy\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "destinationExistsAfterRemove": false,
+              "firstInstall": true,
+              "firstValue": "version-1",
+              "manifestEvents": [
+                "install:A7LocalAddon",
+                "update:A7LocalAddon",
+                "remove:A7LocalAddon"
+              ],
+              "moduleFiles": [
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_installer.py",
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_uninstaller.py"
+              ],
+              "removed": true,
+              "statusesRecorded": 3,
+              "updateInstall": true,
+              "updatedValue": "version-2"
+            },
+            "case": "addon-copy-install-update-remove",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "addon-copy-install-update-remove",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"addon-copy-install-update-remove\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=addon-copy-install-update-remove status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\nInstalling addon A7LocalAddon using Copy\nInstalling addon A7LocalAddon using Copy\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "destinationExistsAfterRemove": false,
+              "firstInstall": true,
+              "firstValue": "version-1",
+              "manifestEvents": [
+                "install:A7LocalAddon",
+                "update:A7LocalAddon",
+                "remove:A7LocalAddon"
+              ],
+              "moduleFiles": [
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_installer.py",
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_uninstaller.py"
+              ],
+              "removed": true,
+              "statusesRecorded": 3,
+              "updateInstall": true,
+              "updatedValue": "version-2"
+            },
+            "case": "addon-copy-install-update-remove",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Mod/AddonManager/addonmanager_installer.py::AddonInstaller",
+        "src/Mod/AddonManager/addonmanager_uninstaller.py::AddonUninstaller",
+        "src/Mod/AddonManager/NetworkManager.py::NetworkManager",
+        "src/Mod/AddonManager/addonmanager_metadata.py::MetadataReader/Version",
+        "src/Mod/AddonManager/addonmanager_licenses.py::SPDXLicenseManager"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "addonmanager.network_install_update_remove"
+      ],
+      "group": "addonmanager",
+      "id": "addon-zip-and-network-manager-mocked",
+      "runs": [
+        {
+          "caseId": "addon-zip-and-network-manager-mocked",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"addon-zip-and-network-manager-mocked\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "qt.core.qobject.connect: QObject::connect(QObject, Unknown): invalid nullptr parameter\nqt.core.qobject.connect: QObject::connect(QObject, Unknown): invalid nullptr parameter\n",
+            "stdout": "Help/AddonManager process contract: case=addon-zip-and-network-manager-mocked status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\nInstalling addon A7ZipAddon using Zip\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "blockingGetUrls": [
+                "https://mock.invalid/A7ZipAddon.zip"
+              ],
+              "completed": [
+                {
+                  "code": 200,
+                  "data": "A7-MOCK-NETWORK",
+                  "index": 0
+                }
+              ],
+              "moduleFiles": [
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_installer.py",
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/NetworkManager.py"
+              ],
+              "networkIndex": 0,
+              "qnamUrls": [
+                "https://mock.invalid/catalog.json"
+              ],
+              "realNetworkRequests": 0,
+              "zipContent": "A7-MOCK-ZIP",
+              "zipInstalled": true
+            },
+            "case": "addon-zip-and-network-manager-mocked",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "addon-zip-and-network-manager-mocked",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"addon-zip-and-network-manager-mocked\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "qt.core.qobject.connect: QObject::connect(QObject, Unknown): invalid nullptr parameter\nqt.core.qobject.connect: QObject::connect(QObject, Unknown): invalid nullptr parameter\n",
+            "stdout": "Help/AddonManager process contract: case=addon-zip-and-network-manager-mocked status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\nInstalling addon A7ZipAddon using Zip\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "blockingGetUrls": [
+                "https://mock.invalid/A7ZipAddon.zip"
+              ],
+              "completed": [
+                {
+                  "code": 200,
+                  "data": "A7-MOCK-NETWORK",
+                  "index": 0
+                }
+              ],
+              "moduleFiles": [
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_installer.py",
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/NetworkManager.py"
+              ],
+              "networkIndex": 0,
+              "qnamUrls": [
+                "https://mock.invalid/catalog.json"
+              ],
+              "realNetworkRequests": 0,
+              "zipContent": "A7-MOCK-ZIP",
+              "zipInstalled": true
+            },
+            "case": "addon-zip-and-network-manager-mocked",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Mod/AddonManager/addonmanager_installer.py::AddonInstaller",
+        "src/Mod/AddonManager/addonmanager_uninstaller.py::AddonUninstaller",
+        "src/Mod/AddonManager/NetworkManager.py::NetworkManager",
+        "src/Mod/AddonManager/addonmanager_metadata.py::MetadataReader/Version",
+        "src/Mod/AddonManager/addonmanager_licenses.py::SPDXLicenseManager"
+      ],
+      "status": "passed"
+    },
+    {
+      "coverageOutcome": "native_process_test",
+      "evidenceFor": [
+        "addonmanager.network_install_update_remove"
+      ],
+      "group": "addonmanager",
+      "id": "addon-invalid-boundaries",
+      "runs": [
+        {
+          "caseId": "addon-invalid-boundaries",
+          "coverageOutcome": "native_process_test",
+          "label": "run-1",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"addon-invalid-boundaries\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=addon-invalid-boundaries status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "dangerousRemoveSucceeded": false,
+              "invalidInstaller": {
+                "message": "Provided object does not provide a name, url, and/or branch attribute",
+                "type": "RuntimeError"
+              },
+              "moduleFiles": [
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_installer.py",
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_uninstaller.py"
+              ],
+              "sentinelPreserved": true
+            },
+            "case": "addon-invalid-boundaries",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        },
+        {
+          "caseId": "addon-invalid-boundaries",
+          "coverageOutcome": "native_process_test",
+          "label": "run-2",
+          "process": {
+            "argv": [
+              "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "-u",
+              "<CASE_ROOT>/user.cfg",
+              "-s",
+              "<CASE_ROOT>/system.cfg",
+              "<CAD_CORE>/tools/collect_help_addon_process_contract.py",
+              "--pass",
+              "__freecad_help_addon_process_args_env__"
+            ],
+            "cwd": "/private<CASE_ROOT>",
+            "environment": {
+              "ALL_PROXY": "http://127.0.0.1:9",
+              "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON": "[\"--inner-case\", \"addon-invalid-boundaries\", \"--result\", \"<CASE_ROOT>/result.json\"]",
+              "FREECAD_USER_DATA": "<CASE_ROOT>/user-data",
+              "FREECAD_USER_HOME": "<CASE_ROOT>/user-home",
+              "FREECAD_USER_TEMP": "<CASE_ROOT>/user-temp",
+              "HOME": "<CASE_ROOT>/user-home",
+              "HTTPS_PROXY": "http://127.0.0.1:9",
+              "HTTP_PROXY": "http://127.0.0.1:9",
+              "LANG": "C",
+              "LC_ALL": "C",
+              "NO_PROXY": "",
+              "PATH": "/usr/bin:/bin",
+              "TMPDIR": "<CASE_ROOT>/user-temp",
+              "XDG_CACHE_HOME": "<CASE_ROOT>/xdg-cache",
+              "XDG_CONFIG_HOME": "<CASE_ROOT>/xdg-config",
+              "XDG_DATA_HOME": "<CASE_ROOT>/xdg-data"
+            },
+            "executable": {
+              "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+              "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+            },
+            "exitCode": 0,
+            "signal": null,
+            "stderr": "",
+            "stdout": "Help/AddonManager process contract: case=addon-invalid-boundaries status=passed\nFreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)\n(C) 2001-2026 FreeCAD contributors\nFreeCAD is free and open-source software licensed under the terms of LGPL2+ license.\n\n",
+            "timedOut": false,
+            "timeoutSeconds": 30
+          },
+          "result": {
+            "actual": {
+              "dangerousRemoveSucceeded": false,
+              "invalidInstaller": {
+                "message": "Provided object does not provide a name, url, and/or branch attribute",
+                "type": "RuntimeError"
+              },
+              "moduleFiles": [
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_installer.py",
+                "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_uninstaller.py"
+              ],
+              "sentinelPreserved": true
+            },
+            "case": "addon-invalid-boundaries",
+            "producerVersion": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+            "status": "passed"
+          },
+          "status": "passed"
+        }
+      ],
+      "sourceEvidence": [
+        "src/Mod/AddonManager/addonmanager_installer.py::AddonInstaller",
+        "src/Mod/AddonManager/addonmanager_uninstaller.py::AddonUninstaller",
+        "src/Mod/AddonManager/NetworkManager.py::NetworkManager",
+        "src/Mod/AddonManager/addonmanager_metadata.py::MetadataReader/Version",
+        "src/Mod/AddonManager/addonmanager_licenses.py::SPDXLicenseManager"
+      ],
+      "status": "passed"
+    }
+  ],
+  "contractId": "process-contract/help-addonmanager",
+  "environmentPolicy": {
+    "caseLocal": [
+      "HOME",
+      "FREECAD_USER_HOME",
+      "FREECAD_USER_DATA",
+      "FREECAD_USER_TEMP",
+      "TMPDIR",
+      "XDG_CONFIG_HOME",
+      "XDG_CACHE_HOME",
+      "XDG_DATA_HOME",
+      "FREECAD_HELP_ADDON_PROCESS_ARGS_JSON"
+    ],
+    "fixed": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin"
+    },
+    "inheritedAllowlist": [
+      "SYSTEMROOT"
+    ],
+    "networkDeny": {
+      "addonZip": "local bytes through mocked blocking_get",
+      "helpUrlopen": "patched to fail",
+      "networkManager": "real queue/request path with mocked QNAM",
+      "proxy": "127.0.0.1:9"
+    }
+  },
+  "errors": [],
+  "manifestCaseCount": 7,
+  "normalization": {
+    "lineEndings": "CRLF to LF",
+    "replacements": {
+      "cadCoreRoot": "<CAD_CORE>",
+      "repositoryRoot": "<REPO>",
+      "temporaryRoot": "<TMP>"
+    }
+  },
+  "producer": {
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "requestedPath": "/Users/li/.cargo/bin/FreeCADCmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+  },
+  "repeat": 2,
+  "repeatStatus": "passed",
+  "resources": [
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contracts/help_addonmanager/manifest.v1.json",
+      "sha256": "199167f92f5a79e97b818f9a5553bd55e282223d23c3b85a500965e8d8064ccf"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Help/Help.py",
+      "sha256": "9ac14244b1e3951fe723c5a7ef2b674a3a6add294b2753d6a75476cd1bce7c73"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/src/Mod/AddonManager/addonmanager_installer.py",
+      "sha256": "06eb24989259c91357b82b763153fd8a1b6faa234852a79a6c82b715d9d6e5b8"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/src/Mod/AddonManager/addonmanager_uninstaller.py",
+      "sha256": "e9143baf7a6e85104dd2dd2ed8d2f0440c70d67ec16ac1c3947eadc37b09d7b1"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/src/Mod/AddonManager/NetworkManager.py",
+      "sha256": "6f7937b2da611b0404afed727c856f32eeb2642fc52857bd4d1b288d1887ec1d"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/src/Mod/AddonManager/addonmanager_metadata.py",
+      "sha256": "d7e559c517289e8713e5f4f675a6e9a83bad728f10248a38ac3ee812b7c374db"
+    },
+    {
+      "path": "/Users/li/Chili3DProject/FreeCAD/src/Mod/AddonManager/addonmanager_licenses.py",
+      "sha256": "0d47fb892de084bdc6045fb3f0228b6afe4bde2e02f2d1b20c6fab6abf923cc6"
+    }
+  ],
+  "runner": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/process_contract.py",
+    "sha256": "659fb29f06f6b967003bc7f7c35f2eb8af41be2157ad2dde94cb1fe063b76c41"
+  },
+  "schema": "freecad-native-process-contract/v1",
+  "status": "passed",
+  "tool": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_help_addon_process_contract.py",
+    "sha256": "f0900f8b7047a5b7b05b0db75a4da68b942cd9874a26b69927dc17e1197584e0"
+  }
+}

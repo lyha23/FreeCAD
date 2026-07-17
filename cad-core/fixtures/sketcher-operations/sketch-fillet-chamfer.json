@@ -1,0 +1,97 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              10,
+              0
+            ],
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ]
+          },
+          {
+            "end": [
+              10,
+              5
+            ],
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ]
+          },
+          {
+            "end": [
+              0,
+              5
+            ],
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ]
+          },
+          {
+            "end": [
+              0,
+              0
+            ],
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ]
+          }
+        ],
+        "Operations": [
+          {
+            "chamfer": true,
+            "createCorner": false,
+            "expectedOutcome": "target_result",
+            "geometryIds": [
+              0,
+              1
+            ],
+            "op": "fillet",
+            "radius": 1.0,
+            "referencePoints": [
+              [
+                8,
+                0
+              ],
+              [
+                10,
+                2
+              ]
+            ],
+            "trim": true
+          }
+        ]
+      },
+      "TypeId": "Sketcher::SketchObject"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "documentHash": "sha256:cf442eecf1a7ec75843acc9fb92c875fb0ea419fe12ed21bd63e0cb6464449ce",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

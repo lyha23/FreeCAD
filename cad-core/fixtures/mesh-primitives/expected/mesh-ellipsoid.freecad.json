@@ -1,0 +1,74 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          1.5,
+          3.0,
+          3.0
+        ],
+        "min": [
+          -1.5,
+          -3.0,
+          -3.0
+        ]
+      },
+      "closed": true,
+      "mesh_defects": {
+        "component_count": 1,
+        "has_non_manifolds": false,
+        "has_non_uniform_oriented_facets": false,
+        "has_self_intersections": false,
+        "non_uniform_oriented_facet_count": 0
+      },
+      "mesh_orientation": {
+        "first_facet_normal": [
+          0.9987418055534363,
+          -0.049183715134859085,
+          -0.009783243760466576
+        ],
+        "normal_sum": [
+          4.470348358154297e-07,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh_summary": {
+        "triangle_count": 480,
+        "vertex_count": 242
+      },
+      "object": "Ellipsoid",
+      "topology_counts": {
+        "edges": 720,
+        "faces": 480,
+        "vertices": 242
+      },
+      "volume": 54.57694625854492
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:226e557d62822759bb6d5dd9169b71534791a7bb22f72bdb58f3a66cdbdc3049",
+    "objects": {
+      "Ellipsoid": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:04108d7c4fa441dab7dd2d3f601f7ab828bae858686d3e5e04cfc3ff72a9c153",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}
